@@ -1,13 +1,53 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>producto</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+<ion-menu contentId="main-content">
+  <ion-header>
     <ion-toolbar>
-      <ion-title size="large">producto</ion-title>
+      <ion-title style="color: black">Menu</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-content class="ion-padding">
+    <ion-button fill="clear" (click)="puntoLimpio()">
+      Punto limpio
+    </ion-button>
+    <ion-button fill="clear" (click)="salir()">
+      Cerrar sesión
+    </ion-button>
+  </ion-content>
+</ion-menu>
+<div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons style="color: black;" slot="start">
+          <ion-menu-button auto-hide="false"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+<ion-content>
+
+  <!-- Barra de pestañas -->
+  <ion-tabs>
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button tab="home" style="margin-left: 12px;">
+        <ion-icon src="./assets/icon/home.svg" (click)="home()" style="font-size: 3em;"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button tab="saved">
+        <ion-icon src="./assets/icon/bookmark.svg" style="font-size: 3em;"></ion-icon>
+      </ion-tab-button>
+      <!-- Espacio en blanco -->
+      <ion-tab-button style="flex: 1;"></ion-tab-button>
+      <ion-tab-button tab="notifications">
+        <ion-icon src="./assets/icon/notifications.svg" style="font-size: 3em;"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button tab="profile">
+        <ion-icon src="./assets/icon/person.svg" (click)="perfil()" style="font-size: 3em;"></ion-icon>
+      </ion-tab-button>
+    </ion-tab-bar>
+
+    <!-- ion-fab fuera de la barra de pestañas -->
+    <ion-fab vertical="bottom" horizontal="center">
+      <ion-fab-button color="primary" style="margin-bottom: 15px;">
+          <ion-icon src="./assets/icon/add.svg"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ion-tabs>
 </ion-content>

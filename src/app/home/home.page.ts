@@ -10,9 +10,25 @@ import { IonicModule } from '@ionic/angular';
   imports: [IonicModule,],
 })
 export class HomePage {
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+  }
 
-  goToProductosPage(){
+  goProducto(){
+    this.router.navigate(['/producto']);
+  }
+
+  home(){
+    this.router.navigate(['/home']);
+  }
+
+  perfil(){
+    this.router.navigate(['/perfil']);
+  }
+
+  salir(){
+
+  }
+  puntoLimpio(){
 
   }
 }

@@ -1,21 +1,51 @@
-<ion-content>
-  <div class="centrar">
-      <ion-img class="imge" src="assets/img/old3.png"></ion-img>
-  </div>
-  <ion-card-content>
-    <div class="social-btns centrar">
-      <ion-img style="width: 140px;margin-left: 100px;" src="assets/img/inter.png" alt=""></ion-img>
-      <h1 class="color-text-black centrar">¿Qué hacemos hoy?</h1>
-      <p class="centrar" style="color: rgb(15, 74, 202);font-weight: bold;">Encuentra, publica y conecta.</p>
-      <p class="color-text-black centrar" >Descubre objetos cerca de ti para una segunda vida</p>
+<ion-menu contentId="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title style="color: black">Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-button fill="clear" (click)="puntoLimpio()">
+      Punto limpio
+    </ion-button>
+    <ion-button fill="clear" (click)="salir()">
+      Cerrar sesión
+    </ion-button>
+  </ion-content>
+</ion-menu>
+<div class="ion-page" id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons style="color: black;" slot="start">
+          <ion-menu-button auto-hide="false"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+  <ion-content>
+    <div class="centrar">
+        <ion-img class="imge" src="assets/img/old3.png"></ion-img>
     </div>
-    <div class="centrar" style="display: flex;">
-      <ion-button style="margin-right: 50px;" class="boton-circular" shape="round" >
-        <div class="icono-imagen-izquierdo"></div>
-      </ion-button>
-      <ion-button class="boton-circular" shape="round" expand="full" style="margin-left: 20px;" (click)="goToProductosPage()">
-        <div class="icono-imagen-derecho"></div>
-      </ion-button>
-    </div>
-  </ion-card-content>
+    <ion-card-content>
+      <div class="social-btns centrar">
+        <div class="centrar">
+          <ion-img style="width: 120px;" src="assets/img/inter.png" alt=""></ion-img>
+        </div>
+        <h1 class="color-text-black centrar">¿Qué hacemos hoy?</h1>
+        <p class="centrar" style="color: rgb(15, 74, 202);font-weight: bold;">Encuentra, publica y conecta.</p>
+        <p class="color-text-black" >Descubre objetos cerca de ti para una segunda vida</p>
+      </div>
+      <div class="centrar" style="display: flex; margin-top: 20px;">
+        <ion-button style="margin-right: 50px;" class="boton-circular" shape="round" >
+          <div class="icono-imagen-izquierdo"></div>
+        </ion-button>
+        <ion-button class="boton-circular" shape="round" expand="full" style="margin-left: 20px;" (click)="goProducto()">
+          <div class="icono-imagen-derecho"></div>
+        </ion-button>
+      </div>
+      <div class="centrar" style="display: flex;">
+        <h1 class="color-text-black" style="margin-left: 10px;margin-right: 85px;">Subir</h1>
+        <h1 class="color-text-black">Buscar</h1>
+      </div>
+    </ion-card-content>
 </ion-content>

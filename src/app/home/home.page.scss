@@ -31,7 +31,11 @@
   align-items: center;
   --background: rgb(226, 226, 230);  /* Color de fondo del botón */
   margin-left: 10px;
+  z-index: 2;
   
+}
+.imge{
+  width: 300px
 }
 
 
@@ -42,6 +46,7 @@
   background: url('../../assets/img/magnifier.png') center/cover no-repeat; /* Ruta a tu imagen */
   border-radius: 50%; /* Hace que el contenedor sea circular */
 }
+
 
 .icono-imagen-izquierdo {
   width: 25px; /* Ajusta el ancho según tus necesidades */
