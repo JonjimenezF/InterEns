@@ -1,0 +1,42 @@
+* {
+    --background: #ffffff; /* Cambia el color de fondo aquí */
+  }
+.signin-btns{
+    margin-top: 25px;
+    text-align: center;
+    h1{
+        color: rgb(10, 163, 23);
+    }
+
+}
+
+.btn{
+    display: flex;
+    margin: 0px 1px 15px 20px; // arriba  derecha  abajo  izquieda
+    --background: rgb(95, 103, 212); 
+    width: 310px; /* Ajusta este valor al ancho deseado */
+    height: 60px;
+    padding: 8px 16px; /* Ajusta estos valores al padding deseado */
+    position: fixed;
+   
+}
+
+ion-img {
+        width: 100px;
+        margin-left: 135px;
+        margin-top: 350px;
+}
+h1{
+    display: flex;
+    margin-left: 130px;
+    color: white;
+    font-size: 30px;
+}
+
+ion-content.fondohome {
+    --background: url('../../assets/img/portada.png')center center/cover no-repeat; /* Reemplaza 'ruta/de/la/imagen.jpg' con la ruta real de tu imagen */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+

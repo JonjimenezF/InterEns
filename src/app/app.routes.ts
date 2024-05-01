@@ -7,19 +7,24 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'portada',
     pathMatch: 'full',
   },
   {
     path: 'login',
     loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
-  },  {
+  },
+  {
     path: 'perfil',
     loadComponent: () => import('./perfil/perfil.page').then( m => m.PerfilPage)
   },
   {
     path: 'producto',
     loadComponent: () => import('./producto/producto.page').then( m => m.ProductoPage)
+  },
+  {
+    path: 'portada',
+    loadComponent: () => import('./portada/portada.page').then( m => m.PortadaPage)
   },
 
 ];
