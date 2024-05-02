@@ -16,3 +16,9 @@ ion-menu::part(container) {
 
   box-shadow: 4px 0px 16px rgba(94, 94, 94, 0.18);
 }
+
+.vertical-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinea los botones a la izquierda */
+}

@@ -2,10 +2,10 @@
   
 </ion-header>
 <ion-content class="color-white">
-    <h1 class="color-text-black " style="padding-left: 40px;"><strong>Hola</strong>,</h1>
+
     <h2 class="color-text-black" style="padding-left: 40px;">Bienvenido!</h2>
   <ion-card-content>
-      <div class="centrar" >
+      < class="centrar" >
         <p class="color-text-black">Email</p>
         <ion-item class="color-white transparent-border" style="padding-right: 40px">
           <ion-input class="color-text-grey" type = "text" placeholder="Ingresa tu Email"></ion-input>
@@ -14,8 +14,9 @@
         <ion-item class="color-white transparent-border" style="padding-right: 40px">
           <ion-input class="color-text-grey" type = "password" placeholder="Ingrese su Clave" ></ion-input>
         </ion-item>
-      </div>
-      <a href="" class="centrar" style="text-decoration: none; color: orange; margin-top:15px;padding-right:80px;">¿Olvido su Contraseña?</a> 
+      <div>
+        <ion-button class="olvbtn" fill="clear" (click)="goRecuperar()">¿Olvido su Contraseña?</ion-button>
+    </div>
       <div class="centrar">
         <ion-button class="color-text-white" style="margin-top:20px" fill="solid" shape="round" (click)="goHome()">Ingresar</ion-button>
       </div>

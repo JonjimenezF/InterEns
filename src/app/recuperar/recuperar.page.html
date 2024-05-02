@@ -1,0 +1,22 @@
+<ion-header class="ion-no-border">
+    <ion-toolbar> 
+      <ion-title></ion-title>
+      <ion-buttons slot="start">
+        <ion-back-button defaulthref= "login" text=""></ion-back-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content >
+    <ion-card-content>
+          <div>
+            <p>Email</p>
+            <ion-item class="border">
+              <ion-input type = "text" placeholder="Ingresa tu Email" [(ngModel)]="user.usuario" ></ion-input>
+            </ion-item>
+          </div>
+          <div class="signin-btns">
+            <ion-button fill="solid" shape="round" class="loginbtn" (click)="Verificar()">Verificar</ion-button>
+          </div>
+    </ion-card-content>   
+  </ion-content>
+  
