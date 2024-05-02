@@ -30,10 +30,22 @@ export const routes: Routes = [
   {
     path: 'recuperar',
     loadComponent: () => import('./recuperar/recuperar.page').then( m => m.RecuperarPage)
-  },  {
+  },
+  {
     path: 'verificarcontra',
     loadComponent: () => import('./verificarcontra/verificarcontra.page').then( m => m.VerificarcontraPage)
   },
+
+  {
+    path: 'mostar',
+    loadComponent: () => import('./mostar/mostar.page').then( m => m.MostarPage)
+  },
+  {
+    path: 'sfoto',
+    loadComponent: () => import('./sfoto/sfoto.page').then( m => m.SfotoPage)
+  },
+
+ 
 
   
 

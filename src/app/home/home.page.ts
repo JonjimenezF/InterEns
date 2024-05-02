@@ -25,10 +25,15 @@ export class HomePage {
     this.router.navigate(['/perfil']);
   }
 
-  salir(){
+   salir(){
 
   }
   puntoLimpio(){
 
+  }
+  goSubirfoto() {
+    // Aquí puedes agregar la lógica para navegar a la página de subir foto
+    // Por ejemplo:
+    this.router.navigate(['/sfoto']);
   }
 }

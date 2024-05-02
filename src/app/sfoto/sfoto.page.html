@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>sfoto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">sfoto</ion-title>
+      <div>
+        <h2>Subir Imagen</h2>
+        <form (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+          <input type="file" accept="image/*" (change)="onFileSelected($event)">
+          
+          
+        </form>
+      </div>
+    </ion-toolbar>
+  </ion-header>
+</ion-content>

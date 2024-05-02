@@ -1,13 +1,21 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>verificarcontra</ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar> 
+    <ion-title></ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaulthref="/login" text="Volver"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">verificarcontra</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content >
+  <ion-card-content>
+        <div>
+          <p>Contraseña nueva</p>
+          <ion-item class="border">
+            <ion-input type = "text" placeholder="Ingresa su contraseña" [(ngModel)]="user.newPassword" ></ion-input>
+          </ion-item>
+        </div>
+        <div class="signin-btns">
+          <ion-button fill="solid" shape="round" class="loginbtn" (click)="vollogin()" >Guardar</ion-button>
+        </div>
+  </ion-card-content>   
 </ion-content>
