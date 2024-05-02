@@ -57,13 +57,8 @@ export class LoginPage implements OnInit {
     this.router.navigate(['/home']);
   }
 
-<<<<<<< HEAD
-  goRecuperar() {
-    this.router.navigate(['/recuperar']);
-=======
   goregistrar(){
     this.router.navigate(['/registrar']);
->>>>>>> main
   }
 
 }
