@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { userLogin } from '../models/userLogin';
+import { UsuarioService } from '../servicios/usuario.service';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -17,17 +20,50 @@ export class LoginPage implements OnInit {
     usuario: "",
     password: ""
   }
-  constructor(private router:Router) { }
+  constructor(private router:Router,private userService: UsuarioService,public toastController: ToastController) { }
+  //Funcion para mostrar mensajes
+  async presentToast(message: string, duration: number = 2000) {
+    const toast = await this.toastController.create({
+      message,
+      duration,
+      position: 'bottom'
+    });
+    toast.present();
+  }
+
+  //Valida al usuario si esta registrado
+  async Login(userLoginInfo: userLogin) {
+    const user_alumno = await lastValueFrom(this.userService.getLogin(userLoginInfo));
+    console.log(user_alumno);
+    if (user_alumno) {
+      console.log("Usuario existe...");
+      this.router.navigate(['/home'], { state: { user_info: user_alumno}})
+    } else {
+      //NO EXISTE
+      console.log("Usuario no existe...");
+      this.presentToast("Usuario y/o Contraseña incorrectas")
+    }
+  }
 
   ngOnInit() {
   }
+
+
+
+
+  //Router 
 
   goHome() {
     this.router.navigate(['/home']);
   }
 
+<<<<<<< HEAD
   goRecuperar() {
     this.router.navigate(['/recuperar']);
+=======
+  goregistrar(){
+    this.router.navigate(['/registrar']);
+>>>>>>> main
   }
 
 }

@@ -1,0 +1,13 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>registrar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-input class="color-text-grey" type = "text" placeholder="Ingrese su email" [(ngModel)]="user.email"></ion-input>
+  <ion-input class="color-text-grey" type = "text" placeholder="Ingrese su nombre" [(ngModel)]="user.nombre" ></ion-input>
+  <ion-input class="color-text-grey" type = "text" placeholder="Ingrese su apellido" [(ngModel)]="user.apellido" ></ion-input>
+  <ion-input class="color-text-grey" type = "password" placeholder="Ingrese su password" [(ngModel)]="user.password"></ion-input> 
+  <ion-button class="btn" (click)="regis(user)">Login</ion-button>
+</ion-content>
