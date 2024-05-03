@@ -37,7 +37,7 @@ export class SfotoPage implements OnInit {
       const formData = new FormData();
       formData.append('file', this.selectedFile);
 
-      this.http.post<any>('http://localhost:5000/upload', formData).subscribe(
+      this.http.post<any>('http://127.0.0.1:5000/upload', formData).subscribe(
         (response) => {
           console.log(response);
           alert('Imagen subida con éxito');
