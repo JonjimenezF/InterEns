@@ -25,7 +25,7 @@ export class HomePage {
     this.router.navigate(['/perfil']);
   }
 
-   salir(){
+  salir(){
 
   }
   puntoLimpio(){

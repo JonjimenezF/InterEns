@@ -22,3 +22,14 @@ ion-menu::part(container) {
   flex-direction: column;
   align-items: flex-start; /* Alinea los botones a la izquierda */
 }
+
+.transparent-border {
+  border: 2px solid transparent; /* Establece el borde transparente */
+  border-color: rgb(255, 255, 255);
+  border-radius: 10px; /* Opcional: Agrega bordes redondeados */
+  box-shadow: 2px 2px 4px rgba(122, 122, 122, 0.5);
+}
+
+.color{
+  --ion-background-color: #ff0000; /* Cambia este valor al color de fondo que desees */
+}

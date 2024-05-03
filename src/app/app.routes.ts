@@ -50,10 +50,6 @@ export const routes: Routes = [
     loadComponent: () => import('./registrar/registrar.page').then( m => m.RegistrarPage)
   },
 
-  {
-    path: 'registrar',
-    loadComponent: () => import('./registrar/registrar.page').then( m => m.RegistrarPage)
-  },
 
 
  
