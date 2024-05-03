@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
-import { NavController, ToastController } from '@ionic/angular';
+import { IonicModule,NavController, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -13,15 +13,27 @@ import { Router } from '@angular/router';
   templateUrl: './sfoto.page.html',
   styleUrls: ['./sfoto.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class SfotoPage implements OnInit {
 
+  producto={
+    nombre: "",
+    descripcion: "",
+    precio: "",
+    stock: "",
+    foto: "",
+  }
+  
+  
 
   selectedFile: File | null = null;
   nombreFoto: string | undefined;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private router: Router) { }
+
+  ngOnInit() {
+   }
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
@@ -37,6 +49,8 @@ export class SfotoPage implements OnInit {
           console.log(response);
           alert('Imagen subida con éxito');
           this.nombreFoto = response.nombre_foto; // Asignar el nombre de la foto
+          this.producto.foto = response.nombre_foto;
+          console.log(this.producto);
         },
         (error) => {
           console.error(error);
@@ -51,6 +65,7 @@ export class SfotoPage implements OnInit {
       (response) => {
         console.log(response);
         alert('Foto eliminada correctamente');
+        this.nombreFoto = '';
       },
       (error) => {
         console.error(error);
@@ -59,11 +74,29 @@ export class SfotoPage implements OnInit {
     );
   }
 
-  // producto={
-  //   descripcion: "",
-  //   precio: "",
-  //   foto: "",
-  // }
+  showMenu = false;
+  toggleMenu() {
+    this.showMenu = !this.showMenu;
+  }
+
+  goProducto(){
+    this.router.navigate(['/producto']);
+  }
+
+  home(){
+    this.router.navigate(['/home']);
+  }
+
+  perfil(){
+    this.router.navigate(['/perfil']);
+  }
+
+  salir(){
+
+  }
+  puntoLimpio(){
+
+  }
 
   
   
@@ -105,12 +138,6 @@ export class SfotoPage implements OnInit {
   //   };
     
   // }
-
-
-
-
-  ngOnInit() {
-   }
 
   // goSubirfoto() {
   //   // Aquí puedes agregar la lógica para navegar a la página de subir foto

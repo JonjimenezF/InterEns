@@ -1,4 +1,32 @@
+* {
+  --background: #ffffff; /* Cambia el color de fondo aquí */
+}
 
+.color-text-black{
+    color: black ;
+    font-family:'Dotumche'
+}
+.color-text-white{
+    color: rgb(255, 255, 255);;
+    font-family:'Dotumche'
+}
+
+.color-text-grey{
+    color: rgb(151, 151, 151);;
+    font-family: 'Dotumche'
+}
+
+.centrar{
+  display:grid;
+  place-content: center;
+}
+
+
+.transparent-border {
+  border: 1px solid transparent; /* Establece el borde transparente */
+  border-color: rgb(151, 151, 151);
+  border-radius: 10px; /* Opcional: Agrega bordes redondeados */
+}
   
   
   
@@ -16,16 +44,11 @@
     color: #666; // Color del texto de las etiquetas
   }
   
-  ion-button {
-    background-color: #007bff; // Color de fondo del botón
-    color: #fff; // Color del texto del botón
-    margin-top: 20px; // Margen superior del botón
-  }
   
   /* Estilos para los input[type="file"] */
   
-  input[type="file"] {
-    display: block; // Mostrar como bloque para separarlo visualmente
-    margin-bottom: 10px; // Margen inferior del input
-  }
+  // input[type="file"] {
+  //   display: block; // Mostrar como bloque para separarlo visualmente
+  //   margin-bottom: 10px; // Margen inferior del input
+  // }
   

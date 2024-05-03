@@ -1,16 +1,54 @@
+<ion-menu contentId="main-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title style="color: black">Menu</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <div class="vertical-buttons">
+      <ion-button fill="clear" (click)="perfil()">Perfil</ion-button>
+      <ion-button fill="clear" (click)="salir()">Novedades</ion-button>
+      <ion-button fill="clear" (click)="salir()">Preguntas frecuentes</ion-button>
+      <ion-button fill="clear" (click)="salir()">Contacto</ion-button>
+      <ion-button fill="clear" (click)="puntoLimpio()">Punto limpio</ion-button>
+      <ion-button fill="clear" (click)="salir()">Cerrar sesión</ion-button>
+    </div>
+  </ion-content>
+</ion-menu>
+
 <ion-header>
   <ion-toolbar>
-    <ion-title>sfoto</ion-title>
+    <ion-buttons style="color: black;" slot="start">
+      <ion-menu-button auto-hide="false"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="centrar" style="color: black;">Subir producto</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div>
-    <h2>Subir Imagen</h2>
-    <input type="file" accept="image/*" (change)="onFileSelected($event)">
-    <button (click)="onSubmit()">Agregar Imagen</button>
+    <ion-item class="color-white transparent-border" style="padding-right: 40px">
+      <ion-input class="color-text-grey" type = "text" placeholder="Ingrese nombre del produto" [(ngModel)]="producto.nombre" ></ion-input>
+    </ion-item>
+    <ion-item class="color-white transparent-border" style="padding-right: 40px">
+      <ion-input class="color-text-grey" type = "text" placeholder="Ingrese descripcion" [(ngModel)]="producto.descripcion" ></ion-input>
+    </ion-item>
+    <ion-item class="color-white transparent-border" style="padding-right: 40px">
+      <ion-input class="color-text-grey" type = "text" placeholder="Ingrese precio" [(ngModel)]="producto.precio" ></ion-input>
+    </ion-item>
+    <ion-item class="color-white transparent-border" style="padding-right: 40px">
+      <ion-input class="color-text-grey" type = "text" placeholder="Ingrese stock" [(ngModel)]="producto.stock" ></ion-input>
+    </ion-item>
+    <div style="margin-top: 20px; text-align: center;">
+      <input class="centrar" style="margin: 0 auto;" type="file" accept="image/*" (change)="onFileSelected($event)">
+    </div>
+    <div class="centrar">
+      <ion-button class="color-text-white" color="primary" fill="solid" shape="round" (click)="onSubmit()">Agregar Imagen</ion-button>
+    </div>
     <p *ngIf="nombreFoto">Nombre de la foto subida: {{ nombreFoto }}</p>
-    <img *ngIf="nombreFoto" [src]="'http://localhost:5000/foto/' + nombreFoto" alt="Foto">
-    <button color="danger" (click)="eliminarFoto(nombreFoto)" *ngIf="nombreFoto">Eliminar Foto</button>
-  </div>
+    <div class="centrar">
+      <img *ngIf="nombreFoto" [src]="'http://localhost:5000/foto/' + nombreFoto" alt="Foto">
+    </div>
+    <div class="centrar" style="margin-top:30px">
+      <ion-button color="danger" (click)="eliminarFoto(nombreFoto)" *ngIf="nombreFoto">Eliminar</ion-button>
+    </div>
 </ion-content>
