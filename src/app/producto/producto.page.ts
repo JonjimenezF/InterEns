@@ -12,8 +12,12 @@ import { Router } from '@angular/router';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class ProductoPage implements OnInit {
-
-
+ 
+  producto={
+    descripcion: "",
+    precio: "",
+    foto: "",
+  }
   ngOnInit() {
   }
 

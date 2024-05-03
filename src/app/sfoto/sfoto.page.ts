@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonicModule, NavController, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -12,13 +12,21 @@ import { Router } from '@angular/router';
   templateUrl: './sfoto.page.html',
   styleUrls: ['./sfoto.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class SfotoPage implements OnInit {
 
+  producto={
+    descripcion: "",
+    precio: "",
+    foto: "",
+  }
+
+  
+  
   selectedFile: File | null = null;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, public toastController: ToastController, private navCtrl: NavController) { }
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
@@ -41,7 +49,17 @@ export class SfotoPage implements OnInit {
       );
     }
   }
-
+  submitForm() {
+    // Aquí puedes envi el formulario o hacer lo que necesites con los datos del producto
+    console.log(this.producto);
+    // Reiniciar el formulario después de enviar los datos
+    this.producto = {
+      descripcion: '',
+      precio: '',
+      foto: '',
+    };
+    
+  }
 
 
 

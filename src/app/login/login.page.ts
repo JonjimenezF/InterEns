@@ -17,7 +17,7 @@ import { lastValueFrom } from 'rxjs';
 export class LoginPage implements OnInit {
 
   user={
-    usuario: "",
+    email: "",
     password: ""
   }
   constructor(private router:Router,private userService: UsuarioService,public toastController: ToastController) { }
@@ -57,13 +57,12 @@ export class LoginPage implements OnInit {
     this.router.navigate(['/home']);
   }
 
-<<<<<<< HEAD
-  goRecuperar() {
-    this.router.navigate(['/recuperar']);
-=======
   goregistrar(){
     this.router.navigate(['/registrar']);
->>>>>>> main
+  }
+
+  goRecuperar() {
+    this.router.navigate(['/recuperar']);
   }
 
 }

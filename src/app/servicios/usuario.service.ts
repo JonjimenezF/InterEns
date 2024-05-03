@@ -27,7 +27,7 @@ export class UsuarioService {
   }
 
   getLogin(UserLogin: userLogin): Observable<string | any> {
-    return this._http.get<any>(this.URL_SUPEBASE + "USUARIO?email=eq." + UserLogin.usuario + "&password=eq." + UserLogin.password, { headers: this.supebaseheads }).pipe(
+    return this._http.get<any>(this.URL_SUPEBASE + "USUARIO?email=eq." + UserLogin.email + "&password=eq." + UserLogin.password, { headers: this.supebaseheads }).pipe(
       map((user) => {
         console.log("Map", user[0])
         return user[0]

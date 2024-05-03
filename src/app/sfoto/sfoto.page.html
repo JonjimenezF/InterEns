@@ -1,10 +1,7 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>sfoto</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
+
+
+ 
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">sfoto</ion-title>
@@ -12,10 +9,25 @@
         <h2>Subir Imagen</h2>
         <form (ngSubmit)="onSubmit()" enctype="multipart/form-data">
           <input type="file" accept="image/*" (change)="onFileSelected($event)">
-          
-          
         </form>
+        <ion-list>
+          <ion-item>
+            <ion-label position="stacked">Descripción</ion-label>
+            <ion-input type="text" [(ngModel)]="producto.descripcion" name="descripcion"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Precio</ion-label>
+            <ion-input type="number" [(ngModel)]="producto.precio" name="precio"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Foto</ion-label>
+            <input type="file" accept="image/*" (change)="onFileSelected($event)">
+          </ion-item>
+        </ion-list>
+        <ion-button expand="block" (click)="submitForm()">Agregar Producto</ion-button>
       </div>
     </ion-toolbar>
   </ion-header>
+
 </ion-content>
+
