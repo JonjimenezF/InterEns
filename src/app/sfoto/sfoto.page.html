@@ -11,5 +11,6 @@
     <button (click)="onSubmit()">Agregar Imagen</button>
     <p *ngIf="nombreFoto">Nombre de la foto subida: {{ nombreFoto }}</p>
     <img *ngIf="nombreFoto" [src]="'http://localhost:5000/foto/' + nombreFoto" alt="Foto">
+    <button color="danger" (click)="eliminarFoto(nombreFoto)" *ngIf="nombreFoto">Eliminar Foto</button>
   </div>
 </ion-content>
