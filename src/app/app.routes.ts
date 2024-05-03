@@ -44,6 +44,10 @@ export const routes: Routes = [
     path: 'sfoto',
     loadComponent: () => import('./sfoto/sfoto.page').then( m => m.SfotoPage)
   },
+  {
+    path: 'registrar',
+    loadComponent: () => import('./registrar/registrar.page').then( m => m.RegistrarPage)
+  }
 
  
 
