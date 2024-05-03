@@ -2,11 +2,10 @@
   
 </ion-header>
 <ion-content class="color-white">
-
-    <h2 class="color-text-black" style="padding-left: 40px;">Bienvenido!</h2>
+  <h2 class="color-text-black" style="padding-left: 40px;">Bienvenido!</h2>
   <ion-card-content>
-      <div class="centrar" >
-        <p class="color-text-black">Email</p>
+    <div class="centrar" >
+      <p class="color-text-black">Email</p>
         <ion-item class="color-white transparent-border" style="padding-right: 40px">
           <ion-input class="color-text-grey" type = "text" placeholder="Ingresa tu Email" [(ngModel)]="user.email"></ion-input>
         </ion-item>
@@ -16,13 +15,19 @@
         </ion-item>
         <div>
         <ion-button class="olvbtn" fill="clear" (click)="goRecuperar()">¿Olvido su Contraseña?</ion-button>
+<<<<<<< HEAD
         </div>
         <div class="centrar">
+=======
+      </div>
+      <div class="centrar">
+>>>>>>> c9cb36395b102f49e4900f4d3c3ac1ef8768ecd7
         <ion-button class="color-text-white" style="margin-top:20px" fill="solid" shape="round" (click)="Login(user)">Ingresar</ion-button>
         </div>
         <span class="color-text-grey centrar" style="margin-top: 10px">--------------------- O ingrese con --------------------- </span>
         <ion-button fill="clear" class="centrar" style="margin-top: 30px">
         <ion-img class="image-with-border" src="assets/img/google.png" alt=""></ion-img> 
+<<<<<<< HEAD
         </ion-button> 
 
         <p class="color-text-black" style="text-align: center;margin-top: 30px;">¿Aun no tiene cuenta?<a style="color: orange;"><strong> Registrese</strong></a></p>
@@ -31,5 +36,11 @@
 
 
   
+=======
+      </ion-button> 
+      <p class="color-text-black" style="text-align: center;margin-top: 30px;">¿Aun no tiene cuenta?<a style="color: orange;" (click)="goregistrar()"><strong> Registrese</strong></a></p>
+    </div>
+  </ion-card-content>
+>>>>>>> c9cb36395b102f49e4900f4d3c3ac1ef8768ecd7
 </ion-content>
 
