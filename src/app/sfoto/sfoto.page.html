@@ -27,22 +27,22 @@
 
 <ion-content>
     <ion-item class="color-white transparent-border" style="padding-right: 40px">
-      <ion-input class="color-text-grey" type = "text" placeholder="Ingrese nombre del produto" [(ngModel)]="producto.nombre" ></ion-input>
+      <ion-input class="color-text-grey" type = "text" placeholder="Ingrese nombre del produto" [(ngModel)]="produc.nombre" ></ion-input>
     </ion-item>
     <ion-item class="color-white transparent-border" style="padding-right: 40px">
-      <ion-input class="color-text-grey" type = "text" placeholder="Ingrese descripcion" [(ngModel)]="producto.descripcion" ></ion-input>
+      <ion-input class="color-text-grey" type = "text" placeholder="Ingrese descripcion" [(ngModel)]="produc.descripcion" ></ion-input>
     </ion-item>
     <ion-item class="color-white transparent-border" style="padding-right: 40px">
-      <ion-input class="color-text-grey" type = "text" placeholder="Ingrese precio" [(ngModel)]="producto.precio" ></ion-input>
+      <ion-input class="color-text-grey" type = "text" placeholder="Ingrese precio" [(ngModel)]="produc.precio" ></ion-input>
     </ion-item>
     <ion-item class="color-white transparent-border" style="padding-right: 40px">
-      <ion-input class="color-text-grey" type = "text" placeholder="Ingrese stock" [(ngModel)]="producto.stock" ></ion-input>
+      <ion-input class="color-text-grey" type = "text" placeholder="Ingrese stock" [(ngModel)]="produc.stock" ></ion-input>
     </ion-item>
     <div style="margin-top: 20px; text-align: center;">
       <input class="centrar" style="margin: 0 auto;" type="file" accept="image/*" (change)="onFileSelected($event)">
     </div>
     <div class="centrar">
-      <ion-button class="color-text-white" color="primary" fill="solid" shape="round" (click)="onSubmit()">Agregar Imagen</ion-button>
+      <ion-button class="color-text-white" color="primary" fill="solid" shape="round" (click)="onSubmit(produc)">Subir Imagen</ion-button>
     </div>
     <p *ngIf="nombreFoto">Nombre de la foto subida: {{ nombreFoto }}</p>
     <div class="centrar">

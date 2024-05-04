@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { idUsuario } from '../models/idUsuario';
 
 @Component({
   selector: 'app-home',
@@ -10,8 +11,24 @@ import { IonicModule } from '@ionic/angular';
   imports: [IonicModule,],
 })
 export class HomePage {
-  constructor(private router: Router) {
+
+  userInfo?: idUsuario;
+  constructor(private router: Router, private activateRoute: ActivatedRoute) {
+    const state = this.router.getCurrentNavigation()?.extras.state;
+    if (state && state['userInfo']) {
+      this.userInfo = state['userInfo'];
+    }
   }
+
+  async ngOnInit() {
+    if (this.userInfo) {
+      console.log(this.userInfo.id_usuario);
+      console.log(this.userInfo);
+    } else {
+      console.log('El objeto userInfo es null o undefined');
+    }
+  }
+  
 
   goProducto(){
     this.router.navigate(['/producto']);
@@ -34,6 +51,6 @@ export class HomePage {
   goSubirfoto() {
     // Aquí puedes agregar la lógica para navegar a la página de subir foto
     // Por ejemplo:
-    this.router.navigate(['/sfoto']);
+    this.router.navigate(['/sfoto'], { state: { userInfo: this.userInfo}})
   }
 }

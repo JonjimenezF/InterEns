@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { IonicModule,NavController, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProductoService } from '../servicios/producto.service';
+import { producto } from '../models/producto';
 
 
 
@@ -14,43 +15,87 @@ import { Router } from '@angular/router';
   styleUrls: ['./sfoto.page.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
+  
 })
 export class SfotoPage implements OnInit {
 
-  producto={
+  produc = {
     nombre: "",
     descripcion: "",
     precio: "",
     stock: "",
-    foto: "",
+    imagp: " ",
+    id_usuario: 0,
   }
-  
-  
 
   selectedFile: File | null = null;
   nombreFoto: string | undefined;
 
-  constructor(private http: HttpClient,private router: Router) { }
+  userInfo?: any;
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private activateRoute: ActivatedRoute,
+    public toastController: ToastController,
+    private productService: ProductoService,
+    private navCtrl: NavController
+  ) {
+    const state = this.router.getCurrentNavigation()?.extras.state;
+    if (state && state['userInfo']) {
+      this.userInfo = state['userInfo'];
+    }
+  }
 
-  ngOnInit() {
-   }
+  async ngOnInit() {
+    if (this.userInfo) {
+      console.log(this.userInfo.id_usuario);
+    } else {
+      console.log('El objeto userInfo es null o undefined');
+    }
+  }
+
+  async presentToast(message: string, duration: number = 2000) {
+    const toast = await this.toastController.create({
+      message,
+      duration,
+      position: 'bottom'
+    });
+    toast.present();
+  }
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
   }
 
-  onSubmit() {
+  onSubmit(pro: any) {
     if (this.selectedFile) {
       const formData = new FormData();
       formData.append('foto', this.selectedFile);
-  
+
       this.http.post<any>('http://localhost:5000/upload', formData).subscribe(
         (response) => {
           console.log(response);
-          alert('Imagen subida con éxito');
-          this.nombreFoto = response.nombre_foto; // Asignar el nombre de la foto
-          this.producto.foto = response.nombre_foto;
-          console.log(this.producto);
+          this.presentToast('Imagen subida con éxito');
+          this.nombreFoto = response.nombre_foto;
+          this.produc.imagp = response.nombre_foto;
+          this.produc.id_usuario = this.userInfo.id_usuario;
+          console.log(this.produc);
+
+          // Agregar el producto
+          this.productService.AgregarFoto(pro).subscribe({
+            next: (response: any) => {
+              this.presentToast('Registro exitoso.', 3000);
+              setTimeout(() => {
+                console.log("exito")
+                this.navCtrl.navigateRoot('/home');
+              }, 3200);
+            },
+            error: (error: any) => {
+              console.log("AQUIIIIIIIII",this.produc)
+              console.error('Error al subir producto:', error);
+              this.presentToast('Error al Subir producto. Inténtalo de nuevo.');
+            }
+          });
         },
         (error) => {
           console.error(error);
@@ -74,10 +119,6 @@ export class SfotoPage implements OnInit {
     );
   }
 
-  showMenu = false;
-  toggleMenu() {
-    this.showMenu = !this.showMenu;
-  }
 
   goProducto(){
     this.router.navigate(['/producto']);
@@ -97,54 +138,6 @@ export class SfotoPage implements OnInit {
   puntoLimpio(){
 
   }
-
-  
-  
-  // selectedFile: File | null = null;
-
-  // constructor(private http: HttpClient, private router: Router, public toastController: ToastController, private navCtrl: NavController) { }
-
-  // onFileSelected(event: any) {
-  //    this.selectedFile = event.target.files[0];
-  // }
-
-  // onSubmit() {
-  //   if (this.selectedFile) {
-  //     const formData = new FormData();
-  //     formData.append('file', this.selectedFile);
-
-  //     this.http.post<any>('http://localhost:5000/upload', formData).subscribe(
-  //       (response) => {
-  //         console.log(response);
-  //         alert('Imagen subida con éxito');
-  //       },
-  //       (error) => {
-  //         console.error(error);
-  //         alert('Error al subir la imagen');
-  //       }
-  //     );
-  //   }
-  // }
-
-
-  // submitForm() {
-  //   // Aquí puedes envi el formulario o hacer lo que necesites con los datos del producto
-  //   console.log(this.producto);
-  //   // Reiniciar el formulario después de enviar los datos
-  //   this.producto = {
-  //     descripcion: '',
-  //     precio: '',
-  //     foto: '',
-  //   };
-    
-  // }
-
-  // goSubirfoto() {
-  //   // Aquí puedes agregar la lógica para navegar a la página de subir foto
-  //   // Por ejemplo:
-  //   this.router.navigate(['/sfoto']);
-  // }
-
   
 
 }

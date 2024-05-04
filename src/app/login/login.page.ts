@@ -33,11 +33,11 @@ export class LoginPage implements OnInit {
 
   //Valida al usuario si esta registrado
   async Login(userLoginInfo: userLogin) {
-    const user_alumno = await lastValueFrom(this.userService.getLogin(userLoginInfo));
-    console.log(user_alumno);
-    if (user_alumno) {
+    const usuario = await lastValueFrom(this.userService.getLogin(userLoginInfo));
+    console.log(usuario);
+    if (usuario) {
       console.log("Usuario existe...");
-      this.router.navigate(['/home'], { state: { user_info: user_alumno}})
+      this.router.navigate(['/home'], { state: { userInfo: usuario}})
     } else {
       //NO EXISTE
       console.log("Usuario no existe...");
