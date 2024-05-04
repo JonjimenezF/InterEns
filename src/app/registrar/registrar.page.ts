@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, NavController, ToastController } from '@ionic/angular';
 import { UsuarioService } from '../servicios/usuario.service'; // Importa el servicio UsuarioService
 import { Router } from '@angular/router';
+import { rUsuario } from '../models/rUsuario';
                       
 @Component({
   selector: 'app-registrar',
@@ -35,8 +36,8 @@ export class RegistrarPage implements OnInit {
     toast.present();
   }
 
-  regis(user: any) {
-    this.userService.registerUser(user).subscribe({
+  regis(users: any) {
+    this.userService.RegistrarUsuario(users).subscribe({
       next: (response: any) => {
         // Mostrar mensaje de éxito
         this.presentToast('Registro exitoso.', 3000);
@@ -53,5 +54,7 @@ export class RegistrarPage implements OnInit {
       }
     });
   }
+
+  
 
 }
