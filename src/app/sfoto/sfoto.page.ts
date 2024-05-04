@@ -25,7 +25,7 @@ export class SfotoPage implements OnInit {
     precio: "",
     stock: "",
     imagp: " ",
-    id_usuario: 0,
+    id_usuario: "",
   }
 
   selectedFile: File | null = null;
