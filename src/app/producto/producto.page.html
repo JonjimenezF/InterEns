@@ -1,64 +1,56 @@
 <ion-menu contentId="main-content">
   <ion-header>
     <ion-toolbar>
-      <ion-title style="color: black"> Categoria </ion-title>
+      <ion-title style="color: black">Menu</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
     <div class="vertical-buttons">
-    <ion-button fill="clear" (click)="puntoLimpio()">
-      Tecnologia
-    </ion-button>
-    <ion-button fill="clear" (click)="salir()">
-      Electrohogar
-    </ion-button>
-    <ion-button fill="clear" (click)="salir()">
-      Muebles y organizacion
-    </ion-button>
-    <ion-button fill="clear" (click)="salir()">
-      Cocina y baño
-    </ion-button>
-    <ion-button fill="clear" (click)="salir()">
-      Otras categorias
-    </ion-button>
-  </div>
+      <ion-button fill="clear" (click)="perfil()">Perfil</ion-button>
+      <ion-button fill="clear" (click)="salir()">Novedades</ion-button>
+      <ion-button fill="clear" (click)="salir()">Preguntas frecuentes</ion-button>
+      <ion-button fill="clear" (click)="salir()">Contacto</ion-button>
+      <ion-button fill="clear" (click)="puntoLimpio()">Punto limpio</ion-button>
+      <ion-button fill="clear" (click)="salir()">Cerrar sesión</ion-button>
+    </div>
   </ion-content>
 </ion-menu>
-<div class="ion-page" id="main-content">
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons style="color: black;" slot="start">
-          <ion-menu-button auto-hide="false"></ion-menu-button>
-        </ion-buttons>
-        <ion-title>Menu</ion-title>
-      </ion-toolbar>
-    </ion-header>
-<ion-content>
 
-  <!-- Barra de pestañas -->
-  <ion-tabs>
-    <ion-tab-bar slot="bottom">
-       <ion-tab-button tab="home" style="margin-left: 12px;">
-       <ion-icon src="./assets/icon/home.svg" (click)="home()" style="font-size: 3em;"></ion-icon>
-      </ion-tab-button>
-     <ion-tab-button tab="saved">
-        <ion-icon src="./assets/icon/bookmark.svg" style="font-size: 3em;"></ion-icon>
-      </ion-tab-button> 
-      <!-- Espacio en blanco -->
-      <ion-tab-button style="flex: 1;"></ion-tab-button>
-      <ion-tab-button tab="notifications">
-        <ion-icon src="./assets/icon/notifications.svg" style="font-size: 3em;"></ion-icon>
-      </ion-tab-button>
-      <ion-tab-button tab="profile">
-        <ion-icon src="./assets/icon/person.svg" (click)="perfil()" style="font-size: 3em;"></ion-icon>
-      </ion-tab-button>
-    </ion-tab-bar>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons style="color: black;" slot="start">
+      <ion-menu-button auto-hide="false"></ion-menu-button>
+    </ion-buttons>
 
-    <!-- ion-fab fuera de la barra de pestañas -->
-    <ion-fab vertical="bottom" horizontal="center">
-      <!-- <ion-fab-button color="primary" style="margin-bottom: 15px;">
-          <ion-icon src="./assets/icon/add.svg"></ion-icon> 
-      </ion-fab-button> -->
-    </ion-fab>
-  </ion-tabs>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title style="color: black;">Producto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="main-content">
+  <ion-toolbar>
+    <ion-searchbar></ion-searchbar>
+    <ion-button class="transparent-border" slot="end" fill="clear" (click)="openFilterMenu()">
+      <ion-icon style="color: black;" src="./assets/icon/options.svg"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+  <!-- Contenido principal aquí -->
+  <ion-row>
+    <ion-col size="6"> <!-- Utilizamos size="6" para que ocupe la mitad del ancho -->
+      <ion-card style="margin-bottom: 10px;">
+        <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" style="width: 100%; height: auto;">
+        <ion-card-header>
+          <ion-card-title>Card Title</ion-card-title>
+          <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          Here's a small text description for the card content. Nothing more, nothing less.
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <!-- Resto del contenido de las cards -->
+  </ion-row>
 </ion-content>

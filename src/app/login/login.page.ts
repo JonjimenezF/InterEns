@@ -7,6 +7,7 @@ import { userLogin } from '../models/userLogin';
 import { UsuarioService } from '../servicios/usuario.service';
 import { lastValueFrom } from 'rxjs';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -20,7 +21,7 @@ export class LoginPage implements OnInit {
     email: "",
     password: ""
   }
-  constructor(private router:Router,private userService: UsuarioService,public toastController: ToastController) { }
+  constructor(private router:Router,private userService: UsuarioService,public toastController: ToastController, private navCtrl: NavController) { }
   //Funcion para mostrar mensajes
   async presentToast(message: string, duration: number = 2000) {
     const toast = await this.toastController.create({
@@ -64,5 +65,9 @@ export class LoginPage implements OnInit {
 
   goRecuperar() {
     this.router.navigate(['/recuperar']);
+  }
+
+  goBack() {
+    this.navCtrl.back();
   }
 }

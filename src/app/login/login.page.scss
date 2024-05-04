@@ -51,3 +51,13 @@ ion-input{
     --highlight-height: 0;
 }
 
+ion-back-button {
+    // Estilos adicionales aquí
+    --color: rgb(233, 17, 17); // Cambia el color del icono de flecha a negro
+    font-size: 18px; // Cambia el tamaño de la fuente del botón
+    margin-left: 10px; // Agrega un margen a la izquierda del botón
+  }
+  
+  ion-buttons ion-back-button {
+    --color: black;
+  }

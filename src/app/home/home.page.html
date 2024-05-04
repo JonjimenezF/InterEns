@@ -1,5 +1,9 @@
+
+
 <ion-menu contentId="main-content">
+  
   <ion-header>
+    
     <ion-toolbar>
       <ion-title style="color: black">Menu</ion-title>
     </ion-toolbar>
@@ -18,19 +22,22 @@
     <ion-button fill="clear" (click)="salir()">
       Contacto
     </ion-button>
-    <ion-button fill="clear" (click)="salir()">
+    <ion-button fill="clear" (click)="salir()" text="" defaultHref="portada" >
       Cerrar sesión
     </ion-button>
   </div>
   </ion-content>
 </ion-menu>
+
 <div class="ion-page" id="main-content">
     <ion-header>
       <ion-toolbar>
         <ion-buttons style="color: black;" slot="start">
           <ion-menu-button auto-hide="false"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Menu</ion-title>
+        <ion-buttons slot="start">
+          <ion-back-button (click)="goBack()" text="" color="rgb(165, 17, 233)"></ion-back-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
   <ion-content>
@@ -59,4 +66,6 @@
         <h1 class="color-text-black">Buscar</h1>
       </div>
     </ion-card-content>
+
+   
 </ion-content>
