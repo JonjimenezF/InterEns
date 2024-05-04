@@ -38,3 +38,17 @@ ion-menu::part(container) {
 ion-buttons ion-back-button {
   --color: black;
 }
+
+.carta-titulo {
+  font-size: 16px; /* Ajusta el tamaño del título según tus preferencias */
+  min-height: 3.6em; /* Ajusta la altura mínima del título para que todas las cartas tengan la misma altura */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limita el número de líneas a 2 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es demasiado largo */
+}
+
+.carta {
+  height: 250px; /* Ajusta la altura según tus preferencias */
+}

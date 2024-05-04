@@ -26,5 +26,14 @@ export class ProductoService {
       })
     );
   }
+
+  getProduct(): Observable<any[]> {
+    return this._http.get<any[]>(this.URL_SUPEBASE + "PRODUCTO?select=*", { headers: this.supebaseheads }).pipe(
+      catchError((error) => {
+        console.log(error);
+        throw error;
+      })
+    );
+  }
   
 }

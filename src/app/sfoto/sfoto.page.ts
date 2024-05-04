@@ -140,6 +140,8 @@ export class SfotoPage implements OnInit {
   puntoLimpio(){
 
   }
-  
 
+  goBack() {
+    this.navCtrl.back();
+  }
 }
