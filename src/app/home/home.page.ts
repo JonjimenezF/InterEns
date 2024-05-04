@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute,Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { idUsuario } from '../models/idUsuario';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +14,7 @@ import { idUsuario } from '../models/idUsuario';
 export class HomePage {
 
   userInfo?: idUsuario;
-  constructor(private router: Router, private activateRoute: ActivatedRoute) {
+  constructor(private router: Router, private activateRoute: ActivatedRoute,private navCtrl: NavController) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
       this.userInfo = state['userInfo'];
@@ -43,6 +44,7 @@ export class HomePage {
   }
 
   salir(){
+    this.router.navigate(['/portada']);
 
   }
   puntoLimpio(){
@@ -52,5 +54,9 @@ export class HomePage {
     // Aquí puedes agregar la lógica para navegar a la página de subir foto
     // Por ejemplo:
     this.router.navigate(['/sfoto'], { state: { userInfo: this.userInfo}})
+  }
+
+  goBack() {
+    this.navCtrl.back();
   }
 }

@@ -33,3 +33,8 @@ ion-menu::part(container) {
 .color{
   --ion-background-color: #ff0000; /* Cambia este valor al color de fondo que desees */
 }
+
+
+ion-buttons ion-back-button {
+  --color: black;
+}

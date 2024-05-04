@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { NavigationExtras, Router} from '@angular/router';
+import { NavController } from '@ionic/angular';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { NavigationExtras, Router} from '@angular/router';
 })
 export class RecuperarPage implements OnInit {
 
-  constructor(private router: Router, public toastController: ToastController) { }
+  constructor(private navCtrl: NavController,private router: Router, public toastController: ToastController) { }
 
   user={
     usuario: ""
@@ -50,6 +51,10 @@ async presentToast(menssage: string, duration:number = 1000){//creacion de una f
   });
   (await toast).present();// pausa la ejecución del código en ese punto hasta que la operación toast.present() haya terminado
 }
+goBack() {
+  this.navCtrl.back();
+}
+
 }
 
 

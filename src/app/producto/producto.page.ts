@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-producto',
@@ -14,7 +15,7 @@ import { ActionSheetController } from '@ionic/angular';
 })
 export class ProductoPage implements OnInit {
  
-  constructor(private router: Router,public actionSheetController: ActionSheetController) {}
+  constructor(private router: Router,public actionSheetController: ActionSheetController, private navCtrl: NavController) {}
 
   producto={
     descripcion: "",
@@ -80,6 +81,10 @@ export class ProductoPage implements OnInit {
   }
   puntoLimpio(){
 
+  }
+
+  goBack() {
+    this.navCtrl.back();
   }
 
 }
