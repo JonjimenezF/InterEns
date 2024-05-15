@@ -70,11 +70,8 @@ export class SfotoPage implements OnInit {
   onSubmit(pro: any) {
     if (this.selectedFile) {
       const formData = new FormData();
-
       formData.append('foto', this.selectedFile);
-
       this.http.post<any>('http://localhost:5000/upload', formData).subscribe(
-
         (response) => {
           console.log(response);
           this.presentToast('Imagen subida con éxito');
@@ -82,22 +79,17 @@ export class SfotoPage implements OnInit {
           this.produc.imagp = response.nombre_foto;
           this.produc.id_usuario = this.userInfo.id_usuario;
           console.log(this.produc);
-
           // Agregar el producto
-          this.productService.AgregarFoto(pro).subscribe({
-            next: (response: any) => {
-              this.presentToast('Registro exitoso.', 3000);
-              setTimeout(() => {
-                console.log("exito")
-                this.navCtrl.navigateRoot('/home');
-              }, 3200);
-            },
-            error: (error: any) => {
-              console.log("AQUIIIIIIIII",this.produc)
-              console.error('Error al subir producto:', error);
-              this.presentToast('Error al Subir producto. Inténtalo de nuevo.');
-            }
-          });
+          this.productService.addProduct(pro).subscribe(
+            (response) => {
+              this.presentToast('producto subido con éxito');
+              this.navCtrl.navigateRoot('/home');
+          },
+          (error) => {
+            console.error(error);
+            alert('Error al subir la Producto');
+          }
+          );
         },
         (error) => {
           console.error(error);

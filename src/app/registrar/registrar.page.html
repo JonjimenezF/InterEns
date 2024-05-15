@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<!-- <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>registrar</ion-title>
   </ion-toolbar>
@@ -10,4 +10,35 @@
   <ion-input class="color-text-grey" type = "text" placeholder="Ingrese su apellido" [(ngModel)]="user.apellido" ></ion-input>
   <ion-input class="color-text-grey" type = "password" placeholder="Ingrese su password" [(ngModel)]="user.password"></ion-input> 
   <ion-button class="btn" (click)="regis(user)">Login</ion-button>
+  <label for="">
+      <ion-input type="text" placeholder=" " class="input"></ion-input>
+      <span></span>
+  </label>
+</ion-content> -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Formulario Tipo Google</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-content>
+      <form (submit)="submitForm()">
+        <ion-item>
+          <ion-label position="stacked" style="color: black;">Nombre:</ion-label>
+          <ion-input type="text" name="nombre" [(ngModel)]="formData.nombre" required style="color: black;"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked" style="color: black;">Email:</ion-label>
+          <ion-input type="email" name="email" [(ngModel)]="formData.email" required style="color: black;"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked" style="color: black;">Mensaje:</ion-label>
+          <ion-textarea name="mensaje" [(ngModel)]="formData.mensaje" required style="color: black;"></ion-textarea>
+        </ion-item>
+        <ion-button type="submit" expand="block" color="success">Enviar</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

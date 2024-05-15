@@ -54,6 +54,16 @@ export class RegistrarPage implements OnInit {
       }
     });
   }
+  
+  formData: any = {
+    nombre: '',
+    email: '',
+    mensaje: ''
+  };
+
+  submitForm() {
+    console.log(this.formData); // Aquí puedes enviar los datos del formulario a través de una petición HTTP
+  }
 
   
 
