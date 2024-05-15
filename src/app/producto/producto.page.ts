@@ -8,6 +8,7 @@ import { NavController } from '@ionic/angular';
 import { ProductoService } from '../servicios/producto.service';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { producto } from '../models/producto';
 
 @Component({
   selector: 'app-producto',
@@ -54,6 +55,7 @@ export class ProductoPage implements OnInit {
       }
     );
   }
+  
 
   async openFilterMenu() {
     const actionSheet = await this.actionSheetController.create({
@@ -94,6 +96,17 @@ export class ProductoPage implements OnInit {
 
 
   showMenu = false;
+
+  //recibir datos producto
+  goDetalleProducto(detProducto:producto) {
+    console.log(detProducto)
+    if (detProducto) {
+      this.router.navigate(['/detalle-producto'], { state: { det_producto: detProducto}})
+      // this.navCtrl.navigateForward(['/detalle-producto/: id']);
+    } else {
+      console.error("ID del producto no definido");
+    }
+  }
 
   toggleMenu() {
     this.showMenu = !this.showMenu;

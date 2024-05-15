@@ -39,8 +39,8 @@
   </ion-toolbar>
   <!-- Contenido principal aquí -->
   <ion-row>
-    <ion-col *ngFor="let producto of productos" size="6">
-      <ion-card class="carta">
+    <ion-col *ngFor="let producto of productos" (click)="goDetalleProducto(producto)" size="6">
+      <ion-card class="carta" >
         <ion-card-header>
           <img [src]="'http://localhost:5000/foto/' + producto.imagp" alt="Imagen" style="width: 100%; height: auto;">
           <ion-card-title class="carta-titulo">{{ producto.nombre }}</ion-card-title>
