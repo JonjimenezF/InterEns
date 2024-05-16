@@ -10,6 +10,7 @@ export class ProductoService {
 
   constructor(private _http: HttpClient) { }
   private baseUrl = 'http://localhost:5000';  
+  
   addProduct(product: producto): Observable<any> {
     return this._http.post<any>(this.baseUrl + '/agregar_producto', product).pipe(
       catchError(this.handleError)
