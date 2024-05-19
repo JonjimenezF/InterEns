@@ -61,3 +61,34 @@
     border-radius: 20px; /* Opcional: Agrega bordes redondeados */
     box-shadow: 2px 2px 4px rgba(122, 122, 122, 0.5);
   }
+
+  .botones-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .file-input {
+    display: none;
+  }
+  
+  .transparent-border {
+    border: none;
+  }
+//contorno de la imagen
+  .image-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .preview-image {
+    border: 2px solid #c0c0c0;
+    box-shadow: 4px 4px 4px rgba(122, 122, 122, 0.5);
+    border-radius: 20px;
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+  }

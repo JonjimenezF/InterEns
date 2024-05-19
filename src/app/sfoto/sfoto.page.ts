@@ -57,6 +57,10 @@ export class SfotoPage implements OnInit {
     }
   }
 
+  triggerFileInput() {
+    const fileInput = document.getElementById('fileInput') as HTMLElement;
+    fileInput.click();
+  }
 
   onFileSelected(event: any) {
 

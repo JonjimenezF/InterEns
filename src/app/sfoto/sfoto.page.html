@@ -11,16 +11,38 @@
 </ion-header>
 
 <ion-content>
-    <div style="margin-top: 20px; text-align: center;">
+    <!-- <div style="margin-top: 20px; text-align: center;">
       <input class="centrar" style="margin: 0 auto;" type="file" accept="image/*" (change)="onFileSelected($event)">
+    </div> -->
+    <div style="margin-top: 20px;" *ngIf="imagePreviews.length > 0" class="centrar">
+      <img 
+        [src]="imagePreviews[imagePreviews.length - 1]" 
+        alt="Vista previa de la imagen" 
+        class="preview-image">
     </div>
-    <div *ngIf="imagePreviews.length > 0" class="centrar">
-      <img *ngFor="let imagePreview of imagePreviews" [src]="imagePreview" alt="Vista previa de la imagen">
-    </div>
-    <div class="centrar">
-      <ion-button class="transparent-border" color="primary" fill="clear" shape="round"  (click)="eliminarFotos()">
-        <img src="./assets/icon/closep.png" alt="">
-      </ion-button>
+    <div class="botones-container">
+      <div class="centrar">
+        <input 
+          class="file-input" 
+          type="file" 
+          accept="image/*" 
+          (change)="onFileSelected($event)" 
+          id="fileInput"
+          style="display: none;">
+        <ion-button 
+          class="transparent-border" 
+          color="primary" 
+          fill="clear" 
+          shape="round" 
+          (click)="triggerFileInput()">
+          <img src="./assets/icon/plus.png" alt="">
+        </ion-button>
+      </div>
+      <div class="centrar">
+        <ion-button class="transparent-border" color="primary" fill="clear" shape="round"  (click)="eliminarFotos()">
+          <img src="./assets/icon/closep.png" alt="">
+        </ion-button>
+      </div>
     </div>
     <div class="centrar"> 
       <ion-button class="color-text-white" color="primary" fill="solid" shape="round" (click)="onSubmit()">Subir Imagen</ion-button>
