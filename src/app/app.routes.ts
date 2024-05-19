@@ -36,11 +36,6 @@ export const routes: Routes = [
     path: 'verificarcontra',
     loadComponent: () => import('./verificarcontra/verificarcontra.page').then( m => m.VerificarcontraPage)
   },
-
-  {
-    path: 'mostar',
-    loadComponent: () => import('./mostar/mostar.page').then( m => m.MostarPage)
-  },
   {
     path: 'sfoto',
     loadComponent: () => import('./sfoto/sfoto.page').then( m => m.SfotoPage)
@@ -48,9 +43,14 @@ export const routes: Routes = [
   {
     path: 'registrar',
     loadComponent: () => import('./registrar/registrar.page').then( m => m.RegistrarPage)
-  },  {
+  },
+  {
     path: 'detalle-producto',
     loadComponent: () => import('./detalle-producto/detalle-producto.page').then( m => m.DetalleProductoPage)
+  },
+  {
+    path: 'sproducto',
+    loadComponent: () => import('./sproducto/sproducto.page').then( m => m.SproductoPage)
   },
 
 

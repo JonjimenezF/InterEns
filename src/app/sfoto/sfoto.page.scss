@@ -54,3 +54,10 @@
   ion-buttons ion-back-button {
     --color: black;
   }
+
+  .transparent-border {
+    border: 4px solid transparent; /* Establece el borde transparente */
+    border-color: rgb(255, 255, 255);
+    border-radius: 20px; /* Opcional: Agrega bordes redondeados */
+    box-shadow: 2px 2px 4px rgba(122, 122, 122, 0.5);
+  }

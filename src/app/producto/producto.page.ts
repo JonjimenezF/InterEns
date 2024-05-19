@@ -32,6 +32,7 @@ export class ProductoPage implements OnInit {
     precio: "",
     foto: "",
   }
+
   productos: any[] = []; // Declaración de la propiedad productos
   imagenProducto: Observable<Blob>; // Declaración de la propiedad imagenProducto
 
@@ -51,51 +52,11 @@ export class ProductoPage implements OnInit {
       },
       (error) => {
         console.error(error);
-        // Manejar errores aquí
       }
     );
   }
   
 
-  async openFilterMenu() {
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Filtro de Búsqueda',
-      backdropDismiss: false,
-      cssClass: 'color',
-      buttons: [
-        {
-          text: 'Orden',
-          role: 'button',
-          
-        },
-        {
-          text: 'Puntuación',
-          role: 'button',
-          
-        },
-        {
-          text: 'Categoría',
-          role: 'button',
-
-        },
-        {
-          text: 'Cerrar',
-          role: 'cancel',
-          
-        }
-      ]
-    });
-    await actionSheet.present();
-  }
-
-
-  getProduc(){
-
-  }
-  
-
-
-  showMenu = false;
 
   //recibir datos producto
   goDetalleProducto(detProducto:producto) {
@@ -107,6 +68,32 @@ export class ProductoPage implements OnInit {
       console.error("ID del producto no definido");
     }
   }
+
+
+  public buttons = [
+    {
+      text: 'Orden',
+      role: 'button',
+      
+    },
+    {
+      text: 'Puntuación',
+      role: 'button',
+      
+    },
+    {
+      text: 'Categoría',
+      role: 'button',
+
+    },
+    {
+      text: 'Cerrar',
+      role: 'cancel',
+      
+    }
+  ]
+
+  showMenu = false;
 
   toggleMenu() {
     this.showMenu = !this.showMenu;

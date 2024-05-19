@@ -30,8 +30,8 @@ ion-menu::part(container) {
   box-shadow: 2px 2px 4px rgba(122, 122, 122, 0.5);
 }
 
-.color{
-  --ion-background-color: #ff0000; /* Cambia este valor al color de fondo que desees */
+ion-action-sheet.color  {
+  --background: #ffffff !important; /* Cambia este valor al color de fondo que desees */
 }
 
 

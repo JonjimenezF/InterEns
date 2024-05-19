@@ -33,10 +33,16 @@
 <ion-content id="main-content">
   <ion-toolbar>
     <ion-searchbar></ion-searchbar>
-    <ion-button class="transparent-border" slot="end" fill="clear" (click)="openFilterMenu()">
+    <ion-button id="abrir-filtro-busqueda" class="transparent-border" slot="end" fill="clear">
       <ion-icon style="color: black;" src="./assets/icon/options.svg"></ion-icon>
     </ion-button>
-  </ion-toolbar>
+  </ion-toolbar> 
+  <ion-action-sheet
+    trigger="abrir-filtro-busqueda"
+    class="color"
+    header="Filtro de Búsqueda"
+    [buttons]="buttons"
+  ></ion-action-sheet>
   <!-- Contenido principal aquí -->
   <ion-row>
     <ion-col *ngFor="let producto of productos" (click)="goDetalleProducto(producto)" size="6">

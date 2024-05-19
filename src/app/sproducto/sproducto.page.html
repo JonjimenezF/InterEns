@@ -1,0 +1,21 @@
+<ion-header>
+
+</ion-header>
+
+<ion-content>
+  <ion-item class="color-white transparent-border" style="padding-right: 40px">
+    <ion-input class="color-text-grey" type = "text" placeholder="Ingrese nombre del produto" [(ngModel)]="produc.nombre" ></ion-input>
+  </ion-item>
+  <ion-item class="color-white transparent-border" style="padding-right: 40px">
+    <ion-input class="color-text-grey" type = "text" placeholder="Ingrese descripcion" [(ngModel)]="produc.descripcion" ></ion-input>
+  </ion-item>
+  <ion-item class="color-white transparent-border" style="padding-right: 40px">
+    <ion-input class="color-text-grey" type = "text" placeholder="Ingrese precio" [(ngModel)]="produc.precio" ></ion-input>
+  </ion-item>
+  <ion-item class="color-white transparent-border" style="padding-right: 40px">
+    <ion-input class="color-text-grey" type = "text" placeholder="Ingrese stock" [(ngModel)]="produc.stock" ></ion-input>
+  </ion-item>
+  <div class="centrar">
+    <ion-button class="color-text-white" color="primary" fill="solid" shape="round" (click)="onSubmit(produc)">Siguiente</ion-button>
+  </div>
+</ion-content>

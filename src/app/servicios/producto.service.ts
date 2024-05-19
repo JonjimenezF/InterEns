@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { producto } from '../models/producto';
+import { subirImagen } from '../models/subirImagen';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,12 @@ export class ProductoService {
     );
   }
 
+  addImagenProduct(imagen:subirImagen): Observable<any> {
+    return this._http.post<any>(this.baseUrl + '/subir_imagen_producto', imagen).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   getProduct(): Observable<any[]> {
     return this._http.get<any[]>(this.baseUrl + '/obtener_productos').pipe(
       catchError(this.handleError)
@@ -25,6 +32,16 @@ export class ProductoService {
 
   getProductById(id: number): Observable<any> {
     return this._http.get<any>(this.baseUrl + '/PRODUCTO?id_producto=eq.' + id).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  uploadPhoto(photo: File, id_producto: number): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('foto', photo);
+    formData.append('id_producto', id_producto.toString());
+
+    return this._http.post<any>(this.baseUrl+ '/upload', formData).pipe(
       catchError(this.handleError)
     );
   }
