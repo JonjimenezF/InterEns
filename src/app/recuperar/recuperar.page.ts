@@ -1,10 +1,12 @@
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
-import { NavigationExtras, Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
-
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-recuperar',
@@ -15,47 +17,65 @@ import { NavController } from '@ionic/angular';
 })
 export class RecuperarPage implements OnInit {
 
-  constructor(private navCtrl: NavController,private router: Router, public toastController: ToastController) { }
-
-  user={
-    usuario: ""
-  }
+  email: string = '';
+  newPassword: string = '';
+  token: string = '';
+  user: { email: string } = { email: '' };
+  constructor(
+    private navCtrl: NavController,
+    private router: Router,
+    public toastController: ToastController,
+    private route: ActivatedRoute,
+    private http: HttpClient
+  ) { }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.token = params['access_token'];
+    });
+  }
+
+  Verificar() {
+    // Aquí puedes agregar la lógica para verificar el usuario.
+    // Este método se llama cuando el usuario hace clic en "Verificar".
+    // Puedes implementar la lógica para enviar un correo de verificación aquí.
+    this.http.post('https://your-backend-api/verify-email', {
+      email: this.email
+    }).subscribe(response => {
+      // Maneja la respuesta, muestra un mensaje de éxito, redirige, etc.
+      console.log('Verification email sent successfully', response);
+      this.presentToast('Correo de verificación enviado con éxito');
+    }, error => {
+      console.error('Error al enviar el correo de verificación', error);
+      this.presentToast('Error al enviar el correo de verificación');
+    });
+  }
+
+  resetPassword() {
+    this.http.post('https://your-backend-api/reset-password', {
+      token: this.token,
+      new_password: this.newPassword
+    }).subscribe(response => {
+      // Maneja la respuesta, muestra un mensaje de éxito, redirige, etc.
+      console.log('Password reset successfully', response);
+      this.presentToast('Contraseña restablecida con éxito');
+      this.router.navigate(['/login']);
+    }, error => {
+      console.error('Error al restablecer la contraseña', error);
+      this.presentToast('Error al restablecer la contraseña');
+    });
+  }
+
+  async presentToast(message: string, duration: number = 1000) {
+    let toast = await this.toastController.create({
+      message: message,
+      duration: duration
+    });
+    toast.present();
+  }
+
+  goBack() {
+    this.navCtrl.back();
+  }
+
 }
-Verificar(){
-  // let usuarioEncontrado = false; // Variable para rastrear si se ha encontrado el usuario
-
-  // for(let i = 0; i < this.userService.userList.length; i++) {
-  //   console.log(this.user.usuario);
-    
-  //   if(this.userService.userList[i].email === this.user.usuario) {
-  //     usuarioEncontrado = true; // Se ha encontrado el usuario
-  //     break; // Salir del bucle tan pronto como se encuentre una coincidencia
-  //   }
-  // }
-
-  // if (usuarioEncontrado) {
-  //   this.presentToast("Usuario Verificado");
-  //   this.router.navigate(['/recuperar-contrasena-verificado']);
-  // } else {
-  //   this.presentToast("Usuario incorrecto");
-  // }
- 
-}
-
-async presentToast(menssage: string, duration:number = 1000){//creacion de una funcion asincronica
-  let toast = this.toastController.create({ //creamos una variable toast que se inicializa llamando al metodo create 
-    message: menssage,
-    duration: duration     
-  });
-  (await toast).present();// pausa la ejecución del código en ese punto hasta que la operación toast.present() haya terminado
-}
-goBack() {
-  this.navCtrl.back();
-}
-
-}
-
-
-

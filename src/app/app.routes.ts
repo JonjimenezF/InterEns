@@ -1,12 +1,16 @@
 import { Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
+///import { RecuperarPage } from './recuperar/recuperar.page';
 
 export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
   },
-  {
+ 
+  {    
     path: '',
     redirectTo: 'portada',
     pathMatch: 'full',
@@ -48,17 +52,10 @@ export const routes: Routes = [
   {
     path: 'registrar',
     loadComponent: () => import('./registrar/registrar.page').then( m => m.RegistrarPage)
-  },  {
+  },
+  {
     path: 'detalle-producto',
     loadComponent: () => import('./detalle-producto/detalle-producto.page').then( m => m.DetalleProductoPage)
-  },
-
-
-
-
- 
-
-  
-
-
+  }
 ];
+

@@ -1,24 +1,34 @@
 <ion-header class="ion-no-border">
-    <ion-toolbar> 
-      <ion-title></ion-title>
-      <ion-buttons slot="start">
-        <ion-back-button (click)="goBack()" defaulthref= "login" text=""></ion-back-button>
-      </ion-buttons>
-    
+  <ion-toolbar>
+    <ion-title>Recuperar Contraseña</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" defaultHref="login" text=""></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
-    </ion-toolbar>
-  </ion-header>
-  <ion-content >
-    <ion-card-content>
-          <div>
-            <p>Email</p>
-            <ion-item class="border">
-              <ion-input type = "text" placeholder="Ingresa tu Email" [(ngModel)]="user.usuario" ></ion-input>
-            </ion-item>
-          </div>
-          <div class="signin-btns">
-            <ion-button fill="solid" shape="round" class="loginbtn" (click)="Verificar()">Verificar</ion-button>
-          </div>
-    </ion-card-content>   
-  </ion-content>
-  
+<ion-content>
+  <ion-card-content>
+    <!-- Email Section for Verification -->
+    <div *ngIf="!token">
+      <p>Email</p>
+      <ion-item class="border">
+        <ion-input type="text" placeholder="Ingresa tu Email" [(ngModel)]="user.email"></ion-input>
+      </ion-item>
+      <div class="signin-btns">
+        <ion-button fill="solid" shape="round" class="loginbtn" (click)="Verificar()">Verificar</ion-button>
+      </div>
+    </div>
+    
+    <!-- New Password Section -->
+    <div *ngIf="token">
+      <p>Nueva Contraseña</p>
+      <ion-item class="border">
+        <ion-input type="password" placeholder="Ingresa tu nueva contraseña" [(ngModel)]="newPassword"></ion-input>
+      </ion-item>
+      <div class="signin-btns">
+        <ion-button fill="solid" shape="round" class="loginbtn" (click)="resetPassword()">Restablecer Contraseña</ion-button>
+      </div>
+    </div>
+  </ion-card-content>
+</ion-content>
