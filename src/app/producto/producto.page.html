@@ -18,7 +18,7 @@
 
 <ion-header>
   <ion-toolbar>
-    <ion-buttons style="color: black;" slot="start">
+    <ion-buttons slot="start">
       <ion-menu-button auto-hide="false"></ion-menu-button>
     </ion-buttons>
 
@@ -26,7 +26,7 @@
       <ion-back-button (click)="goBack()" defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
     </ion-buttons>
 
-    <ion-title style="color: black;">Producto</ion-title>
+    <ion-title>Producto</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -34,21 +34,20 @@
   <ion-toolbar>
     <ion-searchbar></ion-searchbar>
     <ion-button id="abrir-filtro-busqueda" class="transparent-border" slot="end" fill="clear">
-      <ion-icon style="color: black;" src="./assets/icon/options.svg"></ion-icon>
+      <ion-icon src="./assets/icon/options.svg"></ion-icon>
     </ion-button>
   </ion-toolbar> 
   <ion-action-sheet
     trigger="abrir-filtro-busqueda"
-    class="color"
     header="Filtro de Búsqueda"
     [buttons]="buttons"
   ></ion-action-sheet>
   <!-- Contenido principal aquí -->
   <ion-row>
     <ion-col *ngFor="let producto of productos" (click)="goDetalleProducto(producto)" size="6">
-      <ion-card class="carta" >
+      <ion-card class="carta">
         <ion-card-header>
-          <img [src]="'http://localhost:5000/foto/' + producto.imagp" alt="Imagen" style="width: 100%; height: auto;">
+          <img [src]="getImagenProducto(producto)" alt="Imagen" style="width: 100%; height: auto;">
           <ion-card-title class="carta-titulo">{{ producto.nombre }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>

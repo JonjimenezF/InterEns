@@ -36,15 +36,21 @@ export class ProductoService {
     );
   }
 
-  uploadPhoto(photo: File, id_producto: number): Observable<any> {
-    const formData: FormData = new FormData();
-    formData.append('foto', photo);
-    formData.append('id_producto', id_producto.toString());
-
-    return this._http.post<any>(this.baseUrl+ '/upload', formData).pipe(
+  getImagenes(id_producto: number): Observable<any> {
+    return this._http.get<any>('http://localhost:5000/obtener_imagen', { params: { id_producto: id_producto.toString() } }).pipe(
       catchError(this.handleError)
     );
   }
+
+  // uploadPhoto(photo: File, id_producto: number): Observable<any> {
+  //   const formData: FormData = new FormData();
+  //   formData.append('foto', photo);
+  //   formData.append('id_producto', id_producto.toString());
+
+  //   return this._http.post<any>(this.baseUrl+ '/upload', formData).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
