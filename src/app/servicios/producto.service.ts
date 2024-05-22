@@ -30,14 +30,20 @@ export class ProductoService {
     );
   }
 
-  getProductById(id: number): Observable<any> {
-    return this._http.get<any>(this.baseUrl + '/PRODUCTO?id_producto=eq.' + id).pipe(
+  // getProductById(id: number): Observable<any> {
+  //   return this._http.get<any>(this.baseUrl + '/PRODUCTO?id_producto=eq.' + id).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
+
+  getImagenes(id_producto: number): Observable<any> {
+    return this._http.get<any>(this.baseUrl + '/obtener_imagen', { params: { id_producto: id_producto.toString() } }).pipe(
       catchError(this.handleError)
     );
   }
 
-  getImagenes(id_producto: number): Observable<any> {
-    return this._http.get<any>('http://localhost:5000/obtener_imagen', { params: { id_producto: id_producto.toString() } }).pipe(
+  getTodasImagenes(id_producto: number): Observable<any> {
+    return this._http.get<any>(this.baseUrl + '/obtener_todas_imagen', { params: { id_producto: id_producto.toString() } }).pipe(
       catchError(this.handleError)
     );
   }

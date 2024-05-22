@@ -39,16 +39,45 @@ ion-buttons ion-back-button {
   --color: black;
 }
 
-.carta-titulo {
-  font-size: 16px; /* Ajusta el tamaño del título según tus preferencias */
-  min-height: 3.6em; /* Ajusta la altura mínima del título para que todas las cartas tengan la misma altura */
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* Limita el número de líneas a 2 */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es demasiado largo */
+
+// Contenido de los producto
+ion-card.carta {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.carta {
-  height: 250px; /* Ajusta la altura según tus preferencias */
+ion-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
 }
+
+.image-container {
+  width: 100%;
+  height: 150px; // Ajusta esta altura según tus necesidades
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; // Para asegurarse de que la imagen se ajuste sin distorsión
+}
+
+.carta-titulo {
+  text-align: center;
+  font-size: 1.2em;
+  margin-top: 10px;
+  margin-bottom: auto; // Para empujar el contenido hacia abajo y alinear los títulos
+}
+
+ion-card-content {
+  text-align: center;
+  font-size: 1em;
+}
+
