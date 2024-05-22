@@ -9,6 +9,9 @@ import { userLogin } from '../models/userLogin';
   providedIn: 'root'
 })
 export class UsuarioService {
+  signInWithGoogle() {
+    throw new Error('Method not implemented.');
+  }
   URL_SUPEBASE ='https://gglsaoykhjniypthjgfc.supabase.co/rest/v1/';
   constructor(private _http: HttpClient) { }
 
