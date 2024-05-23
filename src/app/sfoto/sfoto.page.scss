@@ -55,12 +55,40 @@
     --color: black;
   }
 
-  /* Cambiar el color del texto seleccionado en el ion-select */
-::ng-deep .select-text {
-  color: black !important; /* Cambia el color del texto seleccionado a negro */
-}
+  .transparent-border {
+    border: 4px solid transparent; /* Establece el borde transparente */
+    border-color: rgb(255, 255, 255);
+    border-radius: 20px; /* Opcional: Agrega bordes redondeados */
+    box-shadow: 2px 2px 4px rgba(122, 122, 122, 0.5);
+  }
 
-/* Cambiar el color del texto seleccionado en el ion-select a negro */
-ion-select {
-  color: black !important;
-}
+  .botones-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .file-input {
+    display: none;
+  }
+  
+  .transparent-border {
+    border: none;
+  }
+//contorno de la imagen
+  .image-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .preview-image {
+    border: 2px solid #c0c0c0;
+    box-shadow: 4px 4px 4px rgba(122, 122, 122, 0.5);
+    border-radius: 20px;
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+  }

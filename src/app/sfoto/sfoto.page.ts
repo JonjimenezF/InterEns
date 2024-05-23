@@ -24,20 +24,22 @@ export class SfotoPage implements OnInit {
   categorias: any[] = [];
  
 
-  produc = {
-    nombre: "",
-    descripcion: "",
-    precio: "",
-    stock: "",
-    imagp: " ",
-    id_usuario: "",
-    id_categoria: ""
+  fotos: string[] = [];
+  selectedFiles: File[] = [];
+  nombreFoto: string = '';
+
+  creadoProducto?: any;
+  imagePreviews: string[] = [];
+  idProducto: number = 0;
+  orden: number = 0;
+
+  
+  imagen = {
+    id_producto: 1,
+    url_imagen: '',
+    orden: 1,
   }
 
-  selectedFile: File | null = null;
-  nombreFoto: string | undefined;
-
-  userInfo?: any;
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -48,33 +50,100 @@ export class SfotoPage implements OnInit {
     private categoriaService: CategoriaService
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
-    if (state && state['userInfo']) {
-      this.userInfo = state['userInfo'];
+    if (state && state['creadoProducto']) {
+      this.creadoProducto = state['creadoProducto'];
     }
   }
 
   async ngOnInit() {
-    if (this.userInfo) {
-      console.log(this.userInfo.id_usuario);
+    if (this.creadoProducto) {
+      console.log(this.creadoProducto);
     } else {
       console.log('El objeto userInfo es null o undefined');
     }
+  }
 
-    this.categoriaService.getCategorias().subscribe(
-      (categorias: any[]) => {
-        this.categorias = categorias;
+  triggerFileInput() {
+    const fileInput = document.getElementById('fileInput') as HTMLElement;
+    fileInput.click();
+  }
+
+  onFileSelected(event: any) {
+
+    const file: File = event.target.files[0];
+    this.selectedFiles.push(file);
+    console.log(file)
+
+    // Mostrar previsualización de la imagen
+    const reader = new FileReader();
+    
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.imagePreviews.push(reader.result as string);
+      console.log(this.imagePreviews)
+    };
+  }
+
+  onSubmit() {
+    if (this.selectedFiles.length === 0) {
+      alert('Por favor, seleccione al menos una imagen para subir');
+      return; // Salir de la función si no hay archivos seleccionados
+    }
+
+    for (let index = 0; index < this.selectedFiles.length; index++) {
+      console.log(index)
+      const file = this.selectedFiles[index];
+      const formData = new FormData();
+      formData.append('foto', file);
+      formData.append('id_producto', this.creadoProducto.toString());
+      formData.append('orden', (this.orden + index).toString());
+    
+      console.log('Index:', index);
+      console.log(formData);
+    
+      this.http.post<any>('http://localhost:5000/upload', formData).subscribe(
+        (response) => {
+          console.log(response);
+          this.presentToast('Imagen subida con éxito');
+          
+          // Guardar la información de la imagen en la base de datos
+          const imagen = {
+            id_producto: this.creadoProducto,
+            url_imagen: response.nombre_foto, // Ajusta esto según la respuesta del servidor
+            orden: this.orden + index // Ajusta esto según tu lógica
+          };
+    
+          this.guardarImagenEnBaseDeDatos(imagen);
+        },
+        (error) => {
+          console.error(error);
+          alert('Error al subir la imagen');
+        }
+      );
+    }
+    console.log(this.selectedFiles);
+    // Limpiar la lista de imágenes seleccionadas
+    this.selectedFiles = [];
+    this.imagePreviews = [];
+
+  }
+
+  guardarImagenEnBaseDeDatos(imagen: any) {
+    this.productService.addImagenProduct(imagen).subscribe(
+      (response) => {
+        console.log('Imagen guardada en la base de datos', response);
       },
-      (error) => {
-        console.error('Error al obtener las categorías:', error);
+      (err) => {
+        console.error('Error al guardar la imagen en la base de datos', err);
       }
     );
   }
 
-
-
-  
-  
-
+  eliminarFotos() {
+    // Eliminar la última imagen seleccionada
+    this.selectedFiles.pop();
+    this.imagePreviews.pop();
+  }
 
   async presentToast(message: string, duration: number = 2000) {
     const toast = await this.toastController.create({
@@ -83,68 +152,6 @@ export class SfotoPage implements OnInit {
       position: 'bottom'
     });
     toast.present();
-  }
-
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
-  }
-
-  onSubmit(pro: any) {
-    if (this.selectedFile) {
-      const formData = new FormData();
-      formData.append('foto', this.selectedFile);
-      this.http.post<any>('http://localhost:5000/upload', formData).subscribe(
-        (response) => {
-          console.log(response);
-          this.presentToast('Imagen subida con éxito');
-          this.nombreFoto = response.nombre_foto;
-          this.produc.imagp = response.nombre_foto;
-          this.produc.id_usuario = this.userInfo.id_usuario;
-          console.log(this.produc);
-          // Agregar el producto
-          this.productService.addProduct(pro).subscribe(
-            (response) => {
-              this.presentToast('producto subido con éxito');
-              this.navCtrl.navigateRoot('/home');
-          },
-          (error) => {
-            console.error(error);
-            alert('Error al subir la Producto');
-          }
-          );
-        },
-        (error) => {
-          console.error(error);
-          alert('Error al subir la imagen');
-        }
-      );
-    }
-  }
-
-  eliminarFoto(nombreFoto: string) {
-    this.http.delete<any>(`http://localhost:5000/eliminar_foto/${nombreFoto}`).subscribe(
-      (response) => {
-        console.log(response);
-        alert('Foto eliminada correctamente');
-        this.nombreFoto = '';
-      },
-      (error) => {
-        console.error(error);
-        alert('Error al eliminar la foto');
-      }
-    );
-  }
-
-  
-  obtenerCategorias() {
-    this.categoriaService.getCategorias().subscribe(
-      (categorias: any[]) => {
-        this.categorias = categorias;
-      },
-      (error) => {
-        console.error('Error al obtener las categorías:', error);
-      }
-    );
   }
   
 

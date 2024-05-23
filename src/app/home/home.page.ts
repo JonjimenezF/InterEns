@@ -51,9 +51,7 @@ export class HomePage {
 
   }
   goSubirfoto() {
-    // Aquí puedes agregar la lógica para navegar a la página de subir foto
-    // Por ejemplo:
-    this.router.navigate(['/sfoto'], { state: { userInfo: this.userInfo}})
+    this.router.navigate(['/sproducto'], { state: { userInfo: this.userInfo}})
   }
 
   goBack() {

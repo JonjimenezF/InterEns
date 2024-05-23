@@ -40,11 +40,6 @@ export const routes: Routes = [
     path: 'verificarcontra',
     loadComponent: () => import('./verificarcontra/verificarcontra.page').then( m => m.VerificarcontraPage)
   },
-
-  {
-    path: 'mostar',
-    loadComponent: () => import('./mostar/mostar.page').then( m => m.MostarPage)
-  },
   {
     path: 'sfoto',
     loadComponent: () => import('./sfoto/sfoto.page').then( m => m.SfotoPage)
@@ -56,10 +51,18 @@ export const routes: Routes = [
   {
     path: 'detalle-producto',
     loadComponent: () => import('./detalle-producto/detalle-producto.page').then( m => m.DetalleProductoPage)
-  },  {
-    path: 'categoria',
-    loadComponent: () => import('./categoria/categoria.page').then( m => m.CategoriaPage)
-  }
+  },
+  {
+    path: 'sproducto',
+    loadComponent: () => import('./sproducto/sproducto.page').then( m => m.SproductoPage)
+  },
+
+
+
+
+ 
+
+  
+
 
 ];
-
