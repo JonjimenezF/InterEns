@@ -5,6 +5,7 @@ import { IonicModule,NavController, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductoService } from '../servicios/producto.service';
+import { UsuarioService } from '../servicios/usuario.service';
 import { producto } from '../models/producto';
 
 @Component({
@@ -34,7 +35,8 @@ export class SproductoPage implements OnInit {
               private activateRoute: ActivatedRoute,
               public toastController: ToastController,
               private productService: ProductoService,
-              private navCtrl: NavController
+              private navCtrl: NavController,
+              private UsuarioService: UsuarioService
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
@@ -50,6 +52,7 @@ export class SproductoPage implements OnInit {
     } else {
       console.log('El objeto userInfo es null o undefined');
     }
+    console.log(this.getCategoria())
     
   }
 
@@ -105,5 +108,18 @@ export class SproductoPage implements OnInit {
 
   goBack() {
     this.navCtrl.back();
+  }
+
+  categorias: any[] = [];
+  getCategoria() {
+    this.UsuarioService.getTodasCategoria().subscribe(
+      (data) => {
+        this.categorias = data;
+        console.log('Categorias:', this.categorias);
+      },
+      (error) => {
+        console.error('Error al obtener categorías:', error);
+      }
+    );
   }
 }

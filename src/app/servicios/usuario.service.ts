@@ -56,6 +56,20 @@ export class UsuarioService {
     return throwError('Hubo un problema al realizar la operación. Por favor, intenta nuevamente más tarde.');
   };
 
+
+  getTodasCategoria(): Observable<string | any> {
+    return this._http.get<any>(this.URL_SUPEBASE + 'CATEGORIA?select=*', { headers: this.supebaseheads }).pipe(
+      map((response) => {
+        console.log('Response:', response);
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Error:', error);
+        return throwError(error);
+      })
+    );
+  }
+  
   
 
   

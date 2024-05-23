@@ -12,8 +12,9 @@ import { NavController } from '@ionic/angular';
   imports: [IonicModule,],
 })
 export class HomePage {
+  userId: string | undefined;
 
-  userInfo?: idUsuario;
+  userInfo?: any;
   constructor(private router: Router, private activateRoute: ActivatedRoute,private navCtrl: NavController) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {

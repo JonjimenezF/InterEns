@@ -26,10 +26,17 @@ export class LoginPage {
               private router: Router
               ) {}
 
-  // Asegúrate de que el método signInWithGoogle está definido así:
-  signInWithGoogle() {
-    this.supabaseService.signInWithGoogle();
+  async signInWithGoogle() {
+    try {
+      const userInfo = await this.supabaseService.signInWithGoogle();
+      console.log(userInfo);
+
+      this.router.navigate(['/home'], { state: { userInfo } });
+    } catch (error) {
+      console.error('Error durante el inicio de sesión:', error);
+    }
   }
+
   async signUp() {
     const { data, error } = await this.supabaseService.signUpWithEmail(this.email, this.password);
     if (error) {
