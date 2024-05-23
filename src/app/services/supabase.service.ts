@@ -2,14 +2,16 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
+import { idUsuario } from '../models/idUsuario';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SupabaseService {
   private supabase: SupabaseClient;
-
-  constructor() {
+  
+  constructor(private router: Router) {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
   }
 
@@ -22,6 +24,7 @@ export class SupabaseService {
     });
     if (error) console.error('Error durante el inicio de sesión:', error);
   }
+  
   async signUpWithEmail(email: string, password: string) {
     const { data, error } = await this.supabase.auth.signUp({
       email,
@@ -35,6 +38,14 @@ export class SupabaseService {
       email,
       password
     });
+    if (error) {
+      console.error('Error durante el inicio de sesión:', error);
+    } else {
+      console.log('Datos de inicio de sesión:', data);
+      localStorage.setItem('access_token', data.session.access_token);
+      localStorage.setItem('user_id', data.user.id);
+      this.router.navigate(['/home']);  // Redirigir a home
+    }
     return { data, error };
   }
   

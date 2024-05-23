@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './auth.guard'; // Importar el guardia
 
 
 export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    canActivate: [authGuard] // Aplicar el guardia aquí
   },
   {
     path: '',
@@ -48,7 +50,8 @@ export const routes: Routes = [
   {
     path: 'registrar',
     loadComponent: () => import('./registrar/registrar.page').then( m => m.RegistrarPage)
-  },  {
+  },
+  {
     path: 'detalle-producto',
     loadComponent: () => import('./detalle-producto/detalle-producto.page').then( m => m.DetalleProductoPage)
   },

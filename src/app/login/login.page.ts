@@ -1,4 +1,4 @@
-
+//login.page.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -27,6 +27,8 @@ export class LoginPage {
   // Asegúrate de que el método signInWithGoogle está definido así:
   signInWithGoogle() {
     this.supabaseService.signInWithGoogle();
+    return this.supabaseService.signInWithGoogle
+    
   }
   async signUp() {
     const { data, error } = await this.supabaseService.signUpWithEmail(this.email, this.password);
