@@ -39,7 +39,7 @@ export class RecuperarPage implements OnInit {
     // Aquí puedes agregar la lógica para verificar el usuario.
     // Este método se llama cuando el usuario hace clic en "Verificar".
     // Puedes implementar la lógica para enviar un correo de verificación aquí.
-    this.http.post('https://your-backend-api/verify-email', {
+    this.http.post('https://gglsaoykhjniypthjgfc.supabase.co/rest/v1/rpc/verify_email', {
       email: this.email
     }).subscribe(response => {
       // Maneja la respuesta, muestra un mensaje de éxito, redirige, etc.
