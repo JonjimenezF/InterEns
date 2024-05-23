@@ -7,14 +7,19 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>{{det_producto?.nombre}}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <!-- <img [src]="'http://localhost:5000/foto/' + det_producto?.imagp" alt="Imagen" style="max-width: 100%; height: auto;"> -->
-      <h1>{{det_producto?.precio}}</h1>
-      <h2>{{det_producto?.descripcion}}</h2>
-    </ion-card-content>
-  </ion-card>
+  <ion-row>
+    <ion-col size="12" *ngFor="let imagen of det_imagen">
+      <ion-card class="carta">
+        <ion-card-header>
+          <div class="image-container">
+            <img [src]="'http://localhost:5000/foto/' + imagen.url_imagen" alt="Imagen" class="product-image" style="max-width: 100%; height: auto;">
+          </div>
+          <ion-card-title class="carta-titulo">{{det_producto?.nombre}}</ion-card-title>
+        </ion-card-header>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <h1 style="color: black;">{{det_producto?.nombre}}</h1>
+  <h2 style="color: black;">{{det_producto?.precio}}</h2>
+  <h2 style="color: black;">{{det_producto?.descripcion}}</h2>
 </ion-content>

@@ -20,8 +20,11 @@ export class SupabaseService {
         redirectTo: 'http://localhost:8100/home', // Asegúrate de cambiar esta URL por la tuya
       }
     });
+    return {data}
     if (error) console.error('Error durante el inicio de sesión:', error);
+    
   }
+  
   async signUpWithEmail(email: string, password: string) {
     const { data, error } = await this.supabase.auth.signUp({
       email,

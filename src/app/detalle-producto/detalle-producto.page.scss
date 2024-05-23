@@ -1,4 +1,29 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
 * {
     --background: #ffffff; /* Cambia el color de fondo aquí */
   }
   
+  ion-slides, ion-slide {
+    width: 100%;
+    height: auto;
+  }
+  
+  .product-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .carta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }

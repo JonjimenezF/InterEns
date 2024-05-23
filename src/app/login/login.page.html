@@ -1,4 +1,4 @@
-<!-- src/app/login/login.page.html -->
+<!-- src/app/login/login.page.html
 <ion-header>
   <ion-toolbar>
     <ion-title>Login</ion-title>
@@ -18,4 +18,35 @@
   <ion-button expand="full" (click)="signIn()">Iniciar Sesión</ion-button>
   <ion-button expand="full" (click)="signInWithGoogle()">Iniciar Sesión con Google</ion-button>
   <ion-button expand="full" color="medium" (click)="resetPassword()">Recuperar Contraseña</ion-button>
+</ion-content>
+ -->
+
+<ion-header class="color-white">
+</ion-header>
+<ion-content class="color-white">  
+  <h2 class="color-text-black" style="padding-left: 40px;">Bienvenido!</h2>
+  <ion-card-content>
+      <div class="centrar" >
+        <p class="color-text-black">Email</p>
+        <ion-item class="color-white transparent-border" style="padding-right: 40px">
+          <ion-input class="color-text-grey" type = "text" placeholder="Ingresa tu Email" [(ngModel)]="email"></ion-input>
+        </ion-item>
+        <p class="color-text-black" style = "margin-top:10px">Clave</p>
+        <ion-item class="color-white transparent-border" style="padding-right: 40px">
+          <ion-input class="color-text-grey" type = "password" placeholder="Ingrese su Clave" [(ngModel)]="password" ></ion-input>
+        </ion-item>
+        <div>
+          <ion-button class="olvbtn" fill="clear" (click)="resetPassword()">¿Olvido su Contraseña?</ion-button>
+        </div>
+        <div class="centrar">
+        <ion-button class="color-text-white" style="margin-top:20px" fill="solid" shape="round" (click)="signIn()">Ingresar</ion-button>
+        </div>
+        <span class="color-text-grey centrar" style="margin-top: 10px">--------------------- O ingrese con --------------------- </span>
+        <ion-button fill="clear" class="centrar" style="margin-top: 30px" (click)="signInWithGoogle()">
+          <ion-img class="image-with-border" src="assets/img/google.png" alt=""></ion-img> 
+        </ion-button> 
+
+        <p class="color-text-black" style="text-align: center;margin-top: 30px;">¿Aun no tiene cuenta?<a style="color: orange;" (click)="signUp()"><strong> Registrese</strong></a></p>
+    </div>
+  </ion-card-content>
 </ion-content>

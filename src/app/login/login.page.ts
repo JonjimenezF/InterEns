@@ -22,7 +22,9 @@ export class LoginPage {
   password = '';
   toastController: any;
 
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(private supabaseService: SupabaseService,
+              private router: Router
+              ) {}
 
   // Asegúrate de que el método signInWithGoogle está definido así:
   signInWithGoogle() {
@@ -43,8 +45,10 @@ export class LoginPage {
       console.error('Error en el inicio de sesión:', error);
     } else {
       console.log('Inicio de sesión exitoso:', data);
+      this.router.navigate(['/home'], { state: { userInfo: data}})
     }
   }
+  
   async resetPassword() {
     const { data, error } = await this.supabaseService.resetPassword(this.email);
     if (error) {
