@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductoService } from '../servicios/producto.service';
 import { producto } from '../models/producto';
+import { categoria} from '../models/categoria';
+import { CategoriaService } from '../servicios/categoria.service'; 
 
 
 
@@ -19,6 +21,9 @@ import { producto } from '../models/producto';
 })
 export class SfotoPage implements OnInit {
 
+  categorias: any[] = [];
+ 
+
   produc = {
     nombre: "",
     descripcion: "",
@@ -26,6 +31,7 @@ export class SfotoPage implements OnInit {
     stock: "",
     imagp: " ",
     id_usuario: "",
+    id_categoria: ""
   }
 
   selectedFile: File | null = null;
@@ -38,7 +44,8 @@ export class SfotoPage implements OnInit {
     private activateRoute: ActivatedRoute,
     public toastController: ToastController,
     private productService: ProductoService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private categoriaService: CategoriaService
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
@@ -52,7 +59,22 @@ export class SfotoPage implements OnInit {
     } else {
       console.log('El objeto userInfo es null o undefined');
     }
+
+    this.categoriaService.getCategorias().subscribe(
+      (categorias: any[]) => {
+        this.categorias = categorias;
+      },
+      (error) => {
+        console.error('Error al obtener las categorías:', error);
+      }
+    );
   }
+
+
+
+  
+  
+
 
   async presentToast(message: string, duration: number = 2000) {
     const toast = await this.toastController.create({
@@ -112,6 +134,15 @@ export class SfotoPage implements OnInit {
       }
     );
   }
+
+  getCategoriaNombre(idCategoria: string): string {
+    const categoriaSeleccionada = this.categorias.find(categoria => categoria.id === idCategoria);
+    return categoriaSeleccionada ? categoriaSeleccionada.nombre : '';
+  }
+  
+
+
+  
 
 
   goProducto(){

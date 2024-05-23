@@ -44,12 +44,23 @@
     <ion-item class="color-white transparent-border" style="padding-right: 40px">
       <ion-input class="color-text-grey" type = "text" placeholder="Ingrese stock" [(ngModel)]="produc.stock" ></ion-input>
     </ion-item>
+    <ion-item class="color-white transparent-border" style="padding-right: 40px">
+      
+      <ion-select [(ngModel)]="produc.id_categoria" name="id_categoria" placeholder="Selecciona una categoría" required>
+        <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id">
+          {{ categoria.nombre }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
     <div style="margin-top: 20px; text-align: center;">
       <input class="centrar" style="margin: 0 auto;" type="file" accept="image/*" (change)="onFileSelected($event)">
     </div>
     <div class="centrar">
       <ion-button class="color-text-white" color="primary" fill="solid" shape="round" (click)="onSubmit(produc)">Subir Imagen</ion-button>
     </div>
+   
+
+  
     <p *ngIf="nombreFoto">Nombre de la foto subida: {{ nombreFoto }}</p>
     <div class="centrar">
       <img *ngIf="nombreFoto" [src]="'http://localhost:5000/foto/' + nombreFoto" alt="Foto">

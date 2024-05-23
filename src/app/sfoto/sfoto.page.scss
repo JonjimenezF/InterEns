@@ -54,3 +54,13 @@
   ion-buttons ion-back-button {
     --color: black;
   }
+
+  /* Cambiar el color del texto seleccionado en el ion-select */
+::ng-deep .select-text {
+  color: black !important; /* Cambia el color del texto seleccionado a negro */
+}
+
+/* Cambiar el color del texto seleccionado en el ion-select a negro */
+ion-select {
+  color: black !important;
+}
