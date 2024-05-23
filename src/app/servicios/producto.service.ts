@@ -30,14 +30,20 @@ export class ProductoService {
     );
   }
 
-  getProductById(id: number): Observable<any> {
-    return this._http.get<any>(this.baseUrl + '/PRODUCTO?id_producto=eq.' + id).pipe(
+  // getProductById(id: number): Observable<any> {
+  //   return this._http.get<any>(this.baseUrl + '/PRODUCTO?id_producto=eq.' + id).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
+
+  getImagenes(id_producto: number): Observable<any> {
+    return this._http.get<any>(this.baseUrl + '/obtener_imagen', { params: { id_producto: id_producto.toString() } }).pipe(
       catchError(this.handleError)
     );
   }
 
-  getImagenes(id_producto: number): Observable<any> {
-    return this._http.get<any>('http://localhost:5000/obtener_imagen', { params: { id_producto: id_producto.toString() } }).pipe(
+  getTodasImagenes(id_producto: number): Observable<any> {
+    return this._http.get<any>(this.baseUrl + '/obtener_todas_imagen', { params: { id_producto: id_producto.toString() } }).pipe(
       catchError(this.handleError)
     );
   }
@@ -65,6 +71,9 @@ export class ProductoService {
     // Devuelve un observable con un mensaje de error orientado al usuario
     return throwError('Hubo un problema al realizar la operación. Por favor, intenta nuevamente más tarde.');
   };
+
+
+  
 
 
 

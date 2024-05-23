@@ -2,3 +2,59 @@
     --background: #ffffff; /* Cambia el color de fondo aquí */
   }
   
+  .centrar{
+    display:grid;
+    place-content: center;
+}
+  
+  ion-slides, ion-slide {
+    width: 100%;
+    height: auto;
+  }
+  
+  .product-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .carta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  //paginacion
+  .custom-pagination {
+    bottom: 10px; /* Ajusta la distancia desde abajo según sea necesario */
+    left: 0; /* Ajusta la posición horizontal según sea necesario */
+    right: 0; /* Ajusta la posición horizontal según sea necesario */
+    margin: 0 auto; /* Centra horizontalmente */
+    text-align: center; /* Centra los puntos de paginación */
+  }
+  .custom-pagination ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Cambia la visualización a flexbox */
+    justify-content: center; /* Centra los elementos horizontalmente */
+  }
+  .custom-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background-color: gray;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  .custom-pagination-bullet.active {
+    background-color: rgb(67, 67, 158); /* Cambia el color del punto activo */
+  }

@@ -12,8 +12,9 @@ import { NavController } from '@ionic/angular';
   imports: [IonicModule,],
 })
 export class HomePage {
+  userId: string | undefined;
 
-  userInfo?: idUsuario;
+  userInfo?: any;
   constructor(private router: Router, private activateRoute: ActivatedRoute,private navCtrl: NavController) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
@@ -23,7 +24,7 @@ export class HomePage {
 
   async ngOnInit() {
     if (this.userInfo) {
-      console.log(this.userInfo.id_usuario);
+      console.log(this.userInfo.id);
       console.log(this.userInfo);
     } else {
       console.log('El objeto userInfo es null o undefined');
