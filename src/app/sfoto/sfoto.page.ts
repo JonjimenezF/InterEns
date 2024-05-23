@@ -135,9 +135,16 @@ export class SfotoPage implements OnInit {
     );
   }
 
-  getCategoriaNombre(idCategoria: string): string {
-    const categoriaSeleccionada = this.categorias.find(categoria => categoria.id === idCategoria);
-    return categoriaSeleccionada ? categoriaSeleccionada.nombre : '';
+  
+  obtenerCategorias() {
+    this.categoriaService.getCategorias().subscribe(
+      (categorias: any[]) => {
+        this.categorias = categorias;
+      },
+      (error) => {
+        console.error('Error al obtener las categorías:', error);
+      }
+    );
   }
   
 
