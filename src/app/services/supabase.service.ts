@@ -17,8 +17,11 @@ export class SupabaseService {
     const { data, error } = await this.supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        
         redirectTo: 'http://localhost:8100/home', // Asegúrate de cambiar esta URL por la tuya
+        queryParams:{
+          access_type: 'offline',
+          prompt: 'consent',
+        }
       }
     });
 

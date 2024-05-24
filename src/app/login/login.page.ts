@@ -30,8 +30,6 @@ export class LoginPage {
     try {
       const userInfo = await this.supabaseService.signInWithGoogle();
       console.log(userInfo);
-
-      this.router.navigate(['/home'], { state: { userInfo } });
     } catch (error) {
       console.error('Error durante el inicio de sesión:', error);
     }
