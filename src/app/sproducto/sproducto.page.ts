@@ -48,7 +48,7 @@ export class SproductoPage implements OnInit {
   
   ngOnInit() {
     if (this.userInfo) {
-      console.log(this.userInfo.id_usuario);
+      console.log(this.userInfo);
     } else {
       console.log('El objeto userInfo es null o undefined');
     }
