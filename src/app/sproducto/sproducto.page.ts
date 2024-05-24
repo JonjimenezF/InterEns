@@ -7,6 +7,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductoService } from '../servicios/producto.service';
 import { UsuarioService } from '../servicios/usuario.service';
 import { producto } from '../models/producto';
+import { CategoriaService } from '../servicios/categoria.service';
+
 
 @Component({
   selector: 'app-sproducto',
@@ -27,6 +29,7 @@ export class SproductoPage implements OnInit {
     precio: "",
     stock: "",
     id_usuario:" ",
+    id_categoria:""
   }
 
   constructor(
@@ -36,7 +39,8 @@ export class SproductoPage implements OnInit {
               public toastController: ToastController,
               private productService: ProductoService,
               private navCtrl: NavController,
-              private UsuarioService: UsuarioService
+              private UsuarioService: UsuarioService,
+              private CategoriaService: CategoriaService
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
@@ -112,7 +116,7 @@ export class SproductoPage implements OnInit {
 
   categorias: any[] = [];
   getCategoria() {
-    this.UsuarioService.getTodasCategoria().subscribe(
+    this.CategoriaService.getTodasCategorias().subscribe(
       (data) => {
         this.categorias = data;
         console.log('Categorias:', this.categorias);

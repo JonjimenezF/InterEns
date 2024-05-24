@@ -43,7 +43,7 @@ export class CategoriaService {
   };
 
 
-  getAllCategorias(): Observable<any[]> {
+  getTodasCategorias(): Observable<any[]> {
     const url = `${this.URL_SUPEBASE}CATEGORIA?select=*`;
 
     return this.http.get<any[]>(url, { headers: this.supebaseheads }).pipe(
