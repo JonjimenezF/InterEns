@@ -51,7 +51,11 @@ export const routes: Routes = [
   {
     path: 'sproducto',
     loadComponent: () => import('./sproducto/sproducto.page').then( m => m.SproductoPage)
+  },  {
+    path: 'carrito',
+    loadComponent: () => import('./carrito/carrito.page').then( m => m.CarritoPage)
   },
+
 
 
 

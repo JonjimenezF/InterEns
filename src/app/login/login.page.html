@@ -1,26 +1,3 @@
-<!-- src/app/login/login.page.html
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Login</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
-  <ion-item>
-    <ion-label position="floating">Email</ion-label>
-    <ion-input type="email" [(ngModel)]="email"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Contraseña</ion-label>
-    <ion-input type="password" [(ngModel)]="password"></ion-input>
-  </ion-item>
-  <ion-button expand="full" (click)="signUp()">Registrarse</ion-button>
-  <ion-button expand="full" (click)="signIn()">Iniciar Sesión</ion-button>
-  <ion-button expand="full" (click)="signInWithGoogle()">Iniciar Sesión con Google</ion-button>
-  <ion-button expand="full" color="medium" (click)="resetPassword()">Recuperar Contraseña</ion-button>
-</ion-content>
- -->
-
 <ion-header class="color-white">
 </ion-header>
 <ion-content class="color-white">  
@@ -39,7 +16,7 @@
           <ion-button class="olvbtn" fill="clear" (click)="resetPassword()">¿Olvido su Contraseña?</ion-button>
         </div>
         <div class="centrar">
-        <ion-button class="color-text-white" style="margin-top:20px" fill="solid" shape="round" (click)="signIn()">Ingresar</ion-button>
+        <ion-button class="color-text-white" style="margin-top:20px" fill="solid" shape="round" (click)="signIn()" [disabled]="!isFormValid()" >Inicio sesión</ion-button>
         </div>
         <span class="color-text-grey centrar" style="margin-top: 10px">--------------------- O ingrese con --------------------- </span>
         <ion-button fill="clear" class="centrar" style="margin-top: 30px" (click)="signInWithGoogle()">

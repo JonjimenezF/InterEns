@@ -157,4 +157,8 @@ export class ProductoPage implements OnInit {
     this.navCtrl.back();
   }
 
+  goCarrito(){
+    this.router.navigate(['/carrito']);
+  }
+
 }
