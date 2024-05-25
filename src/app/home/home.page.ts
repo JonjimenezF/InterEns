@@ -3,6 +3,7 @@ import { ActivatedRoute,Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { idUsuario } from '../models/idUsuario';
 import { NavController } from '@ionic/angular';
+import { SupabaseService } from '../services/supabase.service';
 
 @Component({
   selector: 'app-home',
@@ -21,13 +22,13 @@ export class HomePage {
     }
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     if (this.userInfo) {
       console.log(this.userInfo.id_usuario);
       console.log(this.userInfo);
     } else {
-      console.log('El objeto userInfo es null o undefined');
-    }
+      console.log('El objeto userInfo es null o undefined',this.userInfo);
+                }
   }
   
 
@@ -37,6 +38,8 @@ export class HomePage {
 
   home(){
     this.router.navigate(['/home']);
+    console.log('El objeto userInfo es null o undefined',this.userInfo);
+  
   }
 
   perfil(){

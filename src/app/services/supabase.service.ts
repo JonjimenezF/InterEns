@@ -21,7 +21,11 @@ export class SupabaseService {
       options: {
         redirectTo: 'http://localhost:8100/home', // Asegúrate de cambiar esta URL por la tuya
       }
+      
     });
+   const { data: { user } } = await this.supabase.auth.getUser()
+   console.log(this.supabase.auth.getUser)
+
     if (error) console.error('Error durante el inicio de sesión:', error);
   }
   
