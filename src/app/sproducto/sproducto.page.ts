@@ -62,6 +62,7 @@ export class SproductoPage implements OnInit {
 
   onSubmit(product: producto) {
     this.produc.id_usuario = this.userInfo.id_usuario;
+    console.log(product)
     this.productService.addProduct(product).subscribe({
       next: (response: any) => {
         // Mostrar mensaje de éxito
