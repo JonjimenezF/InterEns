@@ -18,14 +18,13 @@
   <div class="centrar">
     <ion-button class="color-text-white" color="primary" fill="solid" shape="round" (click)="onSubmit(produc)">Siguiente</ion-button>
   </div>
-   <!-- Botón para cargar las categorías (opcional) -->
-    <ion-button (click)="getCategoria()">Cargar Categorías</ion-button> 
+   
 
     <!-- Combobox para seleccionar una categoría -->
     <ion-item>
       <ion-label>Categoría</ion-label>
       <ion-select [(ngModel)]="produc.id_categoria" name="id_categoria" placeholder="Selecciona una categoría" required>
-        <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id">
+        <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id_categoria">
           {{ categoria.nombre }}
         </ion-select-option>
       </ion-select>

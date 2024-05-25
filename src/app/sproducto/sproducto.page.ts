@@ -62,6 +62,11 @@ export class SproductoPage implements OnInit {
 
   onSubmit(product: producto) {
     this.produc.id_usuario = this.userInfo.id_usuario;
+    console.log(product)
+    if (!this.produc.id_categoria) {
+      console.error('id_categoria no está asignado correctamente');
+      return;
+    }
     this.productService.addProduct(product).subscribe({
       next: (response: any) => {
         // Mostrar mensaje de éxito
