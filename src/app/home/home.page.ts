@@ -25,7 +25,7 @@ export class HomePage {
   async ngOnInit() {
     if (this.userInfo) {
       console.log(this.userInfo.id);
-      console.log(this.userInfo);
+      console.log(this.userInfo.user.id);
     } else {
       console.log('El objeto userInfo es null o undefined');
     }
@@ -52,7 +52,7 @@ export class HomePage {
 
   }
   goSubirfoto() {
-    this.router.navigate(['/sproducto'], { state: { userInfo: this.userInfo}})
+    this.router.navigate(['/sproducto'], { state: { userInfo: this.userInfo.user.id}})
   }
 
   goBack() {
