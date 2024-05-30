@@ -44,13 +44,18 @@
     header="Filtro de Búsqueda"
     [buttons]="buttons"
   ></ion-action-sheet>
+  <!-- Spinner de carga -->
+  <div *ngIf="loading" class="spinner-container">
+    <ion-spinner class="custom-spinner" name="circles" color="primary" ></ion-spinner>
+  </div>
+  
   <!-- Contenido principal aquí -->
-  <ion-row>
+  <ion-row *ngIf="!loading">
     <ion-col *ngFor="let producto of productos" (click)="goDetalleProducto(producto)" size="6">
       <ion-card class="carta">
         <ion-card-header>
           <div class="image-container">
-            <img [src]="getImagenProducto(producto)" alt="Imagen" class="product-image">
+            <img [src]="getImagenProducto(producto)" alt="Imagen" class="product-image" (load)="onImageLoad()">
           </div>
           <ion-card-title class="carta-titulo">{{ producto.nombre }}</ion-card-title>
         </ion-card-header>

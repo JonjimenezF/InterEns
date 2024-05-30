@@ -18,25 +18,17 @@ import { producto } from '../models/producto';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class ProductoPage implements OnInit {
-
-  constructor(private router: Router,
-              public actionSheetController: ActionSheetController, 
-              private navCtrl: NavController,
-              private productService: ProductoService,
-              private http: HttpClient,) {
-              // this.imagenProducto = new Observable<Blob>();
-  }
-  producto={
-    descripcion: "",
-    precio: "",
-    foto: "",
-    id_producto: "",
-  }
-
   productos: any[] = [];
+  loading: boolean = true;
+  imagesLoadedCount: number = 0;
 
-  // productos: any[] = []; // Declaración de la propiedad productos
-  // imagenProducto: Observable<Blob>; // Declaración de la propiedad imagenProducto
+  constructor(
+    private router: Router,
+    public actionSheetController: ActionSheetController, 
+    private navCtrl: NavController,
+    private productService: ProductoService,
+    private http: HttpClient
+  ) {}
 
   ngOnInit() {
     this.getProductos();
@@ -50,6 +42,7 @@ export class ProductoPage implements OnInit {
       },
       (error) => {
         console.error(error);
+        this.loading = false; // Detener la animación si hay un error
       }
     );
   }
@@ -73,11 +66,20 @@ export class ProductoPage implements OnInit {
             this.productos[index].imagen = [{ url_imagen: 'URL_IMAGEN_POR_DEFECTO' }];
           }
         });
+        this.loading = false; // Detener la animación una vez que todas las imágenes se hayan cargado
       },
       (error) => {
         console.error("Error al obtener imágenes:", error);
+        this.loading = false; // Detener la animación si hay un error
       }
     );
+  }
+
+  onImageLoad() {
+    this.imagesLoadedCount++;
+    if (this.imagesLoadedCount === this.productos.length) {
+      this.loading = false;
+    }
   }
 
   getImagenProducto(producto: any): string | null {
@@ -88,45 +90,33 @@ export class ProductoPage implements OnInit {
     }
   }
 
-  
-
-
-  //recibir datos producto
-  goDetalleProducto(detProducto:producto) {
-    console.log(detProducto)
+  goDetalleProducto(detProducto: producto) {
+    console.log(detProducto);
     if (detProducto) {
-      this.router.navigate(['/detalle-producto'], { state: { det_producto: detProducto}})
-      // this.navCtrl.navigateForward(['/detalle-producto/: id']);
+      this.router.navigate(['/detalle-producto'], { state: { det_producto: detProducto } });
     } else {
       console.error("ID del producto no definido");
     }
   }
 
-  
-
-
   public buttons = [
     {
       text: 'Orden',
       role: 'button',
-      
     },
     {
       text: 'Puntuación',
       role: 'button',
-      
     },
     {
       text: 'Categoría',
       role: 'button',
-
     },
     {
       text: 'Cerrar',
       role: 'cancel',
-      
     }
-  ]
+  ];
 
   showMenu = false;
 
@@ -134,31 +124,27 @@ export class ProductoPage implements OnInit {
     this.showMenu = !this.showMenu;
   }
 
-  goProducto(){
+  goProducto() {
     this.router.navigate(['/producto']);
   }
 
-  home(){
+  home() {
     this.router.navigate(['/home']);
   }
 
-  perfil(){
+  perfil() {
     this.router.navigate(['/perfil']);
   }
 
-  salir(){
+  salir() {}
 
-  }
-  puntoLimpio(){
-
-  }
+  puntoLimpio() {}
 
   goBack() {
     this.navCtrl.back();
   }
 
-  goCarrito(){
+  goCarrito() {
     this.router.navigate(['/carrito']);
   }
-
 }

@@ -81,3 +81,12 @@ ion-card-content {
   font-size: 1em;
 }
 
+.custom-spinner {
+  width: 70px;
+  height: 70px;
+  margin: auto;
+  position: absolute; /* Posicionamiento absoluto para centrarlo */
+  top: 50%; /* Coloca el margen superior en el 50% del contenedor padre */
+  left: 50%; /* Coloca el margen izquierdo en el 50% del contenedor padre */
+  transform: translate(-50%, -50%); /* Centra el spinner */
+}
