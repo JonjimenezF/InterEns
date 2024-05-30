@@ -23,6 +23,12 @@ export class DetalleProductoPage implements OnInit, AfterViewInit {
   id: any;
   det_imagen: any[] = [];
   det_producto?: producto;
+  
+  Carrito = {
+    id_producto:"",
+    id_usuario:"",
+    cantidad:1
+  }
 
   constructor(private router: Router, 
               private activateRoute: ActivatedRoute,
@@ -41,6 +47,13 @@ export class DetalleProductoPage implements OnInit, AfterViewInit {
     }
     console.log(this.det_producto);
   }
+
+  // agregarCarrito(producto: any){
+  //   console.log(producto)
+  //   this.Carrito.id_producto = producto
+  //   this.Carrito.id_usuario = this.userInfo.id
+  //   console.log(this.Carrito)
+  // }
 
   ngAfterViewInit() {
     if (this.swiperContainer) {

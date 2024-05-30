@@ -1,5 +1,5 @@
 export class idUsuario {
     constructor(
-        public id: number,
+        public id_usuario: string,
     ) {}
 }

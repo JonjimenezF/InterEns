@@ -51,8 +51,8 @@
   
   <!-- Contenido principal aquí -->
   <ion-row *ngIf="!loading">
-    <ion-col *ngFor="let producto of productos" (click)="goDetalleProducto(producto)" size="6">
-      <ion-card class="carta">
+    <ion-col *ngFor="let producto of productos" size="6">
+      <ion-card class="carta" (click)="goDetalleProducto(producto)">
         <ion-card-header>
           <div class="image-container">
             <img [src]="getImagenProducto(producto)" alt="Imagen" class="product-image" (load)="onImageLoad()">
@@ -63,7 +63,9 @@
           Precio: {{ producto.precio }} <br>
           <!-- Descripción: {{ producto.descripcion }} -->
         </ion-card-content>
+        <ion-button color="primary" (click)="agregarCarrito($event, producto)">Agregar carrito</ion-button>
       </ion-card>
     </ion-col>
   </ion-row>
+  
 </ion-content>

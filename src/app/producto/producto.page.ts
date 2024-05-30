@@ -9,6 +9,7 @@ import { ProductoService } from '../servicios/producto.service';
 import { Observable, catchError, forkJoin, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { producto } from '../models/producto';
+import { CarritoService } from '../servicios/carrito.service';
 
 @Component({
   selector: 'app-producto',
@@ -21,17 +22,49 @@ export class ProductoPage implements OnInit {
   productos: any[] = [];
   loading: boolean = true;
   imagesLoadedCount: number = 0;
+  Carrito = {
+    id_producto:"",
+    id_usuario:"",
+    cantidad:1
+  }
 
+  userInfo?: any;
   constructor(
     private router: Router,
     public actionSheetController: ActionSheetController, 
     private navCtrl: NavController,
     private productService: ProductoService,
-    private http: HttpClient
-  ) {}
+    private http: HttpClient,
+    private serviceCarrito: CarritoService
+  ) {
+    const state = this.router.getCurrentNavigation()?.extras.state;
+    if (state && state['userInfo']) {
+      this.userInfo = state['userInfo'];
+    }
+  }
 
   ngOnInit() {
     this.getProductos();
+    console.log(this.userInfo)
+  }
+
+  agregarCarrito(event: Event, producto: any) {
+    event.stopPropagation(); // Detener la propagación del evento
+    console.log(producto);
+    this.Carrito.id_producto = producto.id_producto;
+    this.Carrito.id_usuario = this.userInfo.id;
+    console.log(this.Carrito);
+    this.serviceCarrito.postCarrito(this.Carrito).subscribe(
+      response => {
+        console.log('Producto agregado al carrito', response);
+        // Puedes mostrar una notificación al usuario aquí
+      },
+      error => {
+        console.error('Error al agregar el producto al carrito', error);
+        // Puedes manejar el error aquí, por ejemplo, mostrando un mensaje de error al usuario
+      }
+    );
+    // Aquí puedes agregar la lógica para agregar el producto al carrito
   }
 
   getProductos() {
@@ -124,6 +157,7 @@ export class ProductoPage implements OnInit {
     this.showMenu = !this.showMenu;
   }
 
+
   goProducto() {
     this.router.navigate(['/producto']);
   }
@@ -145,6 +179,6 @@ export class ProductoPage implements OnInit {
   }
 
   goCarrito() {
-    this.router.navigate(['/carrito']);
+    this.router.navigate(['/carrito'], { state: { userInfo: this.userInfo.id } });
   }
 }

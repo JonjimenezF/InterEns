@@ -38,7 +38,7 @@ export class HomePage {
   
 
   goProducto(){
-    this.router.navigate(['/producto']);
+    this.router.navigate(['/producto'], { state: { userInfo: { id: this.userId } } });
   }
 
   home(){
