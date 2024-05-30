@@ -35,7 +35,7 @@ export class CarritoPage implements OnInit {
   ngOnInit() {
     console.log(this.userInfo)
     this.getCarritos(this.userInfo)
-    
+
   }
 
   getCarritos(id:string) {
@@ -43,6 +43,7 @@ export class CarritoPage implements OnInit {
       (data: any[]) => {
         this.carrito= data;
         console.log(this.carrito)
+        this.getProductCarrito(this.carrito.id_producto)
       },
       (error) => {
         console.error(error);
