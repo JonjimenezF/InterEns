@@ -59,7 +59,6 @@ export class LoginPage {
   }
 
   async signIn() {
-    try {
       const { data, error } = await this.supabaseService.signInWithEmail(this.email, this.password);
       if (error) {
         this.showToast('El correo que ingresaste, o la contraseña, son inválidos. Por favor, vuelve a intentar');
@@ -69,10 +68,6 @@ export class LoginPage {
         this.showToast('Inicio de sesión exitoso!');
         this.router.navigate(['/home'], { state: { userInfo: data } });
       }
-    } catch (error) {
-      console.error('Error en el inicio de sesión:', error);
-      this.showToast('Ha ocurrido un error durante el inicio de sesión');
-    }
   }
 
   //inhabilida el boton
