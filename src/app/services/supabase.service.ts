@@ -1,16 +1,27 @@
 // src/app/services/supabase.service.ts
 import { Injectable } from '@angular/core';
-import { AuthApiError, createClient, SupabaseClient } from '@supabase/supabase-js';
+import { AuthApiError, AuthChangeEvent, createClient, Session, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
-
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
 export class SupabaseService {
   private supabase: SupabaseClient;
 
-  constructor() {
+  constructor(private router: Router) {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
+
+    // Listen for auth state changes
+    this.supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
+      console.log('supabase event: ', event);
+      if (session === null) {
+        this.router.navigate(['/login'], { replaceUrl: true });
+      } else {
+        console.log('data del usuario', session.user);
+        this.router.navigate(['/home'], { state: { userInfo: session.user }, replaceUrl: true });
+      }
+    });
   }
 
   async signInWithGoogle() {
@@ -67,4 +78,5 @@ export class SupabaseService {
     const { data, error } = await this.supabase.auth.resetPasswordForEmail(email);
     return { data, error };
   }
+
 }
