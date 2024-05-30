@@ -52,7 +52,7 @@ export class SproductoPage implements OnInit {
   
   ngOnInit() {
     if (this.userInfo) {
-      console.log(this.userInfo);
+      console.log(this.userInfo.id);
     } else {
       console.log('El objeto userInfo es null o undefined');
     }
@@ -61,7 +61,7 @@ export class SproductoPage implements OnInit {
   }
 
   onSubmit(product: producto) {
-    this.produc.id_usuario = this.userInfo;
+    this.produc.id_usuario = this.userInfo.id;
     console.log(product)
     this.productService.addProduct(product).subscribe({
       next: (response: any) => {

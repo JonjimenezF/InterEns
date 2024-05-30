@@ -24,8 +24,13 @@ export class HomePage {
 
   async ngOnInit() {
     if (this.userInfo) {
-      console.log(this.userInfo.id);
-      console.log(this.userInfo.user.id);
+      // Normaliza la estructura de datos del usuario
+      if (this.userInfo.user && this.userInfo.user.id) {
+        this.userId = this.userInfo.user.id;  // Para autenticación por email
+      } else if (this.userInfo.id) {
+        this.userId = this.userInfo.id;  // Para autenticación por Google
+      }
+      console.log('User ID:', this.userId);
     } else {
       console.log('El objeto userInfo es null o undefined');
     }
@@ -52,7 +57,8 @@ export class HomePage {
 
   }
   goSubirfoto() {
-    this.router.navigate(['/sproducto'], { state: { userInfo: this.userInfo.user.id}})
+    console.log("Dentro",this.userInfo)
+    this.router.navigate(['/sproducto'], { state: { userInfo: { id: this.userId } } });
   }
 
   goBack() {
