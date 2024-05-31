@@ -1,25 +1,29 @@
 // src/app/services/supabase.service.ts
 import { Injectable } from '@angular/core';
-import { AuthApiError, AuthChangeEvent, createClient, Session, SupabaseClient } from '@supabase/supabase-js';
+import { AuthApiError, AuthChangeEvent, createClient, Session, SupabaseClient, User } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
 export class SupabaseService {
   private supabase: SupabaseClient;
+  private user = new BehaviorSubject<User | null>(null);
+  user$ = this.user.asObservable();
 
   constructor(private router: Router) {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
 
-    // Listen for auth state changes
+    // Escuchar cambios en el estado de autenticación
     this.supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
-      console.log('supabase event: ', event);
+      console.log('evento de supabase: ', event, session);
+      this.user.next(session?.user || null);
       if (session === null) {
         this.router.navigate(['/login'], { replaceUrl: true });
       } else {
-        console.log('data del usuario', session.user);
-        this.router.navigate(['/home'], { state: { userInfo: session.user }, replaceUrl: true });
+        console.log('datos del usuario', session.user);
+        this.router.navigate(['/home'], { replaceUrl: true });
       }
     });
   }
@@ -28,30 +32,34 @@ export class SupabaseService {
     const { data, error } = await this.supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'http://localhost:8100/home', // Asegúrate de cambiar esta URL por la tuya
-        queryParams:{
+        redirectTo: window.location.origin + '/home',
+        queryParams: {
           access_type: 'offline',
           prompt: 'consent',
-        }
-      }
+        },
+      },
     });
 
     if (error) {
-        console.error('Error durante el inicio de sesión:', error);
-        return null; // O alguna otra forma de manejar el error, como lanzar una excepción
+      console.error('Error durante el inicio de sesión:', error);
+      return null;
     }
 
     return { data };
   }
-  
+
   async signUpWithEmail(email: string, password: string) {
     const { data, error } = await this.supabase.auth.signUp({
       email,
-      password
+      password,
     });
+
+    if (error) {
+      console.error('Error durante el registro:', error);
+    }
+
     return { data, error };
   }
-
   async signInWithEmail(email: string, password: string) {
     try {
       const { data, error } = await this.supabase.auth.signInWithPassword({

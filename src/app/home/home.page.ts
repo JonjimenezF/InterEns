@@ -3,6 +3,7 @@ import { ActivatedRoute,Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { idUsuario } from '../models/idUsuario';
 import { NavController } from '@ionic/angular';
+import { SupabaseService } from '../services/supabase.service';
 
 @Component({
   selector: 'app-home',
@@ -15,30 +16,28 @@ export class HomePage {
   userId: string | undefined;
 
   userInfo?: any;
-  constructor(private router: Router, private activateRoute: ActivatedRoute,private navCtrl: NavController) {
+  constructor(private router: Router, private activateRoute: ActivatedRoute,private navCtrl: NavController,private supabaseService: SupabaseService) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
       this.userInfo = state['userInfo'];
     }
   }
 
-  async ngOnInit() {
-    if (this.userInfo) {
-      // Normaliza la estructura de datos del usuario
-      if (this.userInfo.user && this.userInfo.user.id) {
-        this.userId = this.userInfo.user.id;  // Para autenticación por email
-      } else if (this.userInfo.id) {
-        this.userId = this.userInfo.id;  // Para autenticación por Google
+  ngOnInit() {
+    this.supabaseService.user$.subscribe(user => {
+      if (user) {
+        this.userInfo = user;
+        this.userId = user.id;
+        console.log('User ID:', this.userId);
+      } else {
+        console.log('El objeto userInfo es null o undefined');
       }
-      console.log('User ID:', this.userId);
-    } else {
-      console.log('El objeto userInfo es null o undefined');
-    }
+    });
   }
   
 
   goProducto(){
-    this.router.navigate(['/producto'], { state: { userInfo: { id: this.userId } } });
+    this.router.navigate(['/producto'], { state: { userInfo: this.userInfo}})
   }
 
   home(){
@@ -58,7 +57,7 @@ export class HomePage {
   }
   goSubirfoto() {
     console.log("Dentro",this.userInfo)
-    this.router.navigate(['/sproducto'], { state: { userInfo: { id: this.userId } } });
+    this.router.navigate(['/sproducto'], { state: { userInfo: this.userInfo}})
   }
 
   goBack() {

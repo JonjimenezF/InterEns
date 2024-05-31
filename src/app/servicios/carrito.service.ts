@@ -27,7 +27,7 @@ export class CarritoService {
   }
 
   getProductoCarrito(id_producto: number): Observable<any> {
-    const params = new HttpParams().set('id_usuario', id_producto);
+    const params = new HttpParams().set('id_producto', id_producto);
     return this._http.get<any>(this.baseUrl + '/obtener_productos_carrito', { params }).pipe(
       catchError(this.handleError)
     );

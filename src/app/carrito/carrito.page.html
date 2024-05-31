@@ -10,7 +10,21 @@
 </ion-header>
 
 <ion-content>
-  <ion-button color="primary" (click)="goProducto()">
-      Descubrir productos
-  </ion-button>
+  <ion-list *ngIf="productosCarrito.length > 0">
+    <ion-item *ngFor="let producto of productosCarrito">
+      <div class="product-container">
+        <div class="delete-icon" (click)="eliminarDelCarrito(producto)">
+          <img src="assets/img/bin.png" alt="Eliminar del carrito">
+        </div>
+        <div class="product-image">
+          <img [src]="getImagenProducto(producto)" alt="Imagen del producto">
+        </div>
+        <div class="product-details">
+          <h2 style="color: black;">{{ producto.nombre }}</h2>
+          <p style="color: black;">Precio: {{ producto.precio }}</p>
+        </div>
+      </div>
+    </ion-item>
+  </ion-list>
+  <ion-spinner *ngIf="productosCarrito.length === 0"></ion-spinner>
 </ion-content>
