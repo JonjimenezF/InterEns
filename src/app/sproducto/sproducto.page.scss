@@ -1,0 +1,73 @@
+ion-header {
+    background-color: #fff; // Fondo blanco para el ion-header
+  
+    // Agrega cualquier otro estilo que desees para el header
+  }
+  
+  ion-back-button {
+    --color: rgb(50, 5, 133); // Color morado para la flecha de retroceso
+  }
+  
+  ion-content {
+    --ion-background-color: #f7f9fc; // Color de fondo suave
+    padding: 16px;
+  
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center; // Centrar horizontalmente
+    }
+  
+    .custom-item {
+      --background: white;
+      --border-color: rgb(79, 7, 212); // Color morado
+      border: 2px solid var(--border-color);
+      border-radius: 20px; // Bordes redondeados
+      width: 80%; // Ajustar el ancho para que no ocupe todo el ancho de la pantalla
+      margin-bottom: 12px;
+      padding-right: 40px;
+  
+      .custom-input {
+        --color: #666;
+        --placeholder-color: #999;
+        border-radius: 20px; // Bordes redondeados para los inputs
+      }
+    }
+  
+    .centrar {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+  
+      ion-button.color-text-white {
+        --background: #4cc3ff; // Celeste claro
+        --color: white;
+        --border-radius: 20px; // Bordes redondeados
+        padding: 12px 24px;
+        font-size: 16px;
+      }
+    }
+  
+    ion-item {
+      --background: white;
+      --border-color: #7b4cfc; // Color morado
+      border: 1px solid var(--border-color);
+      border-radius: 20px; // Bordes redondeados
+      margin-bottom: 12px;
+  
+      ion-label {
+        font-size: 14px;
+        color: #333;
+      }
+  
+      ion-select {
+        --color: #333;
+        border-radius: 20px; // Bordes redondeados para el select
+      }
+  
+      ion-select-option {
+        --color: #333;
+      }
+    }
+  }
+  

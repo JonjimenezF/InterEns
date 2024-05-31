@@ -4,5 +4,6 @@ export class producto {
         public descripcion: string,
         public precio: string,
         public stock: string,
+        public id_categoria: string,
     ) {}
 }
