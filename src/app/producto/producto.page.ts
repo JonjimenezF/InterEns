@@ -116,7 +116,6 @@ export class ProductoPage implements OnInit {
   }
 
   getImagenProducto(producto: any): string | null {
-    console.log("HOLAAAAAAAA",producto)
     if (producto && producto.imagen && producto.imagen.length > 0 && producto.imagen[0].url_imagen) {
       return 'http://localhost:5000/foto/' + producto.imagen[0].url_imagen;
     } else {
