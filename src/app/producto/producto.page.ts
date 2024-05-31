@@ -10,7 +10,6 @@ import { Observable, catchError, forkJoin, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { producto } from '../models/producto';
 import { CategoriaService } from '../servicios/categoria.service';
-
 import { CarritoService } from '../servicios/carrito.service';
 
 @Component({
@@ -23,28 +22,7 @@ import { CarritoService } from '../servicios/carrito.service';
 export class ProductoPage implements OnInit {
   
   categoria: any[] = [];
-
- 
   isCategoriaSelected = false;
-
-  constructor(private router: Router,
-              public actionSheetController: ActionSheetController, 
-              private navCtrl: NavController,
-              private productService: ProductoService,
-              private http: HttpClient,) {
-              // this.imagenProducto = new Observable<Blob>();
-  }
-  producto={
-    descripcion: "",
-    precio: "",
-    foto: "",
-    id_producto: "",
-  }
-
-  productos: any[] = [];
-
-  // productos: any[] = []; // Declaración de la propiedad productos
-  // imagenProducto: Observable<Blob>; // Declaración de la propiedad imagenProducto
   productos: any[] = [];
   loading: boolean = true;
   imagesLoadedCount: number = 0;
