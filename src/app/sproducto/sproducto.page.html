@@ -1,27 +1,30 @@
 <ion-header>
-
+  <ion-buttons slot="start">
+    <ion-back-button (click)="goBack()" defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
+  </ion-buttons>
+  
 </ion-header>
 
 <ion-content>
-  <ion-item class="color-white transparent-border" style="padding-right: 40px">
-    <ion-input class="color-text-grey" type = "text" placeholder="Ingrese nombre del produto" [(ngModel)]="produc.nombre" ></ion-input>
-  </ion-item>
-  <ion-item class="color-white transparent-border" style="padding-right: 40px">
-    <ion-input class="color-text-grey" type = "text" placeholder="Ingrese descripcion" [(ngModel)]="produc.descripcion" ></ion-input>
-  </ion-item>
-  <ion-item class="color-white transparent-border" style="padding-right: 40px">
-    <ion-input class="color-text-grey" type = "text" placeholder="Ingrese precio" [(ngModel)]="produc.precio" ></ion-input>
-  </ion-item>
-  <ion-item class="color-white transparent-border" style="padding-right: 40px">
-    <ion-input class="color-text-grey" type = "text" placeholder="Ingrese stock" [(ngModel)]="produc.stock" ></ion-input>
-  </ion-item>
+  <br><br>
   <div class="centrar">
-    <ion-button class="color-text-white" color="primary" fill="solid" shape="round" (click)="onSubmit(produc)">Siguiente</ion-button>
+    <ion-img class="imge" src="assets/img/inter.png"></ion-img>
   </div>
-   
-
-    <!-- Combobox para seleccionar una categoría -->
-    <ion-item>
+  <br>
+  <div class="form-container">
+    <ion-item class="custom-item">
+      <ion-input class="custom-input" type="text" placeholder="Ingrese nombre del producto" [(ngModel)]="produc.nombre"></ion-input>
+    </ion-item>
+    <ion-item class="custom-item">
+      <ion-input class="custom-input" type="text" placeholder="Ingrese descripción" [(ngModel)]="produc.descripcion"></ion-input>
+    </ion-item>
+    <ion-item class="custom-item">
+      <ion-input class="custom-input" type="text" placeholder="Ingrese precio" [(ngModel)]="produc.precio"></ion-input>
+    </ion-item>
+    <ion-item class="custom-item">
+      <ion-input class="custom-input" type="text" placeholder="Ingrese stock" [(ngModel)]="produc.stock"></ion-input>
+    </ion-item>
+    <ion-item class="custom-item">
       <ion-label>Categoría</ion-label>
       <ion-select [(ngModel)]="produc.id_categoria" name="id_categoria" placeholder="Selecciona una categoría" required>
         <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id_categoria">
@@ -29,3 +32,8 @@
         </ion-select-option>
       </ion-select>
     </ion-item>
+    <div class="centrar">
+      <ion-button class="color-text-white" color="primary" fill="solid" shape="round" (click)="onSubmit(produc)">Siguiente</ion-button>
+    </div>
+  </div>
+</ion-content>

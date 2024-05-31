@@ -9,6 +9,8 @@ import { ProductoService } from '../servicios/producto.service';
 import { Observable, catchError, forkJoin, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { producto } from '../models/producto';
+import { CategoriaService } from '../servicios/categoria.service';
+
 
 @Component({
   selector: 'app-producto',
@@ -18,6 +20,11 @@ import { producto } from '../models/producto';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class ProductoPage implements OnInit {
+  
+  categoria: any[] = [];
+
+ 
+  isCategoriaSelected = false;
 
   constructor(private router: Router,
               public actionSheetController: ActionSheetController, 
@@ -40,6 +47,7 @@ export class ProductoPage implements OnInit {
 
   ngOnInit() {
     this.getProductos();
+    
   }
 
   getProductos() {
@@ -102,15 +110,26 @@ export class ProductoPage implements OnInit {
     }
   }
 
+  buildButtons() {
+    return this.categoria.map(categoria => ({
+      text: categoria.nombre,
+      handler: () => this.filterByCategoria(categoria.id)
+    }));
+  }
+
+  
+  
+  
+  filterByCategoria(idCategoria: string) {
+    this.isCategoriaSelected = true;
+    this.productos = this.productos.filter(producto => producto.id_categoria === idCategoria);
+  }
+  
+
   
 
 
   public buttons = [
-    {
-      text: 'Orden',
-      role: 'button',
-      
-    },
     {
       text: 'Puntuación',
       role: 'button',
@@ -120,11 +139,6 @@ export class ProductoPage implements OnInit {
       text: 'Categoría',
       role: 'button',
 
-    },
-    {
-      text: 'Cerrar',
-      role: 'cancel',
-      
     }
   ]
 

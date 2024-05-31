@@ -40,11 +40,18 @@
     </ion-button>
   </ion-toolbar> 
   <ion-action-sheet
+    *ngIf="showMenu"
     trigger="abrir-filtro-busqueda"
     header="Filtro de Búsqueda"
     [buttons]="buttons"
   ></ion-action-sheet>
   <!-- Contenido principal aquí -->
+  <ion-action-sheet
+    *ngIf="showMenu && isCategoriaSelected"
+    header="Selecciona una Categoría"
+    [buttons]="buildButtons()"
+
+  ></ion-action-sheet>
   <ion-row>
     <ion-col *ngFor="let producto of productos" (click)="goDetalleProducto(producto)" size="6">
       <ion-card class="carta">
