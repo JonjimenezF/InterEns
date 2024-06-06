@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule} from '@ionic/angular';
-import { NavController } from '@ionic/angular';
+import { NavController,ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Observable, catchError, forkJoin, of } from 'rxjs';
 import { CarritoService } from '../servicios/carrito.service';
@@ -27,7 +27,8 @@ export class CarritoPage implements OnInit {
     private navCtrl: NavController,
     private productService: ProductoService,
     private http: HttpClient,
-    private serviceCarrito: CarritoService
+    private serviceCarrito: CarritoService,
+    private toastController: ToastController
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
@@ -126,11 +127,13 @@ export class CarritoPage implements OnInit {
   }
 
   eliminarDelCarrito(producto: any) {
-    // const index = this.productosCarrito.findIndex(p => p.id_producto === producto.id_producto);
-    // if (index !== -1) {
-    //   this.productosCarrito.splice(index, 1);
-    // }
-    // // Llama al servicio para eliminar el producto del carrito en el backend si es necesario
+    const index = this.productosCarrito.findIndex(p => p.id_producto === producto.id_producto);
+    if (index !== -1) {
+      this.productosCarrito.splice(index, 1);
+      console.log("carrito",this.productosCarrito)
+      this.showToast("Producto eliminado del carrito")
+    }
+    // Llama al servicio para eliminar el producto del carrito en el backend si es necesario
     // this.serviceCarrito.eliminarProductoCarrito(producto.id_producto).subscribe(
     //   () => {
     //     console.log(`Producto ${producto.id_producto} eliminado del carrito`);
@@ -139,6 +142,15 @@ export class CarritoPage implements OnInit {
     //     console.error('Error al eliminar el producto del carrito:', error);
     //   }
     // );
+  }
+
+  private async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      position: 'bottom'
+    });
+    toast.present();
   }
 
 

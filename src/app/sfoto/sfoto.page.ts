@@ -131,6 +131,7 @@ export class SfotoPage implements OnInit {
   guardarImagenEnBaseDeDatos(imagen: any) {
     this.productService.addImagenProduct(imagen).subscribe(
       (response) => {
+        this.router.navigate(['/home'])
         console.log('Imagen guardada en la base de datos', response);
       },
       (err) => {

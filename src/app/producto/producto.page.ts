@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
-import { NavController } from '@ionic/angular';
+import { NavController,ToastController } from '@ionic/angular';
 import { ProductoService } from '../servicios/producto.service';
 import { Observable, catchError, forkJoin, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -24,22 +24,27 @@ export class ProductoPage implements OnInit {
   categoria: any[] = [];
   isCategoriaSelected = false;
   productos: any[] = [];
+  filteredProducts: any[] = []; // Lista de productos filtrados
   loading: boolean = true;
   imagesLoadedCount: number = 0;
+  searchQuery: string = ''; // Query de búsqueda
+
   Carrito = {
-    id_producto:"",
-    id_usuario:"",
-    cantidad:1
+    id_producto: "",
+    id_usuario: "",
+    cantidad: 1
   }
 
   userInfo?: any;
+
   constructor(
     private router: Router,
-    public actionSheetController: ActionSheetController, 
+    public actionSheetController: ActionSheetController,
     private navCtrl: NavController,
     private productService: ProductoService,
     private http: HttpClient,
-    private serviceCarrito: CarritoService
+    private serviceCarrito: CarritoService,
+    private toastController: ToastController
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
@@ -49,7 +54,6 @@ export class ProductoPage implements OnInit {
 
   ngOnInit() {
     this.getProductos();
-    
     console.log(this.userInfo)
   }
 
@@ -61,6 +65,7 @@ export class ProductoPage implements OnInit {
     console.log(this.Carrito);
     this.serviceCarrito.postCarrito(this.Carrito).subscribe(
       response => {
+        this.showToast("Producto agregado al carrito");
         console.log('Producto agregado al carrito', response);
         // Puedes mostrar una notificación al usuario aquí
       },
@@ -76,6 +81,7 @@ export class ProductoPage implements OnInit {
     this.productService.getProduct().subscribe(
       (data: any[]) => {
         this.productos = data;
+        this.filteredProducts = data; // Inicialmente, mostrar todos los productos
         this.obtenerImagenesProductos();
       },
       (error) => {
@@ -86,7 +92,7 @@ export class ProductoPage implements OnInit {
   }
 
   obtenerImagenesProductos() {
-    const observables = this.productos.map(producto => 
+    const observables = this.productos.map(producto =>
       this.productService.getImagenes(producto.id_producto).pipe(
         catchError(error => {
           console.error(`Error al obtener imágenes para el producto ${producto.id_producto}:`, error);
@@ -101,7 +107,7 @@ export class ProductoPage implements OnInit {
           if (data.length > 0) {
             this.productos[index].imagen = data;
           } else {
-            this.productos[index].imagen = [{ url_imagen: 'URL_IMAGEN_POR_DEFECTO' }];
+            this.productos[index].imagen = [{ url_imagen: 'URL_IMAGEN_POR DEFECTO' }];
           }
         });
         this.loading = false; // Detener la animación una vez que todas las imágenes se hayan cargado
@@ -144,31 +150,40 @@ export class ProductoPage implements OnInit {
     }));
   }
 
-  
-  
-  
   filterByCategoria(idCategoria: string) {
     this.isCategoriaSelected = true;
-    this.productos = this.productos.filter(producto => producto.id_categoria === idCategoria);
+    this.filteredProducts = this.productos.filter(producto => producto.id_categoria === idCategoria);
+  }
+
+  filterByPrice(priceRange: string) {
+    // Implementa la lógica de filtrado por rango de precios aquí
+    // Por ejemplo, puedes filtrar productos con un precio menor a 50
+    this.filteredProducts = this.productos.filter(producto => producto.precio <= 50); // Ejemplo
+  }
+
+  filterProducts() {
+    if (this.searchQuery && this.searchQuery.trim() !== '') {
+      const query = this.searchQuery.toLowerCase();
+      this.filteredProducts = this.productos.filter(producto => 
+        producto.nombre.toLowerCase().includes(query) || 
+        producto.descripcion.toLowerCase().includes(query)
+      );
+    } else {
+      this.filteredProducts = this.productos;
+    }
   }
   
 
-  
-
-
   public buttons = [
     {
-      text: 'Orden',
+      text: 'Filtrar por categoría',
       role: 'button',
+      handler: () => this.buildButtons(),
     },
     {
-      text: 'Puntuación',
+      text: 'Filtrar por precio',
       role: 'button',
-    },
-    {
-      text: 'Categoría',
-      role: 'button',
-
+      handler: () => this.filterByPrice('your-price-range'), // Ejemplo de filtrado por precio
     },
     {
       text: 'Cerrar',
@@ -176,7 +191,16 @@ export class ProductoPage implements OnInit {
     }
   ];
 
-  showMenu = false;
+  showMenu = true;
+
+  private async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      position: 'bottom'
+    });
+    toast.present();
+  }
 
   toggleMenu() {
     this.showMenu = !this.showMenu;

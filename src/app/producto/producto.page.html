@@ -34,7 +34,7 @@
 
 <ion-content id="main-content">
   <ion-toolbar>
-    <ion-searchbar></ion-searchbar>
+    <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="filterProducts()"></ion-searchbar>
     <ion-button id="abrir-filtro-busqueda" class="transparent-border" slot="end" fill="clear">
       <ion-icon src="./assets/icon/options.svg"></ion-icon>
     </ion-button>
@@ -52,7 +52,7 @@
   
   <!-- Contenido principal aquí -->
   <ion-row *ngIf="!loading">
-    <ion-col *ngFor="let producto of productos" size="6">
+    <ion-col *ngFor="let producto of filteredProducts" size="6">
       <ion-card class="carta" (click)="goDetalleProducto(producto)">
         <ion-card-header>
           <div class="image-container">
@@ -68,5 +68,4 @@
       </ion-card>
     </ion-col>
   </ion-row>
-  
 </ion-content>
