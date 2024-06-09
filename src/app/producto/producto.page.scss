@@ -30,13 +30,59 @@ ion-menu::part(container) {
   box-shadow: 2px 2px 4px rgba(122, 122, 122, 0.5);
 }
 
-ion-action-sheet.color  {
-  --background: #ffffff !important; /* Cambia este valor al color de fondo que desees */
-}
 
 
 ion-buttons ion-back-button {
   --color: black;
+}
+
+.my-custom-class {
+  --background: #ffffff;
+  --backdrop-opacity: 0.6;
+  --color: #000000;
+}
+
+.my-custom-class .boton-mostrar-todos {
+  --button-color: #000000;
+  --button-background: #97c8eb;
+}
+
+.my-custom-class .boton-cerrar {
+  --button-color: #ffffff;
+  --button-background: #ff0000;
+}
+
+
+
+// .custom-action-sheet {
+//   --background: white;
+//   --color: black;
+//   --button-color: black;
+//   --ion-color-primary: black;
+// }
+
+// .custom-action-sheet .action-sheet-button {
+//   display: inline-block;
+//   width: auto;
+//   margin: 5px;
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+//   text-align: center;
+//   padding: 10px;
+//   background-color: #f0f0f0;
+//   border-radius: 5px;
+// }
+
+
+//
+.action-sheet-title.sc-ion-action-sheet-md {
+  --color: rgb(255, 0, 0);
+}
+
+/* Estilo para las categorías */
+.custom-action-sheet .action-sheet-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Columnas automáticas con un ancho mínimo de 100px */
+  gap: 10px; /* Espacio entre las categorías */
 }
 
 

@@ -16,12 +16,12 @@
   </ion-content>
 </ion-menu>
 
+<!-- Header -->
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button auto-hide="false"></ion-menu-button>
     </ion-buttons>
-
     <ion-buttons slot="start">
       <ion-back-button (click)="goBack()" defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
     </ion-buttons>
@@ -32,6 +32,7 @@
   </ion-toolbar>
 </ion-header>
 
+<!-- Content -->
 <ion-content id="main-content">
   <ion-toolbar>
     <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="filterProducts()"></ion-searchbar>
@@ -39,18 +40,21 @@
       <ion-icon src="./assets/icon/options.svg"></ion-icon>
     </ion-button>
   </ion-toolbar> 
+
   <ion-action-sheet
+    class="my-custom-class"
     *ngIf="showMenu"
     trigger="abrir-filtro-busqueda"
     header="Filtro de Búsqueda"
     [buttons]="buttons"
   ></ion-action-sheet>
+
   <!-- Spinner de carga -->
   <div *ngIf="loading" class="spinner-container">
-    <ion-spinner class="custom-spinner" name="circles" color="primary" ></ion-spinner>
+    <ion-spinner class="custom-spinner" name="circles" color="primary"></ion-spinner>
   </div>
-  
-  <!-- Contenido principal aquí -->
+
+  <!-- Lista de productos -->
   <ion-row *ngIf="!loading">
     <ion-col *ngFor="let producto of filteredProducts" size="6">
       <ion-card class="carta" (click)="goDetalleProducto(producto)">

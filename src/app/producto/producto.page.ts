@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
-import { NavController,ToastController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { ProductoService } from '../servicios/producto.service';
 import { Observable, catchError, forkJoin, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -22,12 +22,14 @@ import { CarritoService } from '../servicios/carrito.service';
 export class ProductoPage implements OnInit {
   
   categoria: any[] = [];
-  isCategoriaSelected = false;
   productos: any[] = [];
   filteredProducts: any[] = []; // Lista de productos filtrados
   loading: boolean = true;
   imagesLoadedCount: number = 0;
   searchQuery: string = ''; // Query de búsqueda
+  precioMin: number = 0; // Precio mínimo para el filtro
+  precioMax: number = Infinity; // Precio máximo para el filtro
+  selectedCategoria: any; // Categoría seleccionada
 
   Carrito = {
     id_producto: "",
@@ -42,9 +44,12 @@ export class ProductoPage implements OnInit {
     public actionSheetController: ActionSheetController,
     private navCtrl: NavController,
     private productService: ProductoService,
+    private categoriaService: CategoriaService,
     private http: HttpClient,
     private serviceCarrito: CarritoService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private modalController: ModalController,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
@@ -54,7 +59,8 @@ export class ProductoPage implements OnInit {
 
   ngOnInit() {
     this.getProductos();
-    console.log(this.userInfo)
+    this.getCategorias();
+    console.log(this.userInfo);
   }
 
   agregarCarrito(event: Event, producto: any) {
@@ -67,28 +73,59 @@ export class ProductoPage implements OnInit {
       response => {
         this.showToast("Producto agregado al carrito");
         console.log('Producto agregado al carrito', response);
-        // Puedes mostrar una notificación al usuario aquí
       },
       error => {
         console.error('Error al agregar el producto al carrito', error);
-        // Puedes manejar el error aquí, por ejemplo, mostrando un mensaje de error al usuario
       }
     );
-    // Aquí puedes agregar la lógica para agregar el producto al carrito
   }
 
   getProductos() {
     this.productService.getProduct().subscribe(
       (data: any[]) => {
         this.productos = data;
-        this.filteredProducts = data; // Inicialmente, mostrar todos los productos
+        this.filteredProducts = data; // Mostrar todos los productos inicialmente
         this.obtenerImagenesProductos();
+        this.loading = false; // Marcar la carga como completa
       },
       (error) => {
         console.error(error);
         this.loading = false; // Detener la animación si hay un error
       }
     );
+  }
+
+  getCategorias() {
+    this.categoriaService.getTodasCategorias().subscribe(
+      (data: any[]) => {
+        this.categoria = data;
+        this.configureButtons();
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
+
+  configureButtons() {
+    this.buttons = [
+      {
+        text: 'Mostrar todos',
+        cssClass: 'boton-mostrar-todos',
+        handler: () => this.filterByCategoria(null) // Mostrar todos los productos
+      },
+      ...this.categoria.map(categoria => ({
+        cssClass: 'boton-categoria',
+        text: categoria.nombre,
+        handler: () => {
+          this.selectedCategoria = categoria.id_categoria;
+          this.filterByCategoria(this.selectedCategoria); // Llama a la función de filtro
+        }
+      })),
+    ];
+
+    // Forzar la actualización de la interfaz de usuario
+    this.changeDetectorRef.detectChanges();
   }
 
   obtenerImagenesProductos() {
@@ -107,7 +144,7 @@ export class ProductoPage implements OnInit {
           if (data.length > 0) {
             this.productos[index].imagen = data;
           } else {
-            this.productos[index].imagen = [{ url_imagen: 'URL_IMAGEN_POR DEFECTO' }];
+            this.productos[index].imagen = [{ url_imagen: 'URL_IMAGEN_POR_DEFECTO' }];
           }
         });
         this.loading = false; // Detener la animación una vez que todas las imágenes se hayan cargado
@@ -143,22 +180,28 @@ export class ProductoPage implements OnInit {
     }
   }
 
-  buildButtons() {
-    return this.categoria.map(categoria => ({
-      text: categoria.nombre,
-      handler: () => this.filterByCategoria(categoria.id)
-    }));
+  filterByCategoria(idCategoria: string | null = null) {
+    if (idCategoria) {
+      this.selectedCategoria = idCategoria;
+      this.filteredProducts = this.productos.filter(producto => producto.id_categoria === idCategoria);
+      console.log('Productos filtrados por categoría:', this.filteredProducts);
+  
+      // Forzar la actualización de la interfaz de usuario
+      this.changeDetectorRef.detectChanges();
+    } else {
+      this.selectedCategoria = '';
+      this.filteredProducts = this.productos;
+      console.log('Todos los productos:', this.filteredProducts);
+  
+      // Forzar la actualización de la interfaz de usuario
+      this.changeDetectorRef.detectChanges();
+    }
   }
 
-  filterByCategoria(idCategoria: string) {
-    this.isCategoriaSelected = true;
-    this.filteredProducts = this.productos.filter(producto => producto.id_categoria === idCategoria);
-  }
-
-  filterByPrice(priceRange: string) {
-    // Implementa la lógica de filtrado por rango de precios aquí
-    // Por ejemplo, puedes filtrar productos con un precio menor a 50
-    this.filteredProducts = this.productos.filter(producto => producto.precio <= 50); // Ejemplo
+  filterByPrice() {
+    this.filteredProducts = this.productos.filter(producto => 
+      producto.precio >= this.precioMin && producto.precio <= this.precioMax
+    );
   }
 
   filterProducts() {
@@ -172,24 +215,59 @@ export class ProductoPage implements OnInit {
       this.filteredProducts = this.productos;
     }
   }
-  
 
+
+  
+  
   public buttons = [
     {
-      text: 'Filtrar por categoría',
-      role: 'button',
-      handler: () => this.buildButtons(),
-    },
-    {
-      text: 'Filtrar por precio',
-      role: 'button',
-      handler: () => this.filterByPrice('your-price-range'), // Ejemplo de filtrado por precio
+      text: 'Mostrar todos',
+      handler: () => this.filterByCategoria(null) // Mostrar todos los productos
     },
     {
       text: 'Cerrar',
-      role: 'cancel',
+      handler: () => {
+        // Opcionalmente, agrega alguna lógica si es necesario
+      }
     }
   ];
+
+  async showCategoriaFilter() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Categorías',
+      cssClass: 'my-custom-class',
+      buttons: this.categoria.map(categoria => ({
+        text: categoria.nombre,
+        handler: () => {
+          this.selectedCategoria = categoria.id_categoria;
+          this.filterByCategoria(this.selectedCategoria); // Llama a la función de filtro
+        }
+      }))
+    });
+  
+    await actionSheet.present();
+  }
+
+  // async showPriceFilterModal() {
+  //   const modal = await this.modalController.create({
+  //     component: PriceFilterModalComponent,
+  //     componentProps: {
+  //       precioMin: this.precioMin,
+  //       precioMax: this.precioMax
+  //     }
+  //   });
+
+  //   modal.onDidDismiss().then(data => {
+  //     if (data && data.data) {
+  //       this.precioMin = data.data.precioMin;
+  //       this.precioMax = data.data.precioMax;
+  //       this.filterByPrice();
+  //     }
+  //   });
+
+  //   return await modal.present();
+  // }
+
 
   showMenu = true;
 
@@ -201,6 +279,7 @@ export class ProductoPage implements OnInit {
     });
     toast.present();
   }
+
 
   toggleMenu() {
     this.showMenu = !this.showMenu;
