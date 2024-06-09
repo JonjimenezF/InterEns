@@ -83,8 +83,9 @@ export class ProductoPage implements OnInit {
   getProductos() {
     this.productService.getProduct().subscribe(
       (data: any[]) => {
-        this.productos = data;
-        this.filteredProducts = data; // Mostrar todos los productos inicialmente
+        // Filtra los productos que tienen validación verdadera
+        this.productos = data.filter(producto => producto.validacion === true);
+        this.filteredProducts = this.productos; // Mostrar todos los productos inicialmente
         this.obtenerImagenesProductos();
         this.loading = false; // Marcar la carga como completa
       },
@@ -94,7 +95,6 @@ export class ProductoPage implements OnInit {
       }
     );
   }
-
   getCategorias() {
     this.categoriaService.getTodasCategorias().subscribe(
       (data: any[]) => {

@@ -40,18 +40,10 @@ ion-buttons ion-back-button {
   --background: #ffffff;
   --backdrop-opacity: 0.6;
   --color: #000000;
+  --background: white;
+  --button-color: black;
+  --ion-color-primary: black;
 }
-
-.my-custom-class .boton-mostrar-todos {
-  --button-color: #000000;
-  --button-background: #97c8eb;
-}
-
-.my-custom-class .boton-cerrar {
-  --button-color: #ffffff;
-  --button-background: #ff0000;
-}
-
 
 
 // .custom-action-sheet {
