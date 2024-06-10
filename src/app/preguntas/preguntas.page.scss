@@ -1,3 +1,109 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #040404;
+}
+
+ion-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.top-banner, .main-banner {
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 20px;
+}
+
+.product-carousel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.product {
+  background-color: #0f0f0f;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.product:hover {
+  transform: translateY(-5px);
+}
+
+.imge {
+  width: 100%;
+  height: auto;
+}
+
+.answer {
+  background-color: #0b0a0a;
+  border: 1px solid #ddd;
+  padding: 10px;
+  display: none;
+}
+
+.faq-container {
+  background-color: #050505;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 600px;
+  padding: 20px;
+}
+
+.faq-container h1 {
+  text-align: center;
+  color: #333;
+}
+
+.faq-item {
+  margin-bottom: 10px;
+}
+
+.faq-question {
+  background-color: #0b0a0a;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.faq-question:hover {
+  background-color: #100f0f;
+}
+
+.faq-answer {
+  padding: 10px 15px;
+  border: 1px solid #131111;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  display: none;
+  background-color: #030303;
+}
+
+.arrow {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.arrow.up {
+  transform: rotate(180deg);
+}
+
+
 .product-carousel {
   display: flex;
   justify-content: center;
@@ -25,9 +131,5 @@
       max-width: 90%; /* Establecemos un ancho máximo del 100% para que la imagen se ajuste automáticamente */
       height: auto; /* Establecemos una altura automática para mantener la proporción de la imagen */
     }
-  }
-
-  .answer {
-    display: none;
   }
 }
