@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule,NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-preguntas',
   templateUrl: './preguntas.page.html',
   styleUrls: ['./preguntas.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule]
+  imports: [CommonModule, FormsModule, IonicModule, ]
 })
 export class PreguntasPage implements OnInit {
   respuestasVisibles: boolean[] = [];
 
-  constructor() { }
+  constructor(private navCtrl: NavController,) { }
 
   ngOnInit(): void {
   }
@@ -29,5 +29,8 @@ export class PreguntasPage implements OnInit {
       answer!.style.display = "block";
       if (arrow) arrow.innerHTML = "&#9650;";
     }
+  }
+  goBack() {
+    this.navCtrl.back();
   }
 }
