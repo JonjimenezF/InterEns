@@ -33,6 +33,12 @@ export class CarritoService {
     );
   }
 
+  eliminarProductoCarrito(idCarrito: number): Observable<any> {
+    return this._http.delete<any>(`${this.baseUrl}/eliminar_producto_carrito/${idCarrito}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // Error del lado del cliente

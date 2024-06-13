@@ -48,6 +48,13 @@ export class ProductoService {
     );
   }
 
+  getProductosid(id_usuario:String): Observable<any>{
+    return this._http.get<any>(this.baseUrl + '/obtener_productos_id?id_usuario=' + id_usuario).pipe(
+      catchError(this.handleError)
+    )
+  }
+
+
   // uploadPhoto(photo: File, id_producto: number): Observable<any> {
   //   const formData: FormData = new FormData();
   //   formData.append('foto', photo);

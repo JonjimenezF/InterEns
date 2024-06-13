@@ -13,7 +13,7 @@
   <br>
   <div class="form-container">
     <ion-item class="custom-item">
-      <ion-input class="custom-input" type="text" placeholder="Ingrese nombre del producto" [(ngModel)]="produc.nombre"></ion-input>
+      <ion-input class="custom-input" type="text" placeholder="Ingrese nombre del producto" [(ngModel)]="produc.nombre" (ngModelChange)="convertToUpperCase($event)"></ion-input>
     </ion-item>
     <ion-item class="custom-item">
       <ion-input class="custom-input" type="text" placeholder="Ingrese descripción" [(ngModel)]="produc.descripcion"></ion-input>

@@ -60,6 +60,10 @@ export class HomePage {
     this.router.navigate(['/sproducto'], { state: { userInfo: this.userInfo}})
   }
 
+  goMisProductos(){
+    this.router.navigate(['/mis-productos'], { state: { userInfo: this.userInfo.id}})
+  }
+
   goBack() {
     this.navCtrl.back();
   }

@@ -62,10 +62,10 @@
           <div class="image-container">
             <img [src]="getImagenProducto(producto)" alt="Imagen" class="product-image" (load)="onImageLoad()">
           </div>
-          <ion-card-title class="carta-titulo">{{ producto.nombre }}</ion-card-title>
         </ion-card-header>
-        <ion-card-content>
-          Precio: {{ producto.precio }} <br>
+        <ion-card-content style="color: black;">
+          <h2>{{ producto.nombre }}</h2> <br>
+          {{ producto.precio }}
           <!-- Descripción: {{ producto.descripcion }} -->
         </ion-card-content>
         <ion-button color="primary" (click)="agregarCarrito($event, producto)">Agregar carrito</ion-button>

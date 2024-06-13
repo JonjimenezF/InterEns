@@ -127,4 +127,11 @@ export class SproductoPage implements OnInit {
       }
     );
   }
+
+  
+  convertToUpperCase(event: any) {
+    this.produc.nombre = event.toUpperCase();
+  }
 }
+
+

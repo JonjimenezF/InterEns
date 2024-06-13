@@ -1,44 +1,67 @@
-* {
-    --background: #ffffff; /* Cambia el color de fondo aquí */
-  }
+.fondoblanco {
+  --background: #ffffff;
+}
 
-  .product-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: relative; /* Necesario para posicionar la imagen del basurero */
-    padding: 10px; /* Ajuste opcional para dar un poco de espacio alrededor del contenido */
-    margin-bottom: 10px; /* Opcional: Añade espacio entre los elementos de la lista */
-    width: 100%;
-    box-sizing: border-box; /* Asegura que el padding y el borde se incluyan en el ancho total */
+.product-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
 
-  }
-  
-  .delete-icon {
-    position: absolute;
-    top: 0;
-    right: 0;
-    cursor: pointer; /* Cambia el cursor al pasar sobre la imagen */
-    z-index: 1; /* Asegura que la imagen del basurero esté por encima de otros elementos */
-    padding: 5px; /* Opcional: Añade un poco de relleno alrededor de la imagen */
-    margin-top: 10px;
-  }
-  
-  .delete-icon img {
-    width: 24px; /* Ajusta el tamaño de la imagen según sea necesario */
-    height: 24px; /* Ajusta el tamaño de la imagen según sea necesario */
-  }
-  
-  .product-image {
-    flex: 0 0 auto;
-    margin-right: 15px;
-  }
-  
-  .product-image img {
-    max-width: 100px;
-    height: auto;
-  }
-  
-  .product-details {
-    flex: 1;
-  }
+.delete-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  z-index: 1;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+.delete-icon img {
+  width: 24px;
+  height: 24px;
+}
+
+.product-image {
+  flex: 0 0 auto;
+  margin-right: 15px;
+}
+
+.product-image img {
+  max-width: 100px;
+  height: auto;
+}
+
+.product-details {
+  flex: 1;
+}
+
+.product-counter {
+  display: flex;
+  align-items: center;
+}
+
+.product-counter button {
+  width: 25px;
+  height: 25px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  font-size: 16px;
+  line-height: 25px;
+  text-align: center;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.product-counter span {
+  font-size: 16px;
+  width: 30px;
+  text-align: center;
+}

@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>misProductos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Spinner de carga -->
+  <div *ngIf="loading" class="spinner-container">
+    <ion-spinner class="custom-spinner" name="circles" color="primary"></ion-spinner>
+  </div>
+  <ion-content>
+    <!-- Lista de productos -->
+    <ion-row *ngIf="productos.length > 0">
+      <ion-col *ngFor="let producto of productos" size="6">
+        <ion-card class="carta">
+          <ion-card-header>
+            <div class="image-container">
+              <img [src]="getImagenProducto(producto)" alt="Imagen" class="product-image" (load)="onImageLoad()">
+            </div>
+            <ion-card-title class="carta-titulo">{{ producto.nombre }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Precio: {{ producto.precio }} <br>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-content>
+</ion-content>
