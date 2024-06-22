@@ -52,6 +52,10 @@ export class HomePage {
     this.router.navigate(['/portada']);
 
   }
+  preguntas(){
+    this.router.navigate(['/preguntas']);
+
+  }
   puntoLimpio(){
 
   }

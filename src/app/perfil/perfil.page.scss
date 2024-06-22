@@ -1,3 +1,30 @@
-* {
-     --background: #ffffff; /* Cambia el color de fondo aquí */
-}
+.product-carousel {
+     display: flex;
+     justify-content: center;
+     gap: 10px;
+     
+     .product {
+       background-color: #ffffff;
+       color: #0f0e0e;
+       padding: 15px;
+       border: 1px solid #0c14ad; /* Agregamos un borde */
+       border-radius: 8px;
+       width: calc(50% - 10px); /* Ajustamos el ancho para que haya dos elementos por fila */
+       max-width: 200px; /* Establecemos un ancho máximo */
+       text-align: center; /* Alineamos el texto al centro */
+   
+       h2 {
+         margin: 0 0 10px;
+       }
+   
+       p {
+         margin: 0;
+       }
+   
+       .imge {
+         max-width: 90%; /* Establecemos un ancho máximo del 100% para que la imagen se ajuste automáticamente */
+         height: auto; /* Establecemos una altura automática para mantener la proporción de la imagen */
+       }
+     }
+   }
+   

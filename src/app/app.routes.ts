@@ -63,12 +63,13 @@ export const routes: Routes = [
   {
     path: 'categoria',
     loadComponent: () => import('./categoria/categoria.page').then( m => m.CategoriaPage)
-  },  {
+  },
+  {
     path: 'mis-productos',
     loadComponent: () => import('./mis-productos/mis-productos.page').then( m => m.MisProductosPage)
   },
-
-
-
-
-];
+  {
+    path: 'preguntas',
+    loadComponent: () => import('./preguntas/preguntas.page').then( m => m.PreguntasPage)
+  },
+]
