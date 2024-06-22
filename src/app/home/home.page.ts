@@ -56,6 +56,10 @@ export class HomePage {
     this.router.navigate(['/preguntas']);
 
   }
+  contacto(){
+    this.router.navigate(['/contacto']);
+
+  }
   puntoLimpio(){
 
   }
