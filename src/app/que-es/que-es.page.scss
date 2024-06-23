@@ -1,0 +1,66 @@
+
+
+ion-header {
+    background-color: #f0f1f8; // Fondo blanco para el ion-header
+    background-image: url('/assets/img/home3.png'); /* Ruta de la imagen */
+    color: #000000; 
+  
+    // Agrega cualquier otro estilo que desees para el header
+}
+
+ion-content {
+    background-image: url('/assets/img/home3.png'); /* Ruta de la imagen */
+    background-size: cover;
+}
+
+
+.container {
+    padding: 1rem;
+    background: rgb(249, 248, 248);
+    color: rgb(3, 2, 2);
+
+  }
+  
+  .section {
+    padding: 2rem 0;
+    text-align: center;
+  
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+  
+    p, ul, ol {
+      font-size: 1rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  
+    ul {
+      list-style: none;
+      padding: 0;
+  
+      li {
+        background: white;
+        border: 1px solid #1444e2;
+        margin: 0.5rem 0;
+        color: rgb(3, 2, 2);
+        padding: 0.75rem;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+    }
+  
+    ol {
+      list-style-position: inside;
+  
+      li {
+        background: rgb(235, 226, 226);
+        margin: 0.5rem 0;
+        padding: 0.75rem;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+  

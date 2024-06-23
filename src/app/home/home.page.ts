@@ -71,4 +71,9 @@ export class HomePage {
   goBack() {
     this.navCtrl.back();
   }
+
+  inter(){
+    this.router.navigate(['/que-es'], { state: { userInfo: this.userInfo}})
+  }
+
 }
