@@ -6,10 +6,18 @@ ion-header {
   // Agrega cualquier otro estilo que desees para el header
 }
 
+ion-content {
+  --background: none; /* Elimina cualquier fondo por defecto */
+  background-image: url('/assets/img/fondo2.png'); /* Ruta de la imagen de fondo */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-image: url('/assets/img/foto1.png');
   background-color: #f5f5f5; /* Fondo gris claro para todo el cuerpo */
 }
 

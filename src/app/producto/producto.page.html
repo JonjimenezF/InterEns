@@ -1,22 +1,3 @@
-<ion-menu contentId="main-content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title style="color: black">Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding">
-    <div class="vertical-buttons">
-      <ion-button fill="clear" (click)="perfil()">Perfil</ion-button>
-      <ion-button fill="clear" (click)="salir()">Novedades</ion-button>
-      <ion-button fill="clear" (click)="salir()">Preguntas frecuentes</ion-button>
-      <ion-button fill="clear" (click)="salir()">Contacto</ion-button>
-      <ion-button fill="clear" (click)="puntoLimpio()">Punto limpio</ion-button>
-      <ion-button fill="clear" (click)="salir()">Cerrar sesión</ion-button>
-    </div>
-  </ion-content>
-</ion-menu>
-
-<!-- Header -->
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -25,7 +6,6 @@
     <ion-buttons slot="start">
       <ion-back-button (click)="goBack()" defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
     </ion-buttons>
-    <ion-title>Producto</ion-title>
     <ion-buttons slot="end" style="margin-right: 20px;" (click)="goCarrito()">
       <ion-img src="assets/img/cart.png"></ion-img>
     </ion-buttons>
