@@ -54,4 +54,31 @@
     <!-- <div class="centrar" style="margin-top:30px">
       <ion-button color="danger" (click)="eliminarFoto(nombreFoto)" *ngIf="nombreFoto">Eliminar</ion-button>
     </div> -->
+    <!-- Button to open the modal -->
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#success_tic">Open Modal</button>
+
+<!-- Modal -->
+<div id="success_tic" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <!-- Close button -->
+      <a class="close" href="#" data-dismiss="modal">&times;</a>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="head">  
+          <h3 style="margin-top: 5px;">Lorem ipsum dolor sit amet</h3>
+          <h4>Lorem ipsum dolor sit amet</h4>
+        </div>
+
+        <!-- Checkmark circle animation -->
+        <div class="checkmark-circle">
+          <div class="background"></div>
+          <div class="checkmark draw"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </ion-content>
