@@ -1,16 +1,17 @@
 <ion-header>
-  <ion-toolbar class="fondoblanco">
-    <ion-title style="color:black">
+  <ion-toolbar>
+    <ion-title style="color:rgb(255, 255, 255)">
       Carrito de compras
     </ion-title>
     <ion-buttons slot="start">
-      <ion-back-button (click)="goBack()" text="" style="color:black"></ion-back-button>
+      <ion-back-button (click)="goBack()" defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
     </ion-buttons>
+    
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="fondoblanco">
-  <ion-list *ngIf="productosCarrito.length > 0" style="background-color: white; margin-bottom: 220px;">
+<ion-content>
+  <ion-list *ngIf="productosCarrito.length > 0" style="background-color: rgb(250, 250, 250); margin-bottom: 220px;">
     <ion-item *ngFor="let producto of productosCarrito" class="fondoblanco">
       <div class="product-container">
         <div class="product-image">
@@ -34,16 +35,16 @@
 
   <ion-spinner *ngIf="productosCarrito.length === 0"></ion-spinner>
   
-  <div id="summaryDiv" style="background: black; color: white; padding: 20px; position: fixed; bottom: 0; width: 100%; border-radius: 15px; z-index: 1000;">
+  <div id="summaryDiv" style="background: rgba(8, 149, 104, 0.826); color: white; padding: 20px; position: fixed; bottom: 0; width: 100%; border-radius: 15px; z-index: 1000;">
     <ion-title style="color: white;">Resumen de tu compra</ion-title>
-    <ion-item style="--background: black; --color: white;">
+    <ion-item style="--background: rgba(255, 255, 255, 0.826); --color: rgb(0, 0, 0);border-radius: 15px;">
       <ion-label>Delivery:</ion-label>
-      <ion-note slot="end" style="color: rgb(255, 255, 255); --ion-background-color: black;">Free</ion-note>
+      <ion-note class="custom-note" slot="end" style="color: rgb(0, 0, 0);">Gratis</ion-note>
     </ion-item>
-    <ion-item style="--background: black; --color: white;">
+    <ion-item style="--background: rgba(255, 255, 255, 0.826); --color: rgb(0, 0, 0);border-radius: 15px;margin-top: 5px;">
       <ion-label>Total:</ion-label>
-      <ion-note slot="end" style="color: white;">{{ calcularTotal() | currency:'':'symbol':'1.0-0' }}</ion-note>
+      <ion-note class="custom-note" slot="end" style="color: rgb(2, 2, 2);">{{ calcularTotal() | currency:'':'symbol':'1.0-0' }}</ion-note>
     </ion-item>
-    <ion-button expand="block" (click)="continuarCompra()" style="margin-top: 20px; --background: white; --color: black; border-radius: 20px;">Continuar con tu compra</ion-button>
+    <ion-button expand="block" (click)="continuarCompra()" style="margin-top: 20px; --background: white; --color: black; border-radius: 30px;">Continuar con tu compra</ion-button>
   </div> 
 </ion-content>

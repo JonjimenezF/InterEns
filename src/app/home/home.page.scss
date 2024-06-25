@@ -1,31 +1,50 @@
-*{
-    // background-image: url('/assets/img/fondo.png'); /* Ruta a tu imagen de fondo */
-    // background-size: cover; /* Ajusta el tamaño de la imagen para cubrir todo el elemento */
-    // background-position: center; /* Centra la imagen */
-    // background-repeat: no-repeat; /* Evita que la imagen se repita */
-  
+ion-content {
+  --background: none; /* Elimina cualquier fondo por defecto */
+  background-image: url('/assets/img/fondo2.png'); /* Ruta de la imagen de fondo */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.ion-page {
+  #main-content {
+    ion-content {
+      // Añadir fondo de imagen al ion-content de la página principal
+      background-image: url('/assets/img/foto1.png'); /* Ruta de la imagen */
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+}
+
+/* Otros estilos globales */
+* {
   --background: #ffffff; /* Cambia el color de fondo aquí */
+  --background-image: url('/assets/img/foto1.png'); /* Ruta de la imagen */
 }
 
-.color-white{
-  --background: white ; 
-}
-.color-text-black{
-  color: black ;
-  font-family:'Roboto'
-}
-.color-text-white{
-  color: rgb(255, 255, 255);;
-  font-family:'Roboto'
+.color-white {
+  --background: white;
 }
 
-.color-text-grey{
-  color: rgb(151, 151, 151);;
-  font-family:'Roboto'
+.color-text-black {
+  color: black;
+  font-family: 'Roboto';
 }
 
-.centrar{
-  display:grid;
+.color-text-white {
+  color: rgb(255, 255, 255);
+  font-family: 'Roboto';
+}
+
+.color-text-grey {
+  color: rgb(151, 151, 151);
+  font-family: 'Roboto';
+}
+
+.centrar {
+  display: grid;
   place-content: center;
 }
 
@@ -34,29 +53,26 @@
   height: 80px; /* Ajusta la altura según tus necesidades */
   justify-content: center;
   align-items: center;
-  --background: rgb(226, 226, 230);  /* Color de fondo del botón */
+  --background: rgb(226, 226, 230); /* Color de fondo del botón */
   margin-left: 10px;
   z-index: 2;
-  
-}
-.imge{
-  width: 300px
 }
 
-
+.imge {
+  width: 300px;
+}
 
 .icono-imagen-derecho {
   width: 25px; /* Ajusta el ancho según tus necesidades */
   height: 25px; /* Ajusta la altura según tus necesidades */
-  background: url('../../assets/img/magnifier.png') center/cover no-repeat; /* Ruta a tu imagen */
+  background: url('/assets/img/magnifier.png') center/cover no-repeat; /* Ruta a tu imagen */
   border-radius: 50%; /* Hace que el contenedor sea circular */
 }
-
 
 .icono-imagen-izquierdo {
   width: 25px; /* Ajusta el ancho según tus necesidades */
   height: 25px; /* Ajusta la altura según tus necesidades */
-  background: url('../../assets/img/up-arrow.png') center/cover no-repeat; /* Ruta a tu imagen */
+  background: url('/assets/img/up-arrow.png') center/cover no-repeat; /* Ruta a tu imagen */
   border-radius: 50%; /* Hace que el contenedor sea circular */
 }
 

@@ -1,12 +1,15 @@
 <ion-header>
-  <ion-buttons slot="start">
-    <ion-back-button (click)="goBack()" defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
-  </ion-buttons>
-  
+  <ion-toolbar>
+    <ion-title>
+      Preguntas
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="main-container">
+<ion-content class="ion-padding">
     <div class="faq-container">
       <h1>Preguntas frecuentes</h1>
       <div class="faq-item" (click)="toggleAnswer('faq-answer1')">
@@ -55,7 +58,6 @@
         </div>
       </div>
     </div>
-
     <div class="main-banner">
       <div class="product-carousel">
         <div class="product">
@@ -87,5 +89,4 @@
         </div>
       </div>
     </div>
-  </div>
 </ion-content>

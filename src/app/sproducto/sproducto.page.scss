@@ -1,102 +1,77 @@
 ion-header {
-  background-color: #fff;
+  background-color: #f0f1f8; // Fondo blanco para el ion-header
+  background-image: url('/assets/img/home3.png'); /* Ruta de la imagen */
+  color: #000000; 
+  // Agrega cualquier otro estilo que desees para el header
 }
-
-ion-back-button {
-  --color: rgb(50, 5, 133);
-}
-
-ion-content {
-  --ion-background-color: #f7f9fc;
-  padding: 16px;
-
-  .form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  
+  ion-back-button {
+    --color: rgb(0, 0, 0); // Color morado para la flecha de retroceso
   }
-
-  .custom-item {
-    --background: white;
-    // --border-color: rgb(31, 95, 233); /* Color de borde predeterminado */
-    border: 2px solid var(--border-color);
-    border-radius: 20px;
-    width: 90%;
-    margin-bottom: 12px;
-    padding: 0 16px;
-  }
-
-  .custom-input {
-    --color: #666;
-    --placeholder-color: #6e6e6e;
-    border-radius: 20px;
-    width: 100%;
-  }
-
-  ion-textarea {
-    --min-height: 80px;
-    width: 100%;
-  }
-
-  .input-button-container {
-    display: flex;
-    align-items: center;
-    width: 100%;
-  }
-
-  .donate-button {
-    --background: #3cb93c;
-    --color: white;
-    border-radius: 25px;
-    font-size: 14px;
-    padding: 10px;
-    margin-left: 10px;
-  }
-
-  .centrar {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-
-    ion-button.color-text-white {
-      // --background: #4244bd;
-      --color: white;
-      --border-radius: 20px;
-      padding: 12px 24px;
-      font-size: 16px;
+  
+  ion-content {
+    --ion-background-color: #f7f9fc; // Color de fondo suave
+    padding: 16px;
+  
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center; // Centrar horizontalmente
+    }
+  
+    .custom-item {
+      --background: white;
+      --border-color: rgb(79, 7, 212); // Color morado
+      border: 2px solid var(--border-color);
+      border-radius: 20px; // Bordes redondeados
+      width: 80%; // Ajustar el ancho para que no ocupe todo el ancho de la pantalla
+      margin-bottom: 12px;
+      padding-right: 40px;
+  
+      .custom-input {
+        --color: #666;
+        --placeholder-color: #999;
+        border-radius: 20px; // Bordes redondeados para los inputs
+      }
+    }
+  
+    .centrar {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+  
+      ion-button.color-text-white {
+        --background: #4cc3ff; // Celeste claro
+        --color: white;
+        --border-radius: 20px; // Bordes redondeados
+        padding: 12px 24px;
+        font-size: 16px;
+      }
+    }
+  
+    ion-item {
+      --background: white;
+      --border-color: #7b4cfc; // Color morado
+      border: 1px solid var(--border-color);
+      border-radius: 20px; // Bordes redondeados
+      margin-bottom: 12px;
+  
+      ion-label {
+        font-size: 14px;
+        color: #333;
+      }
+  
+      ion-select {
+        --color: #333;
+        border-radius: 20px; // Bordes redondeados para el select
+      }
+  
+      ion-select-option {
+        --color: #333;
+      }
     }
   }
+  
 
-  ion-item {
-    --background: white;
-    // --border-color: #7b4cfc;
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    margin-bottom: 12px;
+//
 
-    ion-label {
-      font-size: 14px;
-      color: #333;
-    }
-
-    ion-select {
-      --color: #333;
-      border-radius: 20px;
-    }
-
-    ion-select-option {
-      --color: #333;
-    }
-  }
-}
-
-
-.invalido {
-  --border-color: red; /* Color de borde para campos inválidos */
-  --highlight-color: rgba(255, 0, 0, 0.3); /* Color de resaltado para campos inválidos */
-}
-
-.invalido .custom-item {
-  border-color: var(--border-color); /* Aplicar color de borde personalizado para campos inválidos */
-  box-shadow: 0 0 5px var(--highlight-color); /* Agregar sombra para resaltar el campo inválido */
-}

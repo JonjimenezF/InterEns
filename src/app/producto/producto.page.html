@@ -1,33 +1,10 @@
-<ion-menu contentId="main-content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title style="color: black">Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding">
-    <div class="vertical-buttons">
-      <ion-button fill="clear" (click)="perfil()">Perfil</ion-button>
-      <ion-button fill="clear" (click)="salir()">Novedades</ion-button>
-      <ion-button fill="clear" (click)="salir()">Preguntas frecuentes</ion-button>
-      <ion-button fill="clear" (click)="salir()">Contacto</ion-button>
-      <ion-button fill="clear" (click)="puntoLimpio()">Punto limpio</ion-button>
-      <ion-button fill="clear" (click)="salir()">Cerrar sesión</ion-button>
-    </div>
-  </ion-content>
-</ion-menu>
-
-<!-- Header -->
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-menu-button auto-hide="false"></ion-menu-button>
+      <ion-back-button  (click)="goBack()" defaultHref="home" text="" style="--background: none;color: white;"></ion-back-button>
     </ion-buttons>
-    <ion-buttons slot="start">
-      <ion-back-button (click)="goBack()" defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Producto</ion-title>
     <ion-buttons slot="end" style="margin-right: 20px;" (click)="goCarrito()">
-      <ion-img src="assets/img/cart.png"></ion-img>
+      <ion-img src="assets/img/cart.png" class="cart-icon"></ion-img>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -56,19 +33,18 @@
 
   <!-- Lista de productos -->
   <ion-row *ngIf="!loading">
-    <ion-col *ngFor="let producto of filteredProducts" size="6">
+    <ion-col *ngFor="let producto of filteredProducts" size="12">
       <ion-card class="carta" (click)="goDetalleProducto(producto)">
-        <ion-card-header>
+        <div class="card-content">
           <div class="image-container">
-            <img [src]="getImagenProducto(producto)" alt="Imagen" class="product-image" (load)="onImageLoad()">
+            <img [src]="getImagenProducto(producto)" alt="Imagen del producto" class="product-image">
           </div>
-        </ion-card-header>
-        <ion-card-content style="color: black;">
-          <h2>{{ producto.nombre }}</h2> <br>
-          {{ producto.precio }}
-          <!-- Descripción: {{ producto.descripcion }} -->
-        </ion-card-content>
-        <ion-button color="primary" (click)="agregarCarrito($event, producto)">Agregar carrito</ion-button>
+          <div class="details-container">
+            <h2>{{ producto.nombre }}</h2>
+            <p>{{ producto.precio }}</p>
+            <ion-button class="custom-button" (click)="agregarCarrito($event, producto)">Agregar al carrito</ion-button>
+          </div>
+        </div>
       </ion-card>
     </ion-col>
   </ion-row>

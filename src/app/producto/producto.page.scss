@@ -1,10 +1,22 @@
-* {
-    --background: #ffffff; /* Cambia el color de fondo aquí */
-  }
+ion-toolbar {
+  --background:rgba(10, 174, 122, 0.826);
+}
+/* Estilos para el contenido */
+ion-content {
+  --background: none; /* Eliminar cualquier fondo por defecto */
+  background-image: url('/assets/img/fondo2.png'); /* Fondo de imagen */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 
-.color-text-black{
-    color: black ;
-    font-family:'Roboto'
+* {
+  --background: #ffffff; /* Cambia el color de fondo aquí */
+}
+
+.color-text-black {
+  color: black;
+  font-family: 'Roboto';
 }
 
 ion-menu::part(backdrop) {
@@ -13,7 +25,6 @@ ion-menu::part(backdrop) {
 
 ion-menu::part(container) {
   border-radius: 0 20px 20px 0;
-
   box-shadow: 4px 0px 16px rgba(94, 94, 94, 0.18);
 }
 
@@ -30,21 +41,17 @@ ion-menu::part(container) {
   box-shadow: 2px 2px 4px rgba(122, 122, 122, 0.5);
 }
 
-
-
 ion-buttons ion-back-button {
   --color: black;
 }
 
 .my-custom-class {
-  --background: #ffffff;
   --backdrop-opacity: 0.6;
   --color: #000000;
   --background: white;
   --button-color: black;
   --ion-color-primary: black;
 }
-
 
 // .custom-action-sheet {
 //   --background: white;
@@ -65,58 +72,86 @@ ion-buttons ion-back-button {
 // }
 
 
-//
-.action-sheet-title.sc-ion-action-sheet-md {
-  --color: rgb(255, 0, 0);
-}
+// //
+// .my-custom-class .boton-mostrar-todos {
+//   --button-color: #000000;
+//   --button-background: #97c8eb;
+// }
 
-/* Estilo para las categorías */
-.custom-action-sheet .action-sheet-group {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Columnas automáticas con un ancho mínimo de 100px */
-  gap: 10px; /* Espacio entre las categorías */
-}
+// .my-custom-class .boton-cerrar {
+//   --button-color: #ffffff;
+//   --button-background: #ff0000;
+// }
 
+// .action-sheet-title.sc-ion-action-sheet-md {
+//   --color: rgb(255, 0, 0);
+// }
 
-// Contenido de los producto
+// /* Estilo para las categorías */
+// .custom-action-sheet .action-sheet-group {
+//   display: grid;
+//   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Columnas automáticas con un ancho mínimo de 100px */
+//   gap: 10px; /* Espacio entre las categorías */
+// }
+
+/* Contenido de los productos */
 ion-card.carta {
-  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  margin-bottom: 20px;
+  border-radius: 15px;
+  border: #000000;
 }
 
-ion-card-header {
+.card-content {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-grow: 1;
+  flex-direction: row; /* Disposición horizontal */
+  align-items: center; /* Alinea verticalmente los elementos */
+  padding: 10px; /* Espacio dentro del ion-card */
+  width: 100%; /* Asegura que el contenido ocupe todo el ancho del card */
 }
 
 .image-container {
-  width: 100%;
-  height: 150px; // Ajusta esta altura según tus necesidades
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  flex: 0 0 auto; /* La imagen no debe crecer ni encoger */
+  width: 150px; /* Ancho fijo para la imagen */
+  height: 150px; /* Alto fijo para la imagen */
+  margin-right: 10px; /* Espacio a la derecha de la imagen */
 }
 
 .product-image {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain; // Para asegurarse de que la imagen se ajuste sin distorsión
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ajusta la imagen sin distorsión */
+  border-radius: 8px; /* Opcional: Añade bordes redondeados a la imagen */
 }
 
-.carta-titulo {
-  text-align: center;
-  font-size: 1.2em;
-  margin-top: 10px;
-  margin-bottom: auto; // Para empujar el contenido hacia abajo y alinear los títulos
+.details-container {
+  flex: 1 1 auto; /* Los detalles ocupan todo el espacio restante */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centra verticalmente el contenido dentro de details-container */
 }
 
-ion-card-content {
-  text-align: center;
-  font-size: 1em;
+h2, p {
+  margin: 0;
+  white-space: nowrap; /* Evita que los textos largos se rompan */
+  overflow: hidden; /* Oculta el texto que sobresale */
+  text-overflow: ellipsis; /* Añade puntos suspensivos al final del texto cortado */
+}
+
+.custom-button {
+  align-self: flex-start; /* Alinea el botón a la izquierda dentro del espacio disponible */
+  margin-top: 40px; /* Espacio sobre el botón */
+  --background: #4CAF50; /* Color de fondo del botón */
+  --background-activated: #45a049; /* Color de fondo cuando se presiona el botón */
+  --color: white; /* Color del texto del botón */
+  --border-radius: 4px; /* Bordes redondeados del botón */
+  --padding-start: 10px; /* Padding interno del botón */
+  --padding-end: 10px; /* Padding interno del botón */
+  --padding-top: 8px; /* Padding interno del botón */
+  --padding-bottom: 8px; /* Padding interno del botón */
+  --box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15); /* Sombra del botón */
+  --transition: background-color 0.3s ease; /* Transición suave para el fondo */
 }
 
 .custom-spinner {
@@ -128,3 +163,10 @@ ion-card-content {
   left: 50%; /* Coloca el margen izquierdo en el 50% del contenedor padre */
   transform: translate(-50%, -50%); /* Centra el spinner */
 }
+
+.cart-icon {
+  width: 30px; /* Ajusta el tamaño según sea necesario */
+  height: 30px;
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+}
+

@@ -1,3 +1,12 @@
+ion-toolbar {
+  --background:rgba(10, 174, 122, 0.826);
+}
+
+ion-content {
+  background-image: url('/assets/img/fondo2.png'); /* Ruta de la imagen */
+  background-size: cover;
+  --background: transparent; /* Para asegurar que el fondo de ion-content sea transparente */
+}
 * {
     --background: #ffffff; /* Cambia el color de fondo aquí */
   }
