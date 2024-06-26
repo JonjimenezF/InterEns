@@ -13,18 +13,54 @@
 <ion-content id="main-content">
   <ion-toolbar>
     <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="filterProducts()"></ion-searchbar>
-    <ion-button id="abrir-filtro-busqueda" class="transparent-border" slot="end" fill="clear">
+    <ion-button id="abrir-filtro-busqueda" class="transparent-border" slot="end" fill="clear" (click)="openCategoryFilter()">
       <ion-icon src="./assets/icon/options.svg"></ion-icon>
     </ion-button>
+    <!-- Filtro por categoría -->
+    <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeCategoryFilter()">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Filtrar por Categoría</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="closeCategoryFilter()">Cerrar</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <ion-grid class="category-button-container">
+            <ion-row>
+              <ion-col size="4">
+                <div class="category-button">
+                  <ion-button expand="block" (click)="showAllProducts()" class="category-text">
+                    Todos
+                  </ion-button>
+                </div>
+              </ion-col>
+              <ion-col size="4" *ngFor="let cat of categoria">
+                <div class="category-button">
+                  <ion-button expand="block" (click)="selectCategory(cat.id_categoria)" class="category-text">
+                    {{ cat.nombre }}
+                  </ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          <ion-item>
+            <ion-label style="color: black;">Mínimo</ion-label>
+            <ion-input style="color: black;" type="number" [(ngModel)]="precioMin"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label style="color: black;">Máximo</ion-label>
+            <ion-input style="color: black;" type="number" [(ngModel)]="precioMax"></ion-input>
+          </ion-item>
+          <ion-button expand="block" (click)="filterByPrice()">Filtrar por Precio</ion-button>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
   </ion-toolbar> 
 
-  <ion-action-sheet
-    class="my-custom-class"
-    *ngIf="showMenu"
-    trigger="abrir-filtro-busqueda"
-    header="Filtro de Búsqueda"
-    [buttons]="buttons"
-  ></ion-action-sheet>
+
 
   <!-- Spinner de carga -->
   <div *ngIf="loading" class="spinner-container">

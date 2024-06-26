@@ -1,3 +1,7 @@
+ion-toolbar {
+  --background:rgba(10, 174, 122, 0.826);
+}
+
 ion-content {
   --background: none; /* Elimina cualquier fondo por defecto */
   background-image: url('/assets/img/fondo2.png'); /* Ruta de la imagen de fondo */

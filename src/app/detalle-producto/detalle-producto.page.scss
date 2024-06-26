@@ -32,6 +32,8 @@ ion-content {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 90%;
+    background: black
   }
   
   .image-container {
@@ -67,3 +69,12 @@ ion-content {
   .custom-pagination-bullet.active {
     background-color: rgb(67, 67, 158); /* Cambia el color del punto activo */
   }
+
+
+.detalle{
+  background-color: white; /* Fondo blanco para el formulario */
+  padding: 20px; /* Añade algo de espacio alrededor del formulario */
+  border-radius: 20px; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera para el formulario */
+  margin-bottom: 20px; /* Espacio entre form-wrapper y contact-details */
+}

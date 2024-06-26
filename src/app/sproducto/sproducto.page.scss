@@ -1,77 +1,91 @@
-ion-header {
-  background-color: #f0f1f8; // Fondo blanco para el ion-header
-  background-image: url('/assets/img/home3.png'); /* Ruta de la imagen */
-  color: #000000; 
-  // Agrega cualquier otro estilo que desees para el header
+ion-toolbar {
+  --background: rgba(10, 174, 122, 0.826);
 }
-  
-  ion-back-button {
-    --color: rgb(0, 0, 0); // Color morado para la flecha de retroceso
-  }
-  
-  ion-content {
-    --ion-background-color: #f7f9fc; // Color de fondo suave
-    padding: 16px;
-  
-    .form-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center; // Centrar horizontalmente
-    }
-  
-    .custom-item {
-      --background: white;
-      --border-color: rgb(79, 7, 212); // Color morado
-      border: 2px solid var(--border-color);
-      border-radius: 20px; // Bordes redondeados
-      width: 80%; // Ajustar el ancho para que no ocupe todo el ancho de la pantalla
-      margin-bottom: 12px;
-      padding-right: 40px;
-  
-      .custom-input {
-        --color: #666;
-        --placeholder-color: #999;
-        border-radius: 20px; // Bordes redondeados para los inputs
-      }
-    }
-  
-    .centrar {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-  
-      ion-button.color-text-white {
-        --background: #4cc3ff; // Celeste claro
-        --color: white;
-        --border-radius: 20px; // Bordes redondeados
-        padding: 12px 24px;
-        font-size: 16px;
-      }
-    }
-  
-    ion-item {
-      --background: white;
-      --border-color: #7b4cfc; // Color morado
-      border: 1px solid var(--border-color);
-      border-radius: 20px; // Bordes redondeados
-      margin-bottom: 12px;
-  
-      ion-label {
-        font-size: 14px;
-        color: #333;
-      }
-  
-      ion-select {
-        --color: #333;
-        border-radius: 20px; // Bordes redondeados para el select
-      }
-  
-      ion-select-option {
-        --color: #333;
-      }
-    }
-  }
-  
 
-//
+ion-back-button {
+  --color: rgb(255, 255, 255); // Color morado para la flecha de retroceso
+}
 
+ion-content {
+  --background: none; /* Eliminar cualquier fondo por defecto */
+  background-image: url('/assets/img/fondo2.png'); /* Fondo de imagen */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.white-background {
+  --background: white; /* Define el color de fondo del botón como blanco */
+  --color: black; /* Define el color del texto como negro */
+}
+
+.green-border {
+  --border-color: rgb(255, 255, 255); /* Color del borde verde */
+  --border-width: 2px; /* Ancho del borde */
+}
+
+.form-wrapper {
+  padding: 20px;
+}
+
+.form-container {
+  background-color: rgba(10, 174, 122, 0.826); // Fondo blanco para el contenedor del formulario
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Sombra suave
+}
+
+.contact-info p {
+  color: #000000; // Color de las letras negro
+}
+
+.custom-item {
+  --background: #ffffff; // Fondo blanco para los ítems
+  margin-bottom: 15px;
+  --ion-item-background: transparent;
+  --ion-item-border-width: 0;
+  --highlight-background: transparent;
+  border-radius: 10px;
+  border: none; /* Eliminando cualquier borde existente */
+  box-shadow: none; /* Eliminando sombras */
+}
+
+.custom-input {
+  --background: #ffffff; // Fondo blanco para los campos de entrada
+  --color: #000000; // Color del texto negro
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --border-width: 0;
+  --box-shadow: none;
+}
+
+ion-select {
+  --background: #ffffff; // Fondo blanco para el select
+  --color: #000000; // Color del texto negro
+}
+
+ion-label {
+  --color: #000000; // Color del texto de las etiquetas negro
+}
+
+.centrar {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.custom-button {
+  width: 100%;
+}
+
+.input-button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Alineación vertical centrada */
+}
+
+.invalido {
+  border: 1px solid red;
+}

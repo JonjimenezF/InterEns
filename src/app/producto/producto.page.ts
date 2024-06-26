@@ -27,9 +27,11 @@ export class ProductoPage implements OnInit {
   loading: boolean = true;
   imagesLoadedCount: number = 0;
   searchQuery: string = ''; // Query de búsqueda
-  precioMin: number = 0; // Precio mínimo para el filtro
-  precioMax: number = Infinity; // Precio máximo para el filtro
+  precioMin: string =''; // Precio mínimo para el filtro
+  precioMax: string =''; // Precio máximo para el filtro
   selectedCategoria: any; // Categoría seleccionada
+  isModalOpen: boolean = false; // Estado del modal
+
 
   Carrito = {
     id_producto: "",
@@ -99,7 +101,6 @@ export class ProductoPage implements OnInit {
     this.categoriaService.getTodasCategorias().subscribe(
       (data: any[]) => {
         this.categoria = data;
-        this.configureButtons();
       },
       (error) => {
         console.error(error);
@@ -107,26 +108,6 @@ export class ProductoPage implements OnInit {
     );
   }
 
-  configureButtons() {
-    this.buttons = [
-      {
-        text: 'Mostrar todos',
-        cssClass: 'boton-mostrar-todos',
-        handler: () => this.filterByCategoria(null) // Mostrar todos los productos
-      },
-      ...this.categoria.map(categoria => ({
-        cssClass: 'boton-categoria',
-        text: categoria.nombre,
-        handler: () => {
-          this.selectedCategoria = categoria.id_categoria;
-          this.filterByCategoria(this.selectedCategoria); // Llama a la función de filtro
-        }
-      })),
-    ];
-
-    // Forzar la actualización de la interfaz de usuario
-    this.changeDetectorRef.detectChanges();
-  }
 
   obtenerImagenesProductos() {
     const observables = this.productos.map(producto =>
@@ -199,11 +180,53 @@ export class ProductoPage implements OnInit {
   }
 
   filterByPrice() {
-    this.filteredProducts = this.productos.filter(producto => 
-      producto.precio >= this.precioMin && producto.precio <= this.precioMax
-    );
+    // Convertir a número si hay valores válidos
+    let minPrice = parseFloat(this.precioMin?.toString());
+    let maxPrice = parseFloat(this.precioMax?.toString());
+  
+    // Validar que se ingresaron números válidos
+    if (isNaN(minPrice)) {
+      minPrice = 0; // Valor mínimo si no se especifica correctamente
+    }
+    if (isNaN(maxPrice)) {
+      maxPrice = 1000000; // Valor máximo si no se especifica correctamente
+    }
+  
+    console.log("Min y Max después de conversión:", minPrice, maxPrice);
+  
+    // Filtrar productos por precio
+    this.filteredProducts = this.productos.filter(producto => {
+      // Obtener el precio del producto como número usando parsePrice()
+      const productPrice = this.parsePrice(producto.precio); // Aquí se pasa producto.precio
+  
+      // Verificar si el precio es un número válido
+      if (!isNaN(productPrice)) {
+        return productPrice >= minPrice && productPrice <= maxPrice;
+      } else {
+        return false; // No incluir productos con precios no válidos
+      }
+    });
+  
+    // Cerrar el modal después de filtrar
+    this.closeCategoryFilter();
   }
-
+  
+  
+  // Función para convertir string de precio a número y formatear como string con $
+  parsePrice(priceString: string | undefined): number {
+    if (!priceString) {
+      return 0; // Retorna 0 si priceString es undefined o null
+    }
+    console.log("Aqui ingresando",priceString);
+    // Eliminar caracteres no numéricos excepto '$' y '.'
+    const numericString = priceString.replace(/[^\d.$]/g, '');
+    console.log("sacando los caracter",numericString);
+    // Convertir a número
+    const numericPrice = parseFloat(numericString.replace(/\./g, '').replace(/\$/g, ''));
+    console.log(numericPrice);
+    return numericPrice || 0; // Retorna 0 si no se puede convertir a número
+  }
+  
   filterProducts() {
     if (this.searchQuery && this.searchQuery.trim() !== '') {
       const query = this.searchQuery.toLowerCase();
@@ -217,35 +240,28 @@ export class ProductoPage implements OnInit {
   }
 
 
-  
-  
-  public buttons = [
-    {
-      text: 'Mostrar todos',
-      handler: () => this.filterByCategoria(null) // Mostrar todos los productos
-    },
-    {
-      text: 'Cerrar',
-      handler: () => {
-        // Opcionalmente, agrega alguna lógica si es necesario
-      }
-    }
-  ];
-
   async showCategoriaFilter() {
-    const actionSheet = await this.actionSheetController.create({
-      header: 'Categorías',
-      cssClass: 'my-custom-class',
-      buttons: this.categoria.map(categoria => ({
-        text: categoria.nombre,
-        handler: () => {
-          this.selectedCategoria = categoria.id_categoria;
-          this.filterByCategoria(this.selectedCategoria); // Llama a la función de filtro
-        }
-      }))
-    });
-  
-    await actionSheet.present();
+    console.log('Categorías disponibles:', this.categoria);
+    
+  }
+
+  openCategoryFilter() {
+    this.isModalOpen = true;
+  }
+
+  closeCategoryFilter() {
+    this.isModalOpen = false;
+  }
+
+  selectCategory(idCategoria: string) {
+    this.filterByCategoria(idCategoria);
+    this.closeCategoryFilter();
+  }
+
+  showAllProducts() {
+    this.selectedCategoria = null;
+    this.filteredProducts = this.productos;
+    this.closeCategoryFilter();
   }
 
   // async showPriceFilterModal() {
@@ -269,7 +285,6 @@ export class ProductoPage implements OnInit {
   // }
 
 
-  showMenu = true;
 
   private async showToast(message: string) {
     const toast = await this.toastController.create({
@@ -278,11 +293,6 @@ export class ProductoPage implements OnInit {
       position: 'bottom'
     });
     toast.present();
-  }
-
-
-  toggleMenu() {
-    this.showMenu = !this.showMenu;
   }
 
 
