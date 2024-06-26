@@ -65,6 +65,7 @@ export class SproductoPage implements OnInit {
 
   onSubmit(productForm: NgForm) {
     const product = productForm.value;
+    this.produc.id_usuario = this.userInfo.id
     if (!this.camposValidos(product)) {
       this.presentToast('Por favor completa todos los campos.');
       return;
@@ -72,7 +73,7 @@ export class SproductoPage implements OnInit {
   
     this.produc.id_usuario = this.userInfo.id;
   
-    this.productService.addProduct(product).subscribe({
+    this.productService.addProduct(this.produc).subscribe({
       next: (response: any) => {
         console.log(response);
         this.presentToast('Registro exitoso.', 3000);

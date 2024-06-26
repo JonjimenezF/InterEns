@@ -2,6 +2,18 @@
   --background: #ffffff; /* Cambia el color de fondo aquí */
 }
 
+ion-toolbar {
+  --background:rgba(10, 174, 122, 0.826);
+}
+
+ion-content {
+  --background: none; /* Eliminar cualquier fondo por defecto */
+  background-image: url('/assets/img/fondo2.png'); /* Fondo de imagen */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .color-text-black{
     color: black ;
     font-family:'Dotumche'
