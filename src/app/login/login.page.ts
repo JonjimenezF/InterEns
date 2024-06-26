@@ -20,33 +20,61 @@ import { SupabaseService } from '../services/supabase.service';
 export class LoginPage {
   email = '';
   password = '';
-  toastController: any;
+  // toastController: any;
 
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(private supabaseService: SupabaseService,
+              private router: Router,
+              private toastController: ToastController
+              ) {}
 
-  // Asegúrate de que el método signInWithGoogle está definido así:
-  signInWithGoogle() {
-    this.supabaseService.signInWithGoogle();
-    return this.supabaseService.signInWithGoogle
-    
+  async signInWithGoogle() {
+    try {
+      const userInfo = await this.supabaseService.signInWithGoogle();
+      console.log(userInfo);
+    } catch (error) {
+      console.error('Error durante el inicio de sesión:', error);
+    }
   }
+
   async signUp() {
-    const { data, error } = await this.supabaseService.signUpWithEmail(this.email, this.password);
-    if (error) {
-      console.error('Error en el registro:', error);
-    } else {
+    // Expresión regular para validar el formato de correo electrónico
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    // Verifica si el correo electrónico coincide con el formato esperado
+    if (!emailRegex.test(this.email)) {
+      this.showToast('Correo electrónico inválido');
+      return;
+    }
+  
+    try {
+      // Llama a signUpWithEmail solo si el correo electrónico es válido
+      const { data } = await this.supabaseService.signUpWithEmail(this.email, this.password);
       console.log('Usuario registrado:', data);
+      this.showToast('Registro exitoso!');
+      // Redirige o realiza alguna acción después de un registro exitoso
+    } catch (error) {
+      this.showToast('Error en el registro');
+      console.error('Error en el registro:', error);
     }
   }
 
   async signIn() {
-    const { data, error } = await this.supabaseService.signInWithEmail(this.email, this.password);
-    if (error) {
-      console.error('Error en el inicio de sesión:', error);
-    } else {
-      console.log('Inicio de sesión exitoso:', data);
-    }
+      const { data, error } = await this.supabaseService.signInWithEmail(this.email, this.password);
+      if (error) {
+        this.showToast('El correo que ingresaste, o la contraseña, son inválidos. Por favor, vuelve a intentar');
+        console.error('Error en el inicio de sesión:', error);
+      } else {
+        console.log('Inicio de sesión exitoso:', data);
+        this.showToast('Inicio de sesión exitoso!');
+        this.router.navigate(['/home'], { state: { userInfo: data } });
+      }
   }
+
+  //inhabilida el boton
+  isFormValid(): boolean {
+    return !!this.email;
+  }
+  
   async resetPassword() {
     const { data, error } = await this.supabaseService.resetPassword(this.email);
     if (error) {
@@ -61,7 +89,7 @@ export class LoginPage {
   private async showToast(message: string) {
     const toast = await this.toastController.create({
       message,
-      duration: 3000,
+      duration: 4000,
       position: 'top'
     });
     toast.present();

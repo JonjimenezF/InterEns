@@ -1,60 +1,90 @@
 // src/app/services/supabase.service.ts
 import { Injectable } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { AuthApiError, AuthChangeEvent, createClient, Session, SupabaseClient, User } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
-import { idUsuario } from '../models/idUsuario';
-
+import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
 export class SupabaseService {
   private supabase: SupabaseClient;
-  
+  private user = new BehaviorSubject<User | null>(null);
+  user$ = this.user.asObservable();
+
   constructor(private router: Router) {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
+
+    // Escuchar cambios en el estado de autenticación
+    this.supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
+      console.log('evento de supabase: ', event, session);
+      this.user.next(session?.user || null);
+      if (session === null) {
+        this.router.navigate(['/login'], { replaceUrl: true });
+      } else {
+        console.log('datos del usuario', session.user);
+        this.router.navigate(['/home'], { replaceUrl: true });
+      }
+    });
   }
 
   async signInWithGoogle() {
     const { data, error } = await this.supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'http://localhost:8100/home', // Asegúrate de cambiar esta URL por la tuya
-      }
-      
+        redirectTo: window.location.origin + '/home',
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
     });
-   const { data: { user } } = await this.supabase.auth.getUser()
-   console.log(this.supabase.auth.getUser)
 
-    if (error) console.error('Error durante el inicio de sesión:', error);
+    if (error) {
+      console.error('Error durante el inicio de sesión:', error);
+      return null;
+    }
+
+    return { data };
   }
-  
+
   async signUpWithEmail(email: string, password: string) {
     const { data, error } = await this.supabase.auth.signUp({
       email,
-      password
+      password,
     });
+
+    if (error) {
+      console.error('Error durante el registro:', error);
+    }
+
     return { data, error };
   }
-
   async signInWithEmail(email: string, password: string) {
-    const { data, error } = await this.supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-    if (error) {
-      console.error('Error durante el inicio de sesión:', error);
-    } else {
-      console.log('Datos de inicio de sesión:', data);
-      localStorage.setItem('access_token', data.session.access_token);
-      localStorage.setItem('user_id', data.user.id);
-      this.router.navigate(['/home']);  // Redirigir a home
+    try {
+      const { data, error } = await this.supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      if (error) {
+        if (error.status === 400) {
+          console.error('Error en el inicio de sesión:');
+          return { data: null, error: 'Credenciales de inicio de sesión no válidas' };
+        } else {
+          console.error('Error en el inicio de sesión:', error.message);
+          return { data: null, error: 'Ha ocurrido un error durante el inicio de sesión' };
+        }
+      }
+      return { data, error: null };
+    } catch (error) {
+      console.error('Error en el inicio de sesión:', error);
+      return { data: null, error: 'Ha ocurrido un error durante el inicio de sesión' };
     }
-    return { data, error };
   }
   
   async resetPassword(email: string) {
     const { data, error } = await this.supabase.auth.resetPasswordForEmail(email);
     return { data, error };
   }
+
 }

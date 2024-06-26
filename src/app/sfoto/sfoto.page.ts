@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductoService } from '../servicios/producto.service';
 import { producto } from '../models/producto';
+import { categoria} from '../models/categoria';
+import { CategoriaService } from '../servicios/categoria.service'; 
 
 
 
@@ -19,39 +21,129 @@ import { producto } from '../models/producto';
 })
 export class SfotoPage implements OnInit {
 
-  produc = {
-    nombre: "",
-    descripcion: "",
-    precio: "",
-    stock: "",
-    imagp: " ",
-    id_usuario: "",
+  categorias: any[] = [];
+ 
+
+  fotos: string[] = [];
+  selectedFiles: File[] = [];
+  nombreFoto: string = '';
+
+  creadoProducto?: any;
+  imagePreviews: string[] = [];
+  idProducto: number = 0;
+  orden: number = 0;
+
+  
+  imagen = {
+    id_producto: 1,
+    url_imagen: '',
+    orden: 1,
   }
 
-  selectedFile: File | null = null;
-  nombreFoto: string | undefined;
-
-  userInfo?: any;
   constructor(
     private http: HttpClient,
     private router: Router,
     private activateRoute: ActivatedRoute,
     public toastController: ToastController,
     private productService: ProductoService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private categoriaService: CategoriaService
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
-    if (state && state['userInfo']) {
-      this.userInfo = state['userInfo'];
+    if (state && state['creadoProducto']) {
+      this.creadoProducto = state['creadoProducto'];
     }
   }
 
   async ngOnInit() {
-    if (this.userInfo) {
-      console.log(this.userInfo.id_usuario);
+    if (this.creadoProducto) {
+      console.log(this.creadoProducto);
     } else {
       console.log('El objeto userInfo es null o undefined');
     }
+  }
+
+  triggerFileInput() {
+    const fileInput = document.getElementById('fileInput') as HTMLElement;
+    fileInput.click();
+  }
+
+  onFileSelected(event: any) {
+
+    const file: File = event.target.files[0];
+    this.selectedFiles.push(file);
+    console.log(file)
+
+    // Mostrar previsualización de la imagen
+    const reader = new FileReader();
+    
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.imagePreviews.push(reader.result as string);
+      console.log(this.imagePreviews)
+    };
+  }
+
+  onSubmit() {
+    if (this.selectedFiles.length === 0) {
+      alert('Por favor, seleccione al menos una imagen para subir');
+      return; // Salir de la función si no hay archivos seleccionados
+    }
+
+    for (let index = 0; index < this.selectedFiles.length; index++) {
+      console.log(index)
+      const file = this.selectedFiles[index];
+      const formData = new FormData();
+      formData.append('foto', file);
+      formData.append('id_producto', this.creadoProducto.toString());
+      formData.append('orden', (this.orden + index).toString());
+    
+      console.log('Index:', index);
+      console.log(formData);
+    
+      this.http.post<any>('http://localhost:5000/upload', formData).subscribe(
+        (response) => {
+          console.log(response);
+          this.presentToast('Imagen subida con éxito');
+          
+          // Guardar la información de la imagen en la base de datos
+          const imagen = {
+            id_producto: this.creadoProducto,
+            url_imagen: response.nombre_foto, // Ajusta esto según la respuesta del servidor
+            orden: this.orden + index // Ajusta esto según tu lógica
+          };
+    
+          this.guardarImagenEnBaseDeDatos(imagen);
+        },
+        (error) => {
+          console.error(error);
+          alert('Error al subir la imagen');
+        }
+      );
+    }
+    console.log(this.selectedFiles);
+    // Limpiar la lista de imágenes seleccionadas
+    this.selectedFiles = [];
+    this.imagePreviews = [];
+
+  }
+
+  guardarImagenEnBaseDeDatos(imagen: any) {
+    this.productService.addImagenProduct(imagen).subscribe(
+      (response) => {
+        this.router.navigate(['/home'])
+        console.log('Imagen guardada en la base de datos', response);
+      },
+      (err) => {
+        console.error('Error al guardar la imagen en la base de datos', err);
+      }
+    );
+  }
+
+  eliminarFotos() {
+    // Eliminar la última imagen seleccionada
+    this.selectedFiles.pop();
+    this.imagePreviews.pop();
   }
 
   async presentToast(message: string, duration: number = 2000) {
@@ -62,56 +154,10 @@ export class SfotoPage implements OnInit {
     });
     toast.present();
   }
+  
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
-  }
 
-  onSubmit(pro: any) {
-    if (this.selectedFile) {
-      const formData = new FormData();
-      formData.append('foto', this.selectedFile);
-      this.http.post<any>('http://localhost:5000/upload', formData).subscribe(
-        (response) => {
-          console.log(response);
-          this.presentToast('Imagen subida con éxito');
-          this.nombreFoto = response.nombre_foto;
-          this.produc.imagp = response.nombre_foto;
-          this.produc.id_usuario = this.userInfo.id_usuario;
-          console.log(this.produc);
-          // Agregar el producto
-          this.productService.addProduct(pro).subscribe(
-            (response) => {
-              this.presentToast('producto subido con éxito');
-              this.navCtrl.navigateRoot('/home');
-          },
-          (error) => {
-            console.error(error);
-            alert('Error al subir la Producto');
-          }
-          );
-        },
-        (error) => {
-          console.error(error);
-          alert('Error al subir la imagen');
-        }
-      );
-    }
-  }
-
-  eliminarFoto(nombreFoto: string) {
-    this.http.delete<any>(`http://localhost:5000/eliminar_foto/${nombreFoto}`).subscribe(
-      (response) => {
-        console.log(response);
-        alert('Foto eliminada correctamente');
-        this.nombreFoto = '';
-      },
-      (error) => {
-        console.error(error);
-        alert('Error al eliminar la foto');
-      }
-    );
-  }
+  
 
 
   goProducto(){

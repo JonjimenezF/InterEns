@@ -1,0 +1,91 @@
+ion-toolbar {
+  --background: rgba(10, 174, 122, 0.826);
+}
+
+ion-back-button {
+  --color: rgb(255, 255, 255); // Color morado para la flecha de retroceso
+}
+
+ion-content {
+  --background: none; /* Eliminar cualquier fondo por defecto */
+  background-image: url('/assets/img/fondo2.png'); /* Fondo de imagen */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.white-background {
+  --background: white; /* Define el color de fondo del botón como blanco */
+  --color: black; /* Define el color del texto como negro */
+}
+
+.green-border {
+  --border-color: rgb(255, 255, 255); /* Color del borde verde */
+  --border-width: 2px; /* Ancho del borde */
+}
+
+.form-wrapper {
+  padding: 20px;
+}
+
+.form-container {
+  background-color: rgba(10, 174, 122, 0.826); // Fondo blanco para el contenedor del formulario
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Sombra suave
+}
+
+.contact-info p {
+  color: #000000; // Color de las letras negro
+}
+
+.custom-item {
+  --background: #ffffff; // Fondo blanco para los ítems
+  margin-bottom: 15px;
+  --ion-item-background: transparent;
+  --ion-item-border-width: 0;
+  --highlight-background: transparent;
+  border-radius: 10px;
+  border: none; /* Eliminando cualquier borde existente */
+  box-shadow: none; /* Eliminando sombras */
+}
+
+.custom-input {
+  --background: #ffffff; // Fondo blanco para los campos de entrada
+  --color: #000000; // Color del texto negro
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --border-width: 0;
+  --box-shadow: none;
+}
+
+ion-select {
+  --background: #ffffff; // Fondo blanco para el select
+  --color: #000000; // Color del texto negro
+}
+
+ion-label {
+  --color: #000000; // Color del texto de las etiquetas negro
+}
+
+.centrar {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.custom-button {
+  width: 100%;
+}
+
+.input-button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Alineación vertical centrada */
+}
+
+.invalido {
+  border: 1px solid red;
+}

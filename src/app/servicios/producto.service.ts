@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { producto } from '../models/producto';
+import { subirImagen } from '../models/subirImagen';
 
 @Injectable({
   providedIn: 'root'
@@ -17,17 +18,52 @@ export class ProductoService {
     );
   }
 
+  addImagenProduct(imagen:subirImagen): Observable<any> {
+    return this._http.post<any>(this.baseUrl + '/subir_imagen_producto', imagen).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   getProduct(): Observable<any[]> {
     return this._http.get<any[]>(this.baseUrl + '/obtener_productos').pipe(
       catchError(this.handleError)
     );
   }
 
-  getProductById(id: number): Observable<any> {
-    return this._http.get<any>(this.baseUrl + '/PRODUCTO?id_producto=eq.' + id).pipe(
+  // getProductById(id: number): Observable<any> {
+  //   return this._http.get<any>(this.baseUrl + '/PRODUCTO?id_producto=eq.' + id).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
+
+  getImagenes(id_producto: number): Observable<any> {
+    return this._http.get<any>(this.baseUrl + '/obtener_imagen', { params: { id_producto: id_producto.toString() } }).pipe(
       catchError(this.handleError)
     );
   }
+
+  getTodasImagenes(id_producto: number): Observable<any> {
+    return this._http.get<any>(this.baseUrl + '/obtener_todas_imagen', { params: { id_producto: id_producto.toString() } }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getProductosid(id_usuario:String): Observable<any>{
+    return this._http.get<any>(this.baseUrl + '/obtener_productos_id?id_usuario=' + id_usuario).pipe(
+      catchError(this.handleError)
+    )
+  }
+
+
+  // uploadPhoto(photo: File, id_producto: number): Observable<any> {
+  //   const formData: FormData = new FormData();
+  //   formData.append('foto', photo);
+  //   formData.append('id_producto', id_producto.toString());
+
+  //   return this._http.post<any>(this.baseUrl+ '/upload', formData).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
@@ -42,6 +78,9 @@ export class ProductoService {
     // Devuelve un observable con un mensaje de error orientado al usuario
     return throwError('Hubo un problema al realizar la operación. Por favor, intenta nuevamente más tarde.');
   };
+
+
+  
 
 
 

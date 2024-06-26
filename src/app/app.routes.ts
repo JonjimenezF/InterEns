@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './auth.guard'; // Importar el guardia
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
+///import { RecuperarPage } from './recuperar/recuperar.page';
 
 export const routes: Routes = [
   {
@@ -8,7 +10,8 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
     canActivate: [authGuard] // Aplicar el guardia aquí
   },
-  {
+ 
+  {    
     path: '',
     redirectTo: 'portada',
     pathMatch: 'full',
@@ -38,11 +41,6 @@ export const routes: Routes = [
     path: 'verificarcontra',
     loadComponent: () => import('./verificarcontra/verificarcontra.page').then( m => m.VerificarcontraPage)
   },
-
-  {
-    path: 'mostar',
-    loadComponent: () => import('./mostar/mostar.page').then( m => m.MostarPage)
-  },
   {
     path: 'sfoto',
     loadComponent: () => import('./sfoto/sfoto.page').then( m => m.SfotoPage)
@@ -55,13 +53,32 @@ export const routes: Routes = [
     path: 'detalle-producto',
     loadComponent: () => import('./detalle-producto/detalle-producto.page').then( m => m.DetalleProductoPage)
   },
-
-
-
-
- 
-
-  
-
-
+  {
+    path: 'sproducto',
+    loadComponent: () => import('./sproducto/sproducto.page').then( m => m.SproductoPage)
+  },
+  {
+    path: 'carrito',
+    loadComponent: () => import('./carrito/carrito.page').then( m => m.CarritoPage)
+  },
+  {
+    path: 'categoria',
+    loadComponent: () => import('./categoria/categoria.page').then( m => m.CategoriaPage)
+  },
+  {
+    path: 'preguntas',
+    loadComponent: () => import('./preguntas/preguntas.page').then( m => m.PreguntasPage)
+  },
+  {
+    path: 'contacto',
+    loadComponent: () => import('./contacto/contacto.page').then( m => m.ContactoPage)
+  },
+  {
+    path: 'mis-productos',
+    loadComponent: () => import('./mis-productos/mis-productos.page').then( m => m.MisProductosPage)
+  },
+  {
+    path: 'que-es',
+    loadComponent: () => import('./que-es/que-es.page').then( m => m.QueEsPage)
+  },
 ];

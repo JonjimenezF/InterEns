@@ -4,7 +4,6 @@ export class producto {
         public descripcion: string,
         public precio: string,
         public stock: string,
-        public imagp: string | undefined,
-        public idusuario: number | undefined,
+        public id_categoria: string,
     ) {}
 }

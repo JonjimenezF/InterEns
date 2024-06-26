@@ -1,27 +1,28 @@
-
-
 <ion-menu contentId="main-content">
   
   <ion-header>
-    
     <ion-toolbar>
       <ion-title style="color: black">Menu</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
     <div class="vertical-buttons">
+      <ion-button fill="clear" (click)="inter()" text="" defaultHref="portada" >
+      ¿Qué es InterEns?
+      </ion-button>
     <ion-button fill="clear" (click)="puntoLimpio()">
       Punto limpio
     </ion-button>
-    <ion-button fill="clear" (click)="salir()">
-      Novedades
+    <ion-button fill="clear" (click)="goMisProductos()">
+      Mis Productos
     </ion-button>
-    <ion-button fill="clear" (click)="salir()">
+    <ion-button fill="clear" (click)="preguntas()" >
       Preguntas frecuentes
     </ion-button>
-    <ion-button fill="clear" (click)="salir()">
+    <ion-button fill="clear" (click)="contacto()">
       Contacto
     </ion-button>
+    
     <ion-button fill="clear" (click)="salir()" text="" defaultHref="portada" >
       Cerrar sesión
     </ion-button>
@@ -32,8 +33,8 @@
 <div class="ion-page" id="main-content">
     <ion-header>
       <ion-toolbar>
-        <ion-buttons style="color: black;" slot="start">
-          <ion-menu-button auto-hide="false"></ion-menu-button>
+        <ion-buttons style="color: rgb(255, 255, 255);" slot="start">
+          <ion-menu-button style="--background: none" auto-hide="false"></ion-menu-button>
         </ion-buttons>
         <ion-buttons slot="start">
           <ion-back-button (click)="goBack()" text="" color="rgb(165, 17, 233)"></ion-back-button>
@@ -54,15 +55,15 @@
         <p class="color-text-black" >Descubre objetos cerca de ti para una segunda vida</p>
       </div>
       <div class="centrar" style="display: flex; margin-top: 20px;">
-        <ion-button style="margin-right: 50px;" class="boton-circular" shape="round" expand="full" style="margin-left: 20px;" (click)="goSubirfoto()" >
+        <ion-button style="margin-right: 10px;" class="boton-circular" shape="round" expand="full" style="margin-left: 30px;" (click)="goSubirfoto()" >
           <div class="icono-imagen-izquierdo"></div>
         </ion-button>
-        <ion-button style="margin-right: 50x;" class="boton-circular" shape="round" expand="full" style="margin-left: 70px;" (click)="goProducto()" >
+        <ion-button style="margin-right: 50x;" class="boton-circular" shape="round" expand="full" style="margin-left: 90px;" (click)="goProducto()" >
           <div class="icono-imagen-derecho"></div>
         </ion-button>
       </div>
       <div class="centrar" style="display: flex;">
-        <h1 class="color-text-black" style="margin-left: 10px;margin-right: 85px;">Subir</h1>
+        <h1 class="color-text-black" style="margin-right: 55px;">Vender o Donar</h1>
         <h1 class="color-text-black">Buscar</h1>
       </div>
     </ion-card-content>

@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+  <ion-content>
+    <div class="form-wrapper">
+      <div class="form-container">
+        <h1 style="color: black;">Subir Producto</h1>
+        <div class="contact-info">
+          <p>Por favor completa el siguiente formulario para agregar un nuevo producto en nuestra plataforma también puedes donar haciendo click en el boton donar.</p>
+          <!-- Div que envuelve el formulario -->
+          <form (ngSubmit)="onSubmit(productForm)" #productForm="ngForm">
+            <ion-item class="custom-item green-border">
+              <ion-input class="custom-input" type="text" placeholder="Nombre del Producto" [(ngModel)]="produc.nombre" name="nombre" required></ion-input>
+            </ion-item>
+  
+            <ion-item class="custom-item green-border">
+              <ion-textarea class="custom-input" placeholder="Descripción" [(ngModel)]="produc.descripcion" name="descripcion" rows="5" required></ion-textarea>
+            </ion-item>
+  
+            <ion-item class="custom-item green-border">
+              <div class="input-button-container">
+                <ion-input class="custom-input" type="text" placeholder="Precio" [(ngModel)]="produc.precio" name="precio" required></ion-input>
+                <ion-button class="donate-button" (click)="toggleDonation()">{{ isDonation ? 'Cancelar Donación' : 'Donar' }}</ion-button>
+              </div>
+            </ion-item>
+  
+            <ion-item class="custom-item green-border">
+              <ion-input class="custom-input" type="text" placeholder="Stock" [(ngModel)]="produc.stock" name="stock" required></ion-input>
+            </ion-item>
+  
+            <ion-item class="custom-item green-border">
+              <ion-select style="color: black;" [(ngModel)]="produc.id_categoria" name="id_categoria" placeholder="Selecciona una categoría" required (ionChange)="actualizarNombreCategoria()">
+                <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id_categoria">
+                  {{ categoria.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+  
+            <div class="centrar">
+              <ion-button  type="submit" class="custom-button white-background" fill="solid" shape="round">Siguiente</ion-button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+

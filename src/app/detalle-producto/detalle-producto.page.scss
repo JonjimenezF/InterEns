@@ -1,4 +1,80 @@
+ion-toolbar {
+  --background:rgba(10, 174, 122, 0.826);
+}
+
+ion-content {
+  background-image: url('/assets/img/fondo2.png'); /* Ruta de la imagen */
+  background-size: cover;
+  --background: transparent; /* Para asegurar que el fondo de ion-content sea transparente */
+}
 * {
     --background: #ffffff; /* Cambia el color de fondo aquí */
   }
   
+  .centrar{
+    display:grid;
+    place-content: center;
+}
+  
+  ion-slides, ion-slide {
+    width: 100%;
+    height: auto;
+  }
+  
+  .product-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .carta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    background: black
+  }
+  
+  .image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  //paginacion
+  .custom-pagination {
+    bottom: 10px; /* Ajusta la distancia desde abajo según sea necesario */
+    left: 0; /* Ajusta la posición horizontal según sea necesario */
+    right: 0; /* Ajusta la posición horizontal según sea necesario */
+    margin: 0 auto; /* Centra horizontalmente */
+    text-align: center; /* Centra los puntos de paginación */
+  }
+  .custom-pagination ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Cambia la visualización a flexbox */
+    justify-content: center; /* Centra los elementos horizontalmente */
+  }
+  .custom-pagination-bullet {
+    width: 10px;
+    height: 10px;
+    background-color: gray;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  .custom-pagination-bullet.active {
+    background-color: rgb(67, 67, 158); /* Cambia el color del punto activo */
+  }
+
+
+.detalle{
+  background-color: white; /* Fondo blanco para el formulario */
+  padding: 20px; /* Añade algo de espacio alrededor del formulario */
+  border-radius: 20px; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera para el formulario */
+  margin-bottom: 20px; /* Espacio entre form-wrapper y contact-details */
+}

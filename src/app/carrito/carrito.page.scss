@@ -1,0 +1,96 @@
+ion-toolbar {
+  --background:rgba(10, 174, 122, 0.826);
+}
+ion-content {
+  --background: none; /* Eliminar cualquier fondo por defecto */
+  background-image: url('/assets/img/fondo2.png'); /* Fondo de imagen */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.fondoblanco {
+   --background: #ffffff;
+}
+
+.product-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #adadad; /* Ajusta el grosor y color del borde según tus preferencias */
+  border-radius: 10px; /* Ajusta el radio de borde para que sea redondeado */
+  padding: 10px; /* Añade espacio interno para separar el contenido del borde */
+  margin-bottom: 10px; /* Añade espacio inferior entre productos */
+}
+
+ion-item {
+
+  --border-style: none; /* Elimina el estilo del borde */
+
+  /* Ajusta el padding interno si es necesario */
+
+
+}
+
+.delete-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  z-index: 1;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+.delete-icon img {
+  width: 24px;
+  height: 24px;
+}
+
+.product-image {
+  flex: 0 0 auto;
+  margin-right: 15px;
+}
+
+.product-image img {
+  max-width: 100px;
+  height: auto;
+}
+
+.product-details {
+  flex: 1;
+}
+
+.product-counter {
+  display: flex;
+  align-items: center;
+}
+
+.product-counter button {
+  width: 25px;
+  height: 25px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  font-size: 16px;
+  line-height: 25px;
+  text-align: center;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.product-counter span {
+  font-size: 16px;
+  width: 30px;
+  text-align: center;
+}
+
+.custom-note {
+  color: rgb(2, 2, 2);
+  font-size: 15px; /* Puedes ajustar el tamaño aquí */
+}

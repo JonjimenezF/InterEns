@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -8,6 +8,7 @@ import { idProducto } from '../models/idProducto';
 import { ProductoService } from '../servicios/producto.service';
 import { lastValueFrom } from 'rxjs';
 import { producto } from '../models/producto';
+import { Swiper } from 'swiper';
 
 @Component({
   selector: 'app-detalle-producto',
@@ -16,37 +17,97 @@ import { producto } from '../models/producto';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class DetalleProductoPage implements OnInit {
+export class DetalleProductoPage implements OnInit, AfterViewInit {
+  @ViewChild('swiperContainer', { static: false }) swiperContainer?: ElementRef<any>;
+  
+  id: any;
+  det_imagen: any[] = [];
+  det_producto?: producto;
+  
+  Carrito = {
+    id_producto:"",
+    id_usuario:"",
+    cantidad:1
+  }
 
-  id:any
-  det_producto?: producto ;
   constructor(private router: Router, 
               private activateRoute: ActivatedRoute,
               private navCtrl: NavController,
-              private productService: ProductoService,) 
-  { 
+              private productService: ProductoService) { 
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['det_producto']) {
-    this.det_producto = state['det_producto'];
+      this.det_producto = state['det_producto'];
     }
   }
 
-
   ngOnInit() {
-    console.log(this.det_producto)
-    this.id=this.det_producto
-    // if (this.id_producto) {
-    //   this.detalleProductoID(this.id);
-    // }
-    console.log()
+    if (this.det_producto) {
+      this.id = this.det_producto;
+      this.getImagenes(this.id.id_producto);
+    }
+    console.log(this.det_producto);
   }
 
-  // async detalleProductoID(id: number) {
-  //   try {
-  //     const product = await this.productService.getProductoid(id).toPromise(); // Obtener detalles del producto por ID
-  //     console.log(product); // Imprimir detalles del producto en la consola
-  //   } catch (error) {
-  //     console.error('Error al cargar detalles del producto:', error); // Manejar errores
-  //   }
+  // agregarCarrito(producto: any){
+  //   console.log(producto)
+  //   this.Carrito.id_producto = producto
+  //   this.Carrito.id_usuario = this.userInfo.id
+  //   console.log(this.Carrito)
   // }
+
+  ngAfterViewInit() {
+    if (this.swiperContainer) {
+      const mySwiper = new Swiper(this.swiperContainer.nativeElement, {
+        pagination: {
+          el: '.custom-pagination', // Usa la clase de la paginación personalizada
+          clickable: true
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+      });
+  
+      // Agrega un listener para actualizar la clase activa en los puntos de paginación
+      mySwiper.on('slideChange', () => {
+        const bullets = document.querySelectorAll('.custom-pagination-bullet');
+        bullets.forEach((bullet, index) => {
+          bullet.classList.remove('active');
+          if (index === mySwiper.activeIndex) {
+            bullet.classList.add('active');
+          }
+        });
+      });
+  
+      console.log('Swiper initialized successfully');
+    } else {
+      console.error('Swiper container not found.');
+    }
+  
+    // Marcar automáticamente el primer elemento de la paginación como activo después de cargar las imágenes
+    this.getImagenes(this.id.id_producto);
+  }
+
+  getImagenes(id: number) {
+    this.productService.getTodasImagenes(id).subscribe(
+      (data: any[]) => {
+        this.det_imagen = data;
+        console.log(this.det_imagen); // Asegúrate de que las imágenes se están recibiendo correctamente
+  
+        // Marcar automáticamente el primer elemento de la paginación como activo
+        const bullets = document.querySelectorAll('.custom-pagination-bullet');
+        if (bullets.length > 0) {
+          bullets[0].classList.add('active');
+        }
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
+
+  goBack() {
+    this.navCtrl.back();
+  }
+
 }

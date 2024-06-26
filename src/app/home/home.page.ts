@@ -13,9 +13,10 @@ import { SupabaseService } from '../services/supabase.service';
   imports: [IonicModule,],
 })
 export class HomePage {
+  userId: string | undefined;
 
-  userInfo?: idUsuario;
-  constructor(private router: Router, private activateRoute: ActivatedRoute,private navCtrl: NavController) {
+  userInfo?: any;
+  constructor(private router: Router, private activateRoute: ActivatedRoute,private navCtrl: NavController,private supabaseService: SupabaseService) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
       this.userInfo = state['userInfo'];
@@ -23,17 +24,20 @@ export class HomePage {
   }
 
   ngOnInit() {
-    if (this.userInfo) {
-      console.log(this.userInfo.id_usuario);
-      console.log(this.userInfo);
-    } else {
-      console.log('El objeto userInfo es null o undefined',this.userInfo);
-                }
+    this.supabaseService.user$.subscribe(user => {
+      if (user) {
+        this.userInfo = user;
+        this.userId = user.id;
+        console.log('User ID:', this.userId);
+      } else {
+        console.log('El objeto userInfo es null o undefined');
+      }
+    });
   }
   
 
   goProducto(){
-    this.router.navigate(['/producto']);
+    this.router.navigate(['/producto'], { state: { userInfo: this.userInfo}})
   }
 
   home(){
@@ -50,16 +54,32 @@ export class HomePage {
     this.router.navigate(['/portada']);
 
   }
+  preguntas(){
+    this.router.navigate(['/preguntas']);
+
+  }
+  contacto(){
+    this.router.navigate(['/contacto']);
+
+  }
   puntoLimpio(){
 
   }
   goSubirfoto() {
-    // Aquí puedes agregar la lógica para navegar a la página de subir foto
-    // Por ejemplo:
-    this.router.navigate(['/sfoto'], { state: { userInfo: this.userInfo}})
+    console.log("Dentro",this.userInfo)
+    this.router.navigate(['/sproducto'], { state: { userInfo: this.userInfo}})
+  }
+
+  goMisProductos(){
+    this.router.navigate(['/mis-productos'], { state: { userInfo: this.userInfo.id}})
   }
 
   goBack() {
     this.navCtrl.back();
   }
+
+  inter(){
+    this.router.navigate(['/que-es'], { state: { userInfo: this.userInfo}})
+  }
+
 }

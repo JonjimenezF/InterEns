@@ -1,0 +1,101 @@
+ion-toolbar {
+  --background: rgba(10, 174, 122, 0.826);
+}
+
+ion-content {
+  background-image: url('/assets/img/fondo2.png'); /* Ruta de la imagen */
+  background-size: cover;
+  --background: transparent; /* Para asegurar que el fondo de ion-content sea transparente */
+}
+
+.contact-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+
+  .form-wrapper {
+    background-color: white; /* Fondo blanco para el formulario */
+    padding: 20px; /* Añade algo de espacio alrededor del formulario */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera para el formulario */
+    margin-bottom: 20px; /* Espacio entre form-wrapper y contact-details */
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #000000;
+    }
+
+    .contact-info {
+      color: #000000;
+      margin-bottom: 40px;
+
+      form {
+        display: flex;
+        flex-direction: column;
+
+        .form-group {
+          margin-bottom: 15px;
+
+          label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #000000;
+          }
+
+          input, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+            color: #000000;
+          }
+
+          textarea {
+            resize: vertical;
+            background-color: white;
+            color: #000000;
+          }
+        }
+
+        .custom-button {
+          --background: #4CAF50;
+          --color: white;
+          padding: 10px 20px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            --background: #45a049; /* Color ligeramente más oscuro para el hover */
+          }
+        }
+      }
+    }
+  }
+
+  .contact-details {
+    background-color: white; /* Fondo blanco para el formulario */
+    padding: 20px; /* Añade algo de espacio alrededor del formulario */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera para el formulario */
+      h2 {
+      color: #000000;
+      margin-bottom: 10px;
+      }
+
+      p {
+      color: #000000;
+      margin-bottom: 5px;
+      }
+  }
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #000000; /* Fondo gris claro para todo el cuerpo */
+}
