@@ -1,8 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>misProductos</ion-title>
-  </ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" defaultHref="home" text="" class="custom-back-button"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>    
 </ion-header>
+
 
 <ion-content [fullscreen]="true">
   <!-- Spinner de carga -->

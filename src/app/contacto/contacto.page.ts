@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { IonicModule,NavController } from '@ionic/angular';
-
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-contacto',
   templateUrl: './contacto.page.html',
@@ -13,17 +13,34 @@ import { IonicModule,NavController } from '@ionic/angular';
 })
 export class ContactoPage implements OnInit {
 
-  constructor(private navCtrl: NavController) { }
+  nombre: string = '';
+  email: string = '';
+  mensaje: string = '';
+
+  constructor(private navCtrl: NavController, private http: HttpClient) { }
 
   ngOnInit() {
   }
 
+ 
   submitForm() {
-    // Lógica para manejar el envío del formulario
-    console.log('Formulario enviado');
-    // Aquí puedes añadir la lógica para enviar los datos del formulario a tu backend o realizar otras acciones necesarias
-  }
+    const data = {
+      nombre: this.nombre,
+      destinatario: this.email,
+      mensaje: this.mensaje
+    };
 
+    this.http.post('http://localhost:5000/enviar-correo', data).subscribe(
+      response => {
+        console.log('Correo enviado:', response);
+        alert('Correo enviado correctamente');
+      },
+      error => {
+        console.error('Error al enviar el correo:', error);
+        alert('Error al enviar el correo');
+      }
+    );
+  }
   goBack() {
     this.navCtrl.back();
   }

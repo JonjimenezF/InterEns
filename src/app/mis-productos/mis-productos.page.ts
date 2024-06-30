@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ProductoService } from '../servicios/producto.service';
@@ -22,7 +22,8 @@ export class MisProductosPage implements OnInit {
   imagesLoadedCount: number = 0;
   constructor(private router:Router,
               private http: HttpClient,
-              private productService: ProductoService
+              private productService: ProductoService,
+              private navCtrl: NavController
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
@@ -96,5 +97,9 @@ export class MisProductosPage implements OnInit {
     } else {
       return null; // No pasar nada si no hay imagen
     }
+  }
+
+  goBack() {
+    this.navCtrl.back();
   }
 }
