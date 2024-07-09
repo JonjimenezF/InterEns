@@ -89,3 +89,21 @@ ion-label {
 .invalido {
   border: 1px solid red;
 }
+
+.custom-item {
+  --border-color: green;
+  --border-width: 2px;
+  border-style: solid;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.green-border {
+  border-color: green;
+}
+
+.custom-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}

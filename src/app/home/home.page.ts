@@ -60,6 +60,10 @@ export class HomePage {
     this.router.navigate(['/contacto']);
 
   }
+  reciclaje(){
+    this.router.navigate(['/reciclaje']);
+
+  }
   puntoLimpio(){
 
   }

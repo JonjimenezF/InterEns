@@ -1,9 +1,13 @@
+
+
 <ion-menu contentId="main-content">
   
   <ion-header>
+    
     <ion-toolbar>
       <ion-title style="color: black">Menu</ion-title>
     </ion-toolbar>
+    
   </ion-header>
   <ion-content class="ion-padding">
     <div class="vertical-buttons">
@@ -19,6 +23,9 @@
     <ion-button fill="clear" (click)="preguntas()" >
       Preguntas frecuentes
     </ion-button>
+    <ion-button fill="clear" (click)="reciclaje()" text="" defaultHref="portada" >
+      Aprende de reciclaje
+    </ion-button>
     <ion-button fill="clear" (click)="contacto()">
       Contacto
     </ion-button>
@@ -33,8 +40,8 @@
 <div class="ion-page" id="main-content">
     <ion-header>
       <ion-toolbar>
-        <ion-buttons style="color: rgb(255, 255, 255);" slot="start">
-          <ion-menu-button style="--background: none" auto-hide="false"></ion-menu-button>
+        <ion-buttons style="color: black;" slot="start">
+          <ion-menu-button auto-hide="false"></ion-menu-button>
         </ion-buttons>
         <ion-buttons slot="start">
           <ion-back-button (click)="goBack()" text="" color="rgb(165, 17, 233)"></ion-back-button>
