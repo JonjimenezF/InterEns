@@ -1,14 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule,NavController } from '@ionic/angular';
+import { IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonContent, IonImg } from '@ionic/angular/standalone';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-preguntas',
   templateUrl: './preguntas.page.html',
   styleUrls: ['./preguntas.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule, ]
+  imports: [
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonContent,
+    IonBackButton,
+    IonImg,
+    CommonModule, 
+    FormsModule
+  ]
 })
 export class PreguntasPage implements OnInit {
   respuestasVisibles: boolean[] = [];

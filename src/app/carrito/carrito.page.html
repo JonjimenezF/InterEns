@@ -6,7 +6,6 @@
     <ion-buttons slot="start">
       <ion-back-button (click)="goBack()" text="" color="rgb(165, 17, 233)"></ion-back-button>
     </ion-buttons>
-    
   </ion-toolbar>
 </ion-header>
 
@@ -15,18 +14,18 @@
     <ion-item *ngFor="let producto of productosCarrito" class="fondoblanco">
       <div class="product-container">
         <div class="product-image">
-          <img [src]="getImagenProducto(producto)" alt="Imagen del producto">
+          <ion-img [src]="getImagenProducto(producto)" alt="Imagen del producto"></ion-img>
         </div>
         <div class="product-details">
           <h2 style="color: black;">{{ producto.nombre }}</h2>
           <p style="color: black;">{{ producto.precio}}</p>
           <div class="product-counter">
             <div class="delete-icon" (click)="eliminarDelCarrito(producto)">
-              <img src="assets/img/bin.png" alt="Eliminar del carrito">
+              <ion-img src="assets/img/bin.png" alt="Eliminar del carrito"></ion-img>
             </div>
-            <button (click)="decrementarCantidad(producto)" style="color: black;">-</button>
+            <ion-button (click)="decrementarCantidad(producto)" style="color: black;">-</ion-button>
             <span style="color: black;">{{ producto.cantidad }}</span>
-            <button (click)="incrementarCantidad(producto)" style="color: black;">+</button>
+            <ion-button (click)="incrementarCantidad(producto)" style="color: black;">+</ion-button>
           </div>
         </div>
       </div>

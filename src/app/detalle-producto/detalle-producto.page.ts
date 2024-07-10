@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonBackButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCol, IonContent, IonHeader, IonImg, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { idProducto } from '../models/idProducto';
@@ -15,7 +15,20 @@ import { Swiper } from 'swiper';
   templateUrl: './detalle-producto.page.html',
   styleUrls: ['./detalle-producto.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonBackButton,
+    IonCol,
+    IonCard,
+    IonCardHeader,
+    IonCardContent,
+    IonImg,
+    CommonModule, 
+    FormsModule]
 })
 export class DetalleProductoPage implements OnInit, AfterViewInit {
   @ViewChild('swiperContainer', { static: false }) swiperContainer?: ElementRef<any>;

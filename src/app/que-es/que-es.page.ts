@@ -1,15 +1,23 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar} from '@ionic/angular/standalone';
-import { IonicModule,NavController } from '@ionic/angular';
+import { IonBackButton, IonHeader, IonToolbar, IonButtons, IonContent} from '@ionic/angular/standalone';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-que-es',
   templateUrl: './que-es.page.html',
   styleUrls: ['./que-es.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [
+    IonBackButton,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonContent,
+    CommonModule, 
+    FormsModule
+  ]
 })
 export class QueEsPage implements OnInit, AfterViewInit {
 

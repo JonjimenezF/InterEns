@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonHeader, IonToolbar, IonTitle, IonContent,IonButton,IonImg,IonBackButton, IonList, IonItem, IonSpinner, IonLabel, IonNote, IonMenu} from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: './portada.page.html',
   styleUrls: ['./portada.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonImg, IonBackButton,IonList,IonItem,IonSpinner, IonLabel, IonNote, IonMenu, CommonModule, FormsModule]
 })
 export class PortadaPage implements OnInit {
 

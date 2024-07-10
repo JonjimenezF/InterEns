@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule,NavController, ToastController } from '@ionic/angular';
+import { IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonButton, IonContent } from '@ionic/angular/standalone';
+import { NavController, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductoService } from '../servicios/producto.service';
-import { producto } from '../models/producto';
-import { categoria} from '../models/categoria';
 import { CategoriaService } from '../servicios/categoria.service'; 
 
 
@@ -16,7 +15,17 @@ import { CategoriaService } from '../servicios/categoria.service';
   templateUrl: './sfoto.page.html',
   styleUrls: ['./sfoto.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [
+    IonHeader, 
+    IonToolbar,
+    IonButtons,
+    IonBackButton,
+    IonTitle,
+    IonButton,
+    IonContent,
+    CommonModule, 
+    FormsModule
+  ]
   
 })
 export class SfotoPage implements OnInit {
