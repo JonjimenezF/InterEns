@@ -268,10 +268,12 @@ export class ProductoPage implements OnInit {
 
   openCategoryFilter() {
     this.isModalOpen = true;
+    this.changeDetectorRef.detectChanges();  // Forzar detección de cambios
   }
 
   closeCategoryFilter() {
     this.isModalOpen = false;
+    this.changeDetectorRef.detectChanges();  // Forzar detección de cambios
   }
 
   selectCategory(idCategoria: string) {
