@@ -2,7 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, NavController, ToastController } from '@ionic/angular';
+import { IonHeader, IonContent, IonCardContent, IonItem, IonInput, IonButton, IonImg } from '@ionic/angular/standalone';
+import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { userLogin } from '../models/userLogin';
 import { UsuarioService } from '../servicios/usuario.service';
@@ -15,7 +16,16 @@ import { SupabaseService } from '../services/supabase.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [
+    IonHeader,
+    IonContent,
+    IonCardContent,
+    IonItem,
+    IonInput,
+    IonButton,
+    IonImg,
+    CommonModule, 
+    FormsModule]
 })
 export class LoginPage {
   email = '';

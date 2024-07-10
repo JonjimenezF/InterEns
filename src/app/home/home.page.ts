@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute,Router } from '@angular/router';
+import { IonBackButton, IonButtons, IonButton, IonContent, IonHeader, IonImg, IonMenu, IonMenuButton, IonTitle, IonToolbar, IonCardContent } from '@ionic/angular/standalone';
 import { IonicModule } from '@ionic/angular';
 import { idUsuario } from '../models/idUsuario';
 import { NavController } from '@ionic/angular';
@@ -10,7 +11,19 @@ import { SupabaseService } from '../services/supabase.service';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonicModule,],
+  imports: [
+    IonMenu,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButtons,
+    IonMenuButton,
+    IonBackButton,
+    IonButton,
+    IonImg,
+    IonCardContent
+  ]
 })
 export class HomePage {
   userId: string | undefined;

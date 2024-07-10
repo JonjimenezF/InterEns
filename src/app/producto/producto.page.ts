@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonHeader, IonTitle, IonToolbar, IonButtons, IonBackButton, IonContent, IonSearchbar, IonButton, IonIcon, IonModal, IonGrid, IonRow, IonCol, IonLabel, IonInput, IonItem, IonSpinner, IonCard, IonImg} from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { NavController, ToastController } from '@ionic/angular';
@@ -17,7 +17,29 @@ import { CarritoService } from '../servicios/carrito.service';
   templateUrl: './producto.page.html',
   styleUrls: ['./producto.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [ 
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonButtons,
+    IonBackButton,
+    IonContent,
+    IonSearchbar,
+    IonButton,
+    IonIcon,
+    IonModal,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonLabel,
+    IonInput,
+    IonItem,
+    IonSpinner,
+    IonCard,
+    IonImg,
+    CommonModule, 
+    FormsModule
+  ]
 })
 export class ProductoPage implements OnInit {
   
@@ -50,7 +72,6 @@ export class ProductoPage implements OnInit {
     private http: HttpClient,
     private serviceCarrito: CarritoService,
     private toastController: ToastController,
-    private modalController: ModalController,
     private changeDetectorRef: ChangeDetectorRef,
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
@@ -247,10 +268,12 @@ export class ProductoPage implements OnInit {
 
   openCategoryFilter() {
     this.isModalOpen = true;
+    this.changeDetectorRef.detectChanges();  // Forzar detección de cambios
   }
 
   closeCategoryFilter() {
     this.isModalOpen = false;
+    this.changeDetectorRef.detectChanges();  // Forzar detección de cambios
   }
 
   selectCategory(idCategoria: string) {

@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { IonHeader, IonToolbar, IonTitle, IonContent,IonButton,IonImg,IonBackButton, IonList, IonItem, IonSpinner, IonLabel, IonNote, IonButtons} from '@ionic/angular/standalone';
 import { IonicModule,AlertController } from '@ionic/angular';
 import { NavController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -14,7 +15,24 @@ import { ProductoService } from '../servicios/producto.service';
   templateUrl: './carrito.page.html',
   styleUrls: ['./carrito.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButton,
+    IonImg,
+    IonBackButton,
+    IonList,
+    IonItem,
+    IonSpinner,
+    IonLabel,
+    IonNote,
+    IonButtons
+  ]
 })
 export class CarritoPage implements OnInit {
   carrito: any[] = [];
