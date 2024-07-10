@@ -1,8 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonHeader, IonTitle, IonToolbar, IonButtons, IonBackButton, IonContent, IonSearchbar, IonButton, IonIcon, IonModal, IonGrid, IonRow, IonCol, IonLabel, IonInput, IonItem, IonSpinner, IonCard, IonImg } from '@ionic/angular/standalone';
-import { ModalController } from '@ionic/angular';
+import { IonHeader, IonTitle, IonToolbar, IonButtons, IonBackButton, IonContent, IonSearchbar, IonButton, IonIcon, IonModal, IonGrid, IonRow, IonCol, IonLabel, IonInput, IonItem, IonSpinner, IonCard, IonImg} from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { NavController, ToastController } from '@ionic/angular';
@@ -73,7 +72,6 @@ export class ProductoPage implements OnInit {
     private http: HttpClient,
     private serviceCarrito: CarritoService,
     private toastController: ToastController,
-    private modalController: ModalController,
     private changeDetectorRef: ChangeDetectorRef,
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
