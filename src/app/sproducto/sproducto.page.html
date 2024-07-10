@@ -21,22 +21,6 @@
             <ion-item class="custom-item green-border">
               <ion-textarea class="custom-input" placeholder="Descripción" [(ngModel)]="produc.descripcion" name="descripcion" rows="5" required></ion-textarea>
             </ion-item>
-
-            <ion-item class="custom-item green-border">
-              <ion-label class="black-text">Seleccionar Bodega</ion-label>
-              <ion-radio-group [(ngModel)]="produc.descripcion" name="descripcion" required>
-                <ion-item>
-                  <ion-label class="black-text">Viña del Mar</ion-label>
-                  <ion-radio slot="start" value="Viña del Mar"></ion-radio>
-                </ion-item>
-                <ion-item>
-                  <ion-label class="black-text">Valparaíso</ion-label>
-                  <ion-radio slot="start" value="Valparaíso"></ion-radio>
-                </ion-item>
-              </ion-radio-group>
-            </ion-item>
-            
-           
   
             <ion-item class="custom-item green-border">
               <div class="input-button-container">
@@ -48,8 +32,6 @@
             <ion-item class="custom-item green-border">
               <ion-input class="custom-input" type="text" placeholder="Stock" [(ngModel)]="produc.stock" name="stock" required></ion-input>
             </ion-item>
-
-            
   
             <ion-item class="custom-item green-border">
               <ion-select style="color: black;" [(ngModel)]="produc.id_categoria" name="id_categoria" placeholder="Selecciona una categoría" required (ionChange)="actualizarNombreCategoria()">
@@ -58,7 +40,6 @@
                 </ion-select-option>
               </ion-select>
             </ion-item>
-            
   
             <div class="centrar">
               <ion-button  type="submit" class="custom-button white-background" fill="solid" shape="round">Siguiente</ion-button>
@@ -68,4 +49,3 @@
       </div>
     </div>
   </ion-content>
-
