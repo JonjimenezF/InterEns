@@ -26,6 +26,7 @@
     border: 1px solid transparent; /* Establece el borde transparente */
     border-color: rgb(151, 151, 151);
     border-radius: 10px; /* Opcional: Agrega bordes redondeados */
+    --border-color: transparent;
 }
 
 .image-with-border {

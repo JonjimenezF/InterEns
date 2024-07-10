@@ -53,7 +53,7 @@ export class SupabaseService {
       return null;
     }
   }
-
+  
   async signUpWithEmail(email: string, password: string) {
     const { data, error } = await this.supabase.auth.signUp({
       email,
