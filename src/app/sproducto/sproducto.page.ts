@@ -1,7 +1,8 @@
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import {IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonContent, IonItem, IonInput, IonTextarea, IonSelect, IonSelectOption, IonButton } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonContent, IonItem, IonInput, IonTextarea, IonSelect, IonSelectOption, IonButton } from '@ionic/angular/standalone';
 import { IonicModule, NavController, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -32,11 +33,21 @@ import { CategoriaService } from '../servicios/categoria.service';
     FormsModule]
 })
 export class SproductoPage implements OnInit {
+
+  
   nombreFoto: string | undefined;
   userInfo?: any;
   selectedFile: File | null = null;
   isDonation: boolean = false;
   camposInvalidos: Set<string> = new Set();
+
+  selectedBodega: any = '';
+
+  onBodegaChange(event: any) {
+    this.selectedBodega = event.detail.value;
+  }
+
+  
 
   produc = {
     nombre: "",
@@ -46,6 +57,8 @@ export class SproductoPage implements OnInit {
     id_usuario: "",
     id_categoria: ""
   };
+
+ 
 
   nombreCat = {
     nombre_categoria: ""
@@ -77,6 +90,7 @@ export class SproductoPage implements OnInit {
     }
     this.getCategorias();
   }
+  
 
   onSubmit(productForm: NgForm) {
     const product = productForm.value;

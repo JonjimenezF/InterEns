@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonHeader, IonToolbar,NavController, IonTitle, IonContent, IonSpinner, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonImg } from '@ionic/angular/standalone';
+import { IonHeader, IonButtons,IonButton, IonBackButton, IonToolbar,NavController, IonTitle, IonContent, IonSpinner, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonImg } from '@ionic/angular/standalone';
 import { Router} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ProductoService } from '../servicios/producto.service';
@@ -25,7 +25,11 @@ import { Observable, catchError, forkJoin, of } from 'rxjs';
     IonCardContent,
     IonImg,
     CommonModule, 
-    FormsModule]
+    FormsModule,
+    IonButtons,
+    IonButton,
+    IonBackButton
+  ]
 })
 export class MisProductosPage implements OnInit {
 
