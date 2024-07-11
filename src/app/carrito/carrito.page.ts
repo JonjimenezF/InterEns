@@ -221,7 +221,7 @@ export class CarritoPage implements OnInit {
 
   continuarCompra() {
     const total = this.calcularTotal();
-    const url = `http://localhost:3000/webpay_plus/create?amount=${total}`;
+    const url = `https://transbank-sdk-nodejs-webpay-rest-example-n3ny.onrender.com/webpay_plus/create?amount=${total}`;
     console.log('Enviando solicitud al servidor para iniciar la transacción con URL:', url);
 
     // Realiza una redirección al navegador
