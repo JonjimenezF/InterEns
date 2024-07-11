@@ -55,6 +55,8 @@ export class HomePage {
 
   home(){
     this.router.navigate(['/home']);
+    console.log('El objeto userInfo es null o undefined',this.userInfo);
+  
   }
 
   perfil(){
