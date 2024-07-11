@@ -23,9 +23,9 @@
             <div class="delete-icon" (click)="eliminarDelCarrito(producto)">
               <ion-img src="assets/img/bin.png" alt="Eliminar del carrito"></ion-img>
             </div>
-            <ion-button (click)="decrementarCantidad(producto)" style="color: black;">-</ion-button>
+            <ion-button (click)="decrementarCantidad(producto)" style="color: black;--background: #b6b6b6;">-</ion-button>
             <span style="color: black;">{{ producto.cantidad }}</span>
-            <ion-button (click)="incrementarCantidad(producto)" style="color: black;">+</ion-button>
+            <ion-button (click)="incrementarCantidad(producto)" style="color: black;--background: #b6b6b6;">+</ion-button>
           </div>
         </div>
       </div>
