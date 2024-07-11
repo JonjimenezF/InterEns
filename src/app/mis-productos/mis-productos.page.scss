@@ -29,3 +29,27 @@
     --color: rgb(12, 12, 13);
   }
   
+  .custom-spinner {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    position: absolute; /* Posicionamiento absoluto para centrarlo */
+    top: 50%; /* Coloca el margen superior en el 50% del contenedor padre */
+    left: 50%; /* Coloca el margen izquierdo en el 50% del contenedor padre */
+    transform: translate(-50%, -50%); /* Centra el spinner */
+  }
+  .carta {
+    width: 100%; /* Asegura que el ion-card ocupe todo el ancho del ion-col */
+    max-width: 300px; /* Ajusta el ancho máximo del ion-card según tus necesidades */
+    display: inline-block; /* Permite centrar horizontalmente */
+    text-align: left; /* Alineación del texto dentro del ion-card */
+    margin: 0 auto; /* Centra horizontalmente el ion-card */
+    border: 1px solid #ccc; /* Borde para visualización */
+    border-radius: 8px; /* Borde redondeado */
+  }
+  .btn{
+    display: grid;
+    place-content: center;
+    --background: #d72e2e;
+    color: white;
+  }

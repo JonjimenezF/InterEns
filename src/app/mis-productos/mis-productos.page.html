@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-buttons slot="start" style="color: rgb(255, 255, 255);">
-      <ion-back-button style="--background: none" (click)="goBack()" defaultHref="home" text="" class="custom-back-button"></ion-back-button>
+    <ion-buttons slot="start">
+      <ion-back-button style="--background: none;color: white;" (click)="goBack()" defaultHref="home" text="" class="custom-back-button"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>    
 </ion-header>
@@ -14,8 +14,8 @@
   </div>
   <ion-content>
     <!-- Lista de productos -->
-    <ion-row *ngIf="productos.length > 0">
-      <ion-col *ngFor="let producto of productos" size="6">
+    <ion-row *ngIf="productos.length > 0" style="margin-top: 10px;" >
+      <ion-col *ngFor="let producto of productos" size="6" >
         <ion-card class="carta">
           <ion-card-header>
             <div class="image-container">
@@ -24,8 +24,9 @@
             <ion-card-title class="carta-titulo">{{ producto.nombre }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            Precio: {{ producto.precio }} <br>
+            {{ producto.precio }} <br>
           </ion-card-content>
+          <ion-button class="btn" (click)="eliminarProducto(producto)" >Eliminar</ion-button>
         </ion-card>
       </ion-col>
     </ion-row>

@@ -6,6 +6,7 @@ import { Router} from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ProductoService } from '../servicios/producto.service';
 import { Observable, catchError, forkJoin, of } from 'rxjs';
+import { AlertController, ToastController } from '@ionic/angular';
 @Component({
   selector: 'app-mis-productos',
   templateUrl: './mis-productos.page.html',
@@ -41,7 +42,9 @@ export class MisProductosPage implements OnInit {
   constructor(private router:Router,
               private http: HttpClient,
               private productService: ProductoService,
-              private navCtrl: NavController
+              private navCtrl: NavController,
+              private alertController: AlertController,
+              private toastController: ToastController
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
@@ -116,6 +119,66 @@ export class MisProductosPage implements OnInit {
       return null; // No pasar nada si no hay imagen
     }
   }
+
+
+  async eliminarProducto(producto: any) {
+    const idProducto = producto.id_producto;
+
+    const alert = await this.alertController.create({
+      header: 'Eliminar',
+      message: '¿Quieres eliminar el producto?',
+      buttons: [
+        {
+          text: 'Volver',
+          role: 'cancel',
+          handler: () => {
+            console.log('Eliminación cancelada');
+          }
+        },
+        {
+          text: 'Eliminar',
+          handler: async () => {
+            try {
+              const response = await fetch(`https://pystore-interens-7.onrender.com/Eliminarproducto/${idProducto}`, {
+                method: 'DELETE'
+              });
+
+              if (!response.ok) {
+                throw new Error('Failed to delete product');
+              }
+
+              console.log('Producto eliminado correctamente');
+              this.showToast('Producto eliminado correctamente');
+
+              // Recargar la página después de un breve tiempo
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000); // Recarga después de 1 segundo (ajústalo según sea necesario)
+
+            } catch (error) {
+              console.error('Error deleting product:', error);
+              this.showToast('Error al eliminar el producto');
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+  
+  
+
+  private async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 4000,
+      position: 'top'
+    });
+    toast.present();
+  }
+
+
 
   goBack() {
     this.navCtrl.back();
