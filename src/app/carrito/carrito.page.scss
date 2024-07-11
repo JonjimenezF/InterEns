@@ -1,6 +1,7 @@
 ion-toolbar {
   --background:rgba(10, 174, 122, 0.826);
 }
+
 ion-content {
   --background: none; /* Eliminar cualquier fondo por defecto */
   background-image: url('/assets/img/fondo2.png'); /* Fondo de imagen */
@@ -29,12 +30,7 @@ ion-content {
 }
 
 ion-item {
-
   --border-style: none; /* Elimina el estilo del borde */
-
-  /* Ajusta el padding interno si es necesario */
-
-
 }
 
 .delete-icon {
@@ -55,11 +51,13 @@ ion-item {
 .product-image {
   flex: 0 0 auto;
   margin-right: 15px;
+  max-width: 100px; /* Ajusta el tamaño máximo del contenedor de la imagen */
 }
 
-.product-image img {
-  max-width: 100px;
+.product-image ion-img {
+  max-width: 100%; /* La imagen se ajustará al tamaño del contenedor */
   height: auto;
+  display: block; /* Asegura que la imagen sea un bloque dentro del contenedor */
 }
 
 .product-details {

@@ -168,7 +168,7 @@ export class ProductoPage implements OnInit {
 
   getImagenProducto(producto: any): string | null {
     if (producto && producto.imagen && producto.imagen.length > 0 && producto.imagen[0].url_imagen) {
-      return 'http://localhost:5000/foto/' + producto.imagen[0].url_imagen;
+      return 'https://pystore-interens-7.onrender.com/foto/' + producto.imagen[0].url_imagen;
     } else {
       return null; // No pasar nada si no hay imagen
     }

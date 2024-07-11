@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonContent, IonItem, IonInput, IonTextarea, IonSelect, IonSelectOption, IonButton } from '@ionic/angular/standalone';
-import { IonicModule, NavController, ToastController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductoService } from '../servicios/producto.service';

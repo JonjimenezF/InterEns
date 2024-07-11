@@ -15,7 +15,7 @@ export class UsuarioService {
   URL_SUPEBASE ='https://gglsaoykhjniypthjgfc.supabase.co/rest/v1/';
   constructor(private _http: HttpClient) { }
 
-  private baseUrl = 'http://localhost:5000';  
+  private baseUrl = 'https://pystore-interens-7.onrender.com';  
 
   supebaseheads = new HttpHeaders()
   .set ('apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnbHNhb3lraGpuaXlwdGhqZ2ZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ1NTIwMTQsImV4cCI6MjAzMDEyODAxNH0.jmngoEfB87raLwTHDq1DI347a4owyHCqs75VSJUwMZo');

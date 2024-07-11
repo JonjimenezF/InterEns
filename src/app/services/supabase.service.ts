@@ -29,25 +29,31 @@ export class SupabaseService {
   }
 
   async signInWithGoogle() {
-    const { data, error } = await this.supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.origin + '/home',
-        queryParams: {
-          access_type: 'offline',
-          prompt: 'consent',
+    try {
+      const { data, error } = await this.supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: 'io.supabase.oauth://login',
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         },
-      },
-    });
+      });
 
-    if (error) {
-      console.error('Error durante el inicio de sesión:', error);
+      if (error) {
+        console.error('Error durante el inicio de sesión:', error);
+        return null;
+      }
+
+      console.log('Usuario autenticado:', data);
+      return { data };
+    } catch (error) {
+      console.error('Error durante el inicio de sesión:', (error as any).message);
       return null;
     }
-
-    return { data };
   }
-
+  
   async signUpWithEmail(email: string, password: string) {
     const { data, error } = await this.supabase.auth.signUp({
       email,

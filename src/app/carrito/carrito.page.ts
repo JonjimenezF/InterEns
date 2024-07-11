@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonHeader, IonToolbar, IonTitle, IonContent,IonButton,IonImg,IonBackButton, IonList, IonItem, IonSpinner, IonLabel, IonNote, IonButtons} from '@ionic/angular/standalone';
-import { IonicModule,AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { NavController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Observable, catchError, forkJoin, of } from 'rxjs';
@@ -18,7 +18,6 @@ import { ProductoService } from '../servicios/producto.service';
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -109,7 +108,7 @@ export class CarritoPage implements OnInit {
 
   getImagenProducto(producto: any): string | null {
     if (producto && producto.imagen && producto.imagen.length > 0 && producto.imagen[0].url_imagen) {
-      return 'http://localhost:5000/foto/' + producto.imagen[0].url_imagen;
+      return 'https://pystore-interens-7.onrender.com/foto/' + producto.imagen[0].url_imagen;
     } else {
       return null;
     }

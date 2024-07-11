@@ -10,7 +10,7 @@ import { subirImagen } from '../models/subirImagen';
 export class ProductoService {
 
   constructor(private _http: HttpClient) { }
-  private baseUrl = 'http://localhost:5000';  
+  private baseUrl = 'https://pystore-interens-7.onrender.com';  
   
   addProduct(product: producto): Observable<any> {
     return this._http.post<any>(this.baseUrl + '/agregar_producto', product).pipe(
