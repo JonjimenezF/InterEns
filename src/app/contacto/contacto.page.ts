@@ -30,7 +30,7 @@ export class ContactoPage implements OnInit {
       mensaje: this.mensaje
     };
 
-    this.http.post('http://localhost:5000/enviar-correo', data).subscribe(
+    this.http.post('https://pystore-interens-7.onrender.com/enviar-correo', data).subscribe(
       response => {
         console.log('Correo enviado:', response);
         alert('Correo enviado correctamente');
