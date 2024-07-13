@@ -66,6 +66,7 @@ export class SupabaseService {
 
     return { data, error };
   }
+
   async signInWithEmail(email: string, password: string) {
     try {
       const { data, error } = await this.supabase.auth.signInWithPassword({

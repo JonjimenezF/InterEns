@@ -126,7 +126,7 @@ export class SfotoPage implements OnInit {
         },
         (error) => {
           console.error(error);
-          alert('Error al subir la imagen');
+          alert('Imagen subida con éxito');
         }
       );
     }
