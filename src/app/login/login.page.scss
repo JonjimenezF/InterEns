@@ -1,64 +1,133 @@
-.color-white{
-    --background: white ; 
-}
-.color-text-black{
-    color: black ;
-    font-family:'Dotumche'
-}
-.color-text-white{
-    color: rgb(255, 255, 255);;
-    font-family:'Dotumche'
-}
-
-.color-text-grey{
-    color: rgb(151, 151, 151);;
-    font-family: 'Dotumche'
-}
-.centrar{
-    display:grid;
-    place-content: center;
-}
-.margen-top{
-   margin-top: 10px ;
-}
-
-.transparent-border {
-    border: 1px solid transparent; /* Establece el borde transparente */
-    border-color: rgb(151, 151, 151);
-    border-radius: 10px; /* Opcional: Agrega bordes redondeados */
-    --border-color: transparent;
-}
-
-.image-with-border {
-    border: 2px solid black; /* Establece un borde de 2px de grosor y color negro */
-    box-shadow: 2px 2px 4px rgba(173, 173, 173, 0.5); /* Agrega una sombra con desplazamiento de 2px horizontal y vertical, difuminación de 4px y opacidad de 0.5 */
-    border-color: rgb(235, 235, 235);
-    padding: 10px;
-    border-radius: 10px; /* Borde redondeado con un radio de 10px */
-}
-
-.button-with-image {
-    display: inline-block; /* Hace que el botón se comporte como un bloque en línea */
-    padding: 0; /* Elimina el relleno del botón para ajustarse al tamaño de la imagen */
-    border: none; /* Elimina el borde del botón */
-    width: fit-content; /* Ajusta el ancho del botón al tamaño del contenido (en este caso, la imagen) */
-    height: fit-content; /* Ajusta la altura del botón al tamaño del contenido (en este caso, la imagen) */
-
-
-}
-
-ion-input{
-    border-bottom: none;/* Elimina la línea que se genera debajo del texto */
-    --highlight-height: 0;
-}
-
-ion-back-button {
-    // Estilos adicionales aquí
-    --color: rgb(165, 17, 233); // Cambia el color del icono de flecha a negro
-    font-size: 18px; // Cambia el tamaño de la fuente del botón
-    margin-left: 10px; // Agrega un margen a la izquierda del botón
+  :host {
+    --bg: #0c0f13;         /* fondo más oscuro */
+    --card: #14161a;       /* cajas grises */
+    --stroke: #2b3036;     /* borde sutil */
+    --txt: #ffffff;        /* texto principal */
+    --muted: #b8bec6;      /* placeholder / iconos */
+    --accent: #1fd39a;     /* verde vibrante */
   }
-  
-  ion-buttons ion-back-button {
-    --color: black;
+
+  ion-content.login { --padding-start: 0;--padding-end: 0; --background: var(--bg); color: var(--txt); }
+
+  .wrap {
+    max-width: 360px;                 /* ancho estrecho como el mockup */
+    margin: 0 auto;
+    padding: 110px 18px 24px;
+    //box-shadow: -1px 1px 33px 0px rgb(91 91 91 / 50%);
+    border-radius: 24px;
   }
+  .logo{
+    padding:0px 0px 0px 25px;
+    width: 40%;
+    height: 40%;
+
+  }
+  @media (max-width: 420px){
+    :root{ --logo-size: 76px; }
+    .brand h1{ font-size: 26px; }
+  }
+
+  /* Marca */
+  .brand {
+    display:flex; align-items:center; justify-content:flex-start;
+    margin-bottom: 12px;           /* más compacto */
+  }
+  .brand-mark { width: 38px; height: 38px; }
+  .brand-mark svg { width:50%; height:50%;; }
+  .brand-name { margin:0; color:#fff; font-size:30px; font-weight:800; }
+
+  /* Etiquetas */
+  .stack {
+    display:block;
+    margin: 14px 2px 6px;
+    font-size: 13.5px;
+    color: #e5e9ef;
+    font-weight: 600;
+  }
+
+  .field { margin: 0 0 10px 0; }
+  /* === Alinear barras y anchos en Correo / Contraseña === */
+.input-shell{
+  position: relative;
+  display: flex; align-items: center;
+  gap: 0;                      /* evita que el gap recorte el input */
+  /* tu estilo existente: fondo, borde, etc. se mantiene */
+  --lead: 44px;                /* ancho fijo para el icono inicial */
+  --trail: 36px;               /* reserva para el botón ojo (derecha) */
+}
+
+/* Icono inicial (ion-img) ocupa SIEMPRE el mismo ancho */
+.input-shell > ion-img:first-child{
+  flex: 0 0 var(--lead);
+  width: var(--lead);
+  display: flex; align-items: center; justify-content: flex-start;
+  margin-right: 10px;          /* reemplaza el gap como separación */
+}
+
+/* (opcional) tamaño visual del png del icono */
+.input-shell > ion-img:first-child::part(image){
+  width: 20px; height: 20px; object-fit: contain;
+}
+
+/* El input se estira a tope y deja espacio para el ojo a la derecha */
+.input-shell ion-input{
+  flex: 1 1 0%;
+  min-width: 0;                /* CLAVE para que pueda crecer */
+  --padding-start: 0;
+  --padding-end: var(--trail); /* espacio para el botón ojo */
+}
+
+/* El botón ojo no participa del layout (no acorta el input) */
+.ghost{
+  position: absolute;
+  right: 10px; top: 50%;
+  transform: translateY(-50%);
+  border: none; background: transparent; color: var(--muted); padding: 0;
+}
+
+
+  /* Meta: checkbox + olvidar derecha */
+  .meta{
+    display:flex; align-items:center; gap:10px;
+    margin: 2px 2px 16px;
+  }
+  .remember{ color:#e5e9ef; font-size:14px; }
+  .forgot{
+    margin-left:68px;
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1.15;
+    text-align: right;
+    //max-width: 140px;                  /* permite salto de línea como tu imagen */
+    white-space: normal;
+  }
+
+  /* CTA verde */
+  .cta{
+    --background: var(--accent);
+    --color: #0b1115;
+    --border-radius: 12px;
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    --box-shadow: none;                /* sin glow */
+    font-weight: 700;
+    margin-top: 6px;
+  }
+
+  /* Botón Google con borde */
+  .google{
+    width:100%; margin-top: 12px;
+    background: var(--card);
+    border:1px solid var(--stroke);
+    border-radius: 12px;
+    color: #e9edf2;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    padding: 12px;
+    font-weight: 600;
+  }
+  .google .gmark{ width: 20px; height: 20px; display:grid; place-items:center; }
+  .google svg{ width:100%; height:100%; }
+
+
+  ion-input::part(native){ outline: none; }

@@ -18,13 +18,13 @@ export class SupabaseService {
     // Escuchar cambios en el estado de autenticación
     this.supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
       console.log('evento de supabase: ', event, session);
-      this.user.next(session?.user || null);
-      if (session === null) {
-        this.router.navigate(['/login'], { replaceUrl: true });
-      } else {
-        console.log('datos del usuario', session.user);
-        this.router.navigate(['/home'], { replaceUrl: true });
-      }
+      // this.user.next(session?.user || null);
+      // if (session === null) {
+      //   this.router.navigate(['/login'], { replaceUrl: true });
+      // } else {
+        // console.log('datos del usuario', session.user);
+        // this.router.navigate(['/home'], { replaceUrl: true });
+      // }
     });
   }
 

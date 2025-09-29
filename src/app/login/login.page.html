@@ -1,29 +1,76 @@
-<ion-header class="color-white">
-</ion-header>
-<ion-content class="color-white">  
-  <h2 class="color-text-black" style="padding-left: 40px;">Bienvenido!</h2>
-  <ion-card-content>
-      <div class="centrar" >
-        <p class="color-text-black">Email</p>
-        <ion-item class="color-white transparent-border" style="padding-right: 40px">
-          <ion-input style=" border: none;" class="color-text-grey" type = "text" placeholder="Ingresa tu Email" [(ngModel)]="email"></ion-input>
-        </ion-item>
-        <p class="color-text-black" style = "margin-top:10px">Clave</p>
-        <ion-item class="color-white transparent-border" style="padding-right: 40px">
-          <ion-input class="color-text-grey" type = "password" placeholder="Ingrese su Clave" [(ngModel)]="password" ></ion-input>
-        </ion-item>
-        <div>
-          <ion-button class="olvbtn" fill="clear" (click)="resetPassword()">¿Olvido su Contraseña?</ion-button>
-        </div>
-        <div class="centrar">
-        <ion-button class="color-text-white" style="margin-top:20px" fill="solid" shape="round" (click)="signIn()" [disabled]="!isFormValid()" >Inicio sesión</ion-button>
-        </div>
-        <span class="color-text-grey centrar" style="margin-top: 10px">--------------------- O ingrese con --------------------- </span>
-        <ion-button fill="clear" class="centrar" style="margin-top: 30px" (click)="signInWithGoogle()">
-          <ion-img class="image-with-border" src="assets/img/google.png" alt=""></ion-img> 
-        </ion-button> 
+<ion-content class="login" [fullscreen]="true">
+  <div class="wrap">
 
-        <p class="color-text-black" style="text-align: center;margin-top: 30px;">¿Aun no tiene cuenta?<a style="color: orange;" (click)="signUp()"><strong> Registrese</strong></a></p>
+    <!-- Marca -->
+    <div class="brand">
+      <ion-img class="logo" src="assets/nuevos_img/interens-logo.png "></ion-img>
+      <h1 class="brand-name">InterEns</h1>
     </div>
-  </ion-card-content>
+
+    <form (ngSubmit)="onSubmit()" [formGroup]="form" class="form">
+
+      <!-- Correo -->
+      <label class="stack">Correo electrónico</label>
+      <div class="field">
+        <div class="input-shell">
+
+          <ion-img src="assets/nuevos_img/correo-electronico.png"></ion-img>
+          <ion-input
+            formControlName="email"
+            type="email"
+            placeholder="correo@ejemplo.com"
+            autocomplete="email">
+          </ion-input>
+        </div>
+      </div>
+
+      <!-- Contraseña -->
+      <label class="stack">Contraseña</label>
+      <div class="field">
+        <div class="input-shell">
+          <ion-img src="assets/nuevos_img/cerrado.png"></ion-img>
+          <!-- <ion-icon name="lock-closed-outline" aria-hidden="true"></ion-icon> -->
+          <ion-input
+            formControlName="password"
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="•••••••"
+            autocomplete="current-password">
+          </ion-input>
+          <button type="button" class="ghost" (click)="toggleShowPassword()" aria-label="Mostrar/Ocultar">
+            <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Meta: Recordarme + Olvidaste -->
+      <div class="meta">
+        <a class="forgot" (click)="onForgot()">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <!-- CTA principal -->
+      <ion-button
+        class="cta"
+        expand="block"
+        shape="round"
+        size="large"
+        type="submit"
+        [disabled]="form.invalid">
+        Iniciar sesión
+      </ion-button>
+
+      <!-- Google -->
+      <button type="button" class="google" (click)="continueWithGoogle()">
+        <span class="gmark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.6 31.7 29.3 35 24 35 16.8 35 11 29.2 11 22s5.8-13 13-13c3.3 0 6.3 1.2 8.6 3.2l5.7-5.7C34.7 3 29.6 1 24 1 11.8 1 2 10.8 2 23s9.8 22 22 22c11.5 0 21-8.3 21-22 0-1.3-.1-2.7-.4-3.5z"/>
+            <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.9 18.9 13 24 13c3.3 0 6.3 1.2 8.6 3.2l5.7-5.7C34.7 3 29.6 1 24 1 16.2 1 9.5 5.5 6.3 14.7z"/>
+            <path fill="#4CAF50" d="M24 45c5.2 0 10-1.8 13.6-4.9l-6.3-5.2C29.2 36.5 26.8 37 24 37c-5.2 0-9.6-3.3-11.2-7.9l-6.6 5.1C9.4 41.9 16.1 45 24 45z"/>
+            <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-1.3 3.8-5.1 7-11.3 7-5.2 0-9.6-3.3-11.2-7.9l-6.6 5.1C9.4 41.9 16.1 45 24 45c11.5 0 21-8.3 21-22 0-1.3-.1-2.7-.4-3.5z"/>
+          </svg>
+        </span>
+        <span>Continuar con Google</span>
+      </button>
+
+    </form>
+  </div>
 </ion-content>

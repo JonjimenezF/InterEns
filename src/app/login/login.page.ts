@@ -1,15 +1,14 @@
-//login.page.ts
-import { Component, OnInit } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonHeader, IonContent, IonCardContent, IonItem, IonInput, IonButton, IonImg } from '@ionic/angular/standalone';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
-import { Router } from '@angular/router';
-import { userLogin } from '../models/userLogin';
-import { UsuarioService } from '../servicios/usuario.service';
-import { lastValueFrom } from 'rxjs';
-import { SupabaseService } from '../services/supabase.service';
-
+import { FormBuilder, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import {
+  IonContent, IonList, IonItem, IonInput, IonIcon, IonButton, IonCheckbox,
+  IonImg, IonSpinner, IonLabel
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-login',
@@ -17,91 +16,59 @@ import { SupabaseService } from '../services/supabase.service';
   styleUrls: ['./login.page.scss'],
   standalone: true,
   imports: [
-    IonHeader,
-    IonContent,
-    IonCardContent,
-    IonItem,
-    IonInput,
-    IonButton,
-    IonImg,
-    CommonModule, 
-    FormsModule]
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    IonContent, IonList, IonItem, IonInput, IonIcon, IonButton, IonCheckbox, IonImg, IonSpinner, IonLabel
+  ]
 })
 export class LoginPage {
-  email = '';
-  password = '';
-  // toastController: any;
+  showPassword = false;
 
-  constructor(private supabaseService: SupabaseService,
-              private router: Router,
-              private toastController: ToastController
-              ) {}
+  form = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    remember: [false]
+  });
 
-  async signInWithGoogle() {
-    try {
-      const userInfo = await this.supabaseService.signInWithGoogle();
-      console.log(userInfo);
-    } catch (error) {
-      console.error('Error durante el inicio de sesión:', error);
+  constructor(
+    private fb: FormBuilder,
+    private toastCtrl: ToastController
+  ) {}
+
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  async onSubmit() {
+    if (this.form.invalid) {
+      const t = await this.toastCtrl.create({
+        message: 'Completa tu correo y contraseña.',
+        duration: 1800,
+        color: 'dark'
+      });
+      return t.present();
     }
-  }
-
-  async signUp() {
-    // Expresión regular para validar el formato de correo electrónico
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
-    // Verifica si el correo electrónico coincide con el formato esperado
-    if (!emailRegex.test(this.email)) {
-      this.showToast('Correo electrónico inválido');
-      return;
-    }
-  
-    try {
-      // Llama a signUpWithEmail solo si el correo electrónico es válido
-      const { data } = await this.supabaseService.signUpWithEmail(this.email, this.password);
-      console.log('Usuario registrado:', data);
-      this.showToast('Registro exitoso!');
-      // Redirige o realiza alguna acción después de un registro exitoso
-    } catch (error) {
-      this.showToast('Error en el registro');
-      console.error('Error en el registro:', error);
-    }
-  }
-
-  async signIn() {
-      const { data, error } = await this.supabaseService.signInWithEmail(this.email, this.password);
-      if (error) {
-        this.showToast('El correo que ingresaste, o la contraseña, son inválidos. Por favor, vuelve a intentar');
-        console.error('Error en el inicio de sesión:', error);
-      } else {
-        console.log('Inicio de sesión exitoso:', data);
-        this.showToast('Inicio de sesión exitoso!');
-        this.router.navigate(['/home'], { state: { userInfo: data } });
-      }
-  }
-
-  //inhabilida el boton
-  isFormValid(): boolean {
-    return !!this.email;
-  }
-  
-  async resetPassword() {
-    const { data, error } = await this.supabaseService.resetPassword(this.email);
-    if (error) {
-      console.error('Error al solicitar restablecimiento de contraseña:', error);
-      this.showToast(error.message || "Error al enviar el correo de recuperación. Por favor, inténtalo más tarde.");
-    } else {
-      console.log('Solicitud de restablecimiento de contraseña enviada:', data);
-      this.showToast("Correo de recuperación enviado. Revisa tu bandeja de entrada.");
-    }
-  }
-
-  private async showToast(message: string) {
-    const toast = await this.toastController.create({
-      message,
-      duration: 4000,
-      position: 'top'
+    // Aquí integras tu lógica real de login (Firebase, Supabase, API, etc.)
+    const t = await this.toastCtrl.create({
+      message: 'Iniciando sesión…',
+      duration: 1200,
+      color: 'dark'
     });
-    toast.present();
+    t.present();
+  }
+
+  onForgot() {
+    // Navega a tu pantalla de recuperación de contraseña
+    console.log('Recuperar contraseña');
+  }
+  showPwd = false;
+  togglePwd() { this.showPwd = !this.showPwd; }
+  async signIn() { /* conecta tu auth aquí */ }
+
+
+  continueWithGoogle() {
+    // Llama a tu flujo de Google (Capacitor + Firebase Auth, por ejemplo)
+    console.log('Sign in with Google');
   }
 }
