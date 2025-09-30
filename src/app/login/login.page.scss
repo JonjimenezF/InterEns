@@ -1,64 +1,188 @@
-.color-white{
-    --background: white ; 
-}
-.color-text-black{
-    color: black ;
-    font-family:'Dotumche'
-}
-.color-text-white{
-    color: rgb(255, 255, 255);;
-    font-family:'Dotumche'
-}
-
-.color-text-grey{
-    color: rgb(151, 151, 151);;
-    font-family: 'Dotumche'
-}
-.centrar{
-    display:grid;
-    place-content: center;
-}
-.margen-top{
-   margin-top: 10px ;
+/**************************************
+ * 1) Variables (paleta del mock)
+ **************************************/
+:root {
+  --bg-app:  #0f0f0f;
+  --card:    #14161a;
+  --border:  #2b3036;
+  --txt:     #e8eaed;
+  --txt-dim: #8d93a3;
+  --txt-lab: #c7cdd5;
+  --accent:  #22c55e;  /* verde botón y enlace */
 }
 
-.transparent-border {
-    border: 1px solid transparent; /* Establece el borde transparente */
-    border-color: rgb(151, 151, 151);
-    border-radius: 10px; /* Opcional: Agrega bordes redondeados */
-    --border-color: transparent;
+/**************************************
+ * 2) Lienzo / Tarjeta / Marca
+ **************************************/
+ion-content { --background: var(--bg-app); color: var(--txt); }
+
+.wrap {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 24px;
 }
 
-.image-with-border {
-    border: 2px solid black; /* Establece un borde de 2px de grosor y color negro */
-    box-shadow: 2px 2px 4px rgba(173, 173, 173, 0.5); /* Agrega una sombra con desplazamiento de 2px horizontal y vertical, difuminación de 4px y opacidad de 0.5 */
-    border-color: rgb(235, 235, 235);
-    padding: 10px;
-    border-radius: 10px; /* Borde redondeado con un radio de 10px */
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: #111315;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(49, 56, 61, 0.4);
 }
 
-.button-with-image {
-    display: inline-block; /* Hace que el botón se comporte como un bloque en línea */
-    padding: 0; /* Elimina el relleno del botón para ajustarse al tamaño de la imagen */
-    border: none; /* Elimina el borde del botón */
-    width: fit-content; /* Ajusta el ancho del botón al tamaño del contenido (en este caso, la imagen) */
-    height: fit-content; /* Ajusta la altura del botón al tamaño del contenido (en este caso, la imagen) */
+.brand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
 
-
+  .logo { width: 50px; height: 50px; }
+  h1 { margin: 0; font-size: 28px; font-weight: 800; color: #fff; }
 }
 
-ion-input{
-    border-bottom: none;/* Elimina la línea que se genera debajo del texto */
-    --highlight-height: 0;
+/**************************************
+ * 3) Formulario (lista / labels / inputs)
+ **************************************/
+/* ion-item sin su fondo propio */
+.field {
+  --background: transparent;
+  padding: 0;
+  margin: 0 0 10px 0;
+  border: none;
 }
 
-ion-back-button {
-    // Estilos adicionales aquí
-    --color: rgb(165, 17, 233); // Cambia el color del icono de flecha a negro
-    font-size: 18px; // Cambia el tamaño de la fuente del botón
-    margin-left: 10px; // Agrega un margen a la izquierda del botón
-  }
+/* Caja del input (gris + borde fino) — usa selector específico para ganar */
+.field .input-shell {
+  width: 90%; 
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background: #14161a !important;     /* gris exacto de la caja */
+  border: 1px solid #2b3036 !important;
+  border-radius: 10px;
+  padding: 5px 10px;
+}
+
+/* Focus: solo cambia color de borde (sin glow) */
+.field .input-shell:focus-within {
+  border-color: #22c55e !important;
+  box-shadow: none;
+}
+
+/* Iconos + input */
+.field .input-shell ion-icon { color: #9aa0a6; }
+.field .input-shell .eye {
+  margin-left: auto;
+  --padding-start: 0;
+  --padding-end: 0;
+  color: #9aa0a6;
+}
+.field .input-shell ion-input {
+  flex: 1;
+  --color: #e8eaed;
+  --padding-start: 0;
+  --padding-end: 0;
+  font-size: 15px;
   
-  ion-buttons ion-back-button {
-    --color: black;
+}
+.field .input-shell ion-input::part(placeholder) { color: #8d93a3; }
+
+/* Label encima */
+.stack {
+  display: block;
+  margin: 12px 2px 9px;
+  color: #c7cdd5;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/**************************************
+ * 4) Opciones (recordarme + olvidaste)
+ **************************************/
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 2px 16px;
+  font-size: 14px;
+  color: #cfd3da;
+
+  .remember {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    ion-checkbox {
+      --size: 18px;
+      --border-color: #8a909e;
+      --checkbox-background-checked: transparent;
+      --checkmark-color: var(--accent);
+    }
   }
+
+  .forgot {
+    color: var(--accent) !important;   /* asegura verde */
+    text-decoration: none;
+    font-weight: 600;
+  }
+}
+
+/**************************************
+ * 5) Botones
+ **************************************/
+/* principal (verde plano, sin mayúsculas forzadas) */
+ion-button.btn-primary {
+  --background: #22c55e !important;
+  --color: #ffffff;
+  --border-radius: 10px;
+  height: 48px;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: .2px;
+  --box-shadow: none;
+}
+
+/* botón Google: fondo y borde del mock */
+ion-button.btn-google {
+  --background: #15181c;
+  --border-color: var(--border) !important;
+  --border-width: 1px;
+  --border-radius: 10px;
+  --color: var(--txt);
+  height: 48px;
+  font-weight: 600;
+  text-transform: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+
+  .g-logo { width: 20px; height: 20px; }
+}
+
+/**************************************
+ * 6) Separador “o”
+ **************************************/
+.separator {
+  margin: 16px 0;
+  position: relative;
+  text-align: center;
+  color: #8d93a3;
+  font-size: 12px;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #262b2f;
+  }
+  &::before { left: 0; }
+  &::after  { right: 0; }
+}

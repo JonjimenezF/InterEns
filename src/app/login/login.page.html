@@ -1,29 +1,60 @@
-<ion-header class="color-white">
-</ion-header>
-<ion-content class="color-white">  
-  <h2 class="color-text-black" style="padding-left: 40px;">Bienvenido!</h2>
-  <ion-card-content>
-      <div class="centrar" >
-        <p class="color-text-black">Email</p>
-        <ion-item class="color-white transparent-border" style="padding-right: 40px">
-          <ion-input style=" border: none;" class="color-text-grey" type = "text" placeholder="Ingresa tu Email" [(ngModel)]="email"></ion-input>
-        </ion-item>
-        <p class="color-text-black" style = "margin-top:10px">Clave</p>
-        <ion-item class="color-white transparent-border" style="padding-right: 40px">
-          <ion-input class="color-text-grey" type = "password" placeholder="Ingrese su Clave" [(ngModel)]="password" ></ion-input>
-        </ion-item>
-        <div>
-          <ion-button class="olvbtn" fill="clear" (click)="resetPassword()">¿Olvido su Contraseña?</ion-button>
-        </div>
-        <div class="centrar">
-        <ion-button class="color-text-white" style="margin-top:20px" fill="solid" shape="round" (click)="signIn()" [disabled]="!isFormValid()" >Inicio sesión</ion-button>
-        </div>
-        <span class="color-text-grey centrar" style="margin-top: 10px">--------------------- O ingrese con --------------------- </span>
-        <ion-button fill="clear" class="centrar" style="margin-top: 30px" (click)="signInWithGoogle()">
-          <ion-img class="image-with-border" src="assets/img/google.png" alt=""></ion-img> 
-        </ion-button> 
+<ion-content [fullscreen]="true">
+  <div class="wrap">
+    <section class="card">
+      <!-- Marca centrada -->
+      <div class="brand">
+        <ion-img src="assets/nueva_iconos/logo.png" alt="InterEns" class="logo"></ion-img>
+        <h1>InterEns</h1>
+      </div>
 
-        <p class="color-text-black" style="text-align: center;margin-top: 30px;">¿Aun no tiene cuenta?<a style="color: orange;" (click)="signUp()"><strong> Registrese</strong></a></p>
-    </div>
-  </ion-card-content>
+      <form [formGroup]="form" (ngSubmit)="signIn()">
+          <!-- Correo -->
+          <ion-item class="field" lines="none">
+            <ion-label class="stack" position="stacked">Correo electrónico</ion-label>
+            <div class="input-shell">
+              <ion-img src="assets/nueva_iconos/correo-electronico (1).png"></ion-img>
+              <ion-input formControlName="email" type="email" placeholder="correo@ejemplo.com"></ion-input>
+            </div>
+          </ion-item>
+
+          <ion-item class="field" lines="none">
+            <ion-label class="stack" position="stacked">Contraseña</ion-label>
+            <div class="input-shell">
+               <ion-img src="assets/nueva_iconos/cerrar.png"></ion-img>
+              <ion-input formControlName="password" [type]="showPwd ? 'text' : 'password'" placeholder="••••••••"></ion-input>
+              <ion-button fill="clear" size="small" class="eye" (click)="togglePwd()">
+                <ion-icon [name]="showPwd ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-item>
+
+
+        <!-- Opciones -->
+        <div class="options">
+          <label class="remember">
+            <ion-checkbox formControlName="remember"></ion-checkbox>
+            <span>Recordarme</span>
+          </label>
+          <a class="forgot" href="#">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <!-- Botón principal -->
+        <ion-button type="submit" expand="block" color="primary" class="btn-primary">
+          Iniciar sesión
+        </ion-button>
+
+        <!-- Separador -->
+        <div class="separator"><span>o</span></div>
+
+        <!-- Botón Google -->
+        <ion-button expand="block" fill="outline" class="btn-google">
+          <ion-img
+            src="https://www.svgrepo.com/show/355037/google.svg"
+            alt="Google" class="g-logo">
+          </ion-img>
+          Continuar con Google
+        </ion-button>
+      </form>
+    </section>
+  </div>
 </ion-content>
