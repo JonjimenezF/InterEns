@@ -1,278 +1,508 @@
-ion-toolbar {
-  --background:rgba(10, 174, 122, 0.826);
-}
-/* Estilos para el ion-content */
-ion-content {
-  --background: none; /* Elimina cualquier fondo por defecto */
-  background-image: url('/assets/img/fondo2.png'); /* Ruta de la imagen de fondo */
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  overflow-y: auto; /* Habilitar el desplazamiento vertical */
-}
+// //   :host {
+// //     --bg: #0c0f13;         /* fondo más oscuro */
+// //     --card: #14161a;       /* cajas grises */
+// //     --stroke: #2b3036;     /* borde sutil */
+// //     --txt: #ffffff;        /* texto principal */
+// //     --muted: #b8bec6;      /* placeholder / iconos */
+// //     --accent: #1fd39a;     /* verde vibrante */
+// //   }
 
-/* Estilos para el cuerpo */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-image: url('/assets/img/foto1.png');
-  background-color: #f5f5f5; /* Fondo gris claro para todo el cuerpo */
-}
 
-/* Contenedor principal */
-.main-container {
-  background-color: #ffffff;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 1200px;
-  padding: 20px;
-  color: #000000; /* Texto negro para todo el contenedor principal */
-}
 
-/* Contenedor de FAQs */
+// // /* Estilos para el ion-content */
+// // ion-content {
+// //   --background: none; /* Elimina cualquier fondo por defecto */
+ 
+// //   background-size: cover;
+// //   background-repeat: no-repeat;
+// //   background-position: center;
+// //   display: flex;
+// //   flex-direction: column;
+// //   align-items: center;
+// //   padding: 20px;
+// //   overflow-y: auto; /* Habilitar el desplazamiento vertical */
+// // }
+
+// // /* Estilos para el cuerpo */
+// // body {
+// //   font-family: Arial, sans-serif;
+// //   margin: 0;
+// //   padding: 0;
+// //   background-image: url('/assets/img/foto1.png');
+// //   background-color: #f5f5f5; /* Fondo gris claro para todo el cuerpo */
+// // }
+
+// // /* Contenedor principal */
+// // .main-container {
+// //   background-color: #ffffff;
+// //   border-radius: 5px;
+// //   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+// //   width: 100%;
+// //   max-width: 1200px;
+// //   padding: 20px;
+// //   color: #000000; /* Texto negro para todo el contenedor principal */
+// // }
+
+// // /* Contenedor de FAQs */
+// // .faq-container {
+// //   margin-bottom: 20px;
+// //   max-width: 400px; /* Asegúrate de que tenga el mismo ancho máximo que los productos */
+// //   width: 100%; /* Asegúrate de que ocupe el 100% del contenedor */
+// //   background-color: #ffffff;
+// //   border-radius: 10px;
+// //   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+// //   padding: 20px; /* Aumenta el padding para hacer los divs más grandes */
+// //   margin-left: 19px;
+// // }
+
+// // /* Título del FAQ */
+// // .faq-container h1 {
+// //   text-align: center;
+// //   color: #000000; /* Texto negro para el título */
+// //   margin-bottom: 20px;
+// // }
+
+// // /* Estilos de cada ítem de FAQ */
+// // .faq-item {
+// //   margin-bottom: 10px;
+// // }
+
+// // /* Pregunta de FAQ */
+// // .faq-question {
+// //   background-color: #f9f9f9;
+// //   padding: 10px 15px;
+// //   border: 1px solid #13772c;
+// //   border-radius: 5px;
+// //   display: flex;
+// //   justify-content: space-between;
+// //   cursor: pointer;
+// //   transition: background-color 0.3s ease;
+// //   color: #000000; /* Texto negro para las preguntas */
+// // }
+
+// // .faq-question:hover {
+// //   background-color: #f1f1f1;
+// // }
+
+// // /* Respuesta de FAQ */
+// // .faq-answer {
+// //   padding: 10px 15px;
+// //   border: 1px solid #dddddd;
+// //   border-top: none;
+// //   border-radius: 0 0 5px 5px;
+// //   display: none;
+// //   background-color: #ffffff;
+// //   color: #000000; /* Texto negro para las respuestas */
+// // }
+
+// // /* Flechas */
+// // .arrow {
+// //   font-size: 18px;
+// //   transition: transform 0.3s ease;
+// //   color: #000000; /* Flechas negras */
+// // }
+
+// // .arrow.up {
+// //   transform: rotate(180deg);
+// // }
+
+// // /* Estilos responsivos */
+// // @media (max-width: 768px) {
+// //   .faq-container {
+// //     width: 90%;
+// //   }
+// // }
+
+// // /* Contenedor principal del banner */
+// // /* Contenedor principal del banner */
+// // .main-banner {
+// //   width: 100%;
+// //   display: flex;
+// //   justify-content: center;
+// //   align-items: center;
+// // }
+
+// // /* Estilos del carrusel de productos */
+// // .product-carousel {
+// //   display: flex;
+// //   flex-wrap: wrap;
+// //   gap: 20px;
+// //   justify-content: center;
+// // }
+
+// // /* Estilos de cada producto */
+// // .product {
+// //   background-color: #ffffff;
+// //   border-radius: 10px;
+// //   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+// //   padding: 30px; /* Aumenta el padding para hacer los divs más grandes */
+// //   max-width: 400px; /* Aumenta el ancho máximo del producto */
+// //   width: 100%;
+// //   cursor: pointer;
+// //   text-align: center;
+// //   transition: transform 0.3s ease;
+// //   color: #000000; /* Texto negro para los productos */
+// // }
+
+// // .product:hover {
+// //   transform: translateY(-10px); /* Aumenta el efecto de hover */
+// // }
+
+// // /* Estilos del contenido del producto */
+// // .product-content {
+// //   display: flex;
+// //   align-items: flex-start;
+// //   gap: 20px;
+// // }
+
+// // /* Ajuste de la imagen */
+// // .imge {
+// //   flex: 1.5; /* La imagen ocupará más espacio */
+// //   width: auto; /* Para que la imagen mantenga sus proporciones */
+// //   max-width: 200px; /* Aumenta el tamaño máximo de la imagen */
+// // }
+
+// // /* Ajuste del contenido de texto */
+// // .text-content {
+// //   flex: 2; /* El contenido de texto ocupará más espacio */
+// //   display: flex;
+// //   flex-direction: column;
+// // }
+
+// // .text-content h2 {
+// //   margin: 0 0 10px 0; /* Margen inferior para separar el h2 del p */
+// //   font-size: 2em; /* Aumenta el tamaño del texto */
+// // }
+
+// // .text-content p {
+// //   margin: 0;
+// //   font-size: 1.2em; /* Aumenta el tamaño del texto */
+// // }
+
+// // /* Estilos responsivos */
+// // @media (max-width: 768px) {
+// //   .faq-container, .main-banner, .product {
+// //     width: 90%;
+// //   }
+
+// //   .product-carousel {
+// //     flex-direction: column;
+// //     align-items: center;
+// //   }
+// // }
+
+// // @media (min-width: 769px) and (max-width: 1200px) {
+// //   .product {
+// //     width: calc(50% - 20px);
+// //   }
+// // }
+
+// // /* Estilos de la barra de desplazamiento */
+// // ::-webkit-scrollbar {
+// //   width: 100px;
+// // }
+
+// // ::-webkit-scrollbar-track {
+// //   background: #f1f1f1;
+// // }
+
+// // ::-webkit-scrollbar-thumb {
+// //   background-color: #888;
+// //   border-radius: 100px;
+// // }
+
+// // ::-webkit-scrollbar-thumb:hover {
+// //   background-color: #555;
+// // }
+
+// // /* Estilos de la barra de desplazamiento para Firefox */
+// // body {
+// //   scrollbar-width: thin; /* Delgado en general */
+// //   scrollbar-color: #0f0505 #030000; /* Color thumb #888 y color track #f1f1f1 */
+// // }
+
+// // /* Establecer estilos específicos para el thumb en Firefox */
+// // body::-webkit-scrollbar-thumb {
+// //   background-color: #888;
+// // }
+
+// // body::-webkit-scrollbar-thumb:hover {
+// //   background-color: #555;
+// // }
+
+// // /* Contenedor principal del banner */
+// // .main-banner {
+// //   width: 100%;
+// //   display: flex;
+// //   justify-content: center;
+// //   align-items: center;
+// // }
+
+// // /* Estilos del carrusel de productos */
+// // .product-carousel {
+// //   display: flex;
+// //   flex-direction: column;
+// //   gap: 20px;
+// // }
+
+// // /* Estilos de cada producto */
+// // .product {
+// //   display: flex;
+// //   justify-content: center;
+// //   align-items: center;
+// //   padding: 20px;
+// //   border: 1px solid #8e8e8e;
+// //   border-radius: 10px;
+// //   background-color: #fff;
+// //   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+// // }
+
+// // .product-content {
+// //   display: flex;
+// //   align-items: flex-start;
+// //   gap: 20px;
+// // }
+
+// // .imge {
+// //   flex: 1.5; /* La imagen ocupará más espacio */
+// //   width: auto; /* Para que la imagen mantenga sus proporciones */
+// //   max-width: 150px; /* Ajusta este valor según tus necesidades */
+// // }
+
+// // .text-content {
+// //   flex: 2; /* El contenido de texto ocupará más espacio */
+// //   display: flex;
+// //   flex-direction: column;
+// // }
+
+// // .text-content h2 {
+// //   margin: 0 0 10px 0; /* Margen inferior para separar el h2 del p */
+// //   font-size: 1.5em; /* Ajusta el tamaño del texto según tus necesidades */
+// // }
+
+// // .text-content p {
+// //   margin: 0;
+// //   font-size: 1em; /* Ajusta el tamaño del texto según tus necesidades */
+// // }
+// :host {
+//   --bg: #0c0f13;         /* fondo oscuro base */
+//   --card: #14161a;       /* cajas grises */
+//   --stroke: #2b3036;     /* borde sutil */
+//   --txt: #ffffff;        /* texto principal */
+//   --muted: #b8bec6;      /* placeholder / iconos */
+//   --accent: #1fd39a;     /* verde vibrante */
+// }
+
+// ion-content.login {
+//   --padding-start: 0;
+//   --padding-end: 0;
+//   --background: var(--bg);
+//   color: var(--txt);
+// }
+
+// /* Contenedor principal centrado */
+// .wrap {
+//   max-width: 360px;          /* ancho limitado */
+//   margin: 0 auto;
+//   padding: 80px 18px 24px;   /* más arriba para bajar contenido */
+//   border-radius: 24px;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   gap: 16px;
+// }
+
+// /* Título principal */
+// .brand-name {
+//   margin: 0;
+//   color: #fff;
+//   font-size: 30px;
+//   font-weight: 800;
+//   text-align: center;
+// }
+
+// /* FAQ Items */
+// .faq-item {
+//   width: 100%;
+//   background: var(--card);
+//   border: 1px solid var(--stroke);
+//   border-radius: 12px;
+//   margin-bottom: 12px;
+//   cursor: pointer;
+//   overflow: hidden;
+
+//   .faq-question {
+//     padding: 14px 16px;
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     font-weight: 600;
+//     color: var(--txt);
+//     font-size: 14px;
+//   }
+
+//   .faq-answer {
+//     padding: 12px 16px;
+//     font-size: 13px;
+//     color: var(--muted);
+//     display: none; /* se muestra al hacer toggle */
+//   }
+
+//   &.active .faq-answer {
+//     display: block;
+//   }
+
+//   .arrow {
+//     transition: transform 0.3s;
+//   }
+
+//   &.active .arrow {
+//     transform: rotate(180deg);
+//   }
+// }
+
+// /* Botón Comenzar */
+// .cta {
+//   --background: var(--accent);
+//   --color: #0b1115;
+//   --border-radius: 12px;
+//   --padding-top: 14px;
+//   --padding-bottom: 14px;
+//   --box-shadow: none;
+//   font-weight: 700;
+//   margin-top: 16px;
+//   width: 100%;
+//   max-width: 300px;
+// }
+
+// /* Responsive móvil */
+// @media (max-width: 420px) {
+//   .brand-name {
+//     font-size: 26px;
+//   }
+
+//   .faq-item .faq-question {
+//     font-size: 13px;
+//   }
+
+//   .faq-item .faq-answer {
+//     font-size: 12px;
+//   }
+// }
+
+
 .faq-container {
-  margin-bottom: 20px;
-  max-width: 400px; /* Asegúrate de que tenga el mismo ancho máximo que los productos */
-  width: 100%; /* Asegúrate de que ocupe el 100% del contenedor */
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  padding: 20px; /* Aumenta el padding para hacer los divs más grandes */
-  margin-left: 19px;
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
-/* Título del FAQ */
-.faq-container h1 {
-  text-align: center;
-  color: #000000; /* Texto negro para el título */
-  margin-bottom: 20px;
-}
-
-/* Estilos de cada ítem de FAQ */
 .faq-item {
-  margin-bottom: 10px;
-}
-
-/* Pregunta de FAQ */
-.faq-question {
-  background-color: #f9f9f9;
-  padding: 10px 15px;
-  border: 1px solid #13772c;
-  border-radius: 5px;
-  display: flex;
-  justify-content: space-between;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  color: #000000; /* Texto negro para las preguntas */
-}
+  transition: transform 0.2s ease;
 
-.faq-question:hover {
-  background-color: #f1f1f1;
-}
-
-/* Respuesta de FAQ */
-.faq-answer {
-  padding: 10px 15px;
-  border: 1px solid #dddddd;
-  border-top: none;
-  border-radius: 0 0 5px 5px;
-  display: none;
-  background-color: #ffffff;
-  color: #000000; /* Texto negro para las respuestas */
-}
-
-/* Flechas */
-.arrow {
-  font-size: 18px;
-  transition: transform 0.3s ease;
-  color: #000000; /* Flechas negras */
-}
-
-.arrow.up {
-  transform: rotate(180deg);
-}
-
-/* Estilos responsivos */
-@media (max-width: 768px) {
-  .faq-container {
-    width: 90%;
-  }
-}
-
-/* Contenedor principal del banner */
-/* Contenedor principal del banner */
-.main-banner {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Estilos del carrusel de productos */
-.product-carousel {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
-
-/* Estilos de cada producto */
-.product {
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  padding: 30px; /* Aumenta el padding para hacer los divs más grandes */
-  max-width: 400px; /* Aumenta el ancho máximo del producto */
-  width: 100%;
-  cursor: pointer;
-  text-align: center;
-  transition: transform 0.3s ease;
-  color: #000000; /* Texto negro para los productos */
-}
-
-.product:hover {
-  transform: translateY(-10px); /* Aumenta el efecto de hover */
-}
-
-/* Estilos del contenido del producto */
-.product-content {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-/* Ajuste de la imagen */
-.imge {
-  flex: 1.5; /* La imagen ocupará más espacio */
-  width: auto; /* Para que la imagen mantenga sus proporciones */
-  max-width: 200px; /* Aumenta el tamaño máximo de la imagen */
-}
-
-/* Ajuste del contenido de texto */
-.text-content {
-  flex: 2; /* El contenido de texto ocupará más espacio */
-  display: flex;
-  flex-direction: column;
-}
-
-.text-content h2 {
-  margin: 0 0 10px 0; /* Margen inferior para separar el h2 del p */
-  font-size: 2em; /* Aumenta el tamaño del texto */
-}
-
-.text-content p {
-  margin: 0;
-  font-size: 1.2em; /* Aumenta el tamaño del texto */
-}
-
-/* Estilos responsivos */
-@media (max-width: 768px) {
-  .faq-container, .main-banner, .product {
-    width: 90%;
+  &:hover {
+    transform: translateY(-3px);
   }
 
-  .product-carousel {
-    flex-direction: column;
+   border: 2px solid #28a745; // verde estilo bootstrap
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: #218838; // verde más oscuro al pasar el mouse
+  }
+
+  .faq-question {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
+
+    ion-icon {
+      font-size: 1.4rem;
+      margin-right: 0.6rem;
+      color: #a511e9; // tono morado corporativo
+    }
+
+    .arrow {
+      font-size: 1.2rem;
+      color: #888;
+      margin-left: auto;
+    }
+  }
+
+  .faq-answer {
+    margin-top: 0.8rem;
+    display: none; // oculto por defecto
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.5;
+
+    &.active {
+      display: block;
+    }
+  }
+}
+.faq-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 0.6rem;
+}
+
+.header-bg {
+  text-align: center;
+  color: #fff;
+  padding: 2rem 1rem 5rem; // espacio para que no choque con el contenedor blanco
+
+  .welcome-text {
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+
+  .sub-text {
+    font-size: 1rem;
+    opacity: 0.9;
   }
 }
 
-@media (min-width: 769px) and (max-width: 1200px) {
-  .product {
-    width: calc(50% - 20px);
+.curved-container {
+  background: #fff;
+  border-top-left-radius: 215px;
+  border-top-right-radius: 215px;
+  padding: 100px;
+  margin-top: 30px; // sube un poco sobre el contenido de arriba
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+   border: 2px solid #28a745; // verde estilo bootstrap
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: #218838; // verde más oscuro al pasar el mouse
   }
-}
+    .contact-details {
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: #333;
+      text-align: center;
+    }
 
-/* Estilos de la barra de desplazamiento */
-::-webkit-scrollbar {
-  width: 100px;
-}
+    p {
+      margin: 10px 0;
+      font-size: 15px;
+      color: #555;
+      line-height: 1.4;
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
+      strong {
+        color: #222;
+      }
+    }
 
-::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 100px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
-}
-
-/* Estilos de la barra de desplazamiento para Firefox */
-body {
-  scrollbar-width: thin; /* Delgado en general */
-  scrollbar-color: #0f0505 #030000; /* Color thumb #888 y color track #f1f1f1 */
-}
-
-/* Establecer estilos específicos para el thumb en Firefox */
-body::-webkit-scrollbar-thumb {
-  background-color: #888;
-}
-
-body::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
-}
-
-/* Contenedor principal del banner */
-.main-banner {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Estilos del carrusel de productos */
-.product-carousel {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Estilos de cada producto */
-.product {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  border: 1px solid #8e8e8e;
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.product-content {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.imge {
-  flex: 1.5; /* La imagen ocupará más espacio */
-  width: auto; /* Para que la imagen mantenga sus proporciones */
-  max-width: 150px; /* Ajusta este valor según tus necesidades */
-}
-
-.text-content {
-  flex: 2; /* El contenido de texto ocupará más espacio */
-  display: flex;
-  flex-direction: column;
-}
-
-.text-content h2 {
-  margin: 0 0 10px 0; /* Margen inferior para separar el h2 del p */
-  font-size: 1.5em; /* Ajusta el tamaño del texto según tus necesidades */
-}
-
-.text-content p {
-  margin: 0;
-  font-size: 1em; /* Ajusta el tamaño del texto según tus necesidades */
+   
+  }
 }

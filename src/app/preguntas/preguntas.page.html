@@ -1,7 +1,7 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
     <ion-title>
-      Preguntas
+      Preguntas Frecuentes
     </ion-title>
     <ion-buttons slot="start">
       <ion-back-button (click)="goBack()" defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
@@ -11,7 +11,7 @@
 
 <ion-content class="ion-padding">
     <div class="faq-container">
-      <h1>Preguntas frecuentes</h1>
+     
       <div class="faq-item" (click)="toggleAnswer('faq-answer1')">
         <div class="faq-question">
           <span>¿Qué es InterEns?</span>
@@ -58,35 +58,105 @@
         </div>
       </div>
     </div>
-    <div class="main-banner">
-      <div class="product-carousel">
-        <div class="product">
-          <div class="product-content">
-            <ion-img class="imge" src="assets/img/tarjeta.png"></ion-img>
-            <div class="text-content">
-              <h2>Elige cómo pagar</h2>
-              <p>Con InterEns paga con tus tarjetas de débito o crédito</p>
-            </div>
-          </div>
-        </div>
-        <div class="product">
-          <div class="product-content">
-            <ion-img class="imge" src="assets/img/envio.png"></ion-img>
-            <div class="text-content">
-              <h2>Envío gratis</h2>
-              <p>Con solo estar registrado en InterEns, por compras sobre $30.000</p>
-            </div>
-          </div>
-        </div>
-        <div class="product">
-          <div class="product-content">
-            <ion-img class="imge" src="assets/img/comprepro.png"></ion-img>
-            <div class="text-content">
-              <h2>Compra Protegida</h2>
-              <p>Si el producto no es lo que esperabas o no llega, contáctanos</p>
-            </div>
-          </div>
-        </div>
+     -->
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Preguntas Frecuentes</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button 
+        (click)="goBack()" 
+        defaultHref="home" 
+        text="" 
+        color="rgb(165, 17, 233)">
+      </ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="faq-container">
+
+    <div class="faq-item" (click)="toggleAnswer('faq-answer1')">
+      <div class="faq-question">
+        <img src="assets/icon/confused_12529778.png" alt="Confused Icon" class="faq-icon" />
+        <span>¿Qué es InterEns?</span>
+        <span class="arrow">&#9660;</span>
+      </div>
+      <div class="faq-answer" id="faq-answer1">
+        <p>
+          InterEns es una plataforma digital diseñada para facilitar la donación, intercambio,
+          venta y reparación de enseres domésticos en desuso. Nuestra misión es promover prácticas 
+          sostenibles y contribuir a la economía circular.
+        </p>
       </div>
     </div>
+
+    <div class="faq-item" (click)="toggleAnswer('faq-answer2')">
+      <div class="faq-question">
+        <img src="assets/icon/money_171780.png" alt="Money Icon" class="faq-icon" />
+        <span>¿Cuánto cuesta usar la aplicación InterEns?</span>
+        <span class="arrow">&#9660;</span>
+      </div>
+      <div class="faq-answer" id="faq-answer2">
+        <p>
+          Registrarse y usar la aplicación InterEns es completamente gratuito. 
+          Sin embargo, algunas transacciones, como ventas, pueden tener tarifas asociadas.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-item" (click)="toggleAnswer('faq-answer3')">
+      <div class="faq-question">
+        <img src="assets/icon/preguntar.png" alt="Pregunta Icon" class="faq-icon" />
+        <span>¿Qué tipo de enseres domésticos puedo publicar en la plataforma?</span>
+        <span class="arrow">&#9660;</span>
+      </div>
+      <div class="faq-answer" id="faq-answer3">
+        <p>
+          Puedes publicar cualquier tipo de enser doméstico, incluyendo muebles, 
+          electrodomésticos, utensilios de cocina, y otros artículos de hogar.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-item" (click)="toggleAnswer('faq-answer4')">
+      <div class="faq-question">
+        <img src="assets/icon/buscar.png" alt="Buscar Icon" class="faq-icon" />
+        <span>¿Cómo puedo buscar enseres específicos en la plataforma?</span>
+        <span class="arrow">&#9660;</span>
+      </div>
+      <div class="faq-answer" id="faq-answer4">
+        <p>
+          La aplicación cuenta con un sistema de categorías y filtros que te permite buscar enseres 
+          específicos o servicios de reparación de manera fácil y rápida.
+        </p>
+      </div>
+    </div>
+
+    <div class="faq-item" (click)="toggleAnswer('faq-answer5')">
+      <div class="faq-question">
+        <img src="assets/icon/donar.png" alt="Donar Icon" class="faq-icon" />
+        <span>¿Qué debo hacer si quiero donar un enser?</span>
+        <span class="arrow">&#9660;</span>
+      </div>
+      <div class="faq-answer" id="faq-answer5">
+        <p>
+          Simplemente selecciona la opción de donación al publicar tu enser en la aplicación. 
+          Otros usuarios interesados podrán contactarte para coordinar la entrega.
+        </p>
+      </div>
+    </div>
+
+  </div> 
+
+  <!-- Aquí va tu contenedor curvo -->
+  <div class="curved-container">
+    <div class="contact-details">
+      <h2>Información de Contacto</h2>
+      <p><strong>Dirección:</strong> Av. Principal 123, Valparaíso, Chile</p>
+      <p><strong>Teléfono:</strong> +569 12345678</p>
+    
+    </div>
+  </div>
 </ion-content>
