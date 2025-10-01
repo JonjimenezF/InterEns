@@ -59,7 +59,6 @@
       </div>
     </div>
      -->
-
 <ion-header>
   <ion-toolbar>
     <ion-title>Preguntas Frecuentes</ion-title>
@@ -77,6 +76,9 @@
 <ion-content class="ion-padding">
   <div class="faq-container">
 
+
+
+    <!-- PREGUNTAS FRECUENTES -->
     <div class="faq-item" (click)="toggleAnswer('faq-answer1')">
       <div class="faq-question">
         <img src="assets/icon/confused_12529778.png" alt="Confused Icon" class="faq-icon" />
@@ -84,11 +86,11 @@
         <span class="arrow">&#9660;</span>
       </div>
       <div class="faq-answer" id="faq-answer1">
-        <p>
+        <li>
           InterEns es una plataforma digital diseñada para facilitar la donación, intercambio,
           venta y reparación de enseres domésticos en desuso. Nuestra misión es promover prácticas 
           sostenibles y contribuir a la economía circular.
-        </p>
+        </li>
       </div>
     </div>
 
@@ -99,64 +101,82 @@
         <span class="arrow">&#9660;</span>
       </div>
       <div class="faq-answer" id="faq-answer2">
-        <p>
+        <li>
           Registrarse y usar la aplicación InterEns es completamente gratuito. 
           Sin embargo, algunas transacciones, como ventas, pueden tener tarifas asociadas.
-        </p>
+        </li>
       </div>
     </div>
 
+
+
     <div class="faq-item" (click)="toggleAnswer('faq-answer3')">
       <div class="faq-question">
-        <img src="assets/icon/preguntar.png" alt="Pregunta Icon" class="faq-icon" />
-        <span>¿Qué tipo de enseres domésticos puedo publicar en la plataforma?</span>
+        <img src="assets/icon/quepuedes.png" alt="Money Icon" class="faq-icon" />
+        <span>¿Qué puedes hacer en la aplicación?</span>
         <span class="arrow">&#9660;</span>
       </div>
       <div class="faq-answer" id="faq-answer3">
-        <p>
-          Puedes publicar cualquier tipo de enser doméstico, incluyendo muebles, 
-          electrodomésticos, utensilios de cocina, y otros artículos de hogar.
-        </p>
+        <li>
+          Filtrar por categorías para encontrar artículos específicos.
+        </li>
+        <li>Sistema de valoraciones y reseñas para transacciones seguras.</li>
+        <li>Publicar, vender y donar enseres.</li>
+        <li>Acumular puntos para canjearlo por un producto de tu interes.</li>
+        <li>Realizar misiones que te permitan ganar puntos.</li>
       </div>
     </div>
 
     <div class="faq-item" (click)="toggleAnswer('faq-answer4')">
       <div class="faq-question">
-        <img src="assets/icon/buscar.png" alt="Buscar Icon" class="faq-icon" />
-        <span>¿Cómo puedo buscar enseres específicos en la plataforma?</span>
+        <img src="assets/icon/preguntar.png" alt="Pregunta Icon" class="faq-icon" />
+        <span>¿Qué tipo de enseres domésticos puedo publicar en la plataforma?</span>
         <span class="arrow">&#9660;</span>
       </div>
       <div class="faq-answer" id="faq-answer4">
-        <p>
-          La aplicación cuenta con un sistema de categorías y filtros que te permite buscar enseres 
-          específicos o servicios de reparación de manera fácil y rápida.
-        </p>
+        <li>
+          Puedes publicar cualquier tipo de enser doméstico, incluyendo muebles, 
+          electrodomésticos, utensilios de cocina, y otros artículos de hogar.
+        </li>
       </div>
     </div>
 
     <div class="faq-item" (click)="toggleAnswer('faq-answer5')">
       <div class="faq-question">
+        <img src="assets/icon/buscar.png" alt="Buscar Icon" class="faq-icon" />
+        <span>¿Cómo puedo buscar enseres específicos en la plataforma?</span>
+        <span class="arrow">&#9660;</span>
+      </div>
+      <div class="faq-answer" id="faq-answer5">
+        <li>
+          La aplicación cuenta con un sistema de categorías y filtros que te permite buscar enseres 
+          específicos o servicios de reparación de manera fácil y rápida.
+        </li>
+      </div>
+    </div>
+
+    <div class="faq-item" (click)="toggleAnswer('faq-answer6')">
+      <div class="faq-question">
         <img src="assets/icon/donar.png" alt="Donar Icon" class="faq-icon" />
         <span>¿Qué debo hacer si quiero donar un enser?</span>
         <span class="arrow">&#9660;</span>
       </div>
-      <div class="faq-answer" id="faq-answer5">
-        <p>
+      <div class="faq-answer" id="faq-answer6">
+        <li>
           Simplemente selecciona la opción de donación al publicar tu enser en la aplicación. 
           Otros usuarios interesados podrán contactarte para coordinar la entrega.
-        </p>
+        </li>
       </div>
     </div>
 
   </div> 
 
-  <!-- Aquí va tu contenedor curvo -->
+  <!-- Contenedor curvo de contacto -->
   <div class="curved-container">
     <div class="contact-details">
       <h2>Información de Contacto</h2>
       <p><strong>Dirección:</strong> Av. Principal 123, Valparaíso, Chile</p>
       <p><strong>Teléfono:</strong> +569 12345678</p>
-    
     </div>
   </div>
 </ion-content>
