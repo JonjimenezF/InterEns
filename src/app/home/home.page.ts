@@ -161,6 +161,13 @@ export class HomePage {
     }
   }
 
+  selectedCard: string | null = null;
+
+selectCard(card: string) {
+  this.selectedCard = card;
+}
+
+
   ngOnInit() {
     this.supabaseService.user$.subscribe(user => {
       if (user) {

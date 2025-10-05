@@ -44,31 +44,89 @@
     </div>
 
     <!-- Acciones principales -->
-    <div class="grid-actions">
-      <div class="action-card" (click)="goSubirfoto()">
-        <ion-icon name="arrow-up-circle-outline"></ion-icon>
-        <p>Vender / Donar</p>
-      </div>
-      <div class="action-card" (click)="goProducto()">
-        <ion-icon name="search-outline"></ion-icon>
-        <p>Canjear</p>
-      </div>
-      <div class="action-card" (click)="puntoLimpio()">
-        <ion-icon name="recycle-outline"></ion-icon>
-        <p>Reciclar</p>
-      </div>
-      <div class="action-card" (click)="contacto()">
-        <ion-icon name="heart-outline"></ion-icon>
-        <p>Misiones</p>
-      </div>
-       <div class="action-card" (click)="contacto()">
-        <ion-icon name="heart-outline"></ion-icon>
-        <p>Retiro</p>
-      </div>
-       <div class="action-card" (click)="contacto()">
-        <ion-icon name="heart-outline"></ion-icon>
-        <p>Perfil</p>
-      </div>
-    </div>
+   <div class="grid-actions">
+  <div
+    class="action-card"
+    [class.selected]="selectedCard === 'donar'"
+    (click)="selectCard('donar'); goSubirfoto()"
+  >
+  <img src="assets/icon/vender.png" alt="Donar Icon" class="faq-icon" />
+    
+    <p>Vender / Donar</p>
+  </div>
+
+  <div
+    class="action-card"
+    [class.selected]="selectedCard === 'canjear'"
+    (click)="selectCard('canjear'); goProducto()"
+  >
+  <img src="assets/icon/coupon.png" alt="Donar Icon" class="faq-icon" />
+   
+    <p>Canjear Puntos</p>
+  </div>
+
+  <div
+    class="action-card"
+    [class.selected]="selectedCard === 'tarjetas'"
+    (click)="selectCard('tarjetas'); puntoLimpio()"
+  >
+  
+  <img src="assets/icon/tarjeta.png" alt="Donar Icon" class="faq-icon" />
+
+    <p>Mis Tarjetas</p>
+  </div>
+
+  <div
+    class="action-card"
+    [class.selected]="selectedCard === 'misiones'"
+    (click)="selectCard('misiones'); contacto()"
+  >
+  
+  <img src="assets/icon/mision.png" alt="Donar Icon" class="faq-icon" />
+    
+    <p>Misiones</p>
+  </div>
+
+  <div
+    class="action-card"
+    [class.selected]="selectedCard === 'contacto'"
+    (click)="selectCard('contacto'); contacto()"
+  >
+    
+  <img src="assets/icon/contacto.png" alt="Donar Icon" class="faq-icon" />
+    <p>Contacto</p>
+  </div>
+
+  <div
+    class="action-card"
+    [class.selected]="selectedCard === 'perfil'"
+    (click)="selectCard('perfil'); perfil()"
+  >
+    
+  <img src="assets/icon/perfil.png" alt="Donar Icon" class="faq-icon" />
+    <p>Perfil</p>
+  </div>
+
+  <div
+    class="action-card"
+    [class.selected]="selectedCard === 'retiro'"
+    (click)="selectCard('retiro'); contacto()"
+  >
+    
+  <img src="assets/icon/retiro.png" alt="Donar Icon" class="faq-icon" />
+    <p>Retiro Producto</p>
+  </div>
+
+  <div
+    class="action-card"
+    [class.selected]="selectedCard === 'faq'"
+    (click)="selectCard('faq'); preguntas()"
+  >
+     
+  <img src="assets/icon/faq.png" alt="Donar Icon" class="faq-icon" />
+    <p>Preguntas Frecuentes</p>
+  </div>
+</div>
+
   </ion-content>
 </div>

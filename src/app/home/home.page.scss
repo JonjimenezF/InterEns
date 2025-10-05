@@ -84,3 +84,43 @@ ion-content {
   transform: translateY(-5px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 }
+
+.action-card {
+  background: var(--card);
+  padding: 25px 15px;
+  border-radius: 12px;
+  text-align: center;
+  border: 2px solid transparent; /* por defecto sin borde */
+  transition: all 0.25s ease;
+}
+
+.action-card ion-icon {
+  font-size: 32px;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.action-card p {
+  color: var(--txt);
+  font-size: 14px;
+}
+
+/* Hover */
+.action-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Seleccionado (borde verde) */
+.action-card.selected {
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 10px rgba(31, 211, 154, 0.5);
+  transform: scale(1.03);
+}
+
+
+.faq-icon {
+  width:60px;
+  height: 60px;
+  margin-right: 0.6rem;
+}
