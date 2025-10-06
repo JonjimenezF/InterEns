@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AuthCallbackPage } from './auth-callback/auth-callback.page';
+
 
 ///import { RecuperarPage } from './recuperar/recuperar.page';
 
@@ -10,7 +12,9 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
     
   },
- 
+
+  { path: 'auth/callback', component: AuthCallbackPage },
+
   {    
     path: '',
     redirectTo: 'portada',

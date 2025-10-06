@@ -1,44 +1,64 @@
-<!-- <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>registrar</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="register" [fullscreen]="true">
+  <div class="wrap">
 
-<ion-content [fullscreen]="true">
-  <ion-input class="color-text-grey" type = "text" placeholder="Ingrese su email" [(ngModel)]="user.email"></ion-input>
-  <ion-input class="color-text-grey" type = "text" placeholder="Ingrese su nombre" [(ngModel)]="user.nombre" ></ion-input>
-  <ion-input class="color-text-grey" type = "text" placeholder="Ingrese su apellido" [(ngModel)]="user.apellido" ></ion-input>
-  <ion-input class="color-text-grey" type = "password" placeholder="Ingrese su password" [(ngModel)]="user.password"></ion-input> 
-  <ion-button class="btn" (click)="regis(user)">Login</ion-button>
-  <label for="">
-      <ion-input type="text" placeholder=" " class="input"></ion-input>
-      <span></span>
-  </label>
-</ion-content> -->
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Formulario Tipo Google</ion-title>
-  </ion-toolbar>
-</ion-header>
+    <!-- Marca -->
+    <div class="brand">
+      <ion-img class="logo" src="assets/nuevos_img/interens-logo.png"></ion-img>
+      <h1 class="brand-name">InterEns</h1>
+    </div>
 
-<ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-content>
-      <form (submit)="submitForm()">
-        <ion-item>
-          <ion-label position="stacked" style="color: black;">Nombre:</ion-label>
-          <ion-input type="text" name="nombre" [(ngModel)]="formData.nombre" required style="color: black;"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="stacked" style="color: black;">Email:</ion-label>
-          <ion-input type="email" name="email" [(ngModel)]="formData.email" required style="color: black;"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="stacked" style="color: black;">Mensaje:</ion-label>
-          <ion-textarea name="mensaje" [(ngModel)]="formData.mensaje" required style="color: black;"></ion-textarea>
-        </ion-item>
-        <ion-button type="submit" expand="block" color="success">Enviar</ion-button>
-      </form>
-    </ion-card-content>
-  </ion-card>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+
+      <!-- Nombre completo -->
+      <label class="stack">Nombre completo</label>
+      <div class="field">
+        <div class="input-shell">
+          <ion-img class="lead" src="assets/nuevos_img/usuario.png"></ion-img>
+          <ion-input formControlName="nombre_completo" placeholder="Tu nombre" autocomplete="name"></ion-input>
+        </div>
+      </div>
+
+      <!-- Correo -->
+      <label class="stack">Correo electrónico</label>
+      <div class="field">
+        <div class="input-shell">
+          <ion-img class="lead" src="assets/nuevos_img/correo-electronico.png"></ion-img>
+          <ion-input type="email" formControlName="email" placeholder="correo@ejemplo.com" autocomplete="email"></ion-input>
+        </div>
+      </div>
+
+      <!-- Contraseña -->
+      <label class="stack">Contraseña</label>
+      <div class="field">
+        <div class="input-shell">
+          <ion-img class="lead" src="assets/nuevos_img/cerrado.png"></ion-img>
+          <ion-input
+            [type]="showPass ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Mínimo 6 caracteres"
+            autocomplete="new-password">
+          </ion-input>
+          <button type="button" class="ghost" (click)="showPass = !showPass" aria-label="Mostrar/Ocultar">
+            <ion-icon [name]="showPass ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Teléfono -->
+      <label class="stack">Teléfono (opcional)</label>
+      <div class="field">
+        <div class="input-shell">
+          <ion-img class="lead" src="assets/nuevos_img/telefono.png"></ion-img>
+          <ion-input formControlName="telefono" placeholder="+56 9 ..." autocomplete="tel"></ion-input>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <ion-button class="cta" expand="block" shape="round" size="large"
+                  type="submit" [disabled]="form.invalid || loading">
+        {{ loading ? 'Creando…' : 'CREAR CUENTA' }}
+      </ion-button>
+    </form>
+
+  </div>
 </ion-content>
