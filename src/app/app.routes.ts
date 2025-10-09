@@ -61,10 +61,7 @@ export const routes: Routes = [
     path: 'carrito',
     loadComponent: () => import('./carrito/carrito.page').then( m => m.CarritoPage)
   },
-  {
-    path: 'categoria',
-    loadComponent: () => import('./categoria/categoria.page').then( m => m.CategoriaPage)
-  },
+  
   {
     path: 'preguntas',
     loadComponent: () => import('./preguntas/preguntas.page').then( m => m.PreguntasPage)
@@ -76,9 +73,10 @@ export const routes: Routes = [
   {
     path: 'mis-productos',
     loadComponent: () => import('./mis-productos/mis-productos.page').then( m => m.MisProductosPage)
-  },
-  {
-    path: 'reciclaje',
-    loadComponent: () => import('./reciclaje/reciclaje.page').then( m => m.ReciclajePage)
-  },
+  },  {
+    path: 'puntos',
+    loadComponent: () => import('./puntos/puntos.page').then( m => m.PuntosPage)
+  }
+
+ 
 ];

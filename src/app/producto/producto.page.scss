@@ -1,163 +1,240 @@
-ion-toolbar {
-  --background:rgba(10, 174, 122, 0.826);
+
+
+:host {
+  --bg: #0c0f13;         /* fondo oscuro */
+  --card: #14161a;       /* cajas */
+  --stroke: #2b3036;     /* bordes sutiles */
+  --txt: #ffffff;        /* texto principal */
+  --muted: #b8bec6;      /* texto secundario */
+  --accent: #1fd39a;     /* verde vibrante */
 }
-/* Estilos para el contenido */
+
+/* ======== GENERAL ======== */
 ion-content {
-  --background: none; /* Eliminar cualquier fondo por defecto */
-  background-image: url('/assets/img/fondo2.png'); /* Fondo de imagen */
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  --background: var(--bg);
+  color: var(--txt);
+  padding-bottom: 20px;
 }
 
-* {
-  --background: #ffffff; /* Cambia el color de fondo aquí */
+ion-toolbar {
+  --background: var(--card);
+  color: var(--txt);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
-.color-text-black {
-  color: black;
-  font-family: 'Roboto';
+ion-back-button {
+  --color: var(--accent);
 }
 
-ion-menu::part(backdrop) {
-  background-color: rgba(43, 1, 43, 0.5);
-}
-
-ion-menu::part(container) {
-  border-radius: 0 20px 20px 0;
-  box-shadow: 4px 0px 16px rgba(94, 94, 94, 0.18);
-}
-
-.vertical-buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Alinea los botones a la izquierda */
-}
-
-.transparent-border {
-  border: 2px solid transparent; /* Establece el borde transparente */
-  border-color: rgb(255, 255, 255);
-  border-radius: 10px; /* Opcional: Agrega bordes redondeados */
-  box-shadow: 2px 2px 4px rgba(122, 122, 122, 0.5);
-}
-
-ion-buttons ion-back-button {
-  --color: black;
-}
-
-.boton-mostrar-todos {
-  --background: #3880ff; /* Color de fondo del botón Mostrar todos */
-}
-
-.boton-categoria {
-  --background: #32db64; /* Color de fondo por defecto de los botones de categoría */
-  --background-hover: #2bb355; /* Color de fondo al pasar el cursor */
-  --color: #ffffff; /* Color del texto */
-}
-
-
-/* Contenido de los productos */
-ion-card.carta {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-  border-radius: 15px;
-  border: #000000;
-}
-
-.card-content {
-  display: flex;
-  flex-direction: row; /* Disposición horizontal */
-  align-items: center; /* Alinea verticalmente los elementos */
-  padding: 10px; /* Espacio dentro del ion-card */
-  width: 100%; /* Asegura que el contenido ocupe todo el ancho del card */
-}
-
-.image-container {
-  flex: 0 0 auto; /* La imagen no debe crecer ni encoger */
-  width: 150px; /* Ancho fijo para la imagen */
-  height: 150px; /* Alto fijo para la imagen */
-  margin-right: 10px; /* Espacio a la derecha de la imagen */
-}
-
-.product-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Ajusta la imagen sin distorsión */
-  border-radius: 8px; /* Opcional: Añade bordes redondeados a la imagen */
-}
-
-.details-container {
-  flex: 1 1 auto; /* Los detalles ocupan todo el espacio restante */
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Centra verticalmente el contenido dentro de details-container */
-}
-
-h2, p {
-  margin: 0;
-  white-space: nowrap; /* Evita que los textos largos se rompan */
-  overflow: hidden; /* Oculta el texto que sobresale */
-  text-overflow: ellipsis; /* Añade puntos suspensivos al final del texto cortado */
-}
-
-.custom-button {
-  align-self: flex-start; /* Alinea el botón a la izquierda dentro del espacio disponible */
-  margin-top: 40px; /* Espacio sobre el botón */
-  --background: #4CAF50; /* Color de fondo del botón */
-  --background-activated: #45a049; /* Color de fondo cuando se presiona el botón */
-  --color: white; /* Color del texto del botón */
-  --border-radius: 4px; /* Bordes redondeados del botón */
-  --padding-start: 10px; /* Padding interno del botón */
-  --padding-end: 10px; /* Padding interno del botón */
-  --padding-top: 8px; /* Padding interno del botón */
-  --padding-bottom: 8px; /* Padding interno del botón */
-  --box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15); /* Sombra del botón */
-  --transition: background-color 0.3s ease; /* Transición suave para el fondo */
-}
-
-.custom-spinner {
-  width: 70px;
-  height: 70px;
-  margin: auto;
-  position: absolute; /* Posicionamiento absoluto para centrarlo */
-  top: 50%; /* Coloca el margen superior en el 50% del contenedor padre */
-  left: 50%; /* Coloca el margen izquierdo en el 50% del contenedor padre */
-  transform: translate(-50%, -50%); /* Centra el spinner */
+ion-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
 }
 
 .cart-icon {
-  width: 30px; /* Ajusta el tamaño según sea necesario */
-  height: 30px;
-  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+  width: 28px;
+  height: 28px;
+  filter: brightness(0) invert(1);
 }
 
-.category-button-container {
-  padding: 10px;
+/* ======== BUSCADOR ======== */
+.search-section {
+  padding: 16px;
 }
 
-.category-button {
+.search-container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* --- buscador limpio con borde ovalado --- */
+.searchbar {
+  --background: transparent;
+  --color: var(--txt);
+  --placeholder-color: var(--muted);
+  flex: 1;
+
+  border: 2px solid var(--stroke); /* borde gris sutil */
+  border-radius: 25px; /* forma ovalada */
+  padding: 0 12px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  /* efecto verde al escribir */
+  &:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 8px rgba(31, 211, 154, 0.4);
+  }
+
+  ion-input,
+  input {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* --- botón de filtro a juego --- */
+/* --- botón de filtro con imagen personalizada --- */
+/* --- botón de filtro completamente redondo y limpio --- */
+/* --- botón de filtro completamente redondo, funcional y con ícono grande --- */
+/* --- botón de filtro completamente redondo, funcional y con ícono grande --- */
+.filter-button {
+  background: transparent;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  height: 52px;
+  width: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  margin: 5px; // Margin around each button
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+  box-shadow: none;
+
+  /* ícono PNG */
+  .filter-icon {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1); /* blanco */
+    transition: all 0.3s ease;
+    pointer-events: none; /* permite clic en toda el área */
+  }
+
+  &:hover,
+  &:focus,
+  &:active {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: 0 0 12px rgba(31, 211, 154, 0.6);
+    transform: scale(1.05);
+
+    .filter-icon {
+      filter: brightness(0) invert(0); /* negro sobre verde */
+    }
+  }
 }
 
-.category-button ion-button {
-  --border-radius: 10px;
-  --padding-start: 10px;
-  --padding-end: 10px;
-  --padding-top: 10px;
-  --padding-bottom: 10px;
-  font-size: 14px;
-  white-space: normal; // Allow text to wrap
-  word-wrap: break-word; // Break long words
-  display: block;
-  width: calc(150% - 20px); // Ensure button takes full width with margin
+/* ======== MODAL DE FILTRO ======== */
+ion-modal {
+  --background: var(--card);
+  color: var(--txt);
+
+  &::part(content) {
+    background: var(--card);
+  }
+
+  ion-toolbar {
+    --background: var(--card);
+    border-bottom: 1px solid var(--stroke);
+  }
 }
 
-.category-text {
-  padding: 0 !important; // Remove default padding to better fit content
+.custom-item {
+  --background: var(--bg);
+  border: 1px solid var(--stroke);
+  border-radius: 10px;
+  margin-bottom: 12px;
+
+  &:focus-within {
+    border-color: var(--accent);
+  }
+
+  ion-label {
+    color: var(--muted);
+  }
+
+  ion-input {
+    --color: var(--txt);
+  }
+}
+
+/* --- botón verde global --- */
+.custom-button {
+  --background: var(--accent);
+  --color: #0b1115;
+  font-weight: 700;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  width: 100%;
+
+  &:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 10px rgba(31, 211, 154, 0.4);
+  }
+}
+
+/* ======== PRODUCTOS ======== */
+.product-list {
+  padding: 16px;
+}
+
+.product-card {
+  background: var(--card);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(31, 211, 154, 0.4);
+  }
+
+  .product-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
+
+  .product-info {
+    padding: 12px;
+    text-align: center;
+
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--txt);
+      margin: 0 0 6px;
+    }
+
+    .price {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+  }
+}
+
+/* ======== SPINNER ======== */
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.custom-spinner {
+  --color: var(--accent);
+}
+
+/* ======== RESPONSIVE ======== */
+@media (min-width: 768px) {
+  .product-card {
+    .product-image {
+      height: 220px;
+    }
+  }
+}
+
+*:focus {
+  outline: none !important;
 }
 

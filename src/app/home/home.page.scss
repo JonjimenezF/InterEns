@@ -124,3 +124,10 @@ ion-content {
   height: 60px;
   margin-right: 0.6rem;
 }
+
+.menu-btn {
+  color: #1fd39a; /* o el color que quieras, ej: #1fd39a */
+  font-weight: 600; /* opcional, para que resalte */
+  text-align: left; /* opcional, para que quede alineado a la izquierda */
+  margin-bottom: 10px; /* espacio entre botones */
+}

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonContent, IonImg } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonContent, IonImg} from '@ionic/angular/standalone';
 import { NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-preguntas',
@@ -24,7 +25,8 @@ import { NavController } from '@ionic/angular';
 export class PreguntasPage implements OnInit {
   respuestasVisibles: boolean[] = [];
 
-  constructor(private navCtrl: NavController,) { }
+  constructor(private navCtrl: NavController,private router: Router) { }
+  
 
   ngOnInit(): void {
   }
@@ -43,5 +45,21 @@ export class PreguntasPage implements OnInit {
   }
   goBack() {
     this.navCtrl.back();
+  }
+
+  goProducto(): void {
+    this.router.navigate(['/producto']);
+  }
+
+  home(): void {
+    this.router.navigate(['/home']);
+  }
+
+  perfil(): void {
+    this.router.navigate(['/perfil']);
+  }
+
+  salir(): void {
+    // Acción al salir
   }
 }

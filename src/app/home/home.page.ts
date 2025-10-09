@@ -205,11 +205,12 @@ selectCard(card: string) {
     this.router.navigate(['/contacto']);
   }
 
-  reciclaje() {
-    this.router.navigate(['/reciclaje']);
+   puntos() {
+    this.router.navigate(['/puntos']);
   }
 
-  puntoLimpio() {}
+
+  
 
   goSubirfoto() {
     console.log("Dentro", this.userInfo);

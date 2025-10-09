@@ -2,16 +2,16 @@
 <ion-menu contentId="main-content">
   <ion-header>
     <ion-toolbar>
-      <ion-title>Menú</ion-title>
+   
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
     <div class="vertical-buttons">
-      <ion-button fill="clear" (click)="puntoLimpio()" class="menu-btn">Punto limpio</ion-button>
+      <ion-button fill="clear" (click)="perfil()" class="menu-btn" >Perfil</ion-button>
       <ion-button fill="clear" (click)="goMisProductos()" class="menu-btn">Mis Productos</ion-button>
       <ion-button fill="clear" (click)="preguntas()" class="menu-btn">Preguntas frecuentes</ion-button>
       <ion-button fill="clear" (click)="contacto()" class="menu-btn">Contacto</ion-button>
-      <ion-button fill="clear" (click)="perfil()" class="menu-btn">Perfil</ion-button>
+      
     </div>
   </ion-content>
 </ion-menu>
@@ -38,10 +38,18 @@
     </div>
 
     <!-- Monedas -->
-    <div class="balance-card">
+    <div class="balance-card"> 
+      <div
+    class="action-card"
+    [class.selected]="selectedCard === 'puntos'"
+    (click)="selectCard('puntos'); puntos()"
+  >
       <p class="color-muted">Puntos Disponibles</p>
+     
       <h2 class="accent">0 InterCoins</h2>
     </div>
+    </div>
+  
 
     <!-- Acciones principales -->
    <div class="grid-actions">
@@ -50,9 +58,9 @@
     [class.selected]="selectedCard === 'donar'"
     (click)="selectCard('donar'); goSubirfoto()"
   >
-  <img src="assets/icon/vender.png" alt="Donar Icon" class="faq-icon" />
+  <img src="assets/icon/upload_6440607.png" alt="Donar Icon" class="faq-icon" />
     
-    <p>Vender / Donar</p>
+    <p>Subir producto</p>
   </div>
 
   <div
@@ -60,21 +68,12 @@
     [class.selected]="selectedCard === 'canjear'"
     (click)="selectCard('canjear'); goProducto()"
   >
-  <img src="assets/icon/coupon.png" alt="Donar Icon" class="faq-icon" />
+  <img src="assets/icon/money_5450231.png" alt="Donar Icon" class="faq-icon" />
    
-    <p>Canjear Puntos</p>
+    <p>Puntos InterEns</p>
   </div>
 
-  <div
-    class="action-card"
-    [class.selected]="selectedCard === 'tarjetas'"
-    (click)="selectCard('tarjetas'); puntoLimpio()"
-  >
-  
-  <img src="assets/icon/tarjeta.png" alt="Donar Icon" class="faq-icon" />
 
-    <p>Mis Tarjetas</p>
-  </div>
 
   <div
     class="action-card"
@@ -82,30 +81,11 @@
     (click)="selectCard('misiones'); contacto()"
   >
   
-  <img src="assets/icon/mision.png" alt="Donar Icon" class="faq-icon" />
+  <img src="assets/icon/target_211759.png" alt="Donar Icon" class="faq-icon" />
     
     <p>Misiones</p>
   </div>
 
-  <div
-    class="action-card"
-    [class.selected]="selectedCard === 'contacto'"
-    (click)="selectCard('contacto'); contacto()"
-  >
-    
-  <img src="assets/icon/contacto.png" alt="Donar Icon" class="faq-icon" />
-    <p>Contacto</p>
-  </div>
-
-  <div
-    class="action-card"
-    [class.selected]="selectedCard === 'perfil'"
-    (click)="selectCard('perfil'); perfil()"
-  >
-    
-  <img src="assets/icon/perfil.png" alt="Donar Icon" class="faq-icon" />
-    <p>Perfil</p>
-  </div>
 
   <div
     class="action-card"
@@ -113,18 +93,20 @@
     (click)="selectCard('retiro'); contacto()"
   >
     
-  <img src="assets/icon/retiro.png" alt="Donar Icon" class="faq-icon" />
+  <img src="assets/icon/shopping_13631247.png" alt="Donar Icon" class="faq-icon" />
     <p>Retiro Producto</p>
   </div>
+
+ 
 
   <div
     class="action-card"
     [class.selected]="selectedCard === 'faq'"
-    (click)="selectCard('faq'); preguntas()"
+    (click)="selectCard('faq'); goProducto()"
   >
      
-  <img src="assets/icon/faq.png" alt="Donar Icon" class="faq-icon" />
-    <p>Preguntas Frecuentes</p>
+  <img src="assets/icon/search_10342115.png" alt="Donar Icon" class="faq-icon" />
+    <p>Buscar Productos</p>
   </div>
 </div>
 
