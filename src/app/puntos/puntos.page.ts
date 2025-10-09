@@ -1,20 +1,35 @@
 import { Component, OnInit } from '@angular/core';
+import { IonHeader, IonToolbar, IonTitle,IonFooter,
+   IonContent, IonButton, IonImg, IonIcon, IonBackButton, IonButtons } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
+
 
 @Component({
   selector: 'app-puntos',
   templateUrl: './puntos.page.html',
   styleUrls: ['./puntos.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonImg, 
+    IonIcon, IonBackButton, IonButtons, CommonModule, IonFooter, FooterInterensComponent]
 })
 export class PuntosPage implements OnInit {
+  puntosTotales: number = 1250; // Ejemplo; luego se conecta con Supabase
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    private activateRoute: ActivatedRoute,
+  ) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  canjearPuntos() {
+    this.router.navigate(['/canjear-puntos']);
   }
 
+  verHistorial() {
+   this.router.navigate(['/historial-puntos']);
+  }
 }
+

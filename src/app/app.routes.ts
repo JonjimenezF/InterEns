@@ -76,6 +76,14 @@ export const routes: Routes = [
   },  {
     path: 'puntos',
     loadComponent: () => import('./puntos/puntos.page').then( m => m.PuntosPage)
+  },
+  {
+    path: 'canjear-puntos',
+    loadComponent: () => import('./canjear-puntos/canjear-puntos.page').then( m => m.CanjearPuntosPage)
+  },
+  {
+    path: 'historial-puntos',
+    loadComponent: () => import('./historial-puntos/historial-puntos.page').then( m => m.HistorialPuntosPage)
   }
 
  

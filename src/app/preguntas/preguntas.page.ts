@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonContent, IonImg} from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonContent, IonImg, IonFooter} from '@ionic/angular/standalone';
 import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 
 @Component({
   selector: 'app-preguntas',
@@ -19,7 +20,9 @@ import { Router } from '@angular/router';
     IonBackButton,
     IonImg,
     CommonModule, 
-    FormsModule
+    FormsModule, 
+    IonFooter, 
+    FooterInterensComponent
   ]
 })
 export class PreguntasPage implements OnInit {

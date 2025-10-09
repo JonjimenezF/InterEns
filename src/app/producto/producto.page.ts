@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonHeader, IonTitle, IonToolbar, IonButtons, IonBackButton, IonContent, IonSearchbar, IonButton, IonIcon, IonModal, IonGrid, IonRow, IonCol, IonLabel, IonInput, IonItem, IonSpinner, IonCard, IonImg} from '@ionic/angular/standalone';
+import { IonHeader, IonTitle,  IonFooter, IonToolbar, IonButtons, IonBackButton, IonContent, IonSearchbar, IonButton, IonIcon, IonModal, IonGrid, IonRow, IonCol, IonLabel, IonInput, IonItem, IonSpinner, IonCard, IonImg, IonList} from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { NavController, ToastController } from '@ionic/angular';
@@ -38,7 +38,11 @@ import { CarritoService } from '../servicios/carrito.service';
     IonCard,
     IonImg,
     CommonModule, 
-    FormsModule
+    FormsModule,
+    IonList,
+    IonItem,
+     IonFooter
+
   ]
 })
 export class ProductoPage implements OnInit {
@@ -320,21 +324,9 @@ export class ProductoPage implements OnInit {
   }
 
 
-  goProducto() {
-    this.router.navigate(['/producto']);
-  }
 
-  home() {
-    this.router.navigate(['/home']);
-  }
 
-  perfil() {
-    this.router.navigate(['/perfil']);
-  }
-
-  salir() {}
-
-  puntoLimpio() {}
+  
 
   goBack() {
     this.navCtrl.back();
@@ -343,4 +335,27 @@ export class ProductoPage implements OnInit {
   goCarrito() {
     this.router.navigate(['/carrito'], { state: { userInfo: this.userInfo.id } });
   }
+
+
+    goProducto(): void {
+    this.router.navigate(['/producto']);
+  }
+
+  home(): void {
+    this.router.navigate(['/home']);
+  }
+
+  perfil(): void {
+    this.router.navigate(['/perfil']);
+  }
+
+  salir(): void {
+    // Acción al salir
+  }
+
+  puntoLimpio(): void {
+    // Acción al ir a punto limpio
+  }
+
+  
 }

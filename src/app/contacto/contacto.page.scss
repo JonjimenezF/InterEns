@@ -143,3 +143,35 @@ body {
 }
 
  
+/* Tab bar inferior */
+ion-tab-bar {
+  --background: var(--card);
+  border-top: 1px solid var(--stroke);
+}
+
+ion-tab-button {
+  --color: var(--muted);
+  --color-selected: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+ion-segment {
+  --background: transparent;
+  margin: 16px 0;
+}
+
+ion-segment-button {
+  --color: #fff;
+  --color-checked: #0b1115;
+  --indicator-color: transparent;
+  --background: var(--card);
+  --background-checked: var(--accent);
+  border-radius: 12px;
+  margin: 0 6px;
+  font-weight: 600;
+}
+.icono-boton {
+  width: 24px;
+  height: 24px;
+  object-fit: contain; /* Mantiene proporción de la imagen */
+}

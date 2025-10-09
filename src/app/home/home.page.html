@@ -42,7 +42,8 @@
       <div
     class="action-card"
     [class.selected]="selectedCard === 'puntos'"
-    (click)="selectCard('puntos'); puntos()"
+    (click)="selectCard('puntos'); goPuntos()"
+
   >
       <p class="color-muted">Puntos Disponibles</p>
      
@@ -63,18 +64,7 @@
     <p>Subir producto</p>
   </div>
 
-  <div
-    class="action-card"
-    [class.selected]="selectedCard === 'canjear'"
-    (click)="selectCard('canjear'); goProducto()"
-  >
-  <img src="assets/icon/money_5450231.png" alt="Donar Icon" class="faq-icon" />
-   
-    <p>Puntos InterEns</p>
-  </div>
-
-
-
+  
   <div
     class="action-card"
     [class.selected]="selectedCard === 'misiones'"

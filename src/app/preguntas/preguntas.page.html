@@ -61,13 +61,13 @@
      -->
 <ion-header>
   <ion-toolbar>
-    <ion-title>Preguntas Frecuentes</ion-title>
+    
     <ion-buttons slot="start">
       <ion-back-button 
         (click)="goBack()" 
         defaultHref="home" 
         text="" 
-        color="rgb(165, 17, 233)">
+        >
       </ion-back-button>
     </ion-buttons>
   </ion-toolbar>
@@ -157,7 +157,7 @@
 
     <div class="faq-item" (click)="toggleAnswer('faq-answer6')">
       <div class="faq-question">
-        <img src="assets/icon/donar.png" alt="Donar Icon" class="faq-icon" />
+      <img src="assets/icon/donar.png" alt="Donar Icon" class="faq-icon" />
         <span>¿Qué debo hacer si quiero donar un enser?</span>
         <span class="arrow">&#9660;</span>
       </div>
@@ -173,3 +173,4 @@
 
 
 </ion-content>
+<app-footer-interens></app-footer-interens>

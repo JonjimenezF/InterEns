@@ -50,4 +50,6 @@ export class PerfilPage implements OnInit {
   puntoLimpio(): void {
     // Acción al ir a punto limpio
   }
+
+  
 }
