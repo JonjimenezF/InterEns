@@ -1,50 +1,48 @@
-* {
-    --background: #ffffff; /* Cambia el color de fondo aquí */
+:host{
+  --bg:#0c0f13;        /* fondo */
+  --card:#14161a;      /* cajas */
+  --stroke:#2b3036;    /* borde */
+  --txt:#ffffff;       /* texto */
+  --muted:#b8bec6;     /* placeholder/iconos */
+  --accent:#1fd39a;    /* verde */
 }
 
-.color-text-black{
-    color: black ;
-    font-family:'Roboto'
+ion-content.register{ --background:var(--bg); color:var(--txt); }
+
+.wrap{ max-width:360px; margin:0 auto; padding:90px 18px 24px; }
+
+.brand{ display:flex; align-items:center; justify-content: center; gap:14px; margin-bottom:8px; }
+.logo{ width:56px; height:56px; }
+.brand-name{ margin:0; color:#fff; font-size:30px; font-weight:800; }
+
+.stack{ display:block; margin:14px 2px 6px; font-size:13.5px; color:#e5e9ef; font-weight:700; }
+.field{ margin:0 0 12px 0; }
+
+.input-shell{
+  position:relative; display:flex; align-items:center;
+  background:var(--card);              /* si la quieres negra, cambia a var(--bg) */
+  border:1px solid var(--stroke);
+  border-radius:10px; height:48px; padding:0 12px;
+  box-shadow:0 2px 18px rgba(0,0,0,.18);
+}
+.input-shell .lead{ flex:0 0 40px; display:grid; place-items:center; margin-right:4px; }
+.input-shell .lead::part(image){ width:22px; height:22px; }
+.input-shell ion-input{
+  flex:1 1 0%; min-width:0;
+  --padding-start:0; --padding-end:38px;
+  --color:var(--txt);
+  --placeholder-color:var(--muted); --placeholder-opacity:1;
 }
 
-.color-text-grey{
-    color: rgb(151, 151, 151);;
-    font-family:'Roboto'
+.ghost{
+  position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  border:none; background:transparent; color:var(--muted);
+  display:grid; place-items:center; font-size:20px;
 }
 
-////////////////////////////////
-.label {
-    width: max-content;
-    margin: 90px auto;
-
-    display:grid;
-    grid-template-areas: "input";
-}
-
-.input {
-    grid-area: input;
-    width: 300px;
-    font: inherit;
-    border-radius: 10px;
-    border: 1px solid gray;
-    padding: .7rem 1.5rem;
-}
-
-.label__name {
-    grid-area: input;
-    z-index: 100;
-    width: max-content;
-    margin-left: 1rem;
-    padding: 0 .5rem;
-    align-self: center;
-    height: 100%;
-    display: flex;
-    align-items: center;
-}
-
-.input:where(:focus,
-.input:not(:placeholder-shown)) + .label__name
-{
-    transform: translateY(-50%) scale(.7);
-    background-color: white;
+.cta{
+  --background:var(--accent); --color:#0b1115;
+  --border-radius:12px;
+  --padding-top:14px; --padding-bottom:14px;
+  font-weight:800; letter-spacing:.3px; margin-top:8px;
 }
