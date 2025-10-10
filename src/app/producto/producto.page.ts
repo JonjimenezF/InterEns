@@ -53,6 +53,7 @@ export class ProductoPage implements OnInit {
   precioMax: string =''; // Precio máximo para el filtro
   selectedCategoria: any; // Categoría seleccionada
   isModalOpen: boolean = false; // Estado del modal
+ 
 
 
   Carrito = {

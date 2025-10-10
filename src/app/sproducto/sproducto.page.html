@@ -40,6 +40,19 @@
                 </ion-select-option>
               </ion-select>
             </ion-item>
+
+            <ion-item class="custom-item green-border">
+            
+              <ion-select style="color: black;" [(ngModel)]="selectedBodega" (ionChange)="onBodegaChange($event)"  placeholder="Selecciona una Bodega" required >
+                <ion-select-option value="Bodega Valparaíso">Bodega Valparaíso</ion-select-option>
+                <ion-select-option value="Bodega Viña del Mar">Bodega Viña del Mar</ion-select-option>
+                <ion-select-option value="Retiro Domicilio">Retiro Domicilio</ion-select-option>
+              </ion-select>
+            </ion-item>
+            
+
+            
+            
   
             <div class="centrar">
               <ion-button  type="submit" class="custom-button white-background" fill="solid" shape="round">Siguiente</ion-button>
@@ -49,4 +62,3 @@
       </div>
     </div>
   </ion-content>
-

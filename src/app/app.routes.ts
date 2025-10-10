@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AuthCallbackPage } from './auth-callback/auth-callback.page';
+
 
 ///import { RecuperarPage } from './recuperar/recuperar.page';
 
@@ -8,8 +10,11 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    
   },
- 
+
+  { path: 'auth/callback', component: AuthCallbackPage },
+
   {    
     path: '',
     redirectTo: 'portada',
@@ -79,5 +84,9 @@ export const routes: Routes = [
   {
     path: 'que-es',
     loadComponent: () => import('./que-es/que-es.page').then( m => m.QueEsPage)
+  },
+  {
+    path: 'reciclaje',
+    loadComponent: () => import('./reciclaje/reciclaje.page').then( m => m.ReciclajePage)
   },
 ];

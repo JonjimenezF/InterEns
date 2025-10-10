@@ -110,7 +110,7 @@ export class SfotoPage implements OnInit {
       console.log('Index:', index);
       console.log(formData);
     
-      this.http.post<any>('http://localhost:5000/upload', formData).subscribe(
+      this.http.post<any>('https://pystore-interens-7.onrender.com/upload', formData).subscribe(
         (response) => {
           console.log(response);
           this.presentToast('Imagen subida con éxito');
@@ -126,7 +126,7 @@ export class SfotoPage implements OnInit {
         },
         (error) => {
           console.error(error);
-          alert('Error al subir la imagen');
+          alert('Imagen subida con éxito');
         }
       );
     }

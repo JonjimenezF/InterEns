@@ -1,188 +1,162 @@
-/**************************************
- * 1) Variables (paleta del mock)
- **************************************/
-:root {
-  --bg-app:  #0f0f0f;
-  --card:    #14161a;
-  --border:  #2b3036;
-  --txt:     #e8eaed;
-  --txt-dim: #8d93a3;
-  --txt-lab: #c7cdd5;
-  --accent:  #22c55e;  /* verde botón y enlace */
-}
-
-/**************************************
- * 2) Lienzo / Tarjeta / Marca
- **************************************/
-ion-content { --background: var(--bg-app); color: var(--txt); }
-
-.wrap {
-  min-height: 100%;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-}
-
-.card {
-  width: 100%;
-  max-width: 420px;
-  background: #111315;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 8px 24px rgba(49, 56, 61, 0.4);
-}
-
-.brand {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 16px;
-
-  .logo { width: 50px; height: 50px; }
-  h1 { margin: 0; font-size: 28px; font-weight: 800; color: #fff; }
-}
-
-/**************************************
- * 3) Formulario (lista / labels / inputs)
- **************************************/
-/* ion-item sin su fondo propio */
-.field {
-  --background: transparent;
-  padding: 0;
-  margin: 0 0 10px 0;
-  border: none;
-}
-
-/* Caja del input (gris + borde fino) — usa selector específico para ganar */
-.field .input-shell {
-  width: 90%; 
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  background: #14161a !important;     /* gris exacto de la caja */
-  border: 1px solid #2b3036 !important;
-  border-radius: 10px;
-  padding: 5px 10px;
-}
-
-/* Focus: solo cambia color de borde (sin glow) */
-.field .input-shell:focus-within {
-  border-color: #22c55e !important;
-  box-shadow: none;
-}
-
-/* Iconos + input */
-.field .input-shell ion-icon { color: #9aa0a6; }
-.field .input-shell .eye {
-  margin-left: auto;
-  --padding-start: 0;
-  --padding-end: 0;
-  color: #9aa0a6;
-}
-.field .input-shell ion-input {
-  flex: 1;
-  --color: #e8eaed;
-  --padding-start: 0;
-  --padding-end: 0;
-  font-size: 15px;
-  
-}
-.field .input-shell ion-input::part(placeholder) { color: #8d93a3; }
-
-/* Label encima */
-.stack {
-  display: block;
-  margin: 12px 2px 9px;
-  color: #c7cdd5;
-  font-size: 17px;
-  font-weight: 600;
-}
-
-/**************************************
- * 4) Opciones (recordarme + olvidaste)
- **************************************/
-.options {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 8px 2px 16px;
-  font-size: 14px;
-  color: #cfd3da;
-
-  .remember {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-
-    ion-checkbox {
-      --size: 18px;
-      --border-color: #8a909e;
-      --checkbox-background-checked: transparent;
-      --checkmark-color: var(--accent);
-    }
+  :host {
+    --bg: #0c0f13;         /* fondo más oscuro */
+    --card: #14161a;       /* cajas grises */
+    --stroke: #2b3036;     /* borde sutil */
+    --txt: #ffffff;        /* texto principal */
+    --muted: #b8bec6;      /* placeholder / iconos */
+    --accent: #1fd39a;     /* verde vibrante */
   }
 
-  .forgot {
-    color: var(--accent) !important;   /* asegura verde */
-    text-decoration: none;
+  ion-content.login { --padding-start: 0;--padding-end: 0; --background: var(--bg); color: var(--txt); }
+
+  .wrap {
+    max-width: 360px;                 /* ancho estrecho como el mockup */
+    margin: 0 auto;
+    padding: 110px 18px 24px;
+    //box-shadow: -1px 1px 33px 0px rgb(91 91 91 / 50%);
+    border-radius: 24px;
+  }
+  .logo{
+    padding:0px 0px 0px 25px;
+    width: 40%;
+    height: 40%;
+
+  }
+  @media (max-width: 420px){
+    :root{ --logo-size: 76px; }
+    .brand h1{ font-size: 26px; }
+  }
+
+  /* Marca */
+  .brand {
+    display:flex; align-items:center; justify-content:flex-start;
+    margin-bottom: 12px;           /* más compacto */
+  }
+  .brand-mark { width: 38px; height: 38px; }
+  .brand-mark svg { width:50%; height:50%;; }
+  .brand-name { margin:0; color:#fff; font-size:30px; font-weight:800; }
+
+  /* Etiquetas */
+  .stack {
+    display:block;
+    margin: 14px 2px 6px;
+    font-size: 13.5px;
+    color: #e5e9ef;
     font-weight: 600;
   }
-}
 
-/**************************************
- * 5) Botones
- **************************************/
-/* principal (verde plano, sin mayúsculas forzadas) */
-ion-button.btn-primary {
-  --background: #22c55e !important;
-  --color: #ffffff;
-  --border-radius: 10px;
-  height: 48px;
-  font-weight: 700;
-  text-transform: none;
-  letter-spacing: .2px;
-  --box-shadow: none;
-}
-
-/* botón Google: fondo y borde del mock */
-ion-button.btn-google {
-  --background: #15181c;
-  --border-color: var(--border) !important;
-  --border-width: 1px;
-  --border-radius: 10px;
-  --color: var(--txt);
-  height: 48px;
-  font-weight: 600;
-  text-transform: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-
-  .g-logo { width: 20px; height: 20px; }
-}
-
-/**************************************
- * 6) Separador “o”
- **************************************/
-.separator {
-  margin: 16px 0;
+  .field { margin: 0 0 10px 0; }
+  /* === Alinear barras y anchos en Correo / Contraseña === */
+.input-shell{
   position: relative;
-  text-align: center;
-  color: #8d93a3;
-  font-size: 12px;
-
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 40%;
-    height: 1px;
-    background: #262b2f;
-  }
-  &::before { left: 0; }
-  &::after  { right: 0; }
+  display: flex; align-items: center;
+  gap: 0;                      /* evita que el gap recorte el input */
+  /* tu estilo existente: fondo, borde, etc. se mantiene */
+  --lead: 44px;                /* ancho fijo para el icono inicial */
+  --trail: 36px;               /* reserva para el botón ojo (derecha) */
+  border:1px solid var(--stroke);
+  border-radius: 10px;                
+  padding: 1px 10px
 }
+
+/* Icono inicial (ion-img) ocupa SIEMPRE el mismo ancho */
+.input-shell > ion-img:first-child{
+  flex: 0 0 var(--lead);
+  width: var(--lead);
+  display: flex; align-items: center; justify-content: flex-start;
+  //margin-right: 10px;          /* reemplaza el gap como separación */
+}
+
+/* (opcional) tamaño visual del png del icono */
+.input-shell > ion-img:first-child::part(image){
+  width: 25px; height: 25px; object-fit: contain;
+}
+
+/* El input se estira a tope y deja espacio para el ojo a la derecha */
+.input-shell ion-input{
+  flex: 1 1 0%;
+  min-width: 0;                /* CLAVE para que pueda crecer */
+  --padding-start: 0;
+  --padding-end: var(--trail); /* espacio para el botón ojo */
+}
+
+/* El botón ojo no participa del layout (no acorta el input) */
+.ghost{
+  position: absolute;
+  right: 10px; top: 50%;
+  transform: translateY(-50%);
+  border: none; background: transparent; color: var(--muted); padding: 0;
+}
+
+
+  /* Meta: checkbox + olvidar derecha */
+  .meta{
+    display: flex;
+    align-items: center;       
+    justify-content: center; 
+    //display:flex; align-items:center; gap:10px;
+    margin: 2px 2px 0px;
+  }
+  .remember{ color:#e5e9ef; font-size:14px; }
+  .forgot{
+    display: flex;
+    align-items: center;       /* centra vertical sin variar el alto */
+    justify-content: center; 
+    // margin-left:68px;
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1.15;
+    text-align: right;
+    //max-width: 140px;                  /* permite salto de línea como tu imagen */
+    white-space: normal;
+    color:var(--accent);
+    font-weight:700;
+    text-decoration:none;
+    text-align:center;
+  }
+  
+
+  /* CTA verde */
+  .cta{
+    --background: var(--accent);
+    --color: #0b1115;
+    --border-radius: 12px;
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    --box-shadow: none;                /* sin glow */
+    font-weight: 700;
+    margin-top: 6px;
+  }
+
+  /* Registro */
+.register-row{
+  margin:14px 0 6px;
+  font-size:14px;
+  color:#e5e9ef;
+  text-align:center;  
+}
+.signup{
+  margin-left:4px;
+  color:var(--accent);
+  font-weight:800;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+  /* Botón Google con borde */
+  .google{
+    width:100%; margin-top: 12px;
+    background: var(--card);
+    border:1px solid var(--stroke);
+    border-radius: 12px;
+    color: #e9edf2;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    padding: 12px;
+    font-weight: 600;
+  }
+  .google .gmark{ width: 20px; height: 20px; display:grid; place-items:center; }
+  .google svg{ width:100%; height:100%; }
+
+
+  ion-input::part(native){ outline: none; }

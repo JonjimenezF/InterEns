@@ -1,60 +1,85 @@
-<ion-content [fullscreen]="true">
+<ion-content class="login" [fullscreen]="true">
   <div class="wrap">
-    <section class="card">
-      <!-- Marca centrada -->
-      <div class="brand">
-        <ion-img src="assets/nueva_iconos/logo.png" alt="InterEns" class="logo"></ion-img>
-        <h1>InterEns</h1>
+
+    <!-- Marca -->
+    <div class="brand">
+      <ion-img class="logo" src="assets/nuevos_img/interens-logo.png "></ion-img>
+      <h1 class="brand-name">InterEns</h1>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" [formGroup]="form" class="form">
+
+      <!-- Correo -->
+      <label class="stack">Correo electrónico</label>
+      <div class="field">
+        <div class="input-shell">
+
+          <ion-img src="assets/nuevos_img/correo-electronico.png"></ion-img>
+          <ion-input
+            formControlName="email"
+            type="email"
+            placeholder="correo@ejemplo.com"
+            autocomplete="email">
+          </ion-input>
+        </div>
       </div>
 
-      <form [formGroup]="form" (ngSubmit)="signIn()">
-          <!-- Correo -->
-          <ion-item class="field" lines="none">
-            <ion-label class="stack" position="stacked">Correo electrónico</ion-label>
-            <div class="input-shell">
-              <ion-img src="assets/nueva_iconos/correo-electronico (1).png"></ion-img>
-              <ion-input formControlName="email" type="email" placeholder="correo@ejemplo.com"></ion-input>
-            </div>
-          </ion-item>
-
-          <ion-item class="field" lines="none">
-            <ion-label class="stack" position="stacked">Contraseña</ion-label>
-            <div class="input-shell">
-               <ion-img src="assets/nueva_iconos/cerrar.png"></ion-img>
-              <ion-input formControlName="password" [type]="showPwd ? 'text' : 'password'" placeholder="••••••••"></ion-input>
-              <ion-button fill="clear" size="small" class="eye" (click)="togglePwd()">
-                <ion-icon [name]="showPwd ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
-              </ion-button>
-            </div>
-          </ion-item>
-
-
-        <!-- Opciones -->
-        <div class="options">
-          <label class="remember">
-            <ion-checkbox formControlName="remember"></ion-checkbox>
-            <span>Recordarme</span>
-          </label>
-          <a class="forgot" href="#">¿Olvidaste tu contraseña?</a>
+      <!-- Contraseña -->
+      <label class="stack">Contraseña</label>
+      <div class="field">
+        <div class="input-shell">
+          <ion-img src="assets/nuevos_img/cerrado.png"></ion-img>
+          <!-- <ion-icon name="lock-closed-outline" aria-hidden="true"></ion-icon> -->
+          <ion-input
+            formControlName="password"
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="•••••••"
+            autocomplete="current-password">
+          </ion-input>
+          <button type="button" class="ghost" (click)="toggleShowPassword()" aria-label="Mostrar/Ocultar">
+            <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </button>
+          
         </div>
+      </div>
 
-        <!-- Botón principal -->
-        <ion-button type="submit" expand="block" color="primary" class="btn-primary">
-          Iniciar sesión
-        </ion-button>
+      <!-- Meta: Recordarme + Olvidaste -->
+      <div class="meta">
+        <a class="forgot" (click)="onForgot()">¿Olvidaste tu contraseña?</a>
+      </div>
 
-        <!-- Separador -->
-        <div class="separator"><span>o</span></div>
+      <!-- CTA principal -->
+      <ion-button
+        class="cta"
+        expand="block"
+        shape="round"
+        size="large"
+        type="submit"
+        [disabled]="form.invalid">
+        Iniciar sesión
+      </ion-button>
+      <!-- Registro -->
+      <p class="register-row">
+        <span>No tiene cuenta?</span>
+        <a class="signup" (click)="onRecuperar()">registrate aqui</a>
+      </p>
 
-        <!-- Botón Google -->
-        <ion-button expand="block" fill="outline" class="btn-google">
-          <ion-img
-            src="https://www.svgrepo.com/show/355037/google.svg"
-            alt="Google" class="g-logo">
-          </ion-img>
-          Continuar con Google
-        </ion-button>
-      </form>
-    </section>
+      <!-- Divisor punteado -->
+      <hr class="dashed" />
+ 
+      <!-- Google -->
+      <button type="button" class="google" (click)="continueWithGoogle()">
+        <span class="gmark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.6 31.7 29.3 35 24 35 16.8 35 11 29.2 11 22s5.8-13 13-13c3.3 0 6.3 1.2 8.6 3.2l5.7-5.7C34.7 3 29.6 1 24 1 11.8 1 2 10.8 2 23s9.8 22 22 22c11.5 0 21-8.3 21-22 0-1.3-.1-2.7-.4-3.5z"/>
+            <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.9 18.9 13 24 13c3.3 0 6.3 1.2 8.6 3.2l5.7-5.7C34.7 3 29.6 1 24 1 16.2 1 9.5 5.5 6.3 14.7z"/>
+            <path fill="#4CAF50" d="M24 45c5.2 0 10-1.8 13.6-4.9l-6.3-5.2C29.2 36.5 26.8 37 24 37c-5.2 0-9.6-3.3-11.2-7.9l-6.6 5.1C9.4 41.9 16.1 45 24 45z"/>
+            <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-1.3 3.8-5.1 7-11.3 7-5.2 0-9.6-3.3-11.2-7.9l-6.6 5.1C9.4 41.9 16.1 45 24 45c11.5 0 21-8.3 21-22 0-1.3-.1-2.7-.4-3.5z"/>
+          </svg>
+        </span>
+        <span>Continuar con Google</span>
+      </button>
+
+    </form>
   </div>
 </ion-content>
