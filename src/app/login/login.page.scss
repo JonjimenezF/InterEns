@@ -54,6 +54,9 @@
   /* tu estilo existente: fondo, borde, etc. se mantiene */
   --lead: 44px;                /* ancho fijo para el icono inicial */
   --trail: 36px;               /* reserva para el botón ojo (derecha) */
+  border:1px solid var(--stroke);
+  border-radius: 10px;                
+  padding: 1px 10px
 }
 
 /* Icono inicial (ion-img) ocupa SIEMPRE el mismo ancho */
@@ -61,12 +64,12 @@
   flex: 0 0 var(--lead);
   width: var(--lead);
   display: flex; align-items: center; justify-content: flex-start;
-  margin-right: 10px;          /* reemplaza el gap como separación */
+  //margin-right: 10px;          /* reemplaza el gap como separación */
 }
 
 /* (opcional) tamaño visual del png del icono */
 .input-shell > ion-img:first-child::part(image){
-  width: 20px; height: 20px; object-fit: contain;
+  width: 25px; height: 25px; object-fit: contain;
 }
 
 /* El input se estira a tope y deja espacio para el ojo a la derecha */
@@ -88,12 +91,18 @@
 
   /* Meta: checkbox + olvidar derecha */
   .meta{
-    display:flex; align-items:center; gap:10px;
-    margin: 2px 2px 16px;
+    display: flex;
+    align-items: center;       
+    justify-content: center; 
+    //display:flex; align-items:center; gap:10px;
+    margin: 2px 2px 0px;
   }
   .remember{ color:#e5e9ef; font-size:14px; }
   .forgot{
-    margin-left:68px;
+    display: flex;
+    align-items: center;       /* centra vertical sin variar el alto */
+    justify-content: center; 
+    // margin-left:68px;
     color: var(--accent);
     font-weight: 600;
     text-decoration: none;
@@ -101,7 +110,12 @@
     text-align: right;
     //max-width: 140px;                  /* permite salto de línea como tu imagen */
     white-space: normal;
+    color:var(--accent);
+    font-weight:700;
+    text-decoration:none;
+    text-align:center;
   }
+  
 
   /* CTA verde */
   .cta{
@@ -114,6 +128,21 @@
     font-weight: 700;
     margin-top: 6px;
   }
+
+  /* Registro */
+.register-row{
+  margin:14px 0 6px;
+  font-size:14px;
+  color:#e5e9ef;
+  text-align:center;  
+}
+.signup{
+  margin-left:4px;
+  color:var(--accent);
+  font-weight:800;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
 
   /* Botón Google con borde */
   .google{

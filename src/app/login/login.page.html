@@ -39,6 +39,7 @@
           <button type="button" class="ghost" (click)="toggleShowPassword()" aria-label="Mostrar/Ocultar">
             <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
           </button>
+          
         </div>
       </div>
 
@@ -57,7 +58,15 @@
         [disabled]="form.invalid">
         Iniciar sesión
       </ion-button>
+      <!-- Registro -->
+      <p class="register-row">
+        <span>No tiene cuenta?</span>
+        <a class="signup" (click)="onRecuperar()">registrate aqui</a>
+      </p>
 
+      <!-- Divisor punteado -->
+      <hr class="dashed" />
+ 
       <!-- Google -->
       <button type="button" class="google" (click)="continueWithGoogle()">
         <span class="gmark" aria-hidden="true">

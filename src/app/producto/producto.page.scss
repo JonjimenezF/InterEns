@@ -1,4 +1,3 @@
-
 :host {
   --bg: #0c0f13;         /* fondo oscuro */
   --card: #14161a;       /* cajas */
@@ -37,80 +36,118 @@ ion-title {
   filter: brightness(0) invert(1);
 }
 
-/* ======== BUSCADOR ======== */
+/* ============================= */
+/* 🔍 BARRA DE BÚSQUEDA + CATEGORÍA + FILTRO */
+/* ============================= */
 .search-section {
   padding: 16px;
+  background-color: var(--bg);
+  display: flex;
+  justify-content: center;
 }
 
 .search-container {
   display: flex;
-  gap: 12px;
   align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-/* --- buscador limpio con borde ovalado --- */
+/* === BUSCADOR === */
 .searchbar {
-  --background: transparent;
+  --background: var(--card);
   --color: var(--txt);
   --placeholder-color: var(--muted);
+  border: 1.8px solid var(--stroke);
+  border-radius: 12px;
   flex: 1;
-
-  border: 2px solid var(--stroke);
-  border-radius: 25px;
-  padding: 0 12px;
   height: 46px;
-
-  display: flex;
-  align-items: center;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
 
   &:focus-within {
     border-color: var(--accent);
     box-shadow: 0 0 8px rgba(31, 211, 154, 0.4);
   }
+}
 
-  ion-input,
-  input {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
+/* === SELECTOR DE CATEGORÍA === */
+ion-select.categoria-select {
+  --background: var(--card);
+  --color: var(--txt);
+  --placeholder-color: var(--muted);
+  --padding-start: 12px;
+  --padding-end: 12px;
+  height: 46px;
+  border-radius: 12px;
+  border: 1.8px solid var(--stroke);
+  min-width: 160px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+
+  &:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 8px rgba(31, 211, 154, 0.4);
   }
 }
 
-/* --- botón de filtro redondo con icono --- */
+/* Estilo del popover del ion-select */
+ion-select-popover {
+  --background: var(--card);
+  --color: var(--txt);
+  --border-color: var(--accent);
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* === BOTÓN DE FILTRO === */
 .filter-button {
-  background: transparent;
-  border: 2px solid var(--accent);
+  background: var(--card);
+  border: 1.8px solid var(--accent);
   border-radius: 50%;
-  height: 52px;
-  width: 52px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  outline: none;
-  box-shadow: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
 
   .filter-icon {
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
     filter: brightness(0) invert(1);
-    transition: all 0.3s ease;
-    pointer-events: none;
+    transition: 0.25s ease;
   }
 
   &:hover,
-  &:focus,
-  &:active {
-    border-color: var(--accent);
-    background: var(--accent);
-    box-shadow: 0 0 12px rgba(31, 211, 154, 0.6);
-    transform: scale(1.05);
-
+  &:focus {
+    background-color: var(--accent);
+    box-shadow: 0 0 12px rgba(31, 211, 154, 0.5);
+    transform: scale(1.08);
     .filter-icon {
-      filter: brightness(0) invert(0);
+      filter: brightness(0);
     }
+  }
+}
+
+/* === ADAPTACIÓN A MÓVILES === */
+@media (max-width: 480px) {
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  ion-select.categoria-select,
+  .searchbar {
+    width: 100%;
+  }
+
+  .filter-button {
+    align-self: center;
   }
 }
 
@@ -274,12 +311,7 @@ ion-modal {
   }
 }
 
-*:focus {
-  outline: none !important;
-}
-
-
-/* Tab bar inferior */
+/* ======== FOOTER ======== */
 ion-tab-bar {
   --background: var(--card);
   border-top: 1px solid var(--stroke);
@@ -291,23 +323,9 @@ ion-tab-button {
   font-size: 13px;
   font-weight: 600;
 }
-ion-segment {
-  --background: transparent;
-  margin: 16px 0;
-}
 
-ion-segment-button {
-  --color: #fff;
-  --color-checked: #0b1115;
-  --indicator-color: transparent;
-  --background: var(--card);
-  --background-checked: var(--accent);
-  border-radius: 12px;
-  margin: 0 6px;
-  font-weight: 600;
-}
 .icono-boton {
   width: 24px;
   height: 24px;
-  object-fit: contain; /* Mantiene proporción de la imagen */
+  object-fit: contain;
 }
