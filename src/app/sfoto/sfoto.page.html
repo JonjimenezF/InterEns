@@ -41,7 +41,7 @@
     <div class="centrar"> 
       <ion-button class="color-text-white" color="primary" fill="solid" shape="round" (click)="onSubmit()">Subir Imagen</ion-button>
     </div>
-    <p *ngIf="nombreFoto" style="color: black;">Nombre de la foto subida: {{ nombreFoto }}</p>
+    <p *ngIf="nombreFoto" style="color: rgb(178, 174, 174);">Nombre de la foto subida: {{ nombreFoto }}</p>
     <div class="centrar">
       <img *ngIf="nombreFoto" [src]="'http://localhost:5000/foto/' + nombreFoto" alt="Foto">
     </div>

@@ -1,87 +1,122 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button  (click)="goBack()" defaultHref="home" text="" style="--background: none;color: white;"></ion-back-button>
+      <ion-back-button 
+        (click)="goBack()" 
+        defaultHref="home" 
+        text="">
+      </ion-back-button>
     </ion-buttons>
-    <ion-buttons slot="end" style="margin-right: 20px;" (click)="goCarrito()">
-      <ion-img src="assets/img/cart.png" class="cart-icon"></ion-img>
-    </ion-buttons>
+    <ion-title>Productos</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<!-- Content -->
 <ion-content id="main-content">
-  <ion-toolbar>
-    <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="filterProducts()"></ion-searchbar>
-    <ion-button id="abrir-filtro-busqueda" class="transparent-border" slot="end" fill="clear" (click)="openCategoryFilter()">
-      <ion-icon src="./assets/icon/options.svg"></ion-icon>
-    </ion-button>
-    <!-- Filtro por categoría -->
-    <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeCategoryFilter()">
-      <ng-template>
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>Filtrar por Categoría</ion-title>
-            <ion-buttons slot="end">
-              <ion-button (click)="closeCategoryFilter()">Cerrar</ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-          <ion-grid class="category-button-container">
-            <ion-row>
-              <ion-col size="4">
-                <div class="category-button">
-                  <ion-button expand="block" (click)="showAllProducts()" class="category-text">
-                    Todos
-                  </ion-button>
-                </div>
-              </ion-col>
-              <ion-col size="4" *ngFor="let cat of categoria">
-                <div class="category-button">
-                  <ion-button expand="block" (click)="selectCategory(cat.id_categoria)" class="category-text">
-                    {{ cat.nombre }}
-                  </ion-button>
-                </div>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-          <ion-item>
-            <ion-label style="color: black;">Mínimo </ion-label>
-            <ion-input style="color: black;" type="number" [(ngModel)]="precioMin"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label style="color: black;">Máximo </ion-label>
-            <ion-input style="color: black;" type="number" [(ngModel)]="precioMax"></ion-input>
-          </ion-item>
-          <ion-button expand="block" (click)="filterByPrice()">Filtrar por Precio</ion-button>
-        </ion-content>
-      </ng-template>
-    </ion-modal>
-  </ion-toolbar> 
+  <!-- 🔍 BUSCADOR + CATEGORÍA + FILTRO -->
+  <section class="search-section">
+    <div class="search-container">
+      
+      <!-- BUSCADOR -->
+      <ion-searchbar
+        placeholder="Buscar productos..."
+        [(ngModel)]="searchQuery"
+        (ionInput)="filterProducts()"
+        class="searchbar">
+      </ion-searchbar>
 
+      <!-- SELECTOR DE CATEGORÍA -->
+      <ion-select
+        interface="popover"
+        placeholder="Categoría"
+        [(ngModel)]="categoriaSeleccionada"
+        (ionChange)="filterByCategory()"
+        class="categoria-select">
+        <ion-select-option *ngFor="let cat of categorias" [value]="cat.id_categoria">
+          {{ cat.nombre }}
+        </ion-select-option>
+      </ion-select>
 
+      <!-- BOTÓN FILTRO POR PRECIO -->
+      <button class="filter-button" (click)="openCategoryFilter()">
+        <img src="assets/icon/filtro.png" class="filter-icon" alt="Filtrar" />
+      </button>
+    </div>
+  </section>
 
-  <!-- Spinner de carga -->
+  <!-- SPINNER DE CARGA -->
   <div *ngIf="loading" class="spinner-container">
-    <ion-spinner class="custom-spinner" name="circles" color="primary"></ion-spinner>
+    <ion-spinner class="custom-spinner" name="circles"></ion-spinner>
   </div>
 
-  <!-- Lista de productos -->
-  <ion-row *ngIf="!loading">
-    <ion-col *ngFor="let producto of filteredProducts" size="12">
-      <ion-card class="carta" (click)="goDetalleProducto(producto)">
-        <div class="card-content">
-          <div class="image-container">
-            <img [src]="getImagenProducto(producto)" alt="Imagen del producto" class="product-image">
-          </div>
-          <div class="details-container">
+  <!-- LISTA DE PRODUCTOS -->
+  <ion-grid *ngIf="!loading">
+    <ion-row>
+      <ion-col size="12" size-md="6" size-lg="4" *ngFor="let producto of filteredProducts">
+        <ion-card class="product-card" (click)="goDetalleProducto(producto)">
+          <img [src]="getImagenProducto(producto)" alt="Imagen del producto" class="product-image" />
+          <div class="product-info">
             <h2>{{ producto.nombre }}</h2>
-            <p>{{ producto.precio }}</p>
-            <ion-button class="custom-button" (click)="agregarCarrito($event, producto)">Agregar al carrito</ion-button>
+            <p class="price">\${{ producto.precio }}</p>
+            <ion-button
+              class="custom-button"
+              (click)="agregarCarrito($event, producto)">
+              Agregar al carrito
+            </ion-button>
           </div>
-        </div>
-      </ion-card>
-    </ion-col>
-  </ion-row>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- MODAL FILTRO POR PRECIO -->
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeCategoryFilter()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Filtrar por Precio</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeCategoryFilter()">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="modal-content">
+        <ion-list>
+          <ion-item class="price-item">
+            <ion-label position="stacked">Mínimo</ion-label>
+            <ion-input type="number" [(ngModel)]="precioMin" placeholder="0"></ion-input>
+          </ion-item>
+
+          <ion-item class="price-item">
+            <ion-label position="stacked">Máximo</ion-label>
+            <ion-input type="number" [(ngModel)]="precioMax" placeholder="0"></ion-input>
+          </ion-item>
+
+          <ion-button expand="block" shape="round" class="custom-button" (click)="filterByPrice()">
+            Filtrar por Precio
+          </ion-button>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
+
+<!-- 🌍 BARRA INFERIOR -->
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons class="ion-justify-content-around">
+      <ion-button (click)="home()">
+        <img src="assets/icon/homeblanco.png" class="icono-boton" />
+      </ion-button>
+      <ion-button (click)="puntoLimpio()">
+        <img src="assets/icon/gpsblanco.png" class="icono-boton" />
+      </ion-button>
+      <ion-button (click)="goProducto()">
+        <img src="assets/icon/subirblanco.png" class="icono-boton" />
+      </ion-button>
+      <ion-button (click)="perfil()">
+        <img src="assets/icon/usuarioblanco.png" class="icono-boton" />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

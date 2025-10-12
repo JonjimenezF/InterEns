@@ -1,3 +1,5 @@
+
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +14,8 @@ import { Router } from '@angular/router';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class PerfilPage implements OnInit {
+
+  selectedTab: string = 'productos'; // 👈 inicializamos en "productos"
 
   constructor(private router: Router) { }
 
@@ -46,4 +50,6 @@ export class PerfilPage implements OnInit {
   puntoLimpio(): void {
     // Acción al ir a punto limpio
   }
+
+  
 }

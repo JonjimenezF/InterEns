@@ -1,0 +1,101 @@
+
+
+:host {
+  --bg: #0c0f13;
+  --card: #14161a;
+  --stroke: #2b3036;
+  --txt: #ffffff;
+  --accent: #1fd39a;
+}
+
+ion-toolbar {
+  --background: var(--card);
+  color: var(--txt);
+  text-align: center;
+  font-weight: 700;
+}
+
+ion-content.fondopuntos {
+  --background: var(--bg);
+  color: var(--txt);
+  text-align: center;
+  padding: 20px;
+}
+
+/* Sección informativa */
+.info-container {
+  margin-top: 40px;
+
+  .points-icon {
+    width: 100px;
+    margin: 0 auto 16px auto;
+    filter: drop-shadow(0 0 10px var(--accent));
+  }
+
+  h1 {
+    color: var(--accent);
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+
+  .descripcion {
+    color: var(--txt);
+    font-size: 1rem;
+    line-height: 1.5;
+    padding: 0 20px;
+
+    .highlight {
+      color: var(--accent);
+      font-weight: 600;
+    }
+  }
+}
+
+/* Puntos acumulados */
+.puntos-acumulados {
+  margin-top: 40px;
+  background: var(--card);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(31, 211, 154, 0.2);
+
+  h2 {
+    color: var(--accent);
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+
+  .contador {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    ion-icon {
+      font-size: 1.8rem;
+      color: var(--accent);
+    }
+
+    span {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+  }
+}
+
+/* Botones */
+.custom-button {
+  --background: var(--accent);
+  --color: #ffffff;
+  font-weight: 700;
+  border-radius: 25px;
+  margin-top: 20px;
+  box-shadow: 0 0 12px rgba(31, 211, 154, 0.4);
+}
+
+.outline-button {
+  --border-color: var(--accent);
+  --color: var(--accent);
+  border-radius: 25px;
+  margin-top: 12px;
+}

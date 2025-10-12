@@ -1,91 +1,133 @@
+:host {
+  --bg: #0c0f13;         
+  --card: #14161a;       
+  --stroke: #2b3036;     
+  --txt: #ffffff;        
+  --muted: #b8bec6;      
+  --accent: #1fd39a;     
+}
+
 ion-toolbar {
-  --background:rgba(10, 174, 122, 0.826);
+  --background: var(--card);
+  color: var(--txt);
+}
+
+ion-menu-button,
+.icono-accent {
+  --color: var(--accent);
 }
 
 ion-content {
-  --background: none; /* Elimina cualquier fondo por defecto */
-  background-image: url('/assets/img/fondo2.png'); /* Ruta de la imagen de fondo */
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  --background: var(--bg);
+  color: var(--txt);
 }
 
-.ion-page {
-  #main-content {
-    ion-content {
-      // Añadir fondo de imagen al ion-content de la página principal
-      background-image: url('/assets/img/foto1.png'); /* Ruta de la imagen */
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-  }
-}
-
-/* Otros estilos globales */
-* {
-  --background: #ffffff; /* Cambia el color de fondo aquí */
-  --background-image: url('/assets/img/foto1.png'); /* Ruta de la imagen */
-}
-
-.color-white {
-  --background: white;
-}
-
-.color-text-black {
-  color: black;
-  font-family: 'Roboto';
-}
-
-.color-text-white {
-  color: rgb(255, 255, 255);
-  font-family: 'Roboto';
-}
-
-.color-text-grey {
-  color: rgb(151, 151, 151);
-  font-family: 'Roboto';
-}
-
-.centrar {
-  display: grid;
-  place-content: center;
-}
-
-.boton-circular {
-  width: 80px; /* Ajusta el ancho según tus necesidades */
-  height: 80px; /* Ajusta la altura según tus necesidades */
-  justify-content: center;
-  align-items: center;
-  --background: rgb(226, 226, 230); /* Color de fondo del botón */
-  margin-left: 10px;
-  z-index: 2;
-}
-
-.imge {
-  width: 300px;
-}
-
-.icono-imagen-derecho {
-  width: 25px; /* Ajusta el ancho según tus necesidades */
-  height: 25px; /* Ajusta la altura según tus necesidades */
-  background: url('/assets/img/magnifier.png') center/cover no-repeat; /* Ruta a tu imagen */
-  border-radius: 50%; /* Hace que el contenedor sea circular */
-}
-
-.icono-imagen-izquierdo {
-  width: 25px; /* Ajusta el ancho según tus necesidades */
-  height: 25px; /* Ajusta la altura según tus necesidades */
-  background: url('/assets/img/up-arrow.png') center/cover no-repeat; /* Ruta a tu imagen */
-  border-radius: 50%; /* Hace que el contenedor sea circular */
-}
-
-.vertical-buttons {
+/* Bienvenida */
+.welcome-card {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Alinea los botones a la izquierda */
+  align-items: center;
+  background: var(--card);
+  margin: 15px;
+  padding: 15px;
+  border-radius: 12px;
+  gap: 10px;
 }
 
-ion-buttons ion-back-button {
-  --color: black;
+.welcome-card ion-avatar img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+/* Saldo */
+.balance-card {
+  text-align: center;
+  margin: 15px;
+  padding: 20px;
+  background: var(--card);
+  border-radius: 12px;
+}
+
+.accent {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Grid de acciones */
+.grid-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  padding: 15px;
+}
+
+.action-card {
+  background: var(--card);
+  padding: 25px 15px;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.action-card ion-icon {
+  font-size: 32px;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.action-card p {
+  color: var(--txt);
+  font-size: 14px;
+}
+
+.action-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.action-card {
+  background: var(--card);
+  padding: 25px 15px;
+  border-radius: 12px;
+  text-align: center;
+  border: 2px solid transparent; /* por defecto sin borde */
+  transition: all 0.25s ease;
+}
+
+.action-card ion-icon {
+  font-size: 32px;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.action-card p {
+  color: var(--txt);
+  font-size: 14px;
+}
+
+/* Hover */
+.action-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Seleccionado (borde verde) */
+.action-card.selected {
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 10px rgba(31, 211, 154, 0.5);
+  transform: scale(1.03);
+}
+
+
+.faq-icon {
+  width:60px;
+  height: 60px;
+  margin-right: 0.6rem;
+}
+
+.menu-btn {
+  color: #1fd39a; /* o el color que quieras, ej: #1fd39a */
+  font-weight: 600; /* opcional, para que resalte */
+  text-align: left; /* opcional, para que quede alineado a la izquierda */
+  margin-bottom: 10px; /* espacio entre botones */
 }
