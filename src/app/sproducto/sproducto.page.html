@@ -1,64 +1,134 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button (click)="goBack()" defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
+      <ion-back-button
+        (click)="goBack()"
+        defaultHref="home"
+        text=""
+        color="rgb(165, 17, 233)">
+      </ion-back-button>
     </ion-buttons>
+    <ion-title>Subir Producto</ion-title>
   </ion-toolbar>
 </ion-header>
 
-  <ion-content>
-    <div class="form-wrapper">
-      <div class="form-container">
-        <h1 style="color: rgb(252, 249, 249);">Subir Producto</h1>
-        <div class="contact-info">
-          <p>Por favor completa el siguiente formulario para agregar un nuevo producto en nuestra plataforma también puedes donar haciendo click en el boton donar.</p>
-          <!-- Div que envuelve el formulario -->
-          <form (ngSubmit)="onSubmit(productForm)" #productForm="ngForm">
-            <ion-item class="custom-item green-border">
-              <ion-input class="custom-input" type="text" placeholder="Nombre del Producto" [(ngModel)]="produc.nombre" name="nombre" required></ion-input>
-            </ion-item>
-  
-            <ion-item class="custom-item green-border">
-              <ion-textarea class="custom-input" placeholder="Descripción" [(ngModel)]="produc.descripcion" name="descripcion" rows="5" required></ion-textarea>
-            </ion-item>
-  
-            <ion-item class="custom-item green-border">
-              <div class="input-button-container">
-                <ion-input class="custom-input" type="text" placeholder="Precio" [(ngModel)]="produc.precio" name="precio" required></ion-input>
-                <ion-button class="donate-button" (click)="toggleDonation()">{{ isDonation ? 'Cancelar Donación' : 'Donar' }}</ion-button>
-              </div>
-            </ion-item>
-  
-            <ion-item class="custom-item green-border">
-              <ion-input class="custom-input" type="text" placeholder="Stock" [(ngModel)]="produc.stock" name="stock" required></ion-input>
-            </ion-item>
-  
-            <ion-item class="custom-item green-border">
-              <ion-select style="color: black;" [(ngModel)]="produc.id_categoria" name="id_categoria" placeholder="Selecciona una categoría" required (ionChange)="actualizarNombreCategoria()">
-                <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id_categoria">
-                  {{ categoria.nombre }}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
+<ion-content>
+  <div class="form-wrapper">
+    <div class="form-container">
+      <h1 style="color: #fff;">Registrar Enser</h1>
+      <p>Completa los datos del producto que deseas compartir o donar.</p>
 
-            <ion-item class="custom-item green-border">
-            
-              <ion-select style="color: black;" [(ngModel)]="selectedBodega" (ionChange)="onBodegaChange($event)"  placeholder="Selecciona una Bodega" required >
-                <ion-select-option value="Bodega Valparaíso">Bodega Valparaíso</ion-select-option>
-                <ion-select-option value="Bodega Viña del Mar">Bodega Viña del Mar</ion-select-option>
-                <ion-select-option value="Retiro Domicilio">Retiro Domicilio</ion-select-option>
-              </ion-select>
-            </ion-item>
-            
+      <!-- Formulario principal -->
+      <form (ngSubmit)="onSubmit(productForm)" #productForm="ngForm">
 
-            
-            
-  
-            <div class="centrar">
-              <ion-button  type="submit" class="custom-button white-background" fill="solid" shape="round">Siguiente</ion-button>
-            </div>
-          </form>
+        <!-- 🔹 TÍTULO DEL ENSER -->
+        <ion-item class="custom-item green-border">
+          <ion-label position="floating">Título</ion-label>
+          <ion-input
+            class="custom-input"
+            type="text"
+            placeholder="Ej. Mesa de comedor"
+            [(ngModel)]="enser.titulo"
+            name="titulo"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <!-- 🔹 DESCRIPCIÓN -->
+        <ion-item class="custom-item green-border">
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-textarea
+            class="custom-input"
+            placeholder="Describe el estado o detalles del producto"
+            [(ngModel)]="enser.descripcion"
+            name="descripcion"
+            rows="4"
+            required>
+          </ion-textarea>
+        </ion-item>
+
+        <!-- 🔹 CATEGORÍA -->
+        <ion-item class="custom-item green-border">
+          <ion-label position="floating">Categoría</ion-label>
+          <ion-select
+            placeholder="Selecciona una categoría"
+            [(ngModel)]="enser.categoria_id"
+            name="categoria_id">
+            <ion-select-option value="1">Muebles</ion-select-option>
+            <ion-select-option value="2">Electrodomésticos</ion-select-option>
+            <ion-select-option value="3">Ropa</ion-select-option>
+            <ion-select-option value="4">Libros</ion-select-option>
+            <ion-select-option value="5">Otros</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <!-- 🔹 VALOR EN PUNTOS -->
+        <ion-item class="custom-item green-border">
+          <ion-label position="floating">Valor en puntos</ion-label>
+          <ion-input
+            class="custom-input"
+            type="number"
+            placeholder="Ej. 50"
+            [(ngModel)]="enser.valor_puntos"
+            name="valor_puntos"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <!-- 🔹 CIUDAD -->
+        <ion-item class="custom-item green-border">
+          <ion-label position="floating">Ciudad</ion-label>
+          <ion-input
+            class="custom-input"
+            type="text"
+            placeholder="Ej. Quillota"
+            [(ngModel)]="enser.ciudad"
+            name="ciudad"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <!-- 🔹 REGIÓN -->
+        <ion-item class="custom-item green-border">
+          <ion-label position="floating">Región</ion-label>
+          <ion-input
+            class="custom-input"
+            type="text"
+            placeholder="Ej. Valparaíso"
+            [(ngModel)]="enser.region"
+            name="region"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <!-- 🔹 INPUT DE IMAGEN -->
+        <!-- Este bloque permite seleccionar la imagen que se subirá a Supabase Storage -->
+        <ion-item class="custom-item green-border">
+          <ion-label>Seleccionar imagen</ion-label>
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            style="color: white; padding: 10px"
+          />
+        </ion-item>
+
+        <!-- Mostrar nombre de imagen seleccionada -->
+        <div *ngIf="selectedFile" style="color: white; font-size: 14px; margin-top: 5px;">
+          Imagen seleccionada: {{ selectedFile.name }}
         </div>
-      </div>
+
+        <!-- 🔹 BOTÓN ENVIAR -->
+        <div class="centrar">
+          <ion-button
+            type="submit"
+            class="custom-button white-background"
+            fill="solid"
+            shape="round">
+            Guardar Enser
+          </ion-button>
+        </div>
+      </form>
     </div>
-  </ion-content>
+  </div>
+</ion-content>
