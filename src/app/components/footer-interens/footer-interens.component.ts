@@ -22,7 +22,7 @@ export class FooterInterensComponent {
   }
 
   goProducto() {
-    this.router.navigate(['/producto']);
+    this.router.navigate(['/sproducto']);
   }
 
   perfil() {
