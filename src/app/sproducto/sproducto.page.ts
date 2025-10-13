@@ -1,8 +1,21 @@
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton,IonFooter, IonContent, IonItem, IonInput, IonTextarea, IonSelect, IonSelectOption, IonButton } from '@ionic/angular/standalone';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButtons,
+  IonBackButton,
+  IonFooter,
+  IonContent,
+  IonItem,
+  IonInput,
+  IonTextarea,
+  IonSelect,
+  IonSelectOption,
+  IonButton
+} from '@ionic/angular/standalone';
 import { NavController, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +30,7 @@ import { FooterInterensComponent } from '../components/footer-interens/footer-in
   templateUrl: './sproducto.page.html',
   styleUrls: ['./sproducto.page.scss'],
   standalone: true,
-  imports: [ 
+  imports: [
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -31,38 +44,30 @@ import { FooterInterensComponent } from '../components/footer-interens/footer-in
     IonSelectOption,
     IonButton,
     CommonModule,
-    FormsModule, IonFooter, FooterInterensComponent]
+    FormsModule,
+    IonFooter,
+    FooterInterensComponent
+  ]
 })
 export class SproductoPage implements OnInit {
-
-  
   nombreFoto: string | undefined;
   userInfo?: any;
   selectedFile: File | null = null;
   isDonation: boolean = false;
   camposInvalidos: Set<string> = new Set();
-
   selectedBodega: any = '';
 
-  onBodegaChange(event: any) {
-    this.selectedBodega = event.detail.value;
-  }
-
-  
-
   produc = {
-    nombre: "",
-    descripcion: "",
-    precio: "",
-    stock: "",
-    id_usuario: "",
-    id_categoria: ""
+    nombre: '',
+    descripcion: '',
+    precio: '',
+    stock: '',
+    id_usuario: '',
+    id_categoria: ''
   };
 
- 
-
   nombreCat = {
-    nombre_categoria: ""
+    nombre_categoria: ''
   };
 
   categorias: any[] = [];
@@ -85,44 +90,60 @@ export class SproductoPage implements OnInit {
 
   ngOnInit() {
     if (this.userInfo) {
-      console.log(this.userInfo.id);
+      console.log('🧩 Usuario:', this.userInfo.id);
     } else {
-      console.log('El objeto userInfo es null o undefined');
+      console.log('⚠️ El objeto userInfo es null o undefined');
     }
+
     this.getCategorias();
   }
-  
 
+  /** ✅ Obtener categorías desde Supabase */
+  async getCategorias() {
+    try {
+      this.categorias = await this.categoriaService.getTodasCategorias();
+      console.log('✅ Categorías cargadas:', this.categorias);
+    } catch (error) {
+      console.error('❌ Error al obtener categorías:', error);
+      this.presentToast('Error al cargar categorías desde Supabase.');
+    }
+  }
+
+  /** ✅ Enviar formulario */
   onSubmit(productForm: NgForm) {
     const product = productForm.value;
-    this.produc.id_usuario = this.userInfo.id
+    this.produc.id_usuario = this.userInfo?.id;
+
     if (!this.camposValidos(product)) {
       this.presentToast('Por favor completa todos los campos.');
       return;
     }
-  
-    this.produc.id_usuario = this.userInfo.id;
-  
+
+    this.produc.id_usuario = this.userInfo?.id;
+
     this.productService.addProduct(this.produc).subscribe({
       next: (response: any) => {
-        console.log(response);
+        console.log('✅ Producto registrado:', response);
         this.presentToast('Registro exitoso.', 3000);
-  
+
         setTimeout(() => {
-          console.log("exito");
-          this.router.navigate(['/sfoto'], { state: { creadoProducto: response.id_producto } });
+          this.router.navigate(['/sfoto'], {
+            state: { creadoProducto: response.id_producto }
+          });
         }, 3200);
       },
       error: (error: any) => {
-        console.error('Error al registrar el producto:', error);
+        console.error('❌ Error al registrar el producto:', error);
         this.presentToast('Error al registrar el producto. Inténtalo de nuevo.');
       }
     });
   }
-  
+
+  /** 🧩 Validar campos antes de enviar */
   camposValidos(product: producto): boolean {
     this.camposInvalidos.clear();
-    console.log(product);
+    console.log('📦 Datos del formulario:', product);
+
     if (!product.nombre || product.nombre.trim() === '') {
       this.camposInvalidos.add('nombre');
     }
@@ -149,13 +170,16 @@ export class SproductoPage implements OnInit {
     if (!product.id_categoria) {
       this.camposInvalidos.add('id_categoria');
     }
+
     return this.camposInvalidos.size === 0;
   }
 
+  /** 📁 Seleccionar imagen */
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
   }
 
+  /** 🗑️ Eliminar imagen */
   eliminarFoto(nombreFoto: string) {
     this.http.delete<any>(`http://localhost:5000/eliminar_foto/${nombreFoto}`).subscribe(
       (response) => {
@@ -170,6 +194,7 @@ export class SproductoPage implements OnInit {
     );
   }
 
+  /** 🔔 Mostrar mensajes */
   async presentToast(message: string, duration: number = 2000) {
     const toast = await this.toastController.create({
       message,
@@ -179,37 +204,38 @@ export class SproductoPage implements OnInit {
     toast.present();
   }
 
+  /** 🔙 Volver atrás */
   goBack() {
     this.navCtrl.back();
   }
 
-  getCategorias() {
-    this.categoriaService.getTodasCategorias().subscribe(
-      (data) => {
-        this.categorias = data;
-        console.log('Categorias:', this.categorias);
-      },
-      (error) => {
-        console.error('Error al obtener categorías:', error);
-      }
-    );
-  }
-
+  /** 🎁 Cambiar modo de donación */
   toggleDonation() {
     this.isDonation = !this.isDonation;
     if (this.isDonation) {
-      this.produc.precio = "$0";
+      this.produc.precio = '$0';
     } else {
-      this.produc.precio = "";
+      this.produc.precio = '';
     }
   }
 
+  /** 🔄 Actualizar nombre de la categoría seleccionada */
   actualizarNombreCategoria() {
-    const categoriaSeleccionada = this.categorias.find(cat => cat.id_categoria === this.produc.id_categoria);
-    this.nombreCat.nombre_categoria = categoriaSeleccionada ? categoriaSeleccionada.nombre : '';
+    const categoriaSeleccionada = this.categorias.find(
+      cat => cat.id === this.produc.id_categoria
+    );
+    this.nombreCat.nombre_categoria = categoriaSeleccionada
+      ? categoriaSeleccionada.nombre
+      : '';
   }
 
+  /** ⚠️ Resalta campos inválidos en el formulario */
   esCampoInvalido(campo: string): boolean {
     return this.camposInvalidos.has(campo);
+  }
+
+  /** 📦 Cambiar bodega */
+  onBodegaChange(event: any) {
+    this.selectedBodega = event.detail.value;
   }
 }

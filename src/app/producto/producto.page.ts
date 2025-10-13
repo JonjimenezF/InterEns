@@ -54,12 +54,14 @@ export class ProductoPage implements OnInit {
     this.getProductos();
   }
 
-  getCategorias() {
-    this.categoriaService.getTodasCategorias().subscribe({
-      next: (data: any[]) => (this.categorias = data),
-      error: (error) => console.error(error),
-    });
+  async getCategorias() {
+  try {
+    this.categorias = await this.categoriaService.getTodasCategorias();
+    console.log('✅ Categorías cargadas:', this.categorias);
+  } catch (error) {
+    console.error('❌ Error al obtener categorías:', error);
   }
+}
 
   getProductos() {
     this.productService.getProduct().subscribe({
