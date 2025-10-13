@@ -1,0 +1,76 @@
+:host {
+  --bg: #0c0f13;
+  --card: #14161a;
+  --stroke: #2b3036;
+  --txt: #ffffff;
+  --accent: #1fd39a;
+}
+
+ion-toolbar {
+  --background: var(--card);
+  color: var(--txt);
+}
+
+ion-content.fondohistorial {
+  --background: var(--bg);
+  color: var(--txt);
+  text-align: center;
+  padding: 16px;
+}
+
+.intro {
+  margin-top: 30px;
+
+  .history-icon {
+    width: 90px;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 10px var(--accent));
+  }
+
+  h1 {
+    color: var(--accent);
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+
+  p {
+    color: var(--muted);
+    font-size: 1rem;
+  }
+}
+
+.lista-historial {
+  margin-top: 25px;
+}
+
+.history-card {
+  background: var(--card);
+  border-radius: 14px;
+  margin-bottom: 16px;
+  box-shadow: 0 0 10px rgba(31, 211, 154, 0.2);
+  text-align: left;
+
+  ion-card-title {
+    color: var(--txt);
+    font-weight: 700;
+  }
+
+  ion-card-subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  ion-card-content {
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-align: right;
+
+    &.positivo {
+      color: var(--accent);
+    }
+
+    &.negativo {
+      color: #e74c3c;
+    }
+  }
+}

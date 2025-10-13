@@ -1,11 +1,28 @@
+
+
+:host {
+  --bg: #0c0f13;         /* fondo más oscuro */
+  --card: #14161a;       /* cajas grises */
+  --stroke: #2b3036;     /* borde sutil */
+  --txt: #ffffff;        /* texto principal */
+  --muted: #b8bec6;      /* placeholder / iconos */
+  --accent: #1fd39a;     /* verde vibrante */
+}
+
 ion-toolbar {
-  --background: rgba(10, 174, 122, 0.826);
+  --background: var(--card);
+  color: var(--txt);
+}
+
+ion-title {
+  color: var(--txt);
+  font-weight: 700;
 }
 
 ion-content {
-  background-image: url('/assets/img/fondo2.png'); /* Ruta de la imagen */
+  --background: var(--bg);
+  color: var(--txt);
   background-size: cover;
-  --background: transparent; /* Para asegurar que el fondo de ion-content sea transparente */
 }
 
 .contact-container {
@@ -14,21 +31,22 @@ ion-content {
   padding: 20px;
 
   .form-wrapper {
-    background-color: white; /* Fondo blanco para el formulario */
-    padding: 20px; /* Añade algo de espacio alrededor del formulario */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera para el formulario */
-    margin-bottom: 20px; /* Espacio entre form-wrapper y contact-details */
-    
+    background-color: var(--card);
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    margin-bottom: 20px;
+
     h1 {
       text-align: center;
       margin-bottom: 20px;
-      color: #000000;
+      color: var(--txt);
+      font-weight: 800;
     }
 
     .contact-info {
-      color: #000000;
-      margin-bottom: 40px;
+      color: var(--txt);
+      margin-bottom: 30px;
 
       form {
         display: flex;
@@ -38,58 +56,62 @@ ion-content {
           margin-bottom: 15px;
 
           label {
-            font-weight: bold;
+            font-weight: 600;
             display: block;
-            margin-bottom: 5px;
-            color: #000000;
+            margin-bottom: 6px;
+            color: var(--muted);
           }
 
-          input, textarea {
+          input,
+          textarea {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: white;
-            color: #000000;
+            padding: 10px;
+            border: 1px solid var(--stroke);
+            border-radius: 8px;
+            background-color: var(--bg);
+            color: var(--txt);
+            font-size: 15px;
+
+            &:focus {
+              border-color: var(--accent);
+              outline: none;
+            }
           }
 
           textarea {
             resize: vertical;
-            background-color: white;
-            color: #000000;
           }
         }
 
         .custom-button {
-          --background: #4CAF50;
-          --color: white;
-          padding: 10px 20px;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
-
-          &:hover {
-            --background: #45a049; /* Color ligeramente más oscuro para el hover */
-          }
+          --background: var(--accent);
+          --color: #0b1115;
+          --border-radius: 12px;
+          --padding-top: 14px;
+          --padding-bottom: 14px;
+          font-weight: 700;
+          margin-top: 10px;
         }
       }
     }
   }
 
   .contact-details {
-    background-color: white; /* Fondo blanco para el formulario */
-    padding: 20px; /* Añade algo de espacio alrededor del formulario */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera para el formulario */
-      h2 {
-      color: #000000;
-      margin-bottom: 10px;
-      }
+    background-color: var(--card);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 
-      p {
-      color: #000000;
-      margin-bottom: 5px;
-      }
+    h2 {
+      color: var(--txt);
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    p {
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
   }
 }
 
@@ -97,5 +119,59 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #000000; /* Fondo gris claro para todo el cuerpo */
+  background-color: var(--bg);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* centrado del conjunto */
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.brand-name {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--txt);
+}
+
+ 
+/* Tab bar inferior */
+ion-tab-bar {
+  --background: var(--card);
+  border-top: 1px solid var(--stroke);
+}
+
+ion-tab-button {
+  --color: var(--muted);
+  --color-selected: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+ion-segment {
+  --background: transparent;
+  margin: 16px 0;
+}
+
+ion-segment-button {
+  --color: #fff;
+  --color-checked: #0b1115;
+  --indicator-color: transparent;
+  --background: var(--card);
+  --background-checked: var(--accent);
+  border-radius: 12px;
+  margin: 0 6px;
+  font-weight: 600;
+}
+.icono-boton {
+  width: 24px;
+  height: 24px;
+  object-fit: contain; /* Mantiene proporción de la imagen */
 }

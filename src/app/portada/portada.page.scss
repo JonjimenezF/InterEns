@@ -1,44 +1,135 @@
-* {
-    --background: #ffffff; /* Cambia el color de fondo aquí */
-  }
-.signin-btns{
-    text-align: center;
-    h1{
-        color: rgb(10, 163, 23);
+
+
+:host {
+  --bg: #0c0f13;     /* fondo oscuro base */
+  --txt: #ffffff;    /* color texto principal */
+  --accent: #1fd39a; /* verde vibrante */
+}
+
+ion-content.portada {
+  background: linear-gradient(135deg, #0c0f13, #1fd39a, #0c0f13);
+  background-size: 300% 300%;
+  animation: moverFondo 10s ease infinite;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  position: relative; /* para que los pseudo-elementos de halo funcionen bien */
+
+  &.loaded {
+    /* se activan animaciones cuando se añade esta clase */
+    .logo-container {
+      animation: logoZoomIn 0.9s cubic-bezier(.25, .8, .25, 1) forwards;
     }
+    .boton-container {
+      animation: botonFadeUp 0.9s ease-out forwards;
+      animation-delay: 0.9s;
+    }
+  }
 
-}
-
-.btn{
+  .contenedor {
     display: flex;
-    --background: rgb(95, 103, 212); 
-    color: white;
-    width: 310px; /* Ajusta este valor al ancho deseado */
-    padding: 8px 16px; /* Ajusta estos valores al padding deseado */
-}
-
-ion-img {
-    margin-top: 350px;
-    width: 100px;
-}
-h1{
-    display: flex;
-    // margin-left: 130px;
-    color: white;
-    font-size: 30px;
-}
-
-ion-content.fondohome {
-    --background: url('../../assets/img/portada.png')center center/cover no-repeat; /* Reemplaza 'ruta/de/la/imagen.jpg' con la ruta real de tu imagen */
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-}
-
-.centrar{
-    display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 55%; /* Ajusta el alto según sea necesario */
+    justify-content: center;
+    height: 100%; /* ocupa toda la altura para centrar bien */
+    gap: 50px;    /* espacio entre logo+texto y botón */
+    z-index: 2;   /* encima del halo */
+  }
+
+  .logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;       /* espacio entre logo e título */
+    opacity: 0;
+    transform: scale(0.6);
+    position: relative; /* para el halo detrás */
+  }
+
+  .logo-container::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(31,211,154,0.25) 0%, transparent 70%);
+    /* haz que el halo sea un poco difuso y amplio */
+    filter: blur(20px);
+    z-index: -1;
+  }
+
+  .boton-container {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 }
 
+/* --- animaciones de fondo, logo y botón --- */
+
+@keyframes moverFondo {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes logoZoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes botonFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- estilos visuales de los elementos del logo, botón, etc. --- */
+
+.logo {
+  width: 40%;
+  max-width: 160px;
+  height: auto;
+  margin: 0; /* ya centrado, no hace falta margin grande */
+}
+
+.brand-name {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--txt);
+}
+
+.cta {
+  --background: var(--accent);
+  --color: #0b1115;
+  --border-radius: 12px;
+  font-weight: 700;
+  width: 200px;
+  height: 50px;
+  letter-spacing: 1px;
+  /* centrado por flex, no necesitas margin grande */
+}

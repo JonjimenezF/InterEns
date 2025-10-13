@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonContent, IonItem, IonInput, IonTextarea, IonSelect, IonSelectOption, IonButton } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton,IonFooter, IonContent, IonItem, IonInput, IonTextarea, IonSelect, IonSelectOption, IonButton } from '@ionic/angular/standalone';
 import { NavController, ToastController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +10,7 @@ import { ProductoService } from '../servicios/producto.service';
 import { UsuarioService } from '../servicios/usuario.service';
 import { producto } from '../models/producto';
 import { CategoriaService } from '../servicios/categoria.service';
+import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 
 @Component({
   selector: 'app-sproducto',
@@ -30,7 +31,7 @@ import { CategoriaService } from '../servicios/categoria.service';
     IonSelectOption,
     IonButton,
     CommonModule,
-    FormsModule]
+    FormsModule, IonFooter, FooterInterensComponent]
 })
 export class SproductoPage implements OnInit {
 

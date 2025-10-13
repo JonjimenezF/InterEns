@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/puntos" text="" ></ion-back-button>
+    </ion-buttons>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondohistorial">
+  <section class="intro">
+   
+    <h1>Historial de Actividad</h1>
+    <p>Consulta cómo has ganado o utilizado tus puntos dentro de InterEns.</p>
+  </section>
+
+  <section class="lista-historial">
+    <ion-card *ngFor="let transaccion of historial" class="history-card">
+      <ion-card-header>
+        <ion-card-title>{{ transaccion.descripcion }}</ion-card-title>
+        <ion-card-subtitle>{{ transaccion.fecha }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content [ngClass]="{'positivo': transaccion.puntos > 0, 'negativo': transaccion.puntos < 0}">
+        <span>{{ transaccion.puntos > 0 ? '+' : '' }}{{ transaccion.puntos }} pts</span>
+      </ion-card-content>
+    </ion-card>
+  </section>
+</ion-content>
+<app-footer-interens></app-footer-interens>
