@@ -150,9 +150,10 @@ export class SproductoPage implements OnInit {
     return urls;
   }
 
-  async onSubmit(form: NgForm) {
+  // 💾 Guardar o publicar producto
+  async onSubmit(form: NgForm, modo: 'borrador' | 'publicado') {
     if (form.invalid) {
-      this.presentToast('Completa todos los campos.');
+      this.presentToast('Completa todos los campos obligatorios.');
       return;
     }
 
@@ -164,20 +165,27 @@ export class SproductoPage implements OnInit {
     this.enser.propietario_id = this.userInfo.id;
 
     try {
-      this.presentToast('Subiendo imágenes...', 2000);
+      this.presentToast('Subiendo imágenes...', 1500);
       const imageUrls = await this.uploadAllImages();
 
       this.enser.imagen_url = imageUrls[0] || null;
       this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
 
+      this.enser.estado = modo === 'borrador' ? 'borrador' : 'publicado';
+
       const { data, error } = await this.enserService.addEnser(this.enser);
       if (error) throw error;
 
-      this.presentToast('✅ Enser registrado con éxito.');
+      if (modo === 'borrador') {
+        this.presentToast('📝 Borrador guardado. Puedes editarlo más tarde.');
+      } else {
+        this.presentToast('✅ Producto publicado correctamente.');
+      }
+
       this.router.navigate(['/home']);
     } catch (err) {
       console.error('[SPRODUCTO] Error al guardar:', err);
-      this.presentToast('❌ Error al subir el enser o las imágenes.');
+      this.presentToast('❌ Error al guardar el producto.');
     }
   }
 

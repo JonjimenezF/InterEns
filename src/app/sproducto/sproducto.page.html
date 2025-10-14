@@ -9,7 +9,7 @@
 
 <ion-content class="ion-padding">
 
-  <form (ngSubmit)="onSubmit(productForm)" #productForm="ngForm">
+  <form #productForm="ngForm">
 
     <!-- 🔹 Título -->
     <ion-item>
@@ -34,25 +34,16 @@
     <!-- 🔹 Condición -->
     <ion-item class="custom-item green-border">
       <ion-label position="floating">Condición</ion-label>
-      <ion-select placeholder="Selecciona una condición" [(ngModel)]="enser.condicion" name="condicion" required>
+      <ion-select
+        placeholder="Selecciona una condición"
+        [(ngModel)]="enser.condicion"
+        name="condicion"
+        required>
         <ion-select-option value="nuevo">Nuevo</ion-select-option>
         <ion-select-option value="como_nuevo">Como nuevo</ion-select-option>
         <ion-select-option value="bueno">Bueno</ion-select-option>
         <ion-select-option value="aceptable">Aceptable</ion-select-option>
         <ion-select-option value="para_reparar">Para reparar</ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <!-- 🔹 Estado -->
-    <ion-item class="custom-item green-border">
-      <ion-label position="floating">Estado</ion-label>
-      <ion-select placeholder="Selecciona un estado" [(ngModel)]="enser.estado" name="estado" required>
-        <ion-select-option value="borrador">Borrador</ion-select-option>
-        <ion-select-option value="publicado">Publicado</ion-select-option>
-        <ion-select-option value="reservado">Reservado</ion-select-option>
-        <ion-select-option value="intercambiado">Intercambiado</ion-select-option>
-        <ion-select-option value="retirado">Retirado</ion-select-option>
-        <ion-select-option value="bloqueado">Bloqueado</ion-select-option>
       </ion-select>
     </ion-item>
 
@@ -80,21 +71,25 @@
       <input type="file" (change)="onFilesSelected($event)" accept="image/*" multiple />
     </ion-item>
 
-    <!-- 🖼️ Vista previa con opción de eliminar -->
+    <!-- 🖼️ Vista previa -->
     <div *ngIf="previewUrls.length > 0" class="preview-container">
       <h4>Previsualización</h4>
       <div class="image-preview-grid">
-        <div *ngFor="let url of previewUrls; let i = index" class="image-wrapper">
+        <div *ngFor="let url of previewUrls; let i = index" class="preview-wrapper">
           <img [src]="url" class="preview-img" />
-          <button type="button" class="remove-btn" (click)="removeImage(i)">✕</button>
+          <button type="button" class="remove-btn" (click)="removeImage(i)">✖</button>
         </div>
       </div>
     </div>
 
-    <!-- 🔘 Botón -->
+    <!-- 🔘 Botones de acción -->
     <div class="centrar">
-      <ion-button expand="block" type="submit" color="primary" shape="round">
-        Guardar Enser
+      <ion-button expand="block" color="medium" shape="round" (click)="onSubmit(productForm, 'borrador')">
+        Guardar Borrador
+      </ion-button>
+
+      <ion-button expand="block" color="primary" shape="round" (click)="onSubmit(productForm, 'publicado')">
+        Publicar Producto
       </ion-button>
     </div>
   </form>
@@ -117,11 +112,11 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     margin: 1em 0;
   }
 
-  .image-wrapper {
+  .preview-wrapper {
     position: relative;
     display: inline-block;
   }
@@ -138,20 +133,15 @@
     position: absolute;
     top: -5px;
     right: -5px;
-    background: rgba(255, 0, 0, 0.8);
+    background-color: rgba(255, 0, 0, 0.8);
     color: white;
     border: none;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
     cursor: pointer;
+    width: 22px;
+    height: 22px;
     font-size: 14px;
-    line-height: 18px;
-    transition: background 0.3s;
-  }
-
-  .remove-btn:hover {
-    background: #ff4444;
+    line-height: 20px;
   }
 
   .centrar {
