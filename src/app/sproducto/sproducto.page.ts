@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { supabase } from '../services/supabase.client';
 import { EnserService } from '../services/enser.service';
 import { CategoriaService } from '../servicios/categoria.service';
+import { ProductosBackendService } from '../servicios/productos-backend.service'; // 👈 nuevo servicio
 
 // 🧱 Importaciones de Ionic (standalone)
 import {
@@ -74,7 +75,7 @@ export class SproductoPage implements OnInit {
     descripcion: '' as string,
     categoria_id: null as number | null,
     condicion: 'bueno' as string,
-    estado: '' as string, // ✅ valor por defecto válido según enum en Supabase
+    estado: '' as string,
     valor_puntos: 0 as number,
     ciudad: '' as string,
     region: '' as string,
@@ -97,7 +98,8 @@ export class SproductoPage implements OnInit {
     private activateRoute: ActivatedRoute,
     private toastController: ToastController,
     private enserService: EnserService,
-    private categoriaService: CategoriaService
+    private categoriaService: CategoriaService,
+    private productosBackend: ProductosBackendService // 👈 conexión con backend
   ) {
     // 🔍 Recuperar datos del estado (si viene del Home)
     const state = this.router.getCurrentNavigation()?.extras.state;
@@ -131,7 +133,6 @@ export class SproductoPage implements OnInit {
 
       if (catErr) throw catErr;
       this.categorias = categorias || [];
-
     } catch (error) {
       console.error('[SPRODUCTO] Error en ngOnInit:', error);
       this.presentToast('❌ Error al cargar datos iniciales.');
@@ -174,7 +175,7 @@ export class SproductoPage implements OnInit {
     return urls;
   }
 
-  // 💾 Guardar el enser junto a las imágenes
+  // 💾 Guardar el enser junto a las imágenes y actualizar puntos
   async onSubmit(form: NgForm) {
     if (form.invalid) {
       this.presentToast('Completa todos los campos.');
@@ -193,26 +194,26 @@ export class SproductoPage implements OnInit {
       const imageUrls = await this.uploadAllImages();
 
       this.enser.imagen_url = imageUrls[0] || null;
-      this.enser.imagenes_extra = [
-        ...(this.enser.imagenes_extra || []),
-        ...imageUrls
-      ];
+      this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
 
-      // 🧾 Guardar en base de datos
-      const { data, error } = await this.enserService.addEnser(this.enser);
-      if (error) throw error;
+      // 🧹 Eliminar campos vacíos
+      const enserToSave = { ...this.enser };
+      Object.keys(enserToSave).forEach((key) => {
+        const value = enserToSave[key as keyof typeof enserToSave];
+        if (value === '' || value === null) {
+          delete enserToSave[key as keyof typeof enserToSave];
+        }
+      });
 
-      this.presentToast('✅ Enser registrado con éxito.');
+      // ✅ Enviar al backend para guardar producto y actualizar puntos
+      const response = await this.productosBackend.uploadProduct(enserToSave).toPromise();
+
+      console.log('✅ Producto y puntos actualizados:', response);
+      this.presentToast('✅ Producto subido con éxito. ¡Puntos actualizados!');
       this.router.navigate(['/home']);
-
     } catch (err: any) {
       console.error('[SPRODUCTO] Error al guardar:', err);
-
-      if (err?.message?.includes('estado_enser')) {
-        this.presentToast('⚠️ Valor de estado inválido, se usará "disponible".');
-      } else {
-        this.presentToast('❌ Error al subir el enser o las imágenes.');
-      }
+      this.presentToast('❌ Error al subir el enser o actualizar puntos.');
     }
   }
 

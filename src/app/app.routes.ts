@@ -138,26 +138,26 @@ export const routes: Routes = [
     path: 'verificarcontra',
     loadComponent: () => import('./verificarcontra/verificarcontra.page').then( m => m.VerificarcontraPage)
   },
-  {
-    path: 'sfoto',
-    loadComponent: () => import('./sfoto/sfoto.page').then( m => m.SfotoPage)
-  },
+  
+  //   path: 'sfoto',
+  //   loadComponent: () => import('./sfoto/sfoto.page').then( m => m.SfotoPage)
+  // },
   {
     path: 'registrar',
     loadComponent: () => import('./registrar/registrar.page').then( m => m.RegistrarPage)
   },
-  {
-    path: 'detalle-producto',
-    loadComponent: () => import('./detalle-producto/detalle-producto.page').then( m => m.DetalleProductoPage)
-  },
+  // {
+  //   path: 'detalle-producto',
+  //   loadComponent: () => import('./detalle-producto/detalle-producto.page').then( m => m.DetalleProductoPage)
+  // },
   {
     path: 'sproducto',
     loadComponent: () => import('./sproducto/sproducto.page').then( m => m.SproductoPage)
   },
-  {
-    path: 'carrito',
-    loadComponent: () => import('./carrito/carrito.page').then( m => m.CarritoPage)
-  },
+  // {
+  //   path: 'carrito',
+  //   loadComponent: () => import('./carrito/carrito.page').then( m => m.CarritoPage)
+  // },
   //{
   //   path: 'categoria',
   //   loadComponent: () => import('./categoria/categoria.page').then( m => m.CategoriaPage)
@@ -170,10 +170,10 @@ export const routes: Routes = [
     path: 'contacto',
     loadComponent: () => import('./contacto/contacto.page').then( m => m.ContactoPage)
   },
-  {
-    path: 'mis-productos',
-    loadComponent: () => import('./mis-productos/mis-productos.page').then( m => m.MisProductosPage)
-  },
+  // {
+  //   path: 'mis-productos',
+  //   loadComponent: () => import('./mis-productos/mis-productos.page').then( m => m.MisProductosPage)
+  // },
   {
   path: 'puntos',
   loadComponent: () => import('./puntos/puntos.page').then(m => m.PuntosPage)

@@ -1,76 +1,175 @@
 :host {
-  --bg: #0c0f13;
-  --card: #14161a;
-  --stroke: #2b3036;
-  --txt: #ffffff;
-  --accent: #1fd39a;
+  --bg: #0c0f13;       /* fondo oscuro */
+  --card: #14161a;     /* tarjetas */
+  --stroke: #2b3036;   /* borde sutil */
+  --txt: #ffffff;      /* texto principal */
+  --muted: #b8bec6;    /* texto secundario */
+  --accent: #1fd39a;   /* verde vibrante */
+  --danger: #e74c3c;   /* rojo para puntos negativos */
 }
 
+/* ====== ENCABEZADO ====== */
 ion-toolbar {
   --background: var(--card);
   color: var(--txt);
+  border-bottom: 1px solid var(--stroke);
+
+  ion-title {
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+  }
 }
 
+/* ====== CONTENIDO ====== */
 ion-content.fondohistorial {
   --background: var(--bg);
   color: var(--txt);
+  padding: 20px;
   text-align: center;
-  padding: 16px;
 }
 
+/* ====== INTRO ====== */
 .intro {
-  margin-top: 30px;
+  margin-top: 25px;
+  margin-bottom: 20px;
 
-  .history-icon {
-    width: 90px;
-    margin-bottom: 12px;
-    filter: drop-shadow(0 0 10px var(--accent));
+  .logo-historial {
+    width: 100px;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 8px var(--accent));
   }
 
   h1 {
+    font-size: 1.5rem;
     color: var(--accent);
-    font-size: 1.6rem;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
+    font-weight: 600;
   }
 
   p {
     color: var(--muted);
-    font-size: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    max-width: 90%;
+    margin: 0 auto;
+  }
+
+  .highlight {
+    color: var(--accent);
+    font-weight: bold;
   }
 }
 
-.lista-historial {
-  margin-top: 25px;
+/* ====== RESUMEN ====== */
+.resumen {
+  margin-top: 10px;
+  margin-bottom: 20px;
+
+  .resumen-box {
+    background: var(--card);
+    border: 1px solid var(--stroke);
+    border-radius: 16px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 0 12px rgba(31, 211, 154, 0.15);
+
+    ion-icon {
+      color: var(--accent);
+      font-size: 1.5rem;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--txt);
+      font-weight: 500;
+    }
+  }
 }
 
+/* ====== HISTORIAL ====== */
+.lista-historial {
+  margin-top: 15px;
+}
+
+/* ====== TARJETAS ====== */
 .history-card {
   background: var(--card);
-  border-radius: 14px;
+  border-radius: 16px;
   margin-bottom: 16px;
-  box-shadow: 0 0 10px rgba(31, 211, 154, 0.2);
+  box-shadow: 0 0 10px rgba(31, 211, 154, 0.15);
   text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 14px rgba(31, 211, 154, 0.3);
+  }
+
+  ion-card-header {
+    border-bottom: 1px solid var(--stroke);
+    padding-bottom: 6px;
+  }
 
   ion-card-title {
     color: var(--txt);
-    font-weight: 700;
+    font-weight: 600;
+    font-size: 1rem;
   }
 
   ion-card-subtitle {
     color: var(--muted);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
   ion-card-content {
     font-weight: 700;
     font-size: 1.1rem;
     text-align: right;
+    padding-right: 15px;
 
     &.positivo {
       color: var(--accent);
     }
 
     &.negativo {
-      color: #e74c3c;
+      color: var(--danger);
     }
   }
+}
+
+/* ====== SIN HISTORIAL ====== */
+.sin-historial {
+  margin-top: 40px;
+  text-align: center;
+  color: var(--muted);
+
+  .icono-vacio {
+    font-size: 3rem;
+    color: var(--accent);
+    opacity: 0.7;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+}
+
+/* ====== SCROLL PERSONALIZADO ====== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--bg);
 }

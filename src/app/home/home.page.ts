@@ -140,6 +140,7 @@ import {
 } from '@ionic/angular/standalone';
 import { NavController } from '@ionic/angular';
 import { supabase } from 'src/shared/supabase/supabase.client';
+import { PuntosService } from '../servicios/puntos.service'; // ✅ importamos el servicio
 
 @Component({
   selector: 'app-home',
@@ -171,20 +172,19 @@ export class HomePage {
   // 👇 Propiedad para saber qué tarjeta está seleccionada
   selectedCard: string | null = null;
 
+  // 💰 Nueva propiedad para mostrar puntos
+  puntosTotales: number = 0;
+
   constructor(
     private router: Router,
     private activateRoute: ActivatedRoute,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private puntosService: PuntosService // ✅ inyectamos el servicio
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
       this.userInfo = state['userInfo'];
     }
-  }
-
-  // 👇 Método que marca la tarjeta activa
-  selectCard(card: string) {
-    this.selectedCard = card;
   }
 
   // 🔹 Obtiene la sesión del usuario actual desde Supabase
@@ -196,9 +196,32 @@ export class HomePage {
       this.userInfo = userData.user;
       this.userId = userData.user.id;
       console.log('Usuario activo:', this.userId);
+
+      // 🔸 Traer puntos cuando hay usuario
+      this.obtenerPuntos();
     } else {
       console.warn('No hay usuario autenticado.');
     }
+  }
+
+  // 🪙 Obtener puntos desde el backend
+  obtenerPuntos() {
+    if (!this.userId) return;
+
+    this.puntosService.getUserPoints(this.userId).subscribe({
+      next: (res) => {
+        console.log('🎯 Puntos obtenidos (Home):', res);
+        this.puntosTotales = res.total_points || 0;
+      },
+      error: (err) => {
+        console.error('❌ Error al obtener puntos en Home:', err);
+      }
+    });
+  }
+
+  // 👇 Método que marca la tarjeta activa
+  selectCard(card: string) {
+    this.selectedCard = card;
   }
 
   // 🌍 Navegaciones principales

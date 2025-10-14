@@ -3,14 +3,14 @@
     <ion-buttons slot="start">
       <ion-back-button (click)="goBack()" defaultHref="home" text=""></ion-back-button>
     </ion-buttons>
-    <ion-title>Subir Producto</ion-title>
+    
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="form-wrapper">
     <div class="form-container">
-      <h1>Subir Enser</h1>
+      <h1>Subir Producto</h1>
       <div class="contact-info">
         <p>
           Completa el siguiente formulario para agregar un nuevo enser a la plataforma.
@@ -42,17 +42,19 @@
             </ion-textarea>
           </ion-item>
 
-          <!-- Valor en puntos -->
-          <ion-item class="custom-item green-border">
-            <ion-input
-              class="custom-input"
-              type="number"
-              placeholder="Valor en puntos"
-              [(ngModel)]="enser.valor_puntos"
-              name="valor_puntos"
-              required>
-            </ion-input>
-          </ion-item>
+          <!-- Campo Valor de Puntos -->
+<!-- Valor de puntos -->
+<ion-item class="custom-item green-border">
+  <ion-input
+    class="custom-input"
+    type="number"
+    placeholder="Valor de puntos"
+    [(ngModel)]="enser.valor_puntos"
+    name="valor_puntos"
+    required>
+  </ion-input>
+</ion-item>
+
 
           <!-- Categoría -->
           <ion-item class="custom-item green-border">

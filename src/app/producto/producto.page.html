@@ -1,18 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button 
-        (click)="goBack()" 
-        defaultHref="home" 
-        text="">
-      </ion-back-button>
+      <ion-back-button (click)="goBack()" defaultHref="home" text=""></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content id="main-content">
 
-  <!-- 🌿 NUEVA CABECERA DE FILTROS -->
+  <!-- 🌿 CABECERA DE FILTROS -->
   <section class="filter-section">
     <div class="logo-area">
       <ion-img src="assets/nuevos_img/interens-logo.png" alt="InterEns" class="logo"></ion-img>
@@ -23,8 +19,8 @@
       <ion-searchbar
         placeholder="Buscar productos..."
         [(ngModel)]="searchQuery"
-        (ionInput)="filterProducts()"
-        class="searchbar">
+        class="searchbar"
+        (ionInput)="applyAllFilters()">
       </ion-searchbar>
 
       <!-- 🎚️ FILTROS -->
@@ -37,19 +33,19 @@
             interface="popover"
             placeholder="Categoría"
             [(ngModel)]="categoriaSeleccionada"
-            (ionChange)="filterByCategory()">
-            <ion-select-option *ngFor="let cat of categorias" [value]="cat.id_categoria">
+            (ionChange)="applyAllFilters()">
+            <ion-select-option *ngFor="let cat of categorias" [value]="cat.id">
               {{ cat.nombre }}
             </ion-select-option>
           </ion-select>
         </ion-item>
 
-        <!-- PRECIO -->
+        <!-- PUNTOS (min / max) -->
         <div class="price-row">
           <ion-item class="input-box">
             <ion-input
               type="number"
-              placeholder="Precio Mín"
+              placeholder="Puntos Mín"
               [(ngModel)]="precioMin"
               [ngModelOptions]="{standalone: true}">
             </ion-input>
@@ -58,45 +54,70 @@
           <ion-item class="input-box">
             <ion-input
               type="number"
-              placeholder="Precio Máx"
+              placeholder="Puntos Máx"
               [(ngModel)]="precioMax"
               [ngModelOptions]="{standalone: true}">
             </ion-input>
           </ion-item>
         </div>
 
-        <!-- BOTÓN APLICAR -->
-        <ion-button expand="block" class="apply-button" (click)="filterByPrice()">
-          Aplicar filtros
-        </ion-button>
+        <!-- BOTONES -->
+        <div class="filter-buttons">
+          <ion-button expand="block" class="apply-button" (click)="applyAllFilters()">
+            Aplicar filtros
+          </ion-button>
+
+          <ion-button fill="clear" color="medium" (click)="resetFilters()">
+            Limpiar filtros
+          </ion-button>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- 🔄 SPINNER DE CARGA -->
   <div *ngIf="loading" class="spinner-container">
-    <ion-spinner class="custom-spinner" name="circles"></ion-spinner>
+    <ion-spinner class="custom-spinner" name="crescent"></ion-spinner>
+    <p>Cargando productos...</p>
   </div>
 
   <!-- 🛍️ LISTA DE PRODUCTOS -->
-  <ion-grid *ngIf="!loading">
+  <ion-grid *ngIf="!loading && filteredProducts.length > 0">
     <ion-row>
-      <ion-col size="12" size-md="6" size-lg="4" *ngFor="let producto of filteredProducts">
+      <ion-col
+        size="12"
+        size-md="6"
+        size-lg="4"
+        *ngFor="let producto of filteredProducts">
+
         <ion-card class="product-card" (click)="goDetalleProducto(producto)">
           <img [src]="getImagenProducto(producto)" alt="Imagen del producto" class="product-image" />
+          
           <div class="product-info">
-            <h2>{{ producto.nombre }}</h2>
-            <p class="price">\${{ producto.precio }}</p>
+            <h2>{{ producto.titulo }}</h2>
+            <p class="desc">{{ producto.descripcion }}</p>
+            <p class="price">
+              <ion-icon name="trophy-outline"></ion-icon> {{ producto.valor_puntos }} pts
+            </p>
+            <p class="ubicacion">{{ producto.region }} - {{ producto.ciudad }}</p>
+            
             <ion-button
               class="custom-button"
               (click)="agregarCarrito($event, producto)">
-              Agregar al carrito
+              Canjear con puntos
             </ion-button>
           </div>
         </ion-card>
+
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <!-- 🪶 SIN PRODUCTOS -->
+  <div *ngIf="!loading && filteredProducts.length === 0" class="sin-productos">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>No hay productos disponibles con estos filtros.</p>
+  </div>
 
 </ion-content>
 
