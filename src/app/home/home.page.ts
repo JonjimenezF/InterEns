@@ -119,7 +119,6 @@
 //   }
 // }
 
-
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -164,6 +163,13 @@ import { supabase } from 'src/shared/supabase/supabase.client';
   ]
 })
 export class HomePage {
+  nombre: string | null = null;
+  email: string | null = null;
+  avatarUrl: string | null = null;
+
+  formNombre = '';
+  formTelefono = '';
+  formNombreUsuario = '';
   loading = true;
   userId: string | undefined;
   userInfo?: any;
@@ -174,13 +180,32 @@ export class HomePage {
   constructor(
     private router: Router,
     private activateRoute: ActivatedRoute,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
       this.userInfo = state['userInfo'];
     }
   }
+
+  private async getToken() {
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.access_token ?? null;
+  }
+
+  private async cargarPerfil() {
+    const token = await this.getToken(); if (!token) return;
+    const r = await fetch('http://127.0.0.1:4000/profile/me', { headers: { Authorization: `Bearer ${token}` }});
+    const p = await r.json();
+    this.nombre = p?.nombre_completo ?? null;
+    this.email = p?.email ?? null;
+    this.avatarUrl = p?.avatar_url ?? null;
+    this.formNombre = this.nombre ?? '';
+    this.formTelefono = p?.telefono ?? '';
+    this.formNombreUsuario = p?.nombre_usuario ?? '';
+  }
+
 
   // 👇 Método que marca la tarjeta activa
   selectCard(card: string) {
@@ -189,19 +214,18 @@ export class HomePage {
 
   // 🔹 Obtiene la sesión del usuario actual desde Supabase
   async ngOnInit() {
-    const { data: session } = await supabase.auth.getSession();
-    const { data: userData } = await supabase.auth.getUser();
-
-    if (userData?.user) {
-      this.userInfo = userData.user;
-      this.userId = userData.user.id;
-      console.log('Usuario activo:', this.userId);
+    await this.cargarPerfil();
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
+      this.userInfo = session.user;
+      this.userId = session.user.id;
+      console.log('User ID:', this.userId);
     } else {
-      console.warn('No hay usuario autenticado.');
+      console.log('El objeto userInfo es null o undefined');
     }
   }
 
-  // 🌍 Navegaciones principales
+
   goProducto() {
     this.router.navigate(['/producto'], { state: { userInfo: this.userInfo } });
   }

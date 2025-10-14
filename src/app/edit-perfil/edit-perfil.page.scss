@@ -107,5 +107,25 @@ ion-segment-button {
 .icono-boton {
   width: 24px;
   height: 24px;
-  object-fit: contain;
+  object-fit: contain; /* Mantiene proporción de la imagen */
 }
+
+.field { background: var(--card); border:1px solid var(--stroke); border-radius: 12px; padding: 6px 8px; margin: 8px 16px; }
+.avatar.loading { opacity: .6; filter: grayscale(40%); }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--stroke);
+  border-radius: 16px;
+  padding: 8px 10px;
+  margin: 0 16px 16px;
+}
+.group-title {
+  color: var(--muted);
+  font-weight: 700;
+  margin: 6px 4px 8px;
+}
+.field { background: transparent; border-radius: 12px; margin: 6px 4px; }
+.two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.two-cols .col { display: flex; flex-direction: column; }
+.avatar.loading { opacity: .6; filter: grayscale(40%); }

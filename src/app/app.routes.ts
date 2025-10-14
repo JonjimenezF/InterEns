@@ -185,7 +185,11 @@ export const routes: Routes = [
 {
   path: 'historial-puntos',
   loadComponent: () => import('./historial-puntos/historial-puntos.page').then(m => m.HistorialPuntosPage)
-},
+},  {
+    path: 'edit-perfil',
+    loadComponent: () => import('./edit-perfil/edit-perfil.page').then( m => m.EditPerfilPage)
+  },
+
   // {
   //   path: 'que-es',
   //   loadComponent: () => import('./que-es/que-es.page').then( m => m.QueEsPage)
