@@ -1,74 +1,7 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Preguntas Frecuentes
-    </ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button (click)="goBack()" defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
-    <div class="faq-container">
-     
-      <div class="faq-item" (click)="toggleAnswer('faq-answer1')">
-        <div class="faq-question">
-          <span>¿Qué es InterEns?</span>
-          <span class="arrow">&#9660;</span>
-        </div>
-        <div class="faq-answer" id="faq-answer1">
-          <p>InterEns es una plataforma digital diseñada para facilitar la donación, intercambio, venta y reparación de enseres domésticos en desuso. Nuestra misión es promover prácticas sostenibles y contribuir a la economía circular.</p>
-        </div>
-      </div>
-      <div class="faq-item" (click)="toggleAnswer('faq-answer2')">
-        <div class="faq-question">
-          <span>¿Cuánto cuesta usar la aplicación InterEns?</span>
-          <span class="arrow">&#9660;</span>
-        </div>
-        <div class="faq-answer" id="faq-answer2">
-          <p>Registrarse y usar la aplicación InterEns es completamente gratuito. Sin embargo, algunas transacciones, como ventas, pueden tener tarifas asociadas.</p>
-        </div>
-      </div>
-      <div class="faq-item" (click)="toggleAnswer('faq-answer3')">
-        <div class="faq-question">
-          <span>¿Qué tipo de enseres domésticos puedo publicar en la plataforma?</span>
-          <span class="arrow">&#9660;</span>
-        </div>
-        <div class="faq-answer" id="faq-answer3">
-          <p>Puedes publicar cualquier tipo de enser doméstico, incluyendo muebles, electrodomésticos, utensilios de cocina, y otros artículos de hogar, siempre y cuando estén en condiciones aceptables para ser reutilizados.</p>
-        </div>
-      </div>
-      <div class="faq-item" (click)="toggleAnswer('faq-answer4')">
-        <div class="faq-question">
-          <span>¿Cómo puedo buscar enseres específicos en la plataforma?</span>
-          <span class="arrow">&#9660;</span>
-        </div>
-        <div class="faq-answer" id="faq-answer4">
-          <p>La aplicación cuenta con un sistema de categorías y filtros que te permite buscar enseres específicos o servicios de reparación de manera fácil y rápida.</p>
-        </div>
-      </div>
-      <div class="faq-item" (click)="toggleAnswer('faq-answer5')">
-        <div class="faq-question">
-          <span>¿Qué debo hacer si quiero donar un enser?</span>
-          <span class="arrow">&#9660;</span>
-        </div>
-        <div class="faq-answer" id="faq-answer5">
-          <p>Simplemente selecciona la opción de donación al publicar tu enser en la aplicación. Otros usuarios interesados podrán contactarte para coordinar la entrega.</p>
-        </div>
-      </div>
-    </div>
-     -->
 <ion-header>
   <ion-toolbar>
-    
     <ion-buttons slot="start">
-      <ion-back-button 
-        (click)="goBack()" 
-        defaultHref="home" 
-        text="" 
-        >
-      </ion-back-button>
+      <ion-back-button (click)="goBack()" defaultHref="home" text=""></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -76,101 +9,94 @@
 <ion-content class="ion-padding">
   <div class="faq-container">
 
-
-
-    <!-- PREGUNTAS FRECUENTES -->
-    <div class="faq-item" (click)="toggleAnswer('faq-answer1')">
+    <!-- 💚 PREGUNTA 1 -->
+    <div class="faq-item" (click)="toggleAnswer('faq1')">
       <div class="faq-question">
-        <img src="assets/icon/confused_12529778.png" alt="Confused Icon" class="faq-icon" />
+        <ion-icon name="information-circle-outline" class="faq-icon"></ion-icon>
         <span>¿Qué es InterEns?</span>
-        <span class="arrow">&#9660;</span>
+        <ion-icon name="chevron-down-outline" class="arrow"></ion-icon>
       </div>
-      <div class="faq-answer" id="faq-answer1">
+      <div class="faq-answer" id="faq1">
         <li>
-          InterEns es una plataforma digital diseñada para facilitar la donación, intercambio,
-          venta y reparación de enseres domésticos en desuso. Nuestra misión es promover prácticas 
-          sostenibles y contribuir a la economía circular.
+          InterEns es una plataforma digital que facilita la donación, intercambio, venta y reparación de enseres domésticos en desuso, promoviendo la economía circular.
         </li>
       </div>
     </div>
 
-    <div class="faq-item" (click)="toggleAnswer('faq-answer2')">
+    <!-- 💸 PREGUNTA 2 -->
+    <div class="faq-item" (click)="toggleAnswer('faq2')">
       <div class="faq-question">
-        <img src="assets/icon/money_171780.png" alt="Money Icon" class="faq-icon" />
-        <span>¿Cuánto cuesta usar la aplicación InterEns?</span>
-        <span class="arrow">&#9660;</span>
+        <ion-icon name="cash-outline" class="faq-icon"></ion-icon>
+        <span>¿Cuánto cuesta usar InterEns?</span>
+        <ion-icon name="chevron-down-outline" class="arrow"></ion-icon>
       </div>
-      <div class="faq-answer" id="faq-answer2">
-        <li>
-          Registrarse y usar la aplicación InterEns es completamente gratuito. 
-          Sin embargo, algunas transacciones, como ventas, pueden tener tarifas asociadas.
-        </li>
+      <div class="faq-answer" id="faq2">
+        <li>Usar InterEns es totalmente gratuito. Solo algunas transacciones de venta pueden tener tarifas asociadas.</li>
       </div>
     </div>
 
-
-
-    <div class="faq-item" (click)="toggleAnswer('faq-answer3')">
+    <!-- 🧩 PREGUNTA 3 -->
+    <div class="faq-item" (click)="toggleAnswer('faq3')">
       <div class="faq-question">
-        <img src="assets/icon/quepuedes.png" alt="Money Icon" class="faq-icon" />
+        <ion-icon name="apps-outline" class="faq-icon"></ion-icon>
         <span>¿Qué puedes hacer en la aplicación?</span>
-        <span class="arrow">&#9660;</span>
+        <ion-icon name="chevron-down-outline" class="arrow"></ion-icon>
       </div>
-      <div class="faq-answer" id="faq-answer3">
-        <li>
-          Filtrar por categorías para encontrar artículos específicos.
-        </li>
-        <li>Sistema de valoraciones y reseñas para transacciones seguras.</li>
-        <li>Publicar, vender y donar enseres.</li>
-        <li>Acumular puntos para canjearlo por un producto de tu interes.</li>
-        <li>Realizar misiones que te permitan ganar puntos.</li>
+      <div class="faq-answer" id="faq3">
+        <li>Filtrar por categorías.</li>
+        <li>Publicar, vender o donar enseres.</li>
+        <li>Ganar puntos y realizar misiones.</li>
+        <li>Valorar y reseñar transacciones.</li>
       </div>
     </div>
 
-    <div class="faq-item" (click)="toggleAnswer('faq-answer4')">
+    <!-- 🏠 PREGUNTA 4 -->
+    <div class="faq-item" (click)="toggleAnswer('faq4')">
       <div class="faq-question">
-        <img src="assets/icon/preguntar.png" alt="Pregunta Icon" class="faq-icon" />
-        <span>¿Qué tipo de enseres domésticos puedo publicar en la plataforma?</span>
-        <span class="arrow">&#9660;</span>
+        <ion-icon name="home-outline" class="faq-icon"></ion-icon>
+        <span>¿Qué tipo de enseres puedo publicar?</span>
+        <ion-icon name="chevron-down-outline" class="arrow"></ion-icon>
       </div>
-      <div class="faq-answer" id="faq-answer4">
-        <li>
-          Puedes publicar cualquier tipo de enser doméstico, incluyendo muebles, 
-          electrodomésticos, utensilios de cocina, y otros artículos de hogar.
-        </li>
+      <div class="faq-answer" id="faq4">
+        <li>Puedes publicar muebles, electrodomésticos, utensilios y todo tipo de artículos del hogar.</li>
       </div>
     </div>
 
-    <div class="faq-item" (click)="toggleAnswer('faq-answer5')">
+    <!-- 🔍 PREGUNTA 5 -->
+    <div class="faq-item" (click)="toggleAnswer('faq5')">
       <div class="faq-question">
-        <img src="assets/icon/buscar.png" alt="Buscar Icon" class="faq-icon" />
-        <span>¿Cómo puedo buscar enseres específicos en la plataforma?</span>
-        <span class="arrow">&#9660;</span>
+        <ion-icon name="search-outline" class="faq-icon"></ion-icon>
+        <span>¿Cómo puedo buscar enseres específicos?</span>
+        <ion-icon name="chevron-down-outline" class="arrow"></ion-icon>
       </div>
-      <div class="faq-answer" id="faq-answer5">
-        <li>
-          La aplicación cuenta con un sistema de categorías y filtros que te permite buscar enseres 
-          específicos o servicios de reparación de manera fácil y rápida.
-        </li>
+      <div class="faq-answer" id="faq5">
+        <li>InterEns cuenta con filtros y categorías para que encuentres lo que necesitas fácilmente.</li>
       </div>
     </div>
 
-    <div class="faq-item" (click)="toggleAnswer('faq-answer6')">
+    <!-- 🎁 PREGUNTA 6 -->
+    <div class="faq-item" (click)="toggleAnswer('faq6')">
       <div class="faq-question">
-      <img src="assets/icon/donar.png" alt="Donar Icon" class="faq-icon" />
+        <ion-icon name="gift-outline" class="faq-icon"></ion-icon>
         <span>¿Qué debo hacer si quiero donar un enser?</span>
-        <span class="arrow">&#9660;</span>
+        <ion-icon name="chevron-down-outline" class="arrow"></ion-icon>
       </div>
-      <div class="faq-answer" id="faq-answer6">
-        <li>
-          Simplemente selecciona la opción de donación al publicar tu enser en la aplicación. 
-          Otros usuarios interesados podrán contactarte para coordinar la entrega.
-        </li>
+      <div class="faq-answer" id="faq6">
+        <li>Selecciona la opción de donación al publicar tu artículo. Otros usuarios podrán contactarte para coordinar la entrega.</li>
       </div>
     </div>
 
-  </div> 
+    <!-- ✉️ BOTÓN CONTACTO -->
+    <div class="contact-section">
+      <h2>¿Tienes otra duda?</h2>
+      <p>Si no encuentras tu respuesta, puedes contactarte con nosotros directamente.</p>
+      <ion-button expand="block" shape="round" class="contact-button" (click)="goContacto()">
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
+        Contáctanos
+      </ion-button>
+    </div>
 
-
+  </div>
 </ion-content>
+
 <app-footer-interens></app-footer-interens>

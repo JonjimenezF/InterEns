@@ -1,132 +1,134 @@
-
-
-
-.faq-container {
-  display: grid;
-  gap: 1rem;
-  margin-top: 1.5rem;
+:host {
+  --bg: #0c0f13;
+  --card: #14161a;
+  --stroke: #2b3036;
+  --txt: #ffffff;
+  --muted: #b8bec6;
+  --accent: #1fd39a;
 }
 
+ion-content {
+  --background: var(--bg);
+  color: var(--txt);
+  padding-bottom: 20px;
+}
+
+ion-toolbar {
+  --background: var(--card);
+  color: var(--txt);
+}
+
+ion-back-button {
+  --color: var(--accent);
+}
+
+.faq-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* === Tarjetas FAQ === */
 .faq-item {
-  background: #fff;
+  background-color: var(--card);
+  border: 1.5px solid var(--stroke);
   border-radius: 12px;
-  padding: 1rem 1.2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 14px 16px;
+  color: var(--txt);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
   cursor: pointer;
-  transition: transform 0.2s ease;
 
   &:hover {
-    transform: translateY(-3px);
-  }
-
-   border: 2px solid #28a745; // verde estilo bootstrap
-
-  &:hover {
-    transform: translateY(-3px);
-    border-color: #218838; // verde más oscuro al pasar el mouse
+    border-color: var(--accent);
+    box-shadow: 0 0 12px rgba(31, 211, 154, 0.3);
   }
 
   .faq-question {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-weight: 600;
-    color: #333;
+    font-weight: 700;
     font-size: 1rem;
+    color: var(--txt);
 
-  
+    ion-icon.faq-icon {
+      font-size: 1.5rem;
+      color: var(--accent);
+      margin-right: 10px;
+    }
+
     .arrow {
       font-size: 1.2rem;
-      color: #888;
-      margin-left: auto;
+      color: var(--accent);
+      transition: transform 0.3s ease;
     }
   }
 
   .faq-answer {
-    margin-top: 0.8rem;
-    display: none; // oculto por defecto
-    font-size: 0.95rem;
-    color: #555;
-    line-height: 1.5;
+    display: none;
+    margin-top: 12px;
+    background-color: #0f1216;
+    padding: 12px 16px;
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    line-height: 1.6;
+    color: var(--muted);
+    animation: fadeIn 0.3s ease;
 
-    &.active {
-      display: block;
+    li {
+      list-style: none;
+      margin-bottom: 6px;
+      color: var(--txt);
     }
   }
-}
-.faq-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 0.6rem;
+
+  .faq-answer.show {
+    display: block;
+  }
 }
 
-.header-bg {
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === Sección Contacto === */
+.contact-section {
+  background-color: var(--card);
+  border: 1.5px solid var(--accent);
+  border-radius: 16px;
   text-align: center;
-  color: #fff;
-  padding: 2rem 1rem 5rem; // espacio para que no choque con el contenedor blanco
+  padding: 28px 18px;
+  margin-top: 30px;
+  box-shadow: 0 0 14px rgba(31, 211, 154, 0.3);
+  transition: all 0.3s ease;
 
-  .welcome-text {
-    font-size: 1.4rem;
-    font-weight: bold;
+  h2 {
+    color: var(--accent);
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-transform: uppercase;
   }
 
-  .sub-text {
-    font-size: 1rem;
-    opacity: 0.9;
+  p {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 18px;
   }
-}
 
+  .contact-button {
+    --background: var(--accent);
+    --color: #0b1115;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 0 12px rgba(31, 211, 154, 0.5);
 
-    .contact-details {
-    h2 {
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-      color: #333;
-      text-align: center;
+    &:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 18px rgba(31, 211, 154, 0.8);
     }
-
-    p {
-      margin: 10px 0;
-      font-size: 15px;
-      color: #555;
-      line-height: 1.4;
-
-      strong {
-        color: #222;
-      }
-    }
-
-   
   }
-
-ion-tab-bar {
-  --background: var(--card);
-  border-top: 1px solid var(--stroke);
-}
-
-ion-tab-button {
-  --color: var(--muted);
-  --color-selected: var(--accent);
-  font-size: 13px;
-  font-weight: 600;
-}
-ion-segment {
-  --background: transparent;
-  margin: 16px 0;
-}
-
-ion-segment-button {
-  --color: #fff;
-  --color-checked: #0b1115;
-  --indicator-color: transparent;
-  --background: var(--card);
-  --background-checked: var(--accent);
-  border-radius: 12px;
-  margin: 0 6px;
-  font-weight: 600;
-}
-.icono-boton {
-  width: 24px;
-  height: 24px;
-  object-fit: contain; /* Mantiene proporción de la imagen */
 }

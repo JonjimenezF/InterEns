@@ -1,19 +1,15 @@
+
+
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {
-  IonHeader, IonTitle, IonFooter, IonToolbar, IonButtons, IonBackButton, IonContent, IonSearchbar,
-  IonButton, IonIcon, IonModal, IonGrid, IonRow, IonCol, IonLabel, IonInput, IonItem, IonSpinner,
-  IonCard, IonImg, IonList,IonSelect, IonSelectOption
-
-} from '@ionic/angular/standalone';
+import { IonicModule, NavController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { NavController, ToastController } from '@ionic/angular';
 import { ProductoService } from '../servicios/producto.service';
 import { CategoriaService } from '../servicios/categoria.service';
 import { CarritoService } from '../servicios/carrito.service';
 import { producto } from '../models/producto';
-
+import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 
 @Component({
   selector: 'app-producto',
@@ -21,10 +17,10 @@ import { producto } from '../models/producto';
   styleUrls: ['./producto.page.scss'],
   standalone: true,
   imports: [
-    IonHeader, IonTitle, IonToolbar, IonButtons, IonBackButton, IonContent, IonSearchbar,
-    IonButton, IonIcon, IonModal, IonGrid, IonRow, IonCol, IonLabel, IonInput, IonItem,
-    IonSpinner, IonCard, IonImg, CommonModule, 
-    FormsModule, IonList, IonFooter,IonSelect, IonSelectOption
+    CommonModule,
+    FormsModule,
+    IonicModule,              // 💡 Incluye todos los componentes base (IonHeader, IonButton, IonSelect, etc.)
+    FooterInterensComponent   // 💚 Agregamos el footer de InterEns
   ]
 })
 export class ProductoPage implements OnInit {
@@ -55,13 +51,13 @@ export class ProductoPage implements OnInit {
   }
 
   async getCategorias() {
-  try {
-    this.categorias = await this.categoriaService.getTodasCategorias();
-    console.log('✅ Categorías cargadas:', this.categorias);
-  } catch (error) {
-    console.error('❌ Error al obtener categorías:', error);
+    try {
+      this.categorias = await this.categoriaService.getTodasCategorias();
+      console.log('✅ Categorías cargadas:', this.categorias);
+    } catch (error) {
+      console.error('❌ Error al obtener categorías:', error);
+    }
   }
-}
 
   getProductos() {
     this.productService.getProduct().subscribe({
@@ -78,13 +74,11 @@ export class ProductoPage implements OnInit {
   }
 
   filterByCategory() {
-    if (this.categoriaSeleccionada) {
-      this.filteredProducts = this.productos.filter(
-        (p) => p.id_categoria === this.categoriaSeleccionada
-      );
-    } else {
-      this.filteredProducts = this.productos;
-    }
+    this.filteredProducts = this.categoriaSeleccionada
+      ? this.productos.filter(
+          (p) => p.id_categoria === this.categoriaSeleccionada
+        )
+      : this.productos;
   }
 
   filterProducts() {
@@ -98,8 +92,13 @@ export class ProductoPage implements OnInit {
       : this.productos;
   }
 
-  openCategoryFilter() { this.isModalOpen = true; }
-  closeCategoryFilter() { this.isModalOpen = false; }
+  openCategoryFilter() {
+    this.isModalOpen = true;
+  }
+
+  closeCategoryFilter() {
+    this.isModalOpen = false;
+  }
 
   filterByPrice() {
     const min = parseFloat(this.precioMin) || 0;
@@ -119,7 +118,9 @@ export class ProductoPage implements OnInit {
   }
 
   goDetalleProducto(detProducto: producto) {
-    this.router.navigate(['/detalle-producto'], { state: { det_producto: detProducto } });
+    this.router.navigate(['/detalle-producto'], {
+      state: { det_producto: detProducto },
+    });
   }
 
   agregarCarrito(event: Event, producto: any) {
@@ -130,7 +131,7 @@ export class ProductoPage implements OnInit {
       cantidad: 1,
     };
     this.serviceCarrito.postCarrito(carrito).subscribe({
-      next: () => this.showToast('Producto agregado al carrito'),
+      next: () => this.showToast('Producto agregado al carrito 🛒'),
       error: (error) => console.error('Error al agregar producto', error),
     });
   }
@@ -140,13 +141,29 @@ export class ProductoPage implements OnInit {
       message,
       duration: 2000,
       position: 'bottom',
+      color: 'dark',
     });
     await toast.present();
   }
 
-  goBack() { this.navCtrl.back(); }
-  home() { this.router.navigate(['/home']); }
-  perfil() { this.router.navigate(['/perfil']); }
-  goProducto() { this.router.navigate(['/sproducto']); }
-  puntoLimpio() { this.router.navigate(['/puntos']); }
+  goBack() {
+    this.navCtrl.back();
+  }
+
+  // 🔗 Navegación Footer
+  home() {
+    this.router.navigate(['/home']);
+  }
+
+  perfil() {
+    this.router.navigate(['/perfil']);
+  }
+
+  goProducto() {
+    this.router.navigate(['/sproducto']);
+  }
+
+  puntoLimpio() {
+    this.router.navigate(['/puntos']);
+  }
 }

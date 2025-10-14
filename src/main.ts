@@ -1,24 +1,3 @@
-// import { enableProdMode, importProvidersFrom } from '@angular/core';
-// import { bootstrapApplication } from '@angular/platform-browser';
-// import { RouteReuseStrategy, provideRouter } from '@angular/router';
-// import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-// import { HttpClientModule, provideHttpClient } from '@angular/common/http';
-// import { routes } from './app/app.routes';
-// import { AppComponent } from './app/app.component';
-// import { environment } from './environments/environment';
-
-// if (environment.production) {
-//   enableProdMode();
-// }
-
-// bootstrapApplication(AppComponent, {
-//   providers: [
-//     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-//     importProvidersFrom(IonicModule.forRoot({})),
-//     HttpClientModule,    provideRouter(routes),provideHttpClient(),    
-//   ],
-// });
-
 import { enableProdMode } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { RouteReuseStrategy, provideRouter } from '@angular/router';
@@ -28,6 +7,50 @@ import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 
+/* 🌿 Registrar Ionicons manualmente */
+import { addIcons } from 'ionicons';
+import {
+  homeOutline,
+  navigateOutline,
+  addCircleOutline,
+  personCircleOutline,
+  personOutline,
+  helpCircleOutline,
+  mailOutline,
+  informationCircleOutline,
+  cashOutline,
+  appsOutline,
+  searchOutline,
+  giftOutline,
+  chevronDownOutline,
+  cloudUploadOutline,
+  trophyOutline,
+  cartOutline,
+  menuOutline
+} from 'ionicons/icons';
+
+/* 🧩 Agregamos todos los íconos usados en la app */
+addIcons({
+  'home-outline': homeOutline,
+  'navigate-outline': navigateOutline,
+  'add-circle-outline': addCircleOutline,
+  'person-circle-outline': personCircleOutline,
+  'person-outline': personOutline,
+  'help-circle-outline': helpCircleOutline,
+  'mail-outline': mailOutline,
+  'information-circle-outline': informationCircleOutline,
+  'cash-outline': cashOutline,
+  'apps-outline': appsOutline,
+  'search-outline': searchOutline,
+  'gift-outline': giftOutline,
+  'chevron-down-outline': chevronDownOutline,
+  'cloud-upload-outline': cloudUploadOutline,
+  'trophy-outline': trophyOutline,
+  'cart-outline': cartOutline,
+  'menu-outline': menuOutline
+});
+
+/* 🚀 Configuración estándar */
 if (environment.production) {
   enableProdMode();
 }
@@ -38,6 +61,6 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular(),
     HttpClientModule,
     provideRouter(routes),
-    provideRouter(routes),provideHttpClient(),   
+    provideHttpClient(),
   ],
 });
