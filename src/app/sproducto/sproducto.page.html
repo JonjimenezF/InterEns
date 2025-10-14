@@ -1,134 +1,143 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="light">
     <ion-buttons slot="start">
-      <ion-back-button
-        (click)="goBack()"
-        defaultHref="home"
-        text=""
-        color="rgb(165, 17, 233)">
-      </ion-back-button>
+      <ion-back-button defaultHref="home"></ion-back-button>
     </ion-buttons>
     <ion-title>Subir Producto</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="form-wrapper">
-    <div class="form-container">
-      <h1 style="color: #fff;">Registrar Enser</h1>
-      <p>Completa los datos del producto que deseas compartir o donar.</p>
+<ion-content class="ion-padding">
 
-      <!-- Formulario principal -->
-      <form (ngSubmit)="onSubmit(productForm)" #productForm="ngForm">
+  <form (ngSubmit)="onSubmit(productForm)" #productForm="ngForm">
 
-        <!-- 🔹 TÍTULO DEL ENSER -->
-        <ion-item class="custom-item green-border">
-          <ion-label position="floating">Título</ion-label>
-          <ion-input
-            class="custom-input"
-            type="text"
-            placeholder="Ej. Mesa de comedor"
-            [(ngModel)]="enser.titulo"
-            name="titulo"
-            required>
-          </ion-input>
-        </ion-item>
+    <!-- 🔹 Título -->
+    <ion-item>
+      <ion-label position="floating">Título</ion-label>
+      <ion-input type="text" [(ngModel)]="enser.titulo" name="titulo" required></ion-input>
+    </ion-item>
 
-        <!-- 🔹 DESCRIPCIÓN -->
-        <ion-item class="custom-item green-border">
-          <ion-label position="floating">Descripción</ion-label>
-          <ion-textarea
-            class="custom-input"
-            placeholder="Describe el estado o detalles del producto"
-            [(ngModel)]="enser.descripcion"
-            name="descripcion"
-            rows="4"
-            required>
-          </ion-textarea>
-        </ion-item>
+    <!-- 🔹 Descripción -->
+    <ion-item>
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea rows="4" [(ngModel)]="enser.descripcion" name="descripcion" required></ion-textarea>
+    </ion-item>
 
-        <!-- 🔹 CATEGORÍA -->
-        <ion-item class="custom-item green-border">
-          <ion-label position="floating">Categoría</ion-label>
-          <ion-select
-            placeholder="Selecciona una categoría"
-            [(ngModel)]="enser.categoria_id"
-            name="categoria_id">
-            <ion-select-option value="1">Muebles</ion-select-option>
-            <ion-select-option value="2">Electrodomésticos</ion-select-option>
-            <ion-select-option value="3">Ropa</ion-select-option>
-            <ion-select-option value="4">Libros</ion-select-option>
-            <ion-select-option value="5">Otros</ion-select-option>
-          </ion-select>
-        </ion-item>
+    <!-- 🔹 Categoría -->
+    <ion-item>
+      <ion-label>Categoría</ion-label>
+      <ion-select placeholder="Selecciona una" [(ngModel)]="enser.categoria_id" name="categoria_id" required>
+        <ion-select-option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</ion-select-option>
+      </ion-select>
+    </ion-item>
 
-        <!-- 🔹 VALOR EN PUNTOS -->
-        <ion-item class="custom-item green-border">
-          <ion-label position="floating">Valor en puntos</ion-label>
-          <ion-input
-            class="custom-input"
-            type="number"
-            placeholder="Ej. 50"
-            [(ngModel)]="enser.valor_puntos"
-            name="valor_puntos"
-            required>
-          </ion-input>
-        </ion-item>
+    <!-- 🔹 CONDICIÓN -->
+<ion-item class="custom-item green-border">
+  <ion-label position="floating">Condición</ion-label>
+  <ion-select
+    placeholder="Selecciona una condición"
+    [(ngModel)]="enser.condicion"
+    name="condicion"
+    required>
+    <ion-select-option value="nuevo">Nuevo</ion-select-option>
+    <ion-select-option value="como_nuevo">Como nuevo</ion-select-option>
+    <ion-select-option value="bueno">Bueno</ion-select-option>
+    <ion-select-option value="aceptable">Aceptable</ion-select-option>
+    <ion-select-option value="para_reparar">Para reparar</ion-select-option>
+  </ion-select>
+</ion-item>
 
-        <!-- 🔹 CIUDAD -->
-        <ion-item class="custom-item green-border">
-          <ion-label position="floating">Ciudad</ion-label>
-          <ion-input
-            class="custom-input"
-            type="text"
-            placeholder="Ej. Quillota"
-            [(ngModel)]="enser.ciudad"
-            name="ciudad"
-            required>
-          </ion-input>
-        </ion-item>
 
-        <!-- 🔹 REGIÓN -->
-        <ion-item class="custom-item green-border">
-          <ion-label position="floating">Región</ion-label>
-          <ion-input
-            class="custom-input"
-            type="text"
-            placeholder="Ej. Valparaíso"
-            [(ngModel)]="enser.region"
-            name="region"
-            required>
-          </ion-input>
-        </ion-item>
+<!-- 🔹 ESTADO -->
+<ion-item class="custom-item green-border">
+  <ion-label position="floating">Estado</ion-label>
+  <ion-select
+    placeholder="Selecciona un estado"
+    [(ngModel)]="enser.estado"
+    name="estado"
+    required>
+    <ion-select-option value="borrador">Borrador</ion-select-option>
+    <ion-select-option value="publicado">Publicado</ion-select-option>
+    <ion-select-option value="reservado">Reservado</ion-select-option>
+    <ion-select-option value="intercambiado">Intercambiado</ion-select-option>
+    <ion-select-option value="retirado">Retirado</ion-select-option>
+    <ion-select-option value="bloqueado">Bloqueado</ion-select-option>
+  </ion-select>
+</ion-item>
 
-        <!-- 🔹 INPUT DE IMAGEN -->
-        <!-- Este bloque permite seleccionar la imagen que se subirá a Supabase Storage -->
-        <ion-item class="custom-item green-border">
-          <ion-label>Seleccionar imagen</ion-label>
-          <input
-            type="file"
-            (change)="onFileSelected($event)"
-            accept="image/*"
-            style="color: white; padding: 10px"
-          />
-        </ion-item>
 
-        <!-- Mostrar nombre de imagen seleccionada -->
-        <div *ngIf="selectedFile" style="color: white; font-size: 14px; margin-top: 5px;">
-          Imagen seleccionada: {{ selectedFile.name }}
-        </div>
+    <!-- 🔹 Valor en puntos -->
+    <ion-item>
+      <ion-label position="floating">Valor en puntos</ion-label>
+      <ion-input type="number" [(ngModel)]="enser.valor_puntos" name="valor_puntos" required></ion-input>
+    </ion-item>
 
-        <!-- 🔹 BOTÓN ENVIAR -->
-        <div class="centrar">
-          <ion-button
-            type="submit"
-            class="custom-button white-background"
-            fill="solid"
-            shape="round">
-            Guardar Enser
-          </ion-button>
-        </div>
-      </form>
+    <!-- 🔹 Ciudad -->
+    <ion-item>
+      <ion-label position="floating">Ciudad</ion-label>
+      <ion-input type="text" [(ngModel)]="enser.ciudad" name="ciudad" required></ion-input>
+    </ion-item>
+
+    <!-- 🔹 Región -->
+    <ion-item>
+      <ion-label position="floating">Región</ion-label>
+      <ion-input type="text" [(ngModel)]="enser.region" name="region" required></ion-input>
+    </ion-item>
+
+    <!-- 🔹 Imágenes -->
+    <ion-item>
+      <ion-label>Seleccionar imágenes</ion-label>
+      <input type="file" (change)="onFilesSelected($event)" accept="image/*" multiple />
+    </ion-item>
+
+    <!-- 🖼️ Vista previa -->
+    <div *ngIf="previewUrls.length > 0" class="preview-container">
+      <h4>Previsualización</h4>
+      <div class="image-preview-grid">
+        <img *ngFor="let url of previewUrls" [src]="url" class="preview-img" />
+      </div>
     </div>
-  </div>
+
+    <!-- 🔘 Botón -->
+    <div class="centrar">
+      <ion-button expand="block" type="submit" color="primary" shape="round">
+        Guardar Enser
+      </ion-button>
+    </div>
+  </form>
+
 </ion-content>
+
+<style>
+  ion-content {
+    --background: #1a1a1a;
+    color: white;
+  }
+
+  h4 {
+    color: #fff;
+    text-align: center;
+    margin-top: 1em;
+  }
+
+  .image-preview-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 1em 0;
+  }
+
+  .preview-img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid #6bc3ff;
+  }
+
+  .centrar {
+    text-align: center;
+    margin-top: 1.5em;
+  }
+</style>

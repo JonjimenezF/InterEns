@@ -12,22 +12,15 @@ export class EnserService {
     const { data, error } = await supabase
       .from('enseres')
       .insert([enser])
-      .select()
-      .single();
+      .select('*'); // 👈 retorna el registro insertado
     return { data, error };
   }
 
-  // Inserta una imagen asociada a un enser
+  // (Opcional) Si en el futuro guardas imágenes en otra tabla
   async addImagen(enser_id: number, ruta_storage: string, es_principal = true) {
     const { data, error } = await supabase
       .from('enser_imagenes')
-      .insert([
-        {
-          enser_id,
-          ruta_storage,
-          es_principal
-        }
-      ]);
+      .insert([{ enser_id, ruta_storage, es_principal }]);
     return { data, error };
   }
 }
