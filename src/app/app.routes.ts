@@ -82,10 +82,6 @@ export const routes: Routes = [
     loadComponent: () => import('./mis-productos/mis-productos.page').then( m => m.MisProductosPage)
   },
   {
-    path: 'que-es',
-    loadComponent: () => import('./que-es/que-es.page').then( m => m.QueEsPage)
-  },
-  {
     path: 'reciclaje',
     loadComponent: () => import('./reciclaje/reciclaje.page').then( m => m.ReciclajePage)
   },
