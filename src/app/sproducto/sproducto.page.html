@@ -31,40 +31,30 @@
       </ion-select>
     </ion-item>
 
-    <!-- 🔹 CONDICIÓN -->
-<ion-item class="custom-item green-border">
-  <ion-label position="floating">Condición</ion-label>
-  <ion-select
-    placeholder="Selecciona una condición"
-    [(ngModel)]="enser.condicion"
-    name="condicion"
-    required>
-    <ion-select-option value="nuevo">Nuevo</ion-select-option>
-    <ion-select-option value="como_nuevo">Como nuevo</ion-select-option>
-    <ion-select-option value="bueno">Bueno</ion-select-option>
-    <ion-select-option value="aceptable">Aceptable</ion-select-option>
-    <ion-select-option value="para_reparar">Para reparar</ion-select-option>
-  </ion-select>
-</ion-item>
+    <!-- 🔹 Condición -->
+    <ion-item class="custom-item green-border">
+      <ion-label position="floating">Condición</ion-label>
+      <ion-select placeholder="Selecciona una condición" [(ngModel)]="enser.condicion" name="condicion" required>
+        <ion-select-option value="nuevo">Nuevo</ion-select-option>
+        <ion-select-option value="como_nuevo">Como nuevo</ion-select-option>
+        <ion-select-option value="bueno">Bueno</ion-select-option>
+        <ion-select-option value="aceptable">Aceptable</ion-select-option>
+        <ion-select-option value="para_reparar">Para reparar</ion-select-option>
+      </ion-select>
+    </ion-item>
 
-
-<!-- 🔹 ESTADO -->
-<ion-item class="custom-item green-border">
-  <ion-label position="floating">Estado</ion-label>
-  <ion-select
-    placeholder="Selecciona un estado"
-    [(ngModel)]="enser.estado"
-    name="estado"
-    required>
-    <ion-select-option value="borrador">Borrador</ion-select-option>
-    <ion-select-option value="publicado">Publicado</ion-select-option>
-    <ion-select-option value="reservado">Reservado</ion-select-option>
-    <ion-select-option value="intercambiado">Intercambiado</ion-select-option>
-    <ion-select-option value="retirado">Retirado</ion-select-option>
-    <ion-select-option value="bloqueado">Bloqueado</ion-select-option>
-  </ion-select>
-</ion-item>
-
+    <!-- 🔹 Estado -->
+    <ion-item class="custom-item green-border">
+      <ion-label position="floating">Estado</ion-label>
+      <ion-select placeholder="Selecciona un estado" [(ngModel)]="enser.estado" name="estado" required>
+        <ion-select-option value="borrador">Borrador</ion-select-option>
+        <ion-select-option value="publicado">Publicado</ion-select-option>
+        <ion-select-option value="reservado">Reservado</ion-select-option>
+        <ion-select-option value="intercambiado">Intercambiado</ion-select-option>
+        <ion-select-option value="retirado">Retirado</ion-select-option>
+        <ion-select-option value="bloqueado">Bloqueado</ion-select-option>
+      </ion-select>
+    </ion-item>
 
     <!-- 🔹 Valor en puntos -->
     <ion-item>
@@ -90,11 +80,14 @@
       <input type="file" (change)="onFilesSelected($event)" accept="image/*" multiple />
     </ion-item>
 
-    <!-- 🖼️ Vista previa -->
+    <!-- 🖼️ Vista previa con opción de eliminar -->
     <div *ngIf="previewUrls.length > 0" class="preview-container">
       <h4>Previsualización</h4>
       <div class="image-preview-grid">
-        <img *ngFor="let url of previewUrls" [src]="url" class="preview-img" />
+        <div *ngFor="let url of previewUrls; let i = index" class="image-wrapper">
+          <img [src]="url" class="preview-img" />
+          <button type="button" class="remove-btn" (click)="removeImage(i)">✕</button>
+        </div>
       </div>
     </div>
 
@@ -128,12 +121,37 @@
     margin: 1em 0;
   }
 
+  .image-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
   .preview-img {
     width: 90px;
     height: 90px;
     object-fit: cover;
     border-radius: 10px;
     border: 2px solid #6bc3ff;
+  }
+
+  .remove-btn {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 18px;
+    transition: background 0.3s;
+  }
+
+  .remove-btn:hover {
+    background: #ff4444;
   }
 
   .centrar {
