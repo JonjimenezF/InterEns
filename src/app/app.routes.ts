@@ -146,10 +146,10 @@ export const routes: Routes = [
     path: 'registrar',
     loadComponent: () => import('./registrar/registrar.page').then( m => m.RegistrarPage)
   },
-  // {
-  //   path: 'detalle-producto',
-  //   loadComponent: () => import('./detalle-producto/detalle-producto.page').then( m => m.DetalleProductoPage)
-  // },
+  {
+   path: 'detalle-producto',
+   loadComponent: () => import('./detalle-producto/detalle-producto.page').then( m => m.DetalleProductoPage)
+   },
   {
     path: 'sproducto',
     loadComponent: () => import('./sproducto/sproducto.page').then( m => m.SproductoPage)

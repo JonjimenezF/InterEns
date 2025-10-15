@@ -127,6 +127,12 @@ export class ProductoPage implements OnInit {
     this.router.navigate(['/detalle-producto'], { state: { producto } });
   }
 
+  verDetalle(producto: any) {
+  console.log('➡️ Navegando al detalle de producto:', producto);
+  this.router.navigate(['/detalle-producto'], { state: { producto } });
+}
+
+
   goBack() {
     this.navCtrl.back();
   }

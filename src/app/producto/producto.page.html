@@ -90,7 +90,7 @@
         size-lg="4"
         *ngFor="let producto of filteredProducts">
 
-        <ion-card class="product-card" (click)="goDetalleProducto(producto)">
+        <ion-card class="product-card">
           <img [src]="getImagenProducto(producto)" alt="Imagen del producto" class="product-image" />
           
           <div class="product-info">
@@ -100,10 +100,13 @@
               <ion-icon name="trophy-outline"></ion-icon> {{ producto.valor_puntos }} pts
             </p>
             <p class="ubicacion">{{ producto.region }} - {{ producto.ciudad }}</p>
-            
+
+            <!-- ✅ CAMBIO: ahora lleva al detalle -->
             <ion-button
+              expand="block"
+              shape="round"
               class="custom-button"
-              (click)="agregarCarrito($event, producto)">
+              (click)="verDetalle(producto)">
               Detalle Producto
             </ion-button>
           </div>

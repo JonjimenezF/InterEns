@@ -1,40 +1,43 @@
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      Detalles del Producto
-    </ion-title>
-    <ion-buttons slot="start" >
-      <ion-back-button (click)="goBack()" text="" style="color:rgb(255, 255, 255);--background: none;"></ion-back-button>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/producto" text=""></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
-  <div #swiperContainer class="swiper-container">
-    <div class="swiper-wrapper">
-      <!-- Mueve el *ngFor dentro del div .swiper-wrapper -->
-      <ion-col size="12" *ngFor="let imagen of det_imagen" class="swiper-slide">
-        <ion-card class="carta">
-          <ion-card-header>
-            <div class="image-container">
-              <img [src]="'https://pystore-interens-7.onrender.com/foto/' + imagen.url_imagen" alt="Imagen" class="product-image" style="max-width: 100%; height: auto;">
-            </div>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
-    </div>
-    <!-- Agrega la paginación personalizada aquí, fuera del swiper-wrapper -->
-    <div class="custom-pagination">
-      <ul>
-        <li *ngFor="let img of det_imagen" class="custom-pagination-bullet"></li>
-      </ul>
+
+<ion-content class="fondodetalle">
+  <div class="detalle-wrapper" *ngIf="producto">
+
+    <!-- Imagen del producto -->
+    <ion-img [src]="producto.imagen_url || 'assets/img/default.png'" alt="{{ producto.titulo }}" class="producto-img"></ion-img>
+
+    <!-- Contenedor de detalle -->
+    <div class="detalle-info">
+      <h1 class="titulo">{{ producto.titulo }}</h1>
+
+      <p class="descripcion">{{ producto.descripcion || 'Sin descripción disponible.' }}</p>
+
+      <div class="info-secundaria">
+        <p><strong>Condición:</strong> {{ producto.condicion || 'No especificada' }}</p>
+        <p><strong>Ubicación:</strong> {{ producto.region }} - {{ producto.ciudad }}</p>
+      </div>
+
+      <div class="puntos-box">
+        <ion-icon name="trophy-outline"></ion-icon>
+        <h2>{{ producto.valor_puntos }} InterCoins</h2>
+      </div>
+
+      <ion-button expand="block" shape="round" class="btn-canjear" (click)="canjearProducto()">
+        Ir a canjear Producto
+      </ion-button>
     </div>
   </div>
-  <div class="detalle" style="margin-top: 20px;">
-    <h1 style="color: black;">{{det_producto?.nombre}}</h1>
-    <h2 style="color: black;">{{det_producto?.precio}}</h2>
-    <h2 style="color: black;">{{det_producto?.descripcion}}</h2>
+
+  <div *ngIf="!producto" class="sin-producto">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>Producto no disponible</p>
   </div>
-  <br>
-  <h1 class="centrar" style="color: black;">Comentario</h1>
 </ion-content>
+
+<app-footer-interens></app-footer-interens>
