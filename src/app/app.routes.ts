@@ -85,15 +85,4 @@ export const routes: Routes = [
     path: 'reciclaje',
     loadComponent: () => import('./reciclaje/reciclaje.page').then( m => m.ReciclajePage)
   },
-  {
-    path: 'mis-enseres',
-    loadComponent: () => import('./mis-enseres/mis-enseres.page').then( m => m.MisEnseresPage)
-  },
-  {
-  path: 'mis-enseres',
-  loadComponent: () => import('./mis-enseres/mis-enseres.page').then(m => m.MisEnseresPage)
-  },
-
-  
-
 ];

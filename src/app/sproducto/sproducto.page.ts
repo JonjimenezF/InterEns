@@ -1,3 +1,6 @@
+// ✅ Componente para crear un nuevo "enser" (producto) y subir múltiples imágenes a Supabase Storage
+
+// 🧩 Importaciones base de Angular
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -6,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { supabase } from '../services/supabase.client';
 import { EnserService } from '../services/enser.service';
 
+// 🧱 Importaciones de Ionic (standalone)
 import {
   IonHeader,
   IonToolbar,
@@ -21,6 +25,8 @@ import {
   IonButton
 } from '@ionic/angular/standalone';
 import { NavController, ToastController } from '@ionic/angular';
+
+// 🔗 Librerías externas
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -49,26 +55,31 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class SproductoPage implements OnInit {
 
+  // 👤 Usuario autenticado
   userInfo?: any;
 
+  // 📦 Campos principales del enser
   enser = {
-    propietario_id: '',
-    titulo: '',
-    descripcion: '',
+    propietario_id: '' as string,
+    titulo: '' as string,
+    descripcion: '' as string,
     categoria_id: null as number | null,
-    condicion: '',
-    estado: '',
-    valor_puntos: 0,
-    ciudad: '',
-    region: '',
+    condicion: '' as string,
+    estado: '' as string,
+    valor_puntos: 0 as number,
+    ciudad: '' as string,
+    region: '' as string,
     latitud: null as number | null,
     longitud: null as number | null,
     imagen_url: null as string | null,
     imagenes_extra: [] as string[]
   };
 
+  // 📂 Manejo de imágenes
   selectedFiles: File[] = [];
   previewUrls: string[] = [];
+
+  // 📚 Categorías dinámicas desde Supabase
   categorias: { id: number; nombre: string }[] = [];
 
   constructor(
@@ -78,12 +89,17 @@ export class SproductoPage implements OnInit {
     private toastController: ToastController,
     private enserService: EnserService
   ) {
+    // 🔍 Recuperar datos del estado (si viene del Home)
     const state = this.router.getCurrentNavigation()?.extras.state;
-    if (state && state['userInfo']) this.userInfo = state['userInfo'];
+    if (state && state['userInfo']) {
+      this.userInfo = state['userInfo'];
+    }
   }
 
+  // 🚀 Inicialización
   async ngOnInit() {
     try {
+      // 🔐 Obtener sesión actual
       const { data: sessionData, error: sErr } = await supabase.auth.getSession();
       if (sErr) throw sErr;
 
@@ -94,47 +110,47 @@ export class SproductoPage implements OnInit {
         return;
       }
 
+      console.log('[SPRODUCTO] Usuario autenticado:', user);
       this.userInfo = user;
       this.enser.propietario_id = user.id;
 
+      // 🔽 Cargar categorías dinámicas
       const { data: categorias, error: catErr } = await supabase
         .from('categorias')
         .select('id, nombre')
         .order('id', { ascending: true });
-
       if (catErr) throw catErr;
       this.categorias = categorias || [];
+      console.log('[SPRODUCTO] Categorías cargadas:', this.categorias);
 
     } catch (error) {
       console.error('[SPRODUCTO] Error en ngOnInit:', error);
     }
   }
 
-  // 📸 Manejo de selección de archivos
-  onFilesSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files) return;
+  // 📸 Seleccionar y previsualizar múltiples imágenes
+  // 📸 Seleccionar y previsualizar múltiples imágenes
+onFilesSelected(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (!input.files) return;
 
-    const files: File[] = Array.from(input.files);
-    this.selectedFiles.push(...files);
+  // ✅ Convierte el FileList en un array tipado correctamente
+  const files: File[] = Array.from(input.files);
+  this.selectedFiles.push(...files); // acumula archivos nuevos
 
-    for (const file of files) {
-      const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        if (e.target?.result) {
-          this.previewUrls.push(e.target.result as string);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
+  for (const file of files) {
+    const reader = new FileReader();
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      if (e.target?.result) {
+        this.previewUrls.push(e.target.result as string);
+      }
+    };
+    reader.readAsDataURL(file); // ✅ ahora TS lo reconoce como Blob/File válido
   }
+}
 
-  // ❌ Eliminar imagen de previsualización
-  removeImage(index: number) {
-    this.previewUrls.splice(index, 1);
-    this.selectedFiles.splice(index, 1);
-  }
 
+  // 🚀 Subir todas las imágenes al bucket de Supabase
   async uploadAllImages(): Promise<string[]> {
     const urls: string[] = [];
 
@@ -150,45 +166,48 @@ export class SproductoPage implements OnInit {
     return urls;
   }
 
-  // 💾 Guardar o publicar producto
-  async onSubmit(form: NgForm, modo: 'borrador' | 'publicado') {
+  // 💾 Guardar el enser junto a las imágenes
+  async onSubmit(form: NgForm) {
     if (form.invalid) {
-      this.presentToast('Completa todos los campos obligatorios.');
+      this.presentToast('Completa todos los campos.');
       return;
     }
 
+    // ✅ Verificar que el usuario esté logueado
     if (!this.userInfo?.id) {
       this.presentToast('Debes iniciar sesión antes de subir un producto.');
       return;
     }
 
+    // ✅ Forzar asignación del propietario_id
     this.enser.propietario_id = this.userInfo.id;
 
     try {
-      this.presentToast('Subiendo imágenes...', 1500);
+      this.presentToast('Subiendo imágenes...', 2000);
       const imageUrls = await this.uploadAllImages();
 
+      // ✅ Imagen principal = primera imagen
       this.enser.imagen_url = imageUrls[0] || null;
-      this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
 
-      this.enser.estado = modo === 'borrador' ? 'borrador' : 'publicado';
+      // ✅ Agregar nuevas imágenes al array existente (para no reemplazar)
+      this.enser.imagenes_extra = [
+        ...(this.enser.imagenes_extra || []),
+        ...imageUrls
+      ];
 
+      // ✅ Guardar en la tabla "enseres"
       const { data, error } = await this.enserService.addEnser(this.enser);
       if (error) throw error;
 
-      if (modo === 'borrador') {
-        this.presentToast('📝 Borrador guardado. Puedes editarlo más tarde.');
-      } else {
-        this.presentToast('✅ Producto publicado correctamente.');
-      }
-
+      this.presentToast('✅ Enser registrado con éxito.');
       this.router.navigate(['/home']);
     } catch (err) {
       console.error('[SPRODUCTO] Error al guardar:', err);
-      this.presentToast('❌ Error al guardar el producto.');
+      this.presentToast('❌ Error al subir el enser o las imágenes.');
     }
   }
 
+  // 🧾 Mostrar mensajes flotantes
   async presentToast(message: string, duration: number = 2500) {
     const toast = await this.toastController.create({
       message,
@@ -198,6 +217,7 @@ export class SproductoPage implements OnInit {
     toast.present();
   }
 
+  // 🔙 Volver atrás
   goBack() {
     this.navCtrl.back();
   }

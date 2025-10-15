@@ -9,7 +9,7 @@
 
 <ion-content class="ion-padding">
 
-  <form #productForm="ngForm">
+  <form (ngSubmit)="onSubmit(productForm)" #productForm="ngForm">
 
     <!-- 🔹 Título -->
     <ion-item>
@@ -31,21 +31,40 @@
       </ion-select>
     </ion-item>
 
-    <!-- 🔹 Condición -->
-    <ion-item class="custom-item green-border">
-      <ion-label position="floating">Condición</ion-label>
-      <ion-select
-        placeholder="Selecciona una condición"
-        [(ngModel)]="enser.condicion"
-        name="condicion"
-        required>
-        <ion-select-option value="nuevo">Nuevo</ion-select-option>
-        <ion-select-option value="como_nuevo">Como nuevo</ion-select-option>
-        <ion-select-option value="bueno">Bueno</ion-select-option>
-        <ion-select-option value="aceptable">Aceptable</ion-select-option>
-        <ion-select-option value="para_reparar">Para reparar</ion-select-option>
-      </ion-select>
-    </ion-item>
+    <!-- 🔹 CONDICIÓN -->
+<ion-item class="custom-item green-border">
+  <ion-label position="floating">Condición</ion-label>
+  <ion-select
+    placeholder="Selecciona una condición"
+    [(ngModel)]="enser.condicion"
+    name="condicion"
+    required>
+    <ion-select-option value="nuevo">Nuevo</ion-select-option>
+    <ion-select-option value="como_nuevo">Como nuevo</ion-select-option>
+    <ion-select-option value="bueno">Bueno</ion-select-option>
+    <ion-select-option value="aceptable">Aceptable</ion-select-option>
+    <ion-select-option value="para_reparar">Para reparar</ion-select-option>
+  </ion-select>
+</ion-item>
+
+
+<!-- 🔹 ESTADO -->
+<ion-item class="custom-item green-border">
+  <ion-label position="floating">Estado</ion-label>
+  <ion-select
+    placeholder="Selecciona un estado"
+    [(ngModel)]="enser.estado"
+    name="estado"
+    required>
+    <ion-select-option value="borrador">Borrador</ion-select-option>
+    <ion-select-option value="publicado">Publicado</ion-select-option>
+    <ion-select-option value="reservado">Reservado</ion-select-option>
+    <ion-select-option value="intercambiado">Intercambiado</ion-select-option>
+    <ion-select-option value="retirado">Retirado</ion-select-option>
+    <ion-select-option value="bloqueado">Bloqueado</ion-select-option>
+  </ion-select>
+</ion-item>
+
 
     <!-- 🔹 Valor en puntos -->
     <ion-item>
@@ -75,21 +94,14 @@
     <div *ngIf="previewUrls.length > 0" class="preview-container">
       <h4>Previsualización</h4>
       <div class="image-preview-grid">
-        <div *ngFor="let url of previewUrls; let i = index" class="preview-wrapper">
-          <img [src]="url" class="preview-img" />
-          <button type="button" class="remove-btn" (click)="removeImage(i)">✖</button>
-        </div>
+        <img *ngFor="let url of previewUrls" [src]="url" class="preview-img" />
       </div>
     </div>
 
-    <!-- 🔘 Botones de acción -->
+    <!-- 🔘 Botón -->
     <div class="centrar">
-      <ion-button expand="block" color="medium" shape="round" (click)="onSubmit(productForm, 'borrador')">
-        Guardar Borrador
-      </ion-button>
-
-      <ion-button expand="block" color="primary" shape="round" (click)="onSubmit(productForm, 'publicado')">
-        Publicar Producto
+      <ion-button expand="block" type="submit" color="primary" shape="round">
+        Guardar Enser
       </ion-button>
     </div>
   </form>
@@ -112,13 +124,8 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
     margin: 1em 0;
-  }
-
-  .preview-wrapper {
-    position: relative;
-    display: inline-block;
   }
 
   .preview-img {
@@ -127,21 +134,6 @@
     object-fit: cover;
     border-radius: 10px;
     border: 2px solid #6bc3ff;
-  }
-
-  .remove-btn {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: rgba(255, 0, 0, 0.8);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    width: 22px;
-    height: 22px;
-    font-size: 14px;
-    line-height: 20px;
   }
 
   .centrar {
