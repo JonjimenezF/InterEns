@@ -139,6 +139,7 @@ import {
 } from '@ionic/angular/standalone';
 import { NavController } from '@ionic/angular';
 import { supabase } from 'src/shared/supabase/supabase.client';
+import { PuntosService } from '../servicios/puntos.service'; // ✅ importamos el servicio
 
 @Component({
   selector: 'app-home',
@@ -177,11 +178,14 @@ export class HomePage {
   // 👇 Propiedad para saber qué tarjeta está seleccionada
   selectedCard: string | null = null;
 
+  // 💰 Nueva propiedad para mostrar puntos
+  puntosTotales: number = 0;
+
   constructor(
     private router: Router,
     private activateRoute: ActivatedRoute,
     private navCtrl: NavController,
-
+    private puntosService: PuntosService // ✅ inyectamos el servicio
   ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (state && state['userInfo']) {
@@ -189,43 +193,44 @@ export class HomePage {
     }
   }
 
-  private async getToken() {
-    const { data: { session } } = await supabase.auth.getSession();
-    return session?.access_token ?? null;
+  // 🔹 Obtiene la sesión del usuario actual desde Supabase
+  async ngOnInit() {
+    const { data: session } = await supabase.auth.getSession();
+    const { data: userData } = await supabase.auth.getUser();
+
+    if (userData?.user) {
+      this.userInfo = userData.user;
+      this.userId = userData.user.id;
+      console.log('Usuario activo:', this.userId);
+
+      // 🔸 Traer puntos cuando hay usuario
+      this.obtenerPuntos();
+    } else {
+      console.warn('No hay usuario autenticado.');
+    }
   }
 
-  private async cargarPerfil() {
-    const token = await this.getToken(); if (!token) return;
-    const r = await fetch('http://127.0.0.1:4000/profile/me', { headers: { Authorization: `Bearer ${token}` }});
-    const p = await r.json();
-    this.nombre = p?.nombre_completo ?? null;
-    this.email = p?.email ?? null;
-    this.avatarUrl = p?.avatar_url ?? null;
-    this.formNombre = this.nombre ?? '';
-    this.formTelefono = p?.telefono ?? '';
-    this.formNombreUsuario = p?.nombre_usuario ?? '';
-  }
+  // 🪙 Obtener puntos desde el backend
+  obtenerPuntos() {
+    if (!this.userId) return;
 
+    this.puntosService.getUserPoints(this.userId).subscribe({
+      next: (res) => {
+        console.log('🎯 Puntos obtenidos (Home):', res);
+        this.puntosTotales = res.total_points || 0;
+      },
+      error: (err) => {
+        console.error('❌ Error al obtener puntos en Home:', err);
+      }
+    });
+  }
 
   // 👇 Método que marca la tarjeta activa
   selectCard(card: string) {
     this.selectedCard = card;
   }
 
-  // 🔹 Obtiene la sesión del usuario actual desde Supabase
-  async ngOnInit() {
-    await this.cargarPerfil();
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user) {
-      this.userInfo = session.user;
-      this.userId = session.user.id;
-      console.log('User ID:', this.userId);
-    } else {
-      console.log('El objeto userInfo es null o undefined');
-    }
-  }
-
-
+  // 🌍 Navegaciones principales
   goProducto() {
     this.router.navigate(['/producto'], { state: { userInfo: this.userInfo } });
   }

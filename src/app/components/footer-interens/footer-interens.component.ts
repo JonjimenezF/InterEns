@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonFooter, IonToolbar, IonButtons, IonButton } from '@ionic/angular/standalone';
+import {
+  IonFooter,
+  IonToolbar,
+  IonButtons,
+  IonButton,
+  IonIcon
+} from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,7 +14,14 @@ import { CommonModule } from '@angular/common';
   templateUrl: './footer-interens.component.html',
   styleUrls: ['./footer-interens.component.scss'],
   standalone: true,
-  imports: [IonFooter, IonToolbar, IonButtons, IonButton, CommonModule]
+  imports: [
+    IonFooter,
+    IonToolbar,
+    IonButtons,
+    IonButton,
+    IonIcon,     // 👈 Importación añadida para evitar errores con <ion-icon>
+    CommonModule
+  ]
 })
 export class FooterInterensComponent {
   constructor(private router: Router) {}

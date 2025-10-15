@@ -1,5 +1,3 @@
-
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { supabase } from 'src/shared/supabase/supabase.client';
 import { ViewChild, ElementRef } from '@angular/core';
+import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 
 
 @Component({
@@ -14,7 +13,12 @@ import { ViewChild, ElementRef } from '@angular/core';
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,              // 👈 ya incluye IonHeader, IonToolbar, IonFooter, IonButton, etc.
+    FooterInterensComponent   // 👈 nuestro footer personalizado
+  ]
 })
 export class PerfilPage implements OnInit {
   nombre: string | null = null;
@@ -79,8 +83,6 @@ export class PerfilPage implements OnInit {
   }
 
   puntoLimpio(): void {
-    // Acción al ir a punto limpio
+    this.router.navigate(['/punto-limpio']);
   }
-
-  
 }

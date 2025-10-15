@@ -1,33 +1,40 @@
+:host {
+  --accent: #1fd39a;
+  --card: #14161a;
+  --stroke: #2b3036;
+}
 
-/* Tab bar inferior */
-ion-tab-bar {
-  --background: var(--card);
+ion-footer {
+  background-color: var(--card);
   border-top: 1px solid var(--stroke);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.4);
 }
 
-ion-tab-button {
-  --color: var(--muted);
-  --color-selected: var(--accent);
-  font-size: 13px;
-  font-weight: 600;
-}
-ion-segment {
-  --background: transparent;
-  margin: 16px 0;
-}
-
-ion-segment-button {
-  --color: #fff;
-  --color-checked: #0b1115;
-  --indicator-color: transparent;
+ion-toolbar {
   --background: var(--card);
-  --background-checked: var(--accent);
-  border-radius: 12px;
-  margin: 0 6px;
-  font-weight: 600;
+  display: flex;
+  justify-content: space-around;
 }
-.icono-boton {
-  width: 24px;
-  height: 24px;
-  object-fit: contain; /* Mantiene proporción de la imagen */
+
+ion-button {
+  --background: transparent;
+  --color: var(--accent);
+  transition: transform 0.25s ease, color 0.25s ease;
+
+  &:hover {
+    transform: scale(1.15);
+    --color: #27fbb3;
+  }
+}
+
+/* Tamaño y estilo de los íconos */
+.footer-icon {
+  font-size: 26px;
+  color: var(--accent);
+}
+
+.central-btn .footer-icon {
+  font-size: 32px;
+  color: var(--accent);
+  filter: drop-shadow(0 0 6px rgba(31, 211, 154, 0.6));
 }
