@@ -1,0 +1,54 @@
+:host {
+  --bg: #0c0f13;
+  --card: #14161a;
+  --txt: #ffffff;
+  --accent: #1fd39a;
+}
+
+ion-toolbar {
+  --background: var(--card);
+  color: var(--txt);
+}
+
+ion-content {
+  --background: var(--bg);
+  color: var(--txt);
+}
+
+.borrador-card {
+  background: var(--card);
+  color: var(--txt);
+  border-radius: 14px;
+  box-shadow: 0 0 10px rgba(31, 211, 154, 0.2);
+  margin: 14px;
+  ion-img {
+    height: 150px;
+    object-fit: cover;
+    border-radius: 14px 14px 0 0;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 100px;
+  color: var(--txt);
+  ion-icon {
+    font-size: 50px;
+    color: var(--accent);
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--accent);
+}

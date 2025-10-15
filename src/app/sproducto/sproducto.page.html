@@ -3,7 +3,6 @@
     <ion-buttons slot="start">
       <ion-back-button (click)="goBack()" defaultHref="home" text=""></ion-back-button>
     </ion-buttons>
-    
   </ion-toolbar>
 </ion-header>
 
@@ -42,19 +41,17 @@
             </ion-textarea>
           </ion-item>
 
-          <!-- Campo Valor de Puntos -->
-<!-- Valor de puntos -->
-<ion-item class="custom-item green-border">
-  <ion-input
-    class="custom-input"
-    type="number"
-    placeholder="Valor de puntos"
-    [(ngModel)]="enser.valor_puntos"
-    name="valor_puntos"
-    required>
-  </ion-input>
-</ion-item>
-
+          <!-- Valor de puntos -->
+          <ion-item class="custom-item green-border">
+            <ion-input
+              class="custom-input"
+              type="number"
+              placeholder="Valor de puntos"
+              [(ngModel)]="enser.valor_puntos"
+              name="valor_puntos"
+              required>
+            </ion-input>
+          </ion-item>
 
           <!-- Categoría -->
           <ion-item class="custom-item green-border">
@@ -115,13 +112,14 @@
           <!-- Previsualización -->
           <div class="preview-container" *ngIf="previewUrls.length > 0">
             <img
-              *ngFor="let url of previewUrls"
+              *ngFor="let url of previewUrls; let i = index"
               [src]="url"
               alt="preview"
-              style="width: 100px; height: 100px; object-fit: cover; margin: 5px; border-radius: 10px;">
+              style="width: 100px; height: 100px; object-fit: cover; margin: 5px; border-radius: 10px;"
+              (click)="removeImage(i)">
           </div>
 
-          <!-- Botón siguiente -->
+          <!-- Botones -->
           <div class="centrar">
             <ion-button
               type="submit"
@@ -131,11 +129,16 @@
               Publicar Enser
             </ion-button>
           </div>
+
+          <div class="button-row">
+            <ion-button expand="block" class="btn-borrador" (click)="guardarBorrador(form)">
+              Guardar como borrador
+            </ion-button>
+          </div>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
   <app-footer-interens></app-footer-interens>
 </ion-content>

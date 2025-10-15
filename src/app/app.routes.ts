@@ -190,6 +190,12 @@ export const routes: Routes = [
     path: 'edit-perfil',
     loadComponent: () => import('./edit-perfil/edit-perfil.page').then( m => m.EditPerfilPage)
   },
+  {
+    path: 'borradores',
+    loadComponent: () => import('./borradores/borradores.page').then(m => m.BorradoresPage)
+
+  },
+
 
   // {
   //   path: 'que-es',
