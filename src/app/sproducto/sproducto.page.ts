@@ -12,7 +12,6 @@ import { EnserService } from '../services/enser.service';
 import { CategoriaService } from '../servicios/categoria.service';
 import { ProductosBackendService } from '../servicios/productos-backend.service'; // 👈 nuevo servicio
 
-// 🧱 Importaciones de Ionic (standalone)
 import {
   IonHeader,
   IonToolbar,
@@ -30,8 +29,6 @@ import {
   IonTitle
 } from '@ionic/angular/standalone';
 import { NavController, ToastController } from '@ionic/angular';
-
-// 🔗 Librerías externas
 import { v4 as uuidv4 } from 'uuid';
 
 // 🧩 Componente de footer personalizado
@@ -70,9 +67,9 @@ export class SproductoPage implements OnInit {
 
   // 📦 Datos del enser
   enser = {
-    propietario_id: '' as string,
-    titulo: '' as string,
-    descripcion: '' as string,
+    propietario_id: '',
+    titulo: '',
+    descripcion: '',
     categoria_id: null as number | null,
     condicion: 'bueno' as string,
     estado: '' as string,
@@ -85,7 +82,6 @@ export class SproductoPage implements OnInit {
     imagenes_extra: [] as string[]
   };
 
-  // 📂 Manejo de imágenes
   selectedFiles: File[] = [];
   previewUrls: string[] = [];
 
@@ -101,17 +97,12 @@ export class SproductoPage implements OnInit {
     private categoriaService: CategoriaService,
     private productosBackend: ProductosBackendService // 👈 conexión con backend
   ) {
-    // 🔍 Recuperar datos del estado (si viene del Home)
     const state = this.router.getCurrentNavigation()?.extras.state;
-    if (state && state['userInfo']) {
-      this.userInfo = state['userInfo'];
-    }
+    if (state && state['userInfo']) this.userInfo = state['userInfo'];
   }
 
-  // 🚀 Inicialización
   async ngOnInit() {
     try {
-      // 🔐 Obtener sesión actual
       const { data: sessionData, error: sErr } = await supabase.auth.getSession();
       if (sErr) throw sErr;
 
@@ -131,6 +122,7 @@ export class SproductoPage implements OnInit {
         .select('id, nombre')
         .order('id', { ascending: true });
 
+
       if (catErr) throw catErr;
       this.categorias = categorias || [];
     } catch (error) {
@@ -146,6 +138,7 @@ export class SproductoPage implements OnInit {
 
     const files: File[] = Array.from(input.files);
     this.selectedFiles.push(...files);
+    
 
     for (const file of files) {
       const reader = new FileReader();
@@ -158,7 +151,6 @@ export class SproductoPage implements OnInit {
     }
   }
 
-  // 🚀 Subir todas las imágenes al bucket de Supabase
   async uploadAllImages(): Promise<string[]> {
     const urls: string[] = [];
 
@@ -178,7 +170,7 @@ export class SproductoPage implements OnInit {
   // 💾 Guardar el enser junto a las imágenes y actualizar puntos
   async onSubmit(form: NgForm) {
     if (form.invalid) {
-      this.presentToast('Completa todos los campos.');
+      this.presentToast('Completa todos los campos obligatorios.');
       return;
     }
 
@@ -190,7 +182,7 @@ export class SproductoPage implements OnInit {
     this.enser.propietario_id = this.userInfo.id;
 
     try {
-      this.presentToast('Subiendo imágenes...', 2000);
+      this.presentToast('Subiendo imágenes...', 1500);
       const imageUrls = await this.uploadAllImages();
 
       this.enser.imagen_url = imageUrls[0] || null;
@@ -216,6 +208,17 @@ export class SproductoPage implements OnInit {
       this.presentToast('❌ Error al subir el enser o actualizar puntos.');
     }
   }
+
+    // ❌ Eliminar imagen de previsualización
+  removeImage(index: number) {
+    this.previewUrls.splice(index, 1);
+    this.selectedFiles.splice(index, 1);
+  }
+
+  
+
+
+  
 
   // 🔙 Volver atrás
   goBack() {

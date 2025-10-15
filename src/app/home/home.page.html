@@ -53,7 +53,6 @@
       >
         <p class="color-muted">Puntos Disponibles</p>
         <h2 class="accent">{{ puntosTotales }} InterCoins</h2>
-
       </div>
     </div>
 
@@ -94,6 +93,11 @@
         <ion-icon name="search-outline" class="faq-icon"></ion-icon>
         <p>Buscar Productos</p>
       </div>
+    </div>
+
+    <!-- ✨ ANIMACIÓN DE PUNTOS GANADOS -->
+    <div *ngIf="mostrarAnimacion" class="floating-points">
+      +{{ puntosGanados }} InterCoins 💚
     </div>
   </ion-content>
 </div>
