@@ -23,16 +23,16 @@
   <!-- Segmento Productos/Reseñas -->
   <ion-segment [(ngModel)]="selectedTab" value="productos">
       <ion-segment-button value="productos">
-        <ion-label>Productos</ion-label>
+        <ion-label> Mis Productos</ion-label>
       </ion-segment-button>
       <ion-segment-button value="reseñas">
-        <ion-label>Reseñas</ion-label>
+        <ion-label>Mis Reseñas</ion-label>
       </ion-segment-button>
     </ion-segment>
 
     <!-- Contenido dinámico -->
     <ng-container *ngIf="selectedTab === 'productos'">
-    <h2>Listado de Productos</h2>
+    
 
     <!-- Lista de productos del usuario -->
     <ion-list *ngIf="productos.length > 0">
