@@ -82,6 +82,7 @@ export class SproductoPage implements OnInit {
     if (state && state['userInfo']) this.userInfo = state['userInfo'];
   }
 
+  // 🔐 Inicialización y carga de categorías
   async ngOnInit() {
     try {
       const { data: sessionData, error: sErr } = await supabase.auth.getSession();
@@ -116,9 +117,19 @@ export class SproductoPage implements OnInit {
     if (!input.files) return;
 
     const files: File[] = Array.from(input.files);
-    this.selectedFiles.push(...files);
-
     for (const file of files) {
+      // ✅ Validación del tipo y tamaño
+      if (!file.type.startsWith('image/')) {
+        this.presentToast('Solo puedes subir imágenes.');
+        continue;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        this.presentToast('El tamaño máximo por imagen es de 5 MB.');
+        continue;
+      }
+
+      this.selectedFiles.push(file);
+
       const reader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {
         if (e.target?.result) {
@@ -135,11 +146,23 @@ export class SproductoPage implements OnInit {
     this.selectedFiles.splice(index, 1);
   }
 
+  // 🧼 Limpia nombres de archivo para evitar errores de Supabase
+  sanitizeFileName(name: string): string {
+    return name
+      .normalize('NFD') // elimina tildes
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9.\-_]/g, '_') // reemplaza caracteres no válidos por "_"
+      .toLowerCase();
+  }
+
+  // ☁️ Subida de todas las imágenes con validación
   async uploadAllImages(): Promise<string[]> {
     const urls: string[] = [];
 
     for (let file of this.selectedFiles) {
-      const fileName = `${uuidv4()}-${file.name}`;
+      const cleanName = this.sanitizeFileName(file.name);
+      const fileName = `${uuidv4()}-${cleanName}`;
+
       const { error } = await supabase.storage.from('enseres').upload(fileName, file);
       if (error) throw error;
 
@@ -168,9 +191,11 @@ export class SproductoPage implements OnInit {
       this.presentToast('Subiendo imágenes...', 1500);
       const imageUrls = await this.uploadAllImages();
 
+      // 📷 Imagen principal = primera imagen
       this.enser.imagen_url = imageUrls[0] || null;
       this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
 
+      // 🟢 Define estado según el modo
       this.enser.estado = modo === 'borrador' ? 'borrador' : 'publicado';
 
       const { data, error } = await this.enserService.addEnser(this.enser);
@@ -183,12 +208,22 @@ export class SproductoPage implements OnInit {
       }
 
       this.router.navigate(['/home']);
-    } catch (err) {
-      console.error('[SPRODUCTO] Error al guardar:', err);
-      this.presentToast('❌ Error al guardar el producto.');
-    }
+    } catch (err: any) {
+  console.error('[SPRODUCTO] Error al guardar:', err);
+
+  // 🧠 Algunos errores de Supabase llegan como "error.message" o "error.error"
+  const errorMsg = err?.error || err?.message || '';
+
+  if (errorMsg.includes('InvalidKey')) {
+    this.presentToast('⚠️ Nombre de archivo no válido. Intenta renombrar las imágenes.');
+  } else {
+    this.presentToast('❌ Error al guardar el producto.');
+  }
+}
+
   }
 
+  // 🔔 Toast reutilizable
   async presentToast(message: string, duration: number = 2500) {
     const toast = await this.toastController.create({
       message,
@@ -198,6 +233,7 @@ export class SproductoPage implements OnInit {
     toast.present();
   }
 
+  // ⬅️ Volver atrás
   goBack() {
     this.navCtrl.back();
   }
