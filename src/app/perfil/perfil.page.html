@@ -22,18 +22,45 @@
 
   <!-- Segmento Productos/Reseñas -->
   <ion-segment [(ngModel)]="selectedTab" value="productos">
-    <ion-segment-button value="productos">
-      <ion-label>Productos</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="reseñas">
-      <ion-label>Reseñas</ion-label>
-    </ion-segment-button>
-  </ion-segment>
+      <ion-segment-button value="productos">
+        <ion-label>Productos</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="reseñas">
+        <ion-label>Reseñas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
 
-  <!-- Contenido dinámico -->
-  <div *ngIf="selectedTab === 'productos'">
+    <!-- Contenido dinámico -->
+    <ng-container *ngIf="selectedTab === 'productos'">
     <h2>Listado de Productos</h2>
-  </div>
+
+    <!-- Lista de productos del usuario -->
+    <ion-list *ngIf="productos.length > 0">
+      <ion-item *ngFor="let p of productos">
+        <ion-thumbnail slot="start">
+          <img [src]="cover(p)" alt="img" />
+        </ion-thumbnail>
+
+        <ion-label>
+          <h3>{{ p.title }}</h3>
+          <p class="ion-text-wrap">{{ p.description }}</p>
+          <small *ngIf="p.created_at">Publicado: {{ p.created_at | date:'shortDate' }}</small>
+        </ion-label>
+
+        <ion-badge [color]="statusColor(p)">{{ p.estado }}</ion-badge>
+      </ion-item>
+    </ion-list>
+
+    <!-- Vacío -->
+    <div *ngIf="!prodLoading && productos.length === 0" class="ion-text-center ion-margin-top">
+      <p>Sin productos aún.</p>
+    </div>
+
+    <!-- Scroll infinito -->
+    <ion-infinite-scroll (ionInfinite)="loadMore($event)" [disabled]="!prodHasMore">
+      <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ng-container>
   <div *ngIf="selectedTab === 'reseñas'">
     <h2>Reseñas de Clientes</h2>
   </div>
