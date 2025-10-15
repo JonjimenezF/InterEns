@@ -10,9 +10,14 @@
 
 <ion-content>
   <div class="profile-header">
-    <img src="/assets/img/avatar.png" class="avatar" />
-    <h2>NOMBRE PERFIL</h2>
-    <ion-button class="edit-btn">Editar Perfil</ion-button>
+    <img [src]="avatarUrl || '/assets/img/avatar.png'"class="avatar" style="cursor:pointer;" />
+    <input #fileInput type="file" accept="image/*" style="display:none" />
+
+    <ion-label>
+      <div>{{ nombre || 'Usuario' }}</div>
+      <small *ngIf="email">{{ email }}</small>
+    </ion-label>
+    <ion-button class="edit-btn" (click)="editarperfil()">Editar Perfil</ion-button>
   </div>
 
   <!-- Segmento Productos/Reseñas -->

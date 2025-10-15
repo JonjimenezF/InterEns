@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="perfil" text=""></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="profile-header">
+    <img
+      [src]="avatarUrl || '/assets/img/avatar.png'"
+      class="avatar"
+      (click)="abrirSelectorFoto()"
+      [class.loading]="uploading"
+      style="cursor:pointer;"
+    />
+    <input #fileInput type="file" accept="image/*" style="display:none" (change)="onFileSelected($event)" />
+  </div>
+
+  <!-- Datos personales -->
+  <div class="card">
+    <div class="group-title">Datos personales</div>
+    <ion-item class="field" lines="none">
+      <ion-label position="stacked">Nombre completo</ion-label>
+      <ion-input [(ngModel)]="formNombre" [disabled]="saving || loading" placeholder="Tu nombre"></ion-input>
+    </ion-item>
+    <ion-item class="field" lines="none">
+      <ion-label position="stacked">Correo</ion-label>
+      <ion-input [value]="email || ''" disabled inputmode="none"></ion-input>
+    </ion-item>
+    <ion-item class="field" lines="none">
+      <ion-label position="stacked">Teléfono</ion-label>
+      <ion-input [(ngModel)]="formTelefono" [disabled]="saving || loading" inputmode="tel"></ion-input>
+    </ion-item>
+  </div>
+
+  <!-- Dirección -->
+  <div class="card">
+    <div class="group-title">Dirección</div>
+
+    <ion-item class="field" lines="none">
+      <ion-label position="stacked">Alias (ej: Casa, Trabajo)</ion-label>
+      <ion-input [(ngModel)]="dir.alias" [disabled]="saving || loading"></ion-input>
+    </ion-item>
+
+    <ion-item class="field" lines="none">
+      <ion-label position="stacked">Dirección</ion-label>
+      <ion-input [(ngModel)]="dir.linea_direccion" [disabled]="saving || loading" placeholder="Calle y número"></ion-input>
+    </ion-item>
+
+    <ion-item class="field two-cols" lines="none">
+      <div class="col">
+        <ion-label position="stacked">Ciudad</ion-label>
+        <ion-input [(ngModel)]="dir.ciudad" [disabled]="saving || loading"></ion-input>
+      </div>
+      <div class="col">
+        <ion-label position="stacked">Región</ion-label>
+        <ion-input [(ngModel)]="dir.region" [disabled]="saving || loading"></ion-input>
+      </div>
+    </ion-item>
+
+    <ion-item class="field" lines="none">
+      <ion-label position="stacked">Código postal</ion-label>
+      <ion-input [(ngModel)]="dir.codigo_postal" [disabled]="saving || loading"></ion-input>
+    </ion-item>
+
+    <ion-item class="field" lines="none">
+      <ion-label>Predeterminada</ion-label>
+      <ion-toggle [(ngModel)]="dir.es_predeterminada" [disabled]="saving || loading"></ion-toggle>
+    </ion-item>
+  </div>
+
+  <div style="display:flex; justify-content:center; margin:16px 0 24px;">
+    <ion-button class="edit-btn" (click)="guardar()" [disabled]="saving || loading" expand="block">
+      <ion-spinner *ngIf="saving" name="dots" style="margin-right:8px;"></ion-spinner>
+      {{ saving ? 'Guardando...' : 'Guardar' }}
+    </ion-button>
+  </div>
+</ion-content>

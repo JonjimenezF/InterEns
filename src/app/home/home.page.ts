@@ -119,7 +119,6 @@
 //   }
 // }
 
-
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -165,6 +164,13 @@ import { PuntosService } from '../servicios/puntos.service'; // ✅ importamos e
   ]
 })
 export class HomePage {
+  nombre: string | null = null;
+  email: string | null = null;
+  avatarUrl: string | null = null;
+
+  formNombre = '';
+  formTelefono = '';
+  formNombreUsuario = '';
   loading = true;
   userId: string | undefined;
   userInfo?: any;
