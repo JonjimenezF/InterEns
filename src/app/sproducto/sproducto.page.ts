@@ -91,6 +91,7 @@ export class SproductoPage implements OnInit {
   constructor(
     private navCtrl: NavController,
     private router: Router,
+    
     private activateRoute: ActivatedRoute,
     private toastController: ToastController,
     private enserService: EnserService,

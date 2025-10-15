@@ -39,26 +39,37 @@ export class PerfilPage implements OnInit {
   
 
   async ngOnInit() {
+    this.loading = true;
+    await this.loadPerfil();
+
+  }
+
+  async ionViewWillEnter() {
+  await this.loadPerfil();
+  }
+
+  private async loadPerfil() {
     const { data: { session } } = await supabase.auth.getSession();
     const token = session?.access_token;
-    console.log('token', session);
-    if (!token) {
-      console.error('No token: el usuario no está autenticado');
-      //this.router.navigate(['/login']);
-      return;
-    }
+    if (!token) return;
+
     const r = await fetch('http://127.0.0.1:4000/profile/me', {
       headers: { Authorization: `Bearer ${token}` }
     });
     const perfil = await r.json();
-    console.log('perfil', perfil);
 
     this.perfile = perfil;
     this.nombre = perfil?.nombre_completo ?? null;
-    this.email = perfil?.email ?? null;
-    this.avatarUrl = perfil?.avatar_url ?? null;
-    this.loading = false;
+    this.email  = perfil?.email ?? null;
 
+    // por si el backend no trae ?v=... (cache-buster)
+    let url = perfil?.avatar_url ?? null;
+    if (url && !url.includes('?v=')) {
+      url = `${url}${url.includes('?') ? '&' : '?'}v=${Date.now()}`;
+    }
+    this.avatarUrl = url;
+
+    this.loading = false;
   }
 
 

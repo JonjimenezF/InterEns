@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular'; // ✅ agregado
 import {
   IonHeader,
   IonToolbar,
@@ -38,7 +39,7 @@ import { CommonModule } from '@angular/common';
 export class DetalleProductoPage implements OnInit {
   producto: any;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private navCtrl: NavController) {} // ✅ agregado NavController
 
   ngOnInit() {
     const nav = this.router.getCurrentNavigation();
@@ -50,6 +51,11 @@ export class DetalleProductoPage implements OnInit {
     }
   }
 
+  // ✅ Soluciona el error del botón de retroceso
+  goBack() {
+    this.navCtrl.back();
+  }
+
   // 🟩 Redirigir a la página de canje, enviando el producto
   canjearProducto() {
     if (!this.producto) {
@@ -59,7 +65,6 @@ export class DetalleProductoPage implements OnInit {
 
     console.log('➡️ Redirigiendo a canjear-puntos con producto:', this.producto);
 
-    // ✅ Enviamos el producto a la página de canje
     this.router.navigate(['/canjear-puntos'], {
       state: { producto: this.producto },
     });

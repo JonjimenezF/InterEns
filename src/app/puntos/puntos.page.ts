@@ -13,6 +13,7 @@ import {
   IonButtons,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 import { PuntosService } from '../servicios/puntos.service'; // ✅ tu servicio de puntos
@@ -36,6 +37,7 @@ import { supabase } from '../services/supabase.client'; // ✅ para obtener el u
     CommonModule,
     IonFooter,
     FooterInterensComponent,
+    HttpClientModule,
   ],
 })
 export class PuntosPage implements OnInit {

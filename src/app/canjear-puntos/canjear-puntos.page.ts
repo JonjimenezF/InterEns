@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlertController } from '@ionic/angular';
-
+import { HttpClientModule } from '@angular/common/http';
 import {
   IonHeader,
   IonToolbar,
@@ -49,7 +49,8 @@ import { supabase } from 'src/shared/supabase/supabase.client';
     IonFooter,
     IonSpinner,
     IonIcon,
-    FooterInterensComponent
+    FooterInterensComponent,
+    HttpClientModule, 
   ],
 })
 export class CanjearPuntosPage implements OnInit {

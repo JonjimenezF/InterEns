@@ -1,6 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 import {
   IonHeader,
@@ -43,6 +44,7 @@ import { supabase } from '../services/supabase.client';
     IonFooter,
     FooterInterensComponent,
     IonIcon,
+    HttpClientModule,
   ],
 })
 export class HistorialPuntosPage implements OnInit {

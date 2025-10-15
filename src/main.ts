@@ -6,6 +6,7 @@ import { provideHttpClient } from '@angular/common/http'; // ✅ solo este
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
+import { HttpClientModule } from '@angular/common/http';
 
 /* 🌿 Registrar Ionicons manualmente */
 import { addIcons } from 'ionicons';
