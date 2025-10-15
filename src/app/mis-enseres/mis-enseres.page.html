@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mis Enseres</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-spinner *ngIf="loading" name="crescent" color="primary"></ion-spinner>
+
+  <div *ngIf="!loading && enseres.length === 0" class="no-data">
+    <p>No has publicado ningún enser aún.</p>
+    <ion-button expand="block" routerLink="/sproducto">Subir uno nuevo</ion-button>
+  </div>
+
+  <ion-list *ngIf="!loading && enseres.length > 0">
+    <ion-card *ngFor="let e of enseres">
+      <img *ngIf="e.imagen_url" [src]="e.imagen_url" alt="{{ e.titulo }}" class="enser-img" />
+      <ion-card-header>
+        <ion-card-title>{{ e.titulo }}</ion-card-title>
+        <ion-card-subtitle>{{ e.ciudad }}, {{ e.region }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p class="desc">{{ e.descripcion }}</p>
+        <div class="details">
+          <span class="estado" [ngClass]="e.estado">{{ e.estado | titlecase }}</span>
+          <span class="puntos">{{ e.valor_puntos }} pts</span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ion-content>
+
+<style>
+.no-data {
+  text-align: center;
+  margin-top: 2em;
+  color: #fff;
+}
+
+ion-card {
+  margin-bottom: 1em;
+  border-radius: 12px;
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+.enser-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px 12px 0 0;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: .5em;
+}
+
+.estado {
+  font-size: 0.9em;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: capitalize;
+}
+
+.estado.borrador { background-color: #777; color: #fff; }
+.estado.publicado { background-color: #4caf50; color: #fff; }
+.estado.reservado { background-color: #ff9800; color: #fff; }
+.estado.intercambiado { background-color: #2196f3; color: #fff; }
+.estado.retirado { background-color: #9c27b0; color: #fff; }
+.estado.bloqueado { background-color: #f44336; color: #fff; }
+
+.puntos {
+  font-weight: bold;
+  color: #6bc3ff;
+}
+
+ion-content {
+  --background: #1a1a1a;
+}
+</style>
