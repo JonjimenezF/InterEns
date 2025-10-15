@@ -88,6 +88,7 @@ export class EditPerfilPage implements OnInit {
     this.avatarUrl = p?.avatar_url ?? null;
     this.formNombre = this.nombre ?? '';
     this.formTelefono = p?.telefono ?? '';
+    this.formNombreUsuario = p?.nombre_usuario ?? '';
   }
 
   private async cargarDireccion() {
