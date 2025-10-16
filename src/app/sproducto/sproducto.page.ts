@@ -3,8 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NavController, ToastController } from '@ionic/angular';
+import { v4 as uuidv4 } from 'uuid';
+
+// 🧩 Servicios
 import { supabase } from '../services/supabase.client';
 import { EnserService } from '../services/enser.service';
+import { CategoriaService } from '../servicios/categoria.service';
+import { ProductosBackendService } from '../servicios/productos-backend.service';
+
+// 🧩 Componentes
+import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 
 import {
   IonHeader,
@@ -18,10 +27,10 @@ import {
   IonTextarea,
   IonSelect,
   IonSelectOption,
-  IonButton
+  IonButton,
+  IonFooter,
+  IonTitle,
 } from '@ionic/angular/standalone';
-import { NavController, ToastController } from '@ionic/angular';
-import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-sproducto',
@@ -43,13 +52,17 @@ import { v4 as uuidv4 } from 'uuid';
     IonTextarea,
     IonSelect,
     IonSelectOption,
-    IonButton
+    IonButton,
+    IonFooter,
+    IonTitle,
+    FooterInterensComponent,
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SproductoPage implements OnInit {
 
   userInfo?: any;
+  categorias: { id: number; nombre: string }[] = [];
 
   enser = {
     propietario_id: '',
@@ -69,7 +82,6 @@ export class SproductoPage implements OnInit {
 
   selectedFiles: File[] = [];
   previewUrls: string[] = [];
-  categorias: { id: number; nombre: string }[] = [];
 
   constructor(
     private navCtrl: NavController,
@@ -89,6 +101,7 @@ export class SproductoPage implements OnInit {
       if (sErr) throw sErr;
 
       const user = sessionData?.session?.user;
+
       if (!user) {
         this.presentToast('Inicia sesión antes de subir un producto.');
         this.router.navigate(['/portada']);
@@ -108,6 +121,7 @@ export class SproductoPage implements OnInit {
 
     } catch (error) {
       console.error('[SPRODUCTO] Error en ngOnInit:', error);
+      this.presentToast('❌ Error al cargar datos iniciales.');
     }
   }
 
@@ -158,18 +172,15 @@ export class SproductoPage implements OnInit {
   // ☁️ Subida de todas las imágenes con validación
   async uploadAllImages(): Promise<string[]> {
     const urls: string[] = [];
-
     for (let file of this.selectedFiles) {
       const cleanName = this.sanitizeFileName(file.name);
       const fileName = `${uuidv4()}-${cleanName}`;
 
       const { error } = await supabase.storage.from('enseres').upload(fileName, file);
       if (error) throw error;
-
       const { data: publicData } = supabase.storage.from('enseres').getPublicUrl(fileName);
       urls.push(publicData.publicUrl);
     }
-
     return urls;
   }
 

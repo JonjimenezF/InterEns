@@ -1,163 +1,213 @@
-ion-toolbar {
-  --background:rgba(10, 174, 122, 0.826);
+:host {
+  --bg: #0c0f13;
+  --card: #14161a;
+  --stroke: #2b3036;
+  --txt: #ffffff;
+  --muted: #b8bec6;
+  --accent: #1fd39a;
 }
-/* Estilos para el contenido */
+
+/* ======== GENERAL ======== */
 ion-content {
-  --background: none; /* Eliminar cualquier fondo por defecto */
-  background-image: url('/assets/img/fondo2.png'); /* Fondo de imagen */
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  --background: var(--bg);
+  color: var(--txt);
 }
 
-* {
-  --background: #ffffff; /* Cambia el color de fondo aquí */
+ion-toolbar {
+  --background: var(--card);
+  color: var(--txt);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
-.color-text-black {
-  color: black;
-  font-family: 'Roboto';
+ion-back-button {
+  --color: var(--accent);
 }
 
-ion-menu::part(backdrop) {
-  background-color: rgba(43, 1, 43, 0.5);
-}
-
-ion-menu::part(container) {
-  border-radius: 0 20px 20px 0;
-  box-shadow: 4px 0px 16px rgba(94, 94, 94, 0.18);
-}
-
-.vertical-buttons {
+/* 🌿 CABECERA DE FILTROS */
+.filter-section {
+  background-color: var(--bg);
+  padding: 15px 16px 5px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Alinea los botones a la izquierda */
-}
-
-.transparent-border {
-  border: 2px solid transparent; /* Establece el borde transparente */
-  border-color: rgb(255, 255, 255);
-  border-radius: 10px; /* Opcional: Agrega bordes redondeados */
-  box-shadow: 2px 2px 4px rgba(122, 122, 122, 0.5);
-}
-
-ion-buttons ion-back-button {
-  --color: black;
-}
-
-.boton-mostrar-todos {
-  --background: #3880ff; /* Color de fondo del botón Mostrar todos */
-}
-
-.boton-categoria {
-  --background: #32db64; /* Color de fondo por defecto de los botones de categoría */
-  --background-hover: #2bb355; /* Color de fondo al pasar el cursor */
-  --color: #ffffff; /* Color del texto */
-}
-
-
-/* Contenido de los productos */
-ion-card.carta {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-  border-radius: 15px;
-  border: #000000;
-}
-
-.card-content {
-  display: flex;
-  flex-direction: row; /* Disposición horizontal */
-  align-items: center; /* Alinea verticalmente los elementos */
-  padding: 10px; /* Espacio dentro del ion-card */
-  width: 100%; /* Asegura que el contenido ocupe todo el ancho del card */
-}
-
-.image-container {
-  flex: 0 0 auto; /* La imagen no debe crecer ni encoger */
-  width: 150px; /* Ancho fijo para la imagen */
-  height: 150px; /* Alto fijo para la imagen */
-  margin-right: 10px; /* Espacio a la derecha de la imagen */
-}
-
-.product-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Ajusta la imagen sin distorsión */
-  border-radius: 8px; /* Opcional: Añade bordes redondeados a la imagen */
-}
-
-.details-container {
-  flex: 1 1 auto; /* Los detalles ocupan todo el espacio restante */
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Centra verticalmente el contenido dentro de details-container */
-}
-
-h2, p {
-  margin: 0;
-  white-space: nowrap; /* Evita que los textos largos se rompan */
-  overflow: hidden; /* Oculta el texto que sobresale */
-  text-overflow: ellipsis; /* Añade puntos suspensivos al final del texto cortado */
-}
-
-.custom-button {
-  align-self: flex-start; /* Alinea el botón a la izquierda dentro del espacio disponible */
-  margin-top: 40px; /* Espacio sobre el botón */
-  --background: #4CAF50; /* Color de fondo del botón */
-  --background-activated: #45a049; /* Color de fondo cuando se presiona el botón */
-  --color: white; /* Color del texto del botón */
-  --border-radius: 4px; /* Bordes redondeados del botón */
-  --padding-start: 10px; /* Padding interno del botón */
-  --padding-end: 10px; /* Padding interno del botón */
-  --padding-top: 8px; /* Padding interno del botón */
-  --padding-bottom: 8px; /* Padding interno del botón */
-  --box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15); /* Sombra del botón */
-  --transition: background-color 0.3s ease; /* Transición suave para el fondo */
-}
-
-.custom-spinner {
-  width: 70px;
-  height: 70px;
-  margin: auto;
-  position: absolute; /* Posicionamiento absoluto para centrarlo */
-  top: 50%; /* Coloca el margen superior en el 50% del contenedor padre */
-  left: 50%; /* Coloca el margen izquierdo en el 50% del contenedor padre */
-  transform: translate(-50%, -50%); /* Centra el spinner */
-}
-
-.cart-icon {
-  width: 30px; /* Ajusta el tamaño según sea necesario */
-  height: 30px;
-  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
-}
-
-.category-button-container {
-  padding: 10px;
-}
-
-.category-button {
-  display: flex;
   align-items: center;
+  border-bottom: 1px solid var(--stroke);
+}
+
+.logo-area {
+  display: flex;
   justify-content: center;
+  margin-bottom: 8px;
+
+  .logo {
+    width: 140px;
+    filter: drop-shadow(0 0 12px rgba(31, 211, 154, 0.4));
+    animation: glow 3s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes glow {
+  from {
+    filter: drop-shadow(0 0 8px rgba(31, 211, 154, 0.4));
+  }
+  to {
+    filter: drop-shadow(0 0 16px rgba(31, 211, 154, 0.8));
+  }
+}
+
+.searchbar {
+  --background: var(--card);
+  --color: var(--txt);
+  --placeholder-color: var(--muted);
+  border: 1.5px solid var(--stroke);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  transition: all 0.25s ease;
+
+  &:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(31, 211, 154, 0.4);
+  }
+}
+
+.input-box {
+  --background: var(--card);
+  --color: var(--txt);
+  border: 1.5px solid var(--stroke);
+  border-radius: 12px;
+  width: 100%;
+  height: 46px;
+  margin-bottom: 8px;
+  transition: 0.3s;
+
+  &:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 8px rgba(31, 211, 154, 0.4);
+  }
+}
+
+/* ======== BOTÓN FILTRAR ======== */
+.apply-button {
+  --background: var(--accent);
+  --color: #ffffff;
+  border-radius: 12px;
+  height: 46px;
+  font-weight: 700;
+  margin-top: 5px;
+  box-shadow: 0 0 15px rgba(31, 211, 154, 0.4);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 20px rgba(31, 211, 154, 0.7);
+  }
+}
+
+/* ======== TARJETAS DE PRODUCTOS ======== */
+.product-card {
+  background: var(--card);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  transition: transform 0.25s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 14px rgba(31, 211, 154, 0.35);
+  }
+
+  /* 📸 Imagen adaptativa y centrada */
+  .product-image {
+    width: 100%;
+    height: 240px; /* altura base */
+    object-fit: contain; /* ✅ mantiene proporciones sin recorte */
+    background-color: #1a1d22; /* fondo de seguridad */
+    border-bottom: 2px solid rgba(31, 211, 154, 0.2);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.03);
+    }
+  }
+
+  /* 🔤 Información del producto */
+  .product-info {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--txt);
+      margin-bottom: 6px;
+      text-transform: capitalize;
+    }
+
+    .desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 5px;
+    }
+
+    .ubicacion {
+      color: #aaa;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+
+    .custom-button {
+      --background: var(--accent);
+      --color: #000;
+      border-radius: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      transition: 0.25s ease;
+    }
+
+    .custom-button:hover {
+      filter: brightness(1.1);
+      transform: scale(1.05);
+    }
+  }
+}
+
+/* ======== RESPONSIVE ======== */
+@media (min-width: 768px) {
+  .product-card .product-image {
+    height: 260px;
+    object-fit: cover; /* en pantallas grandes, puede llenar más */
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-card .product-image {
+    height: 280px;
+  }
+}
+
+/* ======== SIN PRODUCTOS ======== */
+.sin-productos {
   text-align: center;
-  margin: 5px; // Margin around each button
-}
+  color: #aaa;
+  margin-top: 40px;
 
-.category-button ion-button {
-  --border-radius: 10px;
-  --padding-start: 10px;
-  --padding-end: 10px;
-  --padding-top: 10px;
-  --padding-bottom: 10px;
-  font-size: 14px;
-  white-space: normal; // Allow text to wrap
-  word-wrap: break-word; // Break long words
-  display: block;
-  width: calc(150% - 20px); // Ensure button takes full width with margin
+  ion-icon {
+    font-size: 2.5rem;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
 }
-
-.category-text {
-  padding: 0 !important; // Remove default padding to better fit content
-}
-

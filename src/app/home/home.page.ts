@@ -1,12 +1,25 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute,Router } from '@angular/router';
-import { IonBackButton, IonButtons, IonButton, IonContent, IonHeader, IonImg, IonMenu, IonMenuButton, IonTitle, IonToolbar, IonCardContent } from '@ionic/angular/standalone';
-import { IonicModule } from '@ionic/angular';
-import { idUsuario } from '../models/idUsuario';
+import { Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  IonBackButton,
+  IonButtons,
+  IonButton,
+  IonContent,
+  IonHeader,
+  IonImg,
+  IonMenu,
+  IonMenuButton,
+  IonTitle,
+  IonToolbar,
+  IonCard,
+  IonCardContent,
+  IonAvatar,
+  IonIcon
+} from '@ionic/angular/standalone';
 import { NavController } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
 import { supabase } from 'src/shared/supabase/supabase.client';
-
-
+import { PuntosService } from '../servicios/puntos.service';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +27,7 @@ import { supabase } from 'src/shared/supabase/supabase.client';
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [
+    CommonModule,
     IonMenu,
     IonHeader,
     IonToolbar,
@@ -24,100 +38,202 @@ import { supabase } from 'src/shared/supabase/supabase.client';
     IonBackButton,
     IonButton,
     IonImg,
-    IonCardContent
+    IonCard,
+    IonCardContent,
+    IonAvatar,
+    IonIcon
   ]
 })
+export class HomePage implements OnDestroy {
+  nombre: string | null = null;
+  email: string | null = null;
+  avatarUrl: string | null = null;
+  perfile: any;
 
-export class HomePage {
+  formNombre = '';
+  formTelefono = '';
+  formNombreUsuario = '';
   loading = true;
   userId: string | undefined;
-
   userInfo?: any;
-  constructor(private router: Router, private activateRoute: ActivatedRoute,private navCtrl: NavController) {
+  subscription: any;
+
+  selectedCard: string | null = null;
+  puntosTotales: number = 0;
+
+  // ✨ Animación de puntos
+  mostrarAnimacion = false;
+  puntosGanados = 0;
+
+  constructor(
+    private router: Router,
+    private activateRoute: ActivatedRoute,
+    private navCtrl: NavController,
+    private puntosService: PuntosService
+  ) {
     const state = this.router.getCurrentNavigation()?.extras.state;
+    if (state && state['userInfo']) {
+      this.userInfo = state['userInfo'];
+    }
   }
 
-
+  // 🟢 Cargar usuario y puntos al iniciar
   async ngOnInit() {
-    // 1) Sesión y usuario
-    const { data: sessionData, error: sErr } = await supabase.auth.getSession();
-    if (sErr) console.error('[HOME] getSession error:', sErr);
-    console.log('[HOME] session:', sessionData?.session);
+    const { data: userData } = await supabase.auth.getUser();
 
-    const { data: userData, error: uErr } = await supabase.auth.getUser();
-    if (uErr) console.error('[HOME] getUser error:', uErr);
-    console.log('[HOME] user:', userData?.user);
+    if (userData?.user) {
+      this.userInfo = userData.user;
+      this.userId = userData.user.id;
+      console.log('✅ Usuario activo:', this.userId);
 
-    // 2) Perfil en tu tabla "perfiles"
-    const userId = userData?.user?.id;
-    if (!userId) {
-      console.warn('[HOME] No hay usuario logueado.');
-      return;
-    }
-
-    const { data: perfil, error: pErr } = await supabase
-      .from('perfiles')
-      .select('usuario_id')
-      .eq('usuario_id', userId)
-      .maybeSingle();
-
-    if (pErr) {
-      console.error('[HOME] perfiles select error:', pErr);
+      this.obtenerPuntos();
+      this.escucharCambiosEnPuntos();
     } else {
-      console.log('[HOME] perfil (objeto):', perfil);
-      // Vista tabular agradable en la consola
-      if (perfil) console.table([perfil]);
+      console.warn('No hay usuario autenticado.');
+    }
+    this.loading = true;
+    await this.loadPerfil();
+  }
+
+
+  async ionViewWillEnter() {
+  await this.loadPerfil();
+  }
+
+  private async loadPerfil() {
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+    if (!token) return;
+
+    const r = await fetch('http://127.0.0.1:4000/profile/me', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const perfil = await r.json();
+
+    this.perfile = perfil;
+    // this.nombre = perfil?.nombre_completo ?? null;
+    // this.email  = perfil?.email ?? null;
+
+    // por si el backend no trae ?v=... (cache-buster)
+    let url = perfil?.avatar_url ?? null;
+    if (url && !url.includes('?v=')) {
+      url = `${url}${url.includes('?') ? '&' : '?'}v=${Date.now()}`;
+    }
+    this.avatarUrl = url;
+
+    this.loading = false;
+  }
+
+  // 🪙 Obtener puntos desde el backend
+  obtenerPuntos() {
+    if (!this.userId) return;
+
+    this.puntosService.getUserPoints(this.userId).subscribe({
+      next: (res) => {
+        console.log('🎯 Puntos desde Supabase:', res);
+        this.puntosTotales = res.total_points || 0;
+      },
+      error: (err) => {
+        console.error('❌ Error al obtener puntos en Home:', err);
+      }
+    });
+  }
+
+  // 🔔 Escuchar actualizaciones en tiempo real (puntos)
+  escucharCambiosEnPuntos() {
+    if (!this.userId) return;
+
+    this.subscription = supabase
+      .channel('user-points-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'user_points',
+          filter: `usuario_id=eq.${this.userId}`,
+        },
+        (payload) => {
+          const nuevo = payload.new as { total_points?: number };
+
+          if (nuevo && typeof nuevo.total_points === 'number') {
+            const diferencia = nuevo.total_points - this.puntosTotales;
+
+            if (diferencia > 0) {
+              this.puntosGanados = diferencia;
+              this.mostrarAnimacion = true;
+
+              setTimeout(() => {
+                this.mostrarAnimacion = false;
+              }, 1500);
+            }
+
+            this.puntosTotales = nuevo.total_points;
+          }
+        }
+      )
+      .subscribe((status) =>
+        console.log('🟢 Canal Realtime conectado:', status)
+      );
+  }
+
+  // 🧹 Limpiar canal al salir
+  ngOnDestroy() {
+    if (this.subscription) {
+      supabase.removeChannel(this.subscription);
+      console.log('🔴 Canal Realtime desconectado');
     }
   }
 
-  goProducto(){
-    this.router.navigate(['/producto'], { state: { userInfo: this.userInfo}})
+  // 💚 Selección de tarjetas
+  selectCard(card: string) {
+    this.selectedCard = card;
   }
 
-  home(){
+  // 🌍 Navegaciones
+  goProducto() {
+    this.router.navigate(['/producto'], { state: { userInfo: this.userInfo } });
+  }
+
+  home() {
     this.router.navigate(['/home']);
-    console.log('El objeto userInfo es null o undefined',this.userInfo);
-  
   }
 
-  perfil(){
+  perfil() {
     this.router.navigate(['/perfil']);
   }
 
-  salir(){
+  salir() {
     this.router.navigate(['/portada']);
-
   }
-  preguntas(){
+
+  preguntas() {
     this.router.navigate(['/preguntas']);
-
   }
-  contacto(){
+
+  contacto() {
     this.router.navigate(['/contacto']);
-
   }
-  reciclaje(){
-    this.router.navigate(['/reciclaje']);
 
+  goPuntos() {
+    this.router.navigate(['/puntos']);
   }
-  puntoLimpio(){
 
-  }
   goSubirfoto() {
-    console.log("Dentro",this.userInfo)
-    this.router.navigate(['/sproducto'], { state: { userInfo: this.userInfo}})
+    this.router.navigate(['/sproducto'], { state: { userInfo: this.userInfo } });
   }
 
-  goMisProductos(){
-    this.router.navigate(['/mis-productos'], { state: { userInfo: this.userInfo.id}})
+  goMisProductos() {
+    this.router.navigate(['/mis-productos'], {
+      state: { userInfo: this.userInfo?.id },
+    });
   }
 
   goBack() {
     this.navCtrl.back();
   }
 
-  inter(){
-    this.router.navigate(['/que-es'], { state: { userInfo: this.userInfo}})
+  inter() {
+    this.router.navigate(['/que-es'], { state: { userInfo: this.userInfo } });
   }
-
 }

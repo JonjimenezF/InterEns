@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/puntos" text=""></ion-back-button>
+    </ion-buttons>
+   
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondohistorial ion-padding">
+  <!-- 🧩 Sección Intro -->
+  <section class="intro">
+   
+    <h1>Historial de Actividad</h1>
+    <p>
+      Consulta cómo has <strong>ganado</strong> o <strong>utilizado</strong> tus
+      puntos dentro de <span class="highlight">InterEns</span>.
+    </p>
+  </section>
+
+  <!-- 💰 Resumen de puntos (opcional) -->
+  <section *ngIf="historial.length > 0" class="resumen">
+    <div class="resumen-box">
+      <ion-icon name="trophy-outline"></ion-icon>
+      <h2>Total Movimientos: {{ historial.length }}</h2>
+    </div>
+  </section>
+
+  <!-- 📜 Lista de transacciones -->
+  <section class="lista-historial">
+    <ion-card *ngFor="let transaccion of historial" class="history-card">
+      <ion-card-header>
+        <ion-card-title>{{ transaccion.descripcion }}</ion-card-title>
+        <ion-card-subtitle>{{ transaccion.fecha }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content
+        [ngClass]="{
+          positivo: transaccion.puntos > 0,
+          negativo: transaccion.puntos < 0
+        }"
+      >
+        <span>
+          {{ transaccion.puntos > 0 ? '+' : '' }}{{ transaccion.puntos }} pts
+        </span>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Si no hay historial -->
+    <div class="sin-historial" *ngIf="historial.length === 0">
+      <ion-icon name="alert-circle-outline" class="icono-vacio"></ion-icon>
+      <p>No tienes movimientos registrados aún.</p>
+    </div>
+  </section>
+</ion-content>
+
+<!-- 🦶 Footer InterEns -->
+<app-footer-interens></app-footer-interens>

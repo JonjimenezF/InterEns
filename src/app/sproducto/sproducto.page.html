@@ -1,99 +1,148 @@
 <ion-header>
   <ion-toolbar color="light">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="home"></ion-back-button>
+      <ion-back-button (click)="goBack()" defaultHref="home" text=""></ion-back-button>
     </ion-buttons>
-    <ion-title>Subir Producto</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content>
+  <div class="form-wrapper">
+    <div class="form-container">
+      <h1>Subir Producto</h1>
+      <div class="contact-info">
+        <p>
+          Completa el siguiente formulario para agregar un nuevo enser a la plataforma.
+          Puedes asignarle puntos y cargar imágenes desde tu dispositivo.
+        </p>
 
-  <form #productForm="ngForm">
+        <form #productForm="ngForm" (ngSubmit)="onSubmit(productForm, 'publicado')">
+          <!-- Nombre / Título -->
+          <ion-item class="custom-item green-border">
+            <ion-input
+              class="custom-input"
+              type="text"
+              placeholder="Título del Enser"
+              [(ngModel)]="enser.titulo"
+              name="titulo"
+              required>
+            </ion-input>
+          </ion-item>
 
-    <!-- 🔹 Título -->
-    <ion-item>
-      <ion-label position="floating">Título</ion-label>
-      <ion-input type="text" [(ngModel)]="enser.titulo" name="titulo" required></ion-input>
-    </ion-item>
+          <!-- Descripción -->
+          <ion-item class="custom-item green-border">
+            <ion-textarea
+              class="custom-input"
+              placeholder="Descripción"
+              [(ngModel)]="enser.descripcion"
+              name="descripcion"
+              rows="5"
+              required>
+            </ion-textarea>
+          </ion-item>
 
-    <!-- 🔹 Descripción -->
-    <ion-item>
-      <ion-label position="floating">Descripción</ion-label>
-      <ion-textarea rows="4" [(ngModel)]="enser.descripcion" name="descripcion" required></ion-textarea>
-    </ion-item>
+          <!-- Valor de puntos -->
+          <ion-item class="custom-item green-border">
+            <ion-input
+              class="custom-input"
+              type="number"
+              placeholder="Valor de puntos"
+              [(ngModel)]="enser.valor_puntos"
+              name="valor_puntos"
+              required>
+            </ion-input>
+          </ion-item>
 
-    <!-- 🔹 Categoría -->
-    <ion-item>
-      <ion-label>Categoría</ion-label>
-      <ion-select placeholder="Selecciona una" [(ngModel)]="enser.categoria_id" name="categoria_id" required>
-        <ion-select-option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</ion-select-option>
-      </ion-select>
-    </ion-item>
+          <!-- Categoría -->
+          <ion-item class="custom-item green-border">
+            <ion-select
+              [(ngModel)]="enser.categoria_id"
+              name="categoria_id"
+              placeholder="Selecciona una categoría"
+              required>
+              <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id">
+                {{ categoria.nombre }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
 
-    <!-- 🔹 Condición -->
-    <ion-item class="custom-item green-border">
-      <ion-label position="floating">Condición</ion-label>
-      <ion-select
-        placeholder="Selecciona una condición"
-        [(ngModel)]="enser.condicion"
-        name="condicion"
-        required>
-        <ion-select-option value="nuevo">Nuevo</ion-select-option>
-        <ion-select-option value="como_nuevo">Como nuevo</ion-select-option>
-        <ion-select-option value="bueno">Bueno</ion-select-option>
-        <ion-select-option value="aceptable">Aceptable</ion-select-option>
-        <ion-select-option value="para_reparar">Para reparar</ion-select-option>
-      </ion-select>
-    </ion-item>
+          <!-- Condición -->
+          <ion-item class="custom-item green-border">
+            <ion-select
+              [(ngModel)]="enser.condicion"
+              name="condicion"
+              placeholder="Condición del Enser"
+              required>
+              <ion-select-option value="nuevo">Nuevo</ion-select-option>
+              <ion-select-option value="como_nuevo">Como nuevo</ion-select-option>
+              <ion-select-option value="bueno">Bueno</ion-select-option>
+              <ion-select-option value="aceptable">Aceptable</ion-select-option>
+              <ion-select-option value="para_reparar">Para reparar</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <!-- Ciudad -->
+          <ion-item class="custom-item green-border">
+            <ion-input
+              class="custom-input"
+              type="text"
+              placeholder="Ciudad"
+              [(ngModel)]="enser.ciudad"
+              name="ciudad">
+            </ion-input>
+          </ion-item>
 
-    <!-- 🔹 Valor en puntos -->
-    <ion-item>
-      <ion-label position="floating">Valor en puntos</ion-label>
-      <ion-input type="number" [(ngModel)]="enser.valor_puntos" name="valor_puntos" required></ion-input>
-    </ion-item>
+          <!-- Región -->
+          <ion-item class="custom-item green-border">
+            <ion-input
+              class="custom-input"
+              type="text"
+              placeholder="Región"
+              [(ngModel)]="enser.region"
+              name="region">
+            </ion-input>
+          </ion-item>
 
-    <!-- 🔹 Ciudad -->
-    <ion-item>
-      <ion-label position="floating">Ciudad</ion-label>
-      <ion-input type="text" [(ngModel)]="enser.ciudad" name="ciudad" required></ion-input>
-    </ion-item>
+          <!-- Subir Imágenes -->
+          <ion-item class="custom-item green-border">
+            <div class="upload-container">
+              <label class="upload-label">Seleccionar imágenes</label>
+              <input type="file" multiple (change)="onFilesSelected($event)" accept="image/*" />
+            </div>
+          </ion-item>
 
-    <!-- 🔹 Región -->
-    <ion-item>
-      <ion-label position="floating">Región</ion-label>
-      <ion-input type="text" [(ngModel)]="enser.region" name="region" required></ion-input>
-    </ion-item>
+          <!-- Previsualización -->
+          <div class="preview-container" *ngIf="previewUrls.length > 0">
+            <h4>Previsualización</h4>
+            <div class="image-preview-grid">
+              <div *ngFor="let url of previewUrls; let i = index" class="preview-wrapper">
+                <img [src]="url" class="preview-img" alt="preview" />
+                <button type="button" class="remove-btn" (click)="removeImage(i)">✖</button>
+              </div>
+            </div>
+          </div>
 
-    <!-- 🔹 Imágenes -->
-    <ion-item>
-      <ion-label>Seleccionar imágenes</ion-label>
-      <input type="file" (change)="onFilesSelected($event)" accept="image/*" multiple />
-    </ion-item>
+          <!-- Botones -->
+          <div class="centrar">
+            <ion-button
+              type="submit"
+              class="custom-button white-background"
+              fill="solid"
+              shape="round">
+              Publicar Enser
+            </ion-button>
+          </div>
 
-    <!-- 🖼️ Vista previa -->
-    <div *ngIf="previewUrls.length > 0" class="preview-container">
-      <h4>Previsualización</h4>
-      <div class="image-preview-grid">
-        <div *ngFor="let url of previewUrls; let i = index" class="preview-wrapper">
-          <img [src]="url" class="preview-img" />
-          <button type="button" class="remove-btn" (click)="removeImage(i)">✖</button>
-        </div>
+          <div class="button-row">
+            <ion-button expand="block" class="btn-borrador" (click)="onSubmit(productForm, 'borrador')">
+              Guardar como borrador
+            </ion-button>
+          </div>
+        </form>
       </div>
     </div>
+  </div>
 
-    <!-- 🔘 Botones de acción -->
-    <div class="centrar">
-      <ion-button expand="block" color="medium" shape="round" (click)="onSubmit(productForm, 'borrador')">
-        Guardar Borrador
-      </ion-button>
-
-      <ion-button expand="block" color="primary" shape="round" (click)="onSubmit(productForm, 'publicado')">
-        Publicar Producto
-      </ion-button>
-    </div>
-  </form>
-
+  <app-footer-interens></app-footer-interens>
 </ion-content>
 
 <style>

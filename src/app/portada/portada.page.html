@@ -1,21 +1,14 @@
-<ion-header [translucent]="true" class="mi-pagina">
-</ion-header>
-<ion-content class="fondohome" > 
-  <div class="brand">
-      <ion-img class="logo" src="assets/nuevos_img/interens-logo.png "></ion-img>
-      <h1 class="brand-name">InterEns </h1>
+<ion-header [translucent]="true" class="mi-pagina"></ion-header>
+
+<ion-content
+  #portada
+  class="portada"
+  [class.loaded]="isLoaded"
+>
+  <div class="contenedor">
+    <div class="logo-container">
+      <ion-img class="logo" src="assets/nuevos_img/interens-logo.png"></ion-img>
+      <h1 class="brand-name">InterEns</h1>
     </div>
-  <div class="centrar">
-    <ion-button
-        class="cta"
-        expand="block"
-        shape="round"
-        size="large"
-        type="submit"
-        (click)="sg()">
-      
-        Comenzar
-    </ion-button>
   </div>
 </ion-content>
-

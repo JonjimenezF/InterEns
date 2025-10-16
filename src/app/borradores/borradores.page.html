@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mis Borradores</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondoborradores">
+  <!-- 🌀 Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando borradores...</p>
+  </div>
+
+  <!-- 📭 Sin borradores -->
+  <div *ngIf="!loading && borradores.length === 0" class="empty-state">
+    <ion-icon name="document-outline"></ion-icon>
+    <p>No tienes borradores guardados.</p>
+  </div>
+
+  <!-- 📝 Lista de borradores -->
+  <ion-card *ngFor="let item of borradores" class="borrador-card">
+    <ion-img [src]="item.imagen_url || 'assets/img/default.png'"></ion-img>
+    <ion-card-header>
+      <ion-card-title>{{ item.titulo }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>{{ item.descripcion || 'Sin descripción disponible.' }}</p>
+
+      <div class="actions">
+        <ion-button fill="outline" color="success" (click)="editarBorrador(item)">
+          Editar y publicar
+        </ion-button>
+
+        <ion-button fill="outline" color="danger" (click)="eliminarBorrador(item.id)">
+          Eliminar
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<app-footer-interens></app-footer-interens>

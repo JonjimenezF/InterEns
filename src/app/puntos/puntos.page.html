@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home" text=""></ion-back-button>
+    </ion-buttons>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondopuntos">
+
+  <section class="info-container">
+    <ion-img src="assets/nuevos_img/interens-logo.png" alt="Puntos InterEns" class="points-icon"></ion-img>
+    <h1>¡Tus Puntos InterEns!</h1>
+    <p class="descripcion">
+      En <strong>InterEns</strong>, <span class="highlight">1 punto equivale a 1 peso</span>.
+      <br><br>
+      Cada vez que subas un producto, ganarás puntos según su valor estimado.  
+      Mientras más participes, más puntos acumulas y podrás canjearlos por productos o beneficios sostenibles.
+    </p>
+  </section>
+
+  <section class="puntos-acumulados">
+    <h2>Puntos acumulados</h2>
+    <div class="contador">
+      <ion-icon name="trophy-outline"></ion-icon>
+      <span>{{ puntosTotales }}</span>
+    </div>
+  </section>
+
+  <section class="acciones">
+    <ion-button expand="block" shape="round" class="custom-button" (click)="canjearPuntos()">
+      Canjear Puntos
+    </ion-button>
+    <ion-button expand="block" fill="outline" class="outline-button" (click)="verHistorial()">
+      Ver Historial de Puntos
+    </ion-button>
+  </section>
+
+</ion-content>
+  <app-footer-interens></app-footer-interens>

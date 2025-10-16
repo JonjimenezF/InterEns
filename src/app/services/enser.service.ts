@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { supabase } from './supabase.client';
-
+import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
 export class EnserService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   // Inserta un nuevo enser (producto)
   async addEnser(enser: any) {

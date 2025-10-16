@@ -1,80 +1,129 @@
+:host {
+  --bg: #0c0f13;
+  --card: #14161a;
+  --accent: #1fd39a;
+  --txt: #ffffff;
+  --muted: #b8bec6;
+}
+
 ion-toolbar {
-  --background:rgba(10, 174, 122, 0.826);
+  --background: var(--card);
+  color: var(--txt);
 }
 
-ion-content {
-  background-image: url('/assets/img/fondo2.png'); /* Ruta de la imagen */
-  background-size: cover;
-  --background: transparent; /* Para asegurar que el fondo de ion-content sea transparente */
+ion-content.fondodetalle {
+  --background: var(--bg);
+  color: var(--txt);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
-* {
-    --background: #ffffff; /* Cambia el color de fondo aquí */
-  }
-  
-  .centrar{
-    display:grid;
-    place-content: center;
+
+.detalle-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  padding: 20px;
 }
-  
-  ion-slides, ion-slide {
-    width: 100%;
-    height: auto;
+
+/* 🖼️ Imagen */
+.producto-img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 0 15px rgba(31, 211, 154, 0.25);
+  margin-bottom: 20px;
+}
+
+/* 📋 Información del producto */
+.detalle-info {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 22px;
+  width: 100%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.titulo {
+  color: var(--accent);
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.descripcion {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
+/* Info secundaria */
+.info-secundaria {
+  color: var(--txt);
+  font-size: 0.9rem;
+  margin-bottom: 18px;
+
+  p {
+    margin: 4px 0;
   }
-  
-  .product-image {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-  }
-  
-  .carta {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 90%;
-    background: black
-  }
-  
-  .image-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+}
+
+/* 💰 Puntos */
+.puntos-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(31, 211, 154, 0.1);
+  border: 1px solid rgba(31, 211, 154, 0.3);
+  border-radius: 12px;
+  padding: 10px 0;
+  margin-bottom: 20px;
+
+  ion-icon {
+    color: var(--accent);
+    font-size: 1.3rem;
+    margin-right: 6px;
   }
 
-  //paginacion
-  .custom-pagination {
-    bottom: 10px; /* Ajusta la distancia desde abajo según sea necesario */
-    left: 0; /* Ajusta la posición horizontal según sea necesario */
-    right: 0; /* Ajusta la posición horizontal según sea necesario */
-    margin: 0 auto; /* Centra horizontalmente */
-    text-align: center; /* Centra los puntos de paginación */
+  h2 {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1.2rem;
   }
-  .custom-pagination ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex; /* Cambia la visualización a flexbox */
-    justify-content: center; /* Centra los elementos horizontalmente */
-  }
-  .custom-pagination-bullet {
-    width: 10px;
-    height: 10px;
-    background-color: gray;
-    border-radius: 50%;
-    margin: 0 5px;
-    cursor: pointer;
-  }
-  .custom-pagination-bullet.active {
-    background-color: rgb(67, 67, 158); /* Cambia el color del punto activo */
-  }
+}
 
+/* 🟩 Botón */
+.btn-canjear {
+  --background: var(--accent);
+  --color: #fff;
+  font-weight: 700;
+  border-radius: 30px;
+  box-shadow: 0 0 15px rgba(31, 211, 154, 0.4);
+  transition: all 0.3s ease;
 
-.detalle{
-  background-color: white; /* Fondo blanco para el formulario */
-  padding: 20px; /* Añade algo de espacio alrededor del formulario */
-  border-radius: 20px; /* Bordes redondeados */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera para el formulario */
-  margin-bottom: 20px; /* Espacio entre form-wrapper y contact-details */
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(31, 211, 154, 0.6);
+  }
+}
+
+/* 🚫 Sin producto */
+.sin-producto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+  color: var(--muted);
+
+  ion-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    color: var(--accent);
+  }
 }
