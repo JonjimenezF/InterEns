@@ -109,15 +109,17 @@
             </div>
           </ion-item>
 
-          <!-- Previsualización -->
-          <div class="preview-container" *ngIf="previewUrls.length > 0">
-            <img
-              *ngFor="let url of previewUrls; let i = index"
-              [src]="url"
-              alt="preview"
-              style="width: 100px; height: 100px; object-fit: cover; margin: 5px; border-radius: 10px;"
-              (click)="removeImage(i)">
-          </div>
+          <!-- 🖼️ Previsualización de imágenes -->
+<div class="preview-container" *ngIf="previewUrls.length > 0">
+  <div class="image-wrapper" *ngFor="let url of previewUrls; let i = index">
+    <img
+      [src]="url"
+      alt="preview"
+      class="preview-img"
+    />
+    <button type="button" class="delete-btn" (click)="removeImage(i)">✖</button>
+  </div>
+</div>
 
           <!-- Botones -->
           <div class="centrar">

@@ -13,7 +13,7 @@ import { EnserService } from '../services/enser.service';
 import { CategoriaService } from '../servicios/categoria.service';
 import { ProductosBackendService } from '../servicios/productos-backend.service';
 
-// 🧩 Ionic imports
+// 🧩 Ionic standalone imports
 import {
   IonHeader,
   IonToolbar,
@@ -65,7 +65,6 @@ export class SproductoPage implements OnInit {
   userInfo?: any;
   categorias: { id: number; nombre: string }[] = [];
 
-  // 🧱 Datos base del enser
   enser: any = {
     propietario_id: '',
     titulo: '',
@@ -96,7 +95,6 @@ export class SproductoPage implements OnInit {
 
   async ngOnInit() {
     try {
-      // ✅ Sesión actual
       const { data: sessionData } = await supabase.auth.getSession();
       const user = sessionData?.session?.user;
 
@@ -109,7 +107,7 @@ export class SproductoPage implements OnInit {
       this.userInfo = user;
       this.enser.propietario_id = user.id;
 
-      // ✅ Ver si viene un borrador desde /borradores
+      // ✅ Si viene desde Perfil con un borrador para editar
       const state = this.router.getCurrentNavigation()?.extras?.state;
       if (state && state['borrador']) {
         this.enser = { ...state['borrador'] };
@@ -117,7 +115,7 @@ export class SproductoPage implements OnInit {
         console.log('📝 Editando borrador existente:', this.enser);
       }
 
-      // ✅ Cargar categorías
+      // ✅ Cargar categorías desde Supabase
       const { data: categorias } = await supabase
         .from('categorias')
         .select('id, nombre')
@@ -130,7 +128,7 @@ export class SproductoPage implements OnInit {
     }
   }
 
-  // 📸 Manejar imágenes
+  // 📸 Manejar imágenes seleccionadas
   onFilesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files) return;
@@ -147,6 +145,11 @@ export class SproductoPage implements OnInit {
     }
   }
 
+  removeImage(index: number) {
+    this.previewUrls.splice(index, 1);
+    this.selectedFiles.splice(index, 1);
+  }
+
   async uploadAllImages(): Promise<string[]> {
     const urls: string[] = [];
     for (let file of this.selectedFiles) {
@@ -159,7 +162,7 @@ export class SproductoPage implements OnInit {
     return urls;
   }
 
-  // 💾 Publicar o actualizar producto
+  // 💾 Publicar o actualizar producto (borrador → publicado o nuevo)
   async onSubmit(form: NgForm) {
     if (form.invalid) {
       this.presentToast('Completa todos los campos obligatorios.');
@@ -178,23 +181,48 @@ export class SproductoPage implements OnInit {
         if (value === '' || value === null) delete enserToSave[key as keyof typeof enserToSave];
       });
 
-      // 🟩 Si estamos editando un borrador, simplemente se vuelve a guardar
-      const response = await this.productosBackend.uploadProduct(enserToSave).toPromise();
+      // ✅ Si es un borrador existente → publicar con endpoint especial
+      if (this.editandoBorrador && this.enser.id) {
+        const response = await fetch(`http://localhost:4000/api/publishDraft/${this.enser.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            valor_puntos: this.enser.valor_puntos,
+            propietario_id: this.enser.propietario_id,
+            titulo: this.enser.titulo,
+          }),
+        });
 
-      console.log('✅ Producto publicado/actualizado:', response);
-      this.presentToast(
-        this.editandoBorrador
-          ? '✅ Borrador publicado correctamente.'
-          : '✅ Producto publicado correctamente.'
-      );
-      this.router.navigate(['/home']);
+        if (!response.ok) throw new Error('Error al publicar borrador');
+
+        await this.presentToast(`✅ El borrador "${this.enser.titulo}" fue publicado y movido a Mis Productos.`);
+
+        // 🔁 Navegar al perfil y eliminar borrador localmente
+        this.router.navigateByUrl('/perfil', {
+          state: {
+            openTab: 'productos',
+            refresh: true,
+            removeDraftId: this.enser.id,
+            publishedTitle: this.enser.titulo,
+          },
+        });
+        return;
+      }
+
+      // 🟩 Si es un nuevo producto → subir normalmente
+      await this.productosBackend.uploadProduct(enserToSave).toPromise();
+
+      this.presentToast('✅ Producto publicado correctamente.');
+      this.router.navigateByUrl('/perfil', {
+        state: { openTab: 'productos', refresh: true },
+      });
     } catch (err: any) {
       console.error('❌ Error al publicar:', err);
       this.presentToast('Error al subir el producto.');
     }
   }
 
-  // 💾 Guardar como borrador
+  // 💾 Guardar como borrador o actualizarlo
   async guardarBorrador(form: NgForm) {
     try {
       const imageUrls = await this.uploadAllImages();
@@ -202,27 +230,37 @@ export class SproductoPage implements OnInit {
       this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
       this.enser.estado = 'borrador';
 
-      await this.productosBackend.uploadProduct(this.enser).toPromise();
+      if (this.editandoBorrador && this.enser.id) {
+        await fetch(`http://localhost:4000/api/updateDraft/${this.enser.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.enser),
+        });
+      } else {
+        await this.productosBackend.uploadProduct(this.enser).toPromise();
+      }
 
       this.presentToast('📝 Borrador guardado correctamente.');
-      this.router.navigate(['/borradores']);
+      this.router.navigateByUrl('/perfil', {
+        state: { openTab: 'borradores', refresh: true },
+      });
     } catch (error) {
       console.error('❌ Error al guardar borrador:', error);
       this.presentToast('Error al guardar el borrador.');
     }
   }
 
-  removeImage(index: number) {
-    this.previewUrls.splice(index, 1);
-    this.selectedFiles.splice(index, 1);
-  }
-
   goBack() {
     this.navCtrl.back();
   }
 
-  async presentToast(message: string, duration = 2500) {
-    const toast = await this.toastController.create({ message, duration, position: 'bottom' });
+  async presentToast(message: string, duration = 3000) {
+    const toast = await this.toastController.create({
+      message,
+      duration,
+      position: 'bottom',
+      color: 'success',
+    });
     toast.present();
   }
 }

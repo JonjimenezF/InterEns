@@ -1,40 +1,47 @@
-
 <ion-header>
   <ion-toolbar>
-    
     <ion-buttons slot="start">
       <ion-back-button defaultHref="home" text="" color="rgb(165, 17, 233)"></ion-back-button>
     </ion-buttons>
+    <ion-title>Mi Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <!-- 🧍 Perfil del usuario -->
   <div class="profile-header">
-    <img [src]="avatarUrl || '/assets/img/avatar.png'"class="avatar" style="cursor:pointer;" />
-    <input #fileInput type="file" accept="image/*" style="display:none" />
-
+    <img
+      [src]="avatarUrl || '/assets/img/avatar.png'"
+      class="avatar"
+      style="cursor: pointer"
+    />
     <ion-label>
-      <div>{{ nombre || 'Usuario' }}</div>
+      <div class="nombre">{{ nombre || 'Usuario' }}</div>
       <small *ngIf="email">{{ email }}</small>
     </ion-label>
+
     <ion-button class="edit-btn" (click)="editarperfil()">Editar Perfil</ion-button>
   </div>
 
-  <!-- Segmento Productos/Reseñas -->
+  <!-- 🔹 Segmento de pestañas -->
   <ion-segment [(ngModel)]="selectedTab" value="productos">
-      <ion-segment-button value="productos">
-        <ion-label> Mis Productos</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="reseñas">
-        <ion-label>Mis Reseñas</ion-label>
-      </ion-segment-button>
-    </ion-segment>
+    <ion-segment-button value="productos">
+      <ion-label>Mis Productos</ion-label>
+    </ion-segment-button>
 
-    <!-- Contenido dinámico -->
-    <ng-container *ngIf="selectedTab === 'productos'">
-    
+    <ion-segment-button value="borradores">
+      <ion-label>Mis Borradores</ion-label>
+    </ion-segment-button>
 
-    <!-- Lista de productos del usuario -->
+    <ion-segment-button value="reseñas">
+      <ion-label>Mis Reseñas</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- ===================== -->
+  <!-- TAB: MIS PRODUCTOS -->
+  <!-- ===================== -->
+  <ng-container *ngIf="selectedTab === 'productos'">
     <ion-list *ngIf="productos.length > 0">
       <ion-item *ngFor="let p of productos">
         <ion-thumbnail slot="start">
@@ -44,26 +51,78 @@
         <ion-label>
           <h3>{{ p.title }}</h3>
           <p class="ion-text-wrap">{{ p.description }}</p>
-          <small *ngIf="p.created_at">Publicado: {{ p.created_at | date:'shortDate' }}</small>
+          <small *ngIf="p.created_at">Publicado: {{ p.created_at | date: 'shortDate' }}</small>
         </ion-label>
 
         <ion-badge [color]="statusColor(p)">{{ p.estado }}</ion-badge>
+
+        <!-- ♻️ Botón Intercambiado -->
+        <ion-buttons slot="end">
+          <ion-button
+            fill="outline"
+            class="intercambiado-btn"
+            (click)="marcarIntercambiado(p.id)">
+            <ion-icon name="swap-horizontal-outline"></ion-icon>
+            Intercambiado
+          </ion-button>
+        </ion-buttons>
       </ion-item>
     </ion-list>
 
-    <!-- Vacío -->
+    <!-- 🕳️ Sin productos -->
     <div *ngIf="!prodLoading && productos.length === 0" class="ion-text-center ion-margin-top">
-      <p>Sin productos aún.</p>
+      <ion-icon name="cube-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
+      <p>Sin productos publicados aún.</p>
     </div>
-
-    <!-- Scroll infinito -->
-    <ion-infinite-scroll (ionInfinite)="loadMore($event)" [disabled]="!prodHasMore">
-      <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
   </ng-container>
-  <div *ngIf="selectedTab === 'reseñas'">
-    <h2>Reseñas de Clientes</h2>
-  </div>
+
+  <!-- ===================== -->
+  <!-- TAB: MIS BORRADORES -->
+  <!-- ===================== -->
+  <ng-container *ngIf="selectedTab === 'borradores'">
+    <ion-list *ngIf="borradores.length > 0">
+      <ion-item *ngFor="let b of borradores">
+        <ion-thumbnail slot="start">
+          <img [src]="cover(b)" alt="img" />
+        </ion-thumbnail>
+
+        <ion-label>
+          <h3>{{ b.titulo }}</h3>
+          <p class="ion-text-wrap">{{ b.descripcion || 'Sin descripción' }}</p>
+          <small *ngIf="b.updated_at">Última edición: {{ b.updated_at | date: 'short' }}</small>
+        </ion-label>
+
+        <!-- Botones de acción -->
+        <ion-buttons slot="end">
+          <ion-button fill="outline" color="success" (click)="editarBorrador(b)">
+            <ion-icon name="create-outline"></ion-icon>
+            Editar
+          </ion-button>
+
+          <ion-button fill="outline" color="danger" (click)="eliminarBorrador(b.id)">
+            <ion-icon name="trash-outline"></ion-icon>
+            Eliminar
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-list>
+
+    <!-- 📭 Sin borradores -->
+    <div *ngIf="!borrLoading && borradores.length === 0" class="ion-text-center ion-margin-top">
+      <ion-icon name="document-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
+      <p>No tienes borradores guardados.</p>
+    </div>
+  </ng-container>
+
+  <!-- ===================== -->
+  <!-- TAB: MIS RESEÑAS -->
+  <!-- ===================== -->
+  <ng-container *ngIf="selectedTab === 'reseñas'">
+    <div class="ion-text-center ion-margin-top">
+      <ion-icon name="star-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
+      <p>Aún no tienes reseñas de clientes.</p>
+    </div>
+  </ng-container>
 </ion-content>
 
 <app-footer-interens></app-footer-interens>

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, NavController, ToastController } from '@ionic/angular';
@@ -15,7 +15,7 @@ import { FooterInterensComponent } from '../components/footer-interens/footer-in
   standalone: true,
   imports: [CommonModule, FormsModule, IonicModule, FooterInterensComponent],
 })
-export class ProductoPage implements OnInit {
+export class ProductoPage implements OnInit, OnDestroy {
   categorias: any[] = [];
   productos: any[] = [];
   filteredProducts: any[] = [];
@@ -26,6 +26,8 @@ export class ProductoPage implements OnInit {
   precioMax = '';
   categoriaSeleccionada = '';
   userInfo?: any;
+
+  private intercambiadoHandler?: (event: any) => void;
 
   constructor(
     private router: Router,
@@ -40,6 +42,21 @@ export class ProductoPage implements OnInit {
   ngOnInit() {
     this.getCategorias();
     this.getProductos();
+
+    // 🧩 Listener global: escucha cuando un producto se marca como intercambiado
+    this.intercambiadoHandler = () => {
+      console.log('♻️ Evento recibido: productoIntercambiado, recargando lista...');
+      this.getProductos(); // refresca lista automáticamente
+    };
+
+    window.addEventListener('productoIntercambiado', this.intercambiadoHandler);
+  }
+
+  ngOnDestroy() {
+    // Limpieza del listener al salir de la página
+    if (this.intercambiadoHandler) {
+      window.removeEventListener('productoIntercambiado', this.intercambiadoHandler);
+    }
   }
 
   // 🔹 Obtener categorías
@@ -60,6 +77,7 @@ export class ProductoPage implements OnInit {
         this.productos = data;
         this.filteredProducts = data;
         this.loading = false;
+        console.log(`🧩 Productos cargados: ${this.productos.length}`);
       },
       error: (error) => {
         console.error('❌ Error al cargar productos:', error);
@@ -99,7 +117,7 @@ export class ProductoPage implements OnInit {
     return producto.imagen_url || 'assets/img/default.png';
   }
 
-  // 🛒 Agregar al carrito (opcional)
+  // 🛒 Agregar al carrito
   agregarCarrito(event: Event, producto: any) {
     event.stopPropagation();
     const item = {
@@ -123,21 +141,21 @@ export class ProductoPage implements OnInit {
     await toast.present();
   }
 
+  // 🔗 Navegación y detalle
   goDetalleProducto(producto: any) {
     this.router.navigate(['/detalle-producto'], { state: { producto } });
   }
 
   verDetalle(producto: any) {
-  console.log('➡️ Navegando al detalle de producto:', producto);
-  this.router.navigate(['/detalle-producto'], { state: { producto } });
-}
-
+    console.log('➡️ Navegando al detalle de producto:', producto);
+    this.router.navigate(['/detalle-producto'], { state: { producto } });
+  }
 
   goBack() {
     this.navCtrl.back();
   }
 
-  // 🔗 Navegación Footer
+  // 🔗 Footer
   home() { this.router.navigate(['/home']); }
   perfil() { this.router.navigate(['/perfil']); }
   goProducto() { this.router.navigate(['/sproducto']); }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AlertController } from '@ionic/angular';
 import { HttpClientModule } from '@angular/common/http';
@@ -23,7 +23,6 @@ import {
 } from '@ionic/angular/standalone';
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 import { PuntosService } from '../servicios/puntos.service';
-
 import { supabase } from 'src/shared/supabase/supabase.client';
 
 @Component({
@@ -50,14 +49,16 @@ import { supabase } from 'src/shared/supabase/supabase.client';
     IonSpinner,
     IonIcon,
     FooterInterensComponent,
-    HttpClientModule, 
+    HttpClientModule,
   ],
 })
-export class CanjearPuntosPage implements OnInit {
+export class CanjearPuntosPage implements OnInit, OnDestroy {
   productos: any[] = [];
   userId: string | undefined;
   puntosTotales: number = 0;
   loading = true;
+
+  private intercambiadoHandler?: (event: any) => void;
 
   constructor(
     private puntosService: PuntosService,
@@ -75,6 +76,19 @@ export class CanjearPuntosPage implements OnInit {
       this.obtenerProductos();
     } else {
       console.warn('⚠️ No hay usuario autenticado.');
+    }
+
+    // 🧩 Listener global para actualizar al marcar productos como intercambiados
+    this.intercambiadoHandler = () => {
+      console.log('♻️ Evento recibido: productoIntercambiado → refrescando lista de canje.');
+      this.obtenerProductos();
+    };
+    window.addEventListener('productoIntercambiado', this.intercambiadoHandler);
+  }
+
+  ngOnDestroy() {
+    if (this.intercambiadoHandler) {
+      window.removeEventListener('productoIntercambiado', this.intercambiadoHandler);
     }
   }
 
@@ -98,6 +112,7 @@ export class CanjearPuntosPage implements OnInit {
       next: (data: any[]) => {
         this.productos = data;
         this.loading = false;
+        console.log(`🎁 Productos disponibles para canje: ${this.productos.length}`);
       },
       error: (err: any) => {
         console.error('❌ Error al cargar productos:', err);
@@ -113,53 +128,51 @@ export class CanjearPuntosPage implements OnInit {
 
   // 💱 Canjear producto
   async canjear(item: any) {
-  if (!this.userId) return;
+    if (!this.userId) return;
 
-  if (this.puntosTotales < item.valor_puntos) {
-    const alert = await this.alertController.create({
-      header: 'Puntos insuficientes 😕',
-      message: 'No tienes puntos suficientes para este canje.',
-      buttons: ['Aceptar'],
-      cssClass: 'custom-alert'
-    });
-    await alert.present();
-    return;
-  }
-
-  this.puntosService.canjearProducto(this.userId, item.id, item.valor_puntos).subscribe({
-    next: async (res: any) => {
-      if (res.success) {
-        this.puntosTotales = res.nuevo_total;
-        this.obtenerProductos();
-
-        const alert = await this.alertController.create({
-          header: '🎉 ¡Canje exitoso!',
-          message: `Has canjeado ${item.titulo} correctamente.Te quedan 
-          ${res.nuevo_total} puntos.`,
-          buttons: ['Aceptar'],
-          cssClass: 'custom-alert'
-        });
-        await alert.present();
-      } else {
-        const alert = await this.alertController.create({
-          header: 'Error ⚠️',
-          message: 'No se pudo completar el canje.',
-          buttons: ['Aceptar'],
-          cssClass: 'custom-alert'
-        });
-        await alert.present();
-      }
-    },
-    error: async () => {
+    if (this.puntosTotales < item.valor_puntos) {
       const alert = await this.alertController.create({
-        header: '❌ Error',
-        message: 'Ocurrió un error al procesar el canje. Inténtalo nuevamente.',
+        header: 'Puntos insuficientes 😕',
+        message: 'No tienes puntos suficientes para este canje.',
         buttons: ['Aceptar'],
         cssClass: 'custom-alert'
       });
       await alert.present();
-    },
-  });
-}
+      return;
+    }
 
+    this.puntosService.canjearProducto(this.userId, item.id, item.valor_puntos).subscribe({
+      next: async (res: any) => {
+        if (res.success) {
+          this.puntosTotales = res.nuevo_total;
+          this.obtenerProductos();
+
+          const alert = await this.alertController.create({
+            header: '🎉 ¡Canje exitoso!',
+            message: `Has canjeado ${item.titulo} correctamente. Te quedan ${res.nuevo_total} puntos.`,
+            buttons: ['Aceptar'],
+            cssClass: 'custom-alert'
+          });
+          await alert.present();
+        } else {
+          const alert = await this.alertController.create({
+            header: 'Error ⚠️',
+            message: 'No se pudo completar el canje.',
+            buttons: ['Aceptar'],
+            cssClass: 'custom-alert'
+          });
+          await alert.present();
+        }
+      },
+      error: async () => {
+        const alert = await this.alertController.create({
+          header: '❌ Error',
+          message: 'Ocurrió un error al procesar el canje. Inténtalo nuevamente.',
+          buttons: ['Aceptar'],
+          cssClass: 'custom-alert'
+        });
+        await alert.present();
+      },
+    });
+  }
 }
