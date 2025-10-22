@@ -2,17 +2,14 @@ import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 import { v4 as uuidv4 } from 'uuid';
 
-// 🧩 Servicios
+// Servicios
 import { supabase } from '../services/supabase.client';
-import { EnserService } from '../services/enser.service';
-import { CategoriaService } from '../servicios/categoria.service';
-import { ProductosBackendService } from '../servicios/productos-backend.service';
 
-// 🧩 Componentes
+// Componentes
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 
 import {
@@ -60,7 +57,6 @@ import {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SproductoPage implements OnInit {
-
   userInfo?: any;
   categorias: { id: number; nombre: string }[] = [];
 
@@ -74,10 +70,7 @@ export class SproductoPage implements OnInit {
     valor_puntos: 0,
     ciudad: '',
     region: '',
-    latitud: null as number | null,
-    longitud: null as number | null,
     imagen_url: null as string | null,
-    imagenes_extra: [] as string[]
   };
 
   selectedFiles: File[] = [];
@@ -86,15 +79,10 @@ export class SproductoPage implements OnInit {
   constructor(
     private navCtrl: NavController,
     private router: Router,
-    private activateRoute: ActivatedRoute,
-    private toastController: ToastController,
-    private enserService: EnserService
-  ) {
-    const state = this.router.getCurrentNavigation()?.extras.state;
-    if (state && state['userInfo']) this.userInfo = state['userInfo'];
-  }
+    private toastController: ToastController
+  ) {}
 
-  // 🔐 Inicialización y carga de categorías
+  // Inicialización y carga de categorías
   async ngOnInit() {
     try {
       const { data: sessionData, error: sErr } = await supabase.auth.getSession();
@@ -118,27 +106,25 @@ export class SproductoPage implements OnInit {
 
       if (catErr) throw catErr;
       this.categorias = categorias || [];
-
     } catch (error) {
       console.error('[SPRODUCTO] Error en ngOnInit:', error);
       this.presentToast('❌ Error al cargar datos iniciales.');
     }
   }
 
-  // 📸 Manejo de selección de archivos
+  // Manejo de selección de archivos
   onFilesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files) return;
 
     const files: File[] = Array.from(input.files);
     for (const file of files) {
-      // ✅ Validación del tipo y tamaño
       if (!file.type.startsWith('image/')) {
         this.presentToast('Solo puedes subir imágenes.');
         continue;
       }
       if (file.size > 5 * 1024 * 1024) {
-        this.presentToast('El tamaño máximo por imagen es de 5 MB.');
+        this.presentToast('El tamaño máximo por imagen es 5MB.');
         continue;
       }
 
@@ -154,28 +140,24 @@ export class SproductoPage implements OnInit {
     }
   }
 
-  // ❌ Eliminar imagen de previsualización
   removeImage(index: number) {
     this.previewUrls.splice(index, 1);
     this.selectedFiles.splice(index, 1);
   }
 
-  // 🧼 Limpia nombres de archivo para evitar errores de Supabase
   sanitizeFileName(name: string): string {
     return name
-      .normalize('NFD') // elimina tildes
+      .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-zA-Z0-9.\-_]/g, '_') // reemplaza caracteres no válidos por "_"
+      .replace(/[^a-zA-Z0-9.\-_]/g, '_')
       .toLowerCase();
   }
 
-  // ☁️ Subida de todas las imágenes con validación
   async uploadAllImages(): Promise<string[]> {
     const urls: string[] = [];
     for (let file of this.selectedFiles) {
       const cleanName = this.sanitizeFileName(file.name);
       const fileName = `${uuidv4()}-${cleanName}`;
-
       const { error } = await supabase.storage.from('enseres').upload(fileName, file);
       if (error) throw error;
       const { data: publicData } = supabase.storage.from('enseres').getPublicUrl(fileName);
@@ -184,7 +166,7 @@ export class SproductoPage implements OnInit {
     return urls;
   }
 
-  // 💾 Guardar o publicar producto
+  // Guardar producto (usa el backend)
   async onSubmit(form: NgForm, modo: 'borrador' | 'publicado') {
     if (form.invalid) {
       this.presentToast('Completa todos los campos obligatorios.');
@@ -196,55 +178,52 @@ export class SproductoPage implements OnInit {
       return;
     }
 
-    this.enser.propietario_id = this.userInfo.id;
-
     try {
       this.presentToast('Subiendo imágenes...', 1500);
       const imageUrls = await this.uploadAllImages();
 
-      // 📷 Imagen principal = primera imagen
       this.enser.imagen_url = imageUrls[0] || null;
-      this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
+      this.enser.estado = modo; // 🟢 guarda como borrador o publicado
 
-      // 🟢 Define estado según el modo
-      this.enser.estado = modo === 'borrador' ? 'borrador' : 'publicado';
+      // Enviar los datos al backend Fastify
+      const response = await fetch('http://localhost:4000/api/uploadProduct', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.enser),
+      });
 
-      const { data, error } = await this.enserService.addEnser(this.enser);
-      if (error) throw error;
+      const result = await response.json();
 
-      if (modo === 'borrador') {
-        this.presentToast('📝 Borrador guardado. Puedes editarlo más tarde.');
+      if (result.success) {
+        const msg = modo === 'borrador'
+          ? '📝 Producto guardado como borrador.'
+          : '✅ Producto publicado correctamente.';
+        this.presentToast(msg);
+        this.router.navigate(['/home']);
       } else {
-        this.presentToast('✅ Producto publicado correctamente.');
+        throw new Error(result.error || 'Error desconocido.');
       }
-
-      this.router.navigate(['/home']);
     } catch (err: any) {
-  console.error('[SPRODUCTO] Error al guardar:', err);
-
-  // 🧠 Algunos errores de Supabase llegan como "error.message" o "error.error"
-  const errorMsg = err?.error || err?.message || '';
-
-  if (errorMsg.includes('InvalidKey')) {
-    this.presentToast('⚠️ Nombre de archivo no válido. Intenta renombrar las imágenes.');
-  } else {
-    this.presentToast('❌ Error al guardar el producto.');
-  }
-}
-
+      console.error('[SPRODUCTO] Error al guardar:', err);
+      const errorMsg = err?.error || err?.message || '';
+      if (errorMsg.includes('InvalidKey')) {
+        this.presentToast('⚠️ Nombre de archivo no válido. Intenta renombrar las imágenes.');
+      } else {
+        this.presentToast('❌ Error al guardar el producto.');
+      }
+    }
   }
 
-  // 🔔 Toast reutilizable
+
   async presentToast(message: string, duration: number = 2500) {
     const toast = await this.toastController.create({
       message,
       duration,
-      position: 'bottom'
+      position: 'bottom',
     });
     toast.present();
   }
 
-  // ⬅️ Volver atrás
   goBack() {
     this.navCtrl.back();
   }
