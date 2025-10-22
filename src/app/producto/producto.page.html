@@ -7,7 +7,6 @@
 </ion-header>
 
 <ion-content id="main-content">
-
   <!-- 🌿 CABECERA DE FILTROS -->
   <section class="filter-section">
     <div class="logo-area">
@@ -23,7 +22,6 @@
         (ionInput)="applyAllFilters()">
       </ion-searchbar>
 
-      <!-- 🎚️ FILTROS -->
       <div class="filters-row">
         <p class="filter-label">Filtrar por:</p>
 
@@ -40,7 +38,7 @@
           </ion-select>
         </ion-item>
 
-        <!-- PUNTOS (min / max) -->
+        <!-- PUNTOS -->
         <div class="price-row">
           <ion-item class="input-box">
             <ion-input
@@ -61,7 +59,6 @@
           </ion-item>
         </div>
 
-        <!-- BOTONES -->
         <div class="filter-buttons">
           <ion-button expand="block" class="apply-button" (click)="applyAllFilters()">
             Aplicar filtros
@@ -91,17 +88,33 @@
         *ngFor="let producto of filteredProducts">
 
         <ion-card class="product-card">
+
+          <!-- ❤️ Botón de favorito arriba a la derecha -->
+          <ion-button
+            fill="clear"
+            class="fav-btn"
+            [class.active]="isFavorito(producto.id)"
+            (click)="toggleFavorito($event, producto)">
+            <ion-icon
+              slot="icon-only"
+              [name]="isFavorito(producto.id) ? 'heart' : 'heart-outline'"
+              [style.color]="isFavorito(producto.id) ? '#ff4d4d' : '#ffffff'"
+              style="font-size: 26px;">
+            </ion-icon>
+          </ion-button>
+
+          <!-- Imagen del producto -->
           <img [src]="getImagenProducto(producto)" alt="Imagen del producto" class="product-image" />
-          
+
           <div class="product-info">
             <h2>{{ producto.titulo }}</h2>
             <p class="desc">{{ producto.descripcion }}</p>
             <p class="price">
-              <ion-icon name="trophy-outline"></ion-icon> {{ producto.valor_puntos }} pts
+              <ion-icon name="trophy-outline"></ion-icon>
+              {{ producto.valor_puntos }} pts
             </p>
             <p class="ubicacion">{{ producto.region }} - {{ producto.ciudad }}</p>
 
-            <!-- ✅ CAMBIO: ahora lleva al detalle -->
             <ion-button
               expand="block"
               shape="round"
@@ -121,7 +134,6 @@
     <ion-icon name="alert-circle-outline"></ion-icon>
     <p>No hay productos disponibles con estos filtros.</p>
   </div>
-
 </ion-content>
 
 <app-footer-interens></app-footer-interens>

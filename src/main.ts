@@ -8,6 +8,7 @@ import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 
+
 /* 🌿 Registrar Ionicons manualmente */
 import { addIcons } from 'ionicons';
 import {
@@ -27,7 +28,9 @@ import {
   cloudUploadOutline,
   trophyOutline,
   cartOutline,
-  menuOutline
+  menuOutline,
+    heart,               // ❤️ agregado
+  heartOutline         // ❤️ agregado
 } from 'ionicons/icons';
 
 /* 🧩 Agregamos todos los íconos usados en la app */
@@ -48,7 +51,9 @@ addIcons({
   'cloud-upload-outline': cloudUploadOutline,
   'trophy-outline': trophyOutline,
   'cart-outline': cartOutline,
-  'menu-outline': menuOutline
+  'menu-outline': menuOutline,
+  'heart': heart,                   // ❤️ agregado
+  'heart-outline': heartOutline     // ❤️ agregado
 });
 
 /* 🚀 Configuración estándar */

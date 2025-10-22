@@ -7,6 +7,12 @@ import { ProductoService } from '../servicios/producto.service';
 import { CategoriaService } from '../servicios/categoria.service';
 import { CarritoService } from '../servicios/carrito.service';
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
+import { FavoritosService } from '../servicios/favoritos.service'; // ❤️ servicio de favoritos
+import { supabase } from 'src/shared/supabase/supabase.client';   // para obtener userId
+import { addIcons } from 'ionicons';
+import { heart, heartOutline } from 'ionicons/icons';
+
+addIcons({ heart, heartOutline });
 
 @Component({
   selector: 'app-producto',
@@ -19,6 +25,7 @@ export class ProductoPage implements OnInit, OnDestroy {
   categorias: any[] = [];
   productos: any[] = [];
   filteredProducts: any[] = [];
+  favoritos: number[] = []; // ❤️ IDs de productos favoritos
   loading = true;
 
   searchQuery = '';
@@ -26,6 +33,7 @@ export class ProductoPage implements OnInit, OnDestroy {
   precioMax = '';
   categoriaSeleccionada = '';
   userInfo?: any;
+  userId: string | null = null;
 
   private intercambiadoHandler?: (event: any) => void;
 
@@ -35,25 +43,30 @@ export class ProductoPage implements OnInit, OnDestroy {
     private productoService: ProductoService,
     private categoriaService: CategoriaService,
     private carritoService: CarritoService,
+    private favoritosService: FavoritosService,
     private toastController: ToastController,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
-  ngOnInit() {
+  // 🚀 Inicialización
+  async ngOnInit() {
+    // 🧠 Obtener usuario actual primero
+    const { data: session } = await supabase.auth.getSession();
+    this.userId = session?.session?.user?.id || null;
+
     this.getCategorias();
     this.getProductos();
 
-    // 🧩 Listener global: escucha cuando un producto se marca como intercambiado
+    // ♻️ Listener: cuando un producto cambia a "intercambiado"
     this.intercambiadoHandler = () => {
-      console.log('♻️ Evento recibido: productoIntercambiado, recargando lista...');
-      this.getProductos(); // refresca lista automáticamente
+      console.log('♻️ Evento: productoIntercambiado → recargando lista...');
+      this.getProductos();
+      if (this.userId) this.loadFavoritos(); // ❤️ sincroniza lista tras canjeo
     };
-
     window.addEventListener('productoIntercambiado', this.intercambiadoHandler);
   }
 
   ngOnDestroy() {
-    // Limpieza del listener al salir de la página
     if (this.intercambiadoHandler) {
       window.removeEventListener('productoIntercambiado', this.intercambiadoHandler);
     }
@@ -74,10 +87,16 @@ export class ProductoPage implements OnInit, OnDestroy {
     this.loading = true;
     this.productoService.getAllProducts().subscribe({
       next: (data) => {
-        this.productos = data;
-        this.filteredProducts = data;
+        // Filtra productos activos (no intercambiados)
+        this.productos = data.filter((p) => p.estado_enser !== 'intercambiado');
+        this.filteredProducts = [...this.productos];
         this.loading = false;
         console.log(`🧩 Productos cargados: ${this.productos.length}`);
+
+        // ❤️ Si ya hay userId, carga los favoritos después
+        if (this.userId) {
+          setTimeout(() => this.loadFavoritos(), 300);
+        }
       },
       error: (error) => {
         console.error('❌ Error al cargar productos:', error);
@@ -86,7 +105,63 @@ export class ProductoPage implements OnInit, OnDestroy {
     });
   }
 
-  // 🧩 Aplica todos los filtros combinados
+  // ❤️ Cargar lista de deseos (favoritos)
+  loadFavoritos() {
+    if (!this.userId) return;
+    this.favoritosService.getFavoritos(this.userId).subscribe({
+      next: (res) => {
+        // Evita mostrar favoritos que ya no existen o fueron intercambiados
+        this.favoritos = res
+          .filter((f: any) => f.producto && f.producto.estado_enser !== 'intercambiado')
+          .map((f: any) => f.producto_id);
+
+        console.log('❤️ Favoritos activos cargados:', this.favoritos);
+        this.changeDetectorRef.detectChanges();
+      },
+      error: (err) => console.error('❌ Error al cargar favoritos:', err),
+    });
+  }
+
+  // ❤️ Verifica si un producto está marcado como favorito
+  isFavorito(productoId: number): boolean {
+    return this.favoritos.includes(productoId);
+  }
+
+  // ❤️ Alternar favorito (agregar / quitar)
+  toggleFavorito(event: Event, producto: any) {
+    event.stopPropagation();
+
+    if (!this.userId) {
+      this.showToast('Debes iniciar sesión para usar favoritos ❤️');
+      return;
+    }
+
+    const id = producto.id;
+
+    // Si ya es favorito → eliminar
+    if (this.isFavorito(id)) {
+      this.favoritosService.removeFavorito(this.userId, id).subscribe({
+        next: async () => {
+          this.favoritos = this.favoritos.filter((fid) => fid !== id);
+          await this.showToast('💔 Eliminado de favoritos');
+          this.changeDetectorRef.detectChanges();
+        },
+        error: (err) => console.error('❌ Error al quitar favorito:', err),
+      });
+    } else {
+      // Si no → agregar
+      this.favoritosService.addFavorito(this.userId, id).subscribe({
+        next: async () => {
+          this.favoritos.push(id);
+          await this.showToast('❤️ Agregado a favoritos');
+          this.changeDetectorRef.detectChanges();
+        },
+        error: (err) => console.error('❌ Error al agregar favorito:', err),
+      });
+    }
+  }
+
+  // 🧩 Aplica los filtros combinados
   applyAllFilters() {
     const query = this.searchQuery.trim().toLowerCase();
     const min = parseFloat(this.precioMin) || 0;
@@ -112,7 +187,7 @@ export class ProductoPage implements OnInit, OnDestroy {
     this.filteredProducts = [...this.productos];
   }
 
-  // 🖼️ Obtener imagen del producto o fallback
+  // 🖼️ Imagen del producto o fallback
   getImagenProducto(producto: any): string {
     return producto.imagen_url || 'assets/img/default.png';
   }
@@ -131,6 +206,7 @@ export class ProductoPage implements OnInit, OnDestroy {
     });
   }
 
+  // 📣 Toasts
   async showToast(message: string) {
     const toast = await this.toastController.create({
       message,
@@ -142,10 +218,6 @@ export class ProductoPage implements OnInit, OnDestroy {
   }
 
   // 🔗 Navegación y detalle
-  goDetalleProducto(producto: any) {
-    this.router.navigate(['/detalle-producto'], { state: { producto } });
-  }
-
   verDetalle(producto: any) {
     console.log('➡️ Navegando al detalle de producto:', producto);
     this.router.navigate(['/detalle-producto'], { state: { producto } });
@@ -155,7 +227,7 @@ export class ProductoPage implements OnInit, OnDestroy {
     this.navCtrl.back();
   }
 
-  // 🔗 Footer
+  // 🔗 Footer navegación
   home() { this.router.navigate(['/home']); }
   perfil() { this.router.navigate(['/perfil']); }
   goProducto() { this.router.navigate(['/sproducto']); }

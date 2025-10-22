@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" defaultHref="home" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mis Favoritos ❤️</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- 🔄 Spinner mientras carga -->
+  <div *ngIf="loading" class="spinner-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando tus favoritos...</p>
+  </div>
+
+  <!-- 💖 Lista de favoritos -->
+  <ion-list *ngIf="!loading && favoritos.length > 0">
+    <ion-item *ngFor="let p of favoritos">
+      <ion-thumbnail slot="start">
+        <img [src]="getImagenProducto(p)" />
+      </ion-thumbnail>
+
+      <ion-label (click)="verDetalle(p)">
+        <h2>{{ p.titulo }}</h2>
+        <p>{{ p.descripcion }}</p>
+        <p><ion-icon name="trophy-outline"></ion-icon> {{ p.valor_puntos }} pts</p>
+      </ion-label>
+
+      <ion-button fill="clear" color="danger" (click)="eliminarFavorito(p.id)">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <!-- 🪶 Sin favoritos -->
+  <div *ngIf="!loading && favoritos.length === 0" class="empty-list">
+    <ion-icon name="heart-outline" style="font-size: 3em; opacity: 0.5;"></ion-icon>
+    <p>No tienes productos en tu lista de deseos aún ❤️</p>
+  </div>
+</ion-content>
+
+<app-footer-interens></app-footer-interens>

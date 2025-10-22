@@ -176,3 +176,57 @@ ion-content {
     transform: translate(-50%, -100%) scale(0.8);
   }
 }
+
+/* === MENÚ LATERAL === */
+.menu-content {
+  --background: var(--bg);
+}
+
+.vertical-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 5px 10px;
+}
+
+/* Botones del menú */
+.menu-btn {
+  --color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-transform: none;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  padding: 10px 12px;
+  width: 100%;
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+.menu-btn ion-icon {
+  font-size: 20px;
+  margin-right: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Corazón (Favoritos) */
+.menu-btn ion-icon[name="heart-outline"],
+.menu-btn ion-icon[name="heart"] {
+  color: #ff4d4d;
+}
+
+/* Hover general */
+.menu-btn:hover {
+  background-color: rgba(31, 211, 154, 0.1);
+  transform: scale(1.02);
+}
+
+/* Ajuste visual para texto */
+.menu-btn span {
+  flex-grow: 1;
+  text-align: left;
+  color: var(--txt);
+}

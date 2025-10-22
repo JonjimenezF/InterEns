@@ -236,4 +236,9 @@ export class HomePage implements OnDestroy {
   inter() {
     this.router.navigate(['/que-es'], { state: { userInfo: this.userInfo } });
   }
+
+  favoritos() {
+  this.router.navigate(['/favoritos']);
+}
+
 }

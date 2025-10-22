@@ -3,22 +3,30 @@
     <ion-toolbar></ion-toolbar>
   </ion-header>
 
-  <ion-content class="ion-padding">
+  <ion-content class="ion-padding menu-content">
     <div class="vertical-buttons">
-      <ion-button fill="clear" (click)="perfil()" class="menu-btn">
+
+      <ion-button fill="clear" class="menu-btn" (click)="perfil()" expand="block">
         <ion-icon name="person-outline" slot="start"></ion-icon>
-        Perfil
+        <span>Perfil</span>
       </ion-button>
 
-      <ion-button fill="clear" (click)="preguntas()" class="menu-btn">
+      <!-- ❤️ FAVORITOS -->
+      <ion-button fill="clear" class="menu-btn" (click)="favoritos()" expand="block">
+        <ion-icon name="heart-outline" slot="start"></ion-icon>
+        <span>Favoritos</span>
+      </ion-button>
+
+      <ion-button fill="clear" class="menu-btn" (click)="preguntas()" expand="block">
         <ion-icon name="help-circle-outline" slot="start"></ion-icon>
-        Preguntas frecuentes
+        <span>Preguntas Frecuentes</span>
       </ion-button>
 
-      <ion-button fill="clear" (click)="contacto()" class="menu-btn">
+      <ion-button fill="clear" class="menu-btn" (click)="contacto()" expand="block">
         <ion-icon name="mail-outline" slot="start"></ion-icon>
-        Contacto
+        <span>Contacto</span>
       </ion-button>
+
     </div>
   </ion-content>
 </ion-menu>
@@ -31,6 +39,9 @@
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
+
+
+
 
   <ion-content>
     <!-- 🧑‍💻 Bienvenida -->
