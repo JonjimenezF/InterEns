@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button (click)="goBack()" defaultHref="home" text=""></ion-back-button>
     </ion-buttons>
-    <ion-title>Mis Favoritos ❤️</ion-title>
+    <ion-title>Mis Favoritos</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -15,27 +15,44 @@
   </div>
 
   <!-- 💖 Lista de favoritos -->
-  <ion-list *ngIf="!loading && favoritos.length > 0">
-    <ion-item *ngFor="let p of favoritos">
-      <ion-thumbnail slot="start">
-        <img [src]="getImagenProducto(p)" />
-      </ion-thumbnail>
+  <ion-grid *ngIf="!loading && favoritos.length > 0">
+    <ion-row>
+      <ion-col size="12" size-md="6" size-lg="4" *ngFor="let p of favoritos">
+        <ion-card>
+          <!-- ❤️ Botón eliminar favorito -->
+          <ion-button fill="clear" class="fav-btn" (click)="eliminarFavorito(p.id)">
+            <ion-icon name="heart"></ion-icon>
+          </ion-button>
 
-      <ion-label (click)="verDetalle(p)">
-        <h2>{{ p.titulo }}</h2>
-        <p>{{ p.descripcion }}</p>
-        <p><ion-icon name="trophy-outline"></ion-icon> {{ p.valor_puntos }} pts</p>
-      </ion-label>
+          <!-- 🖼️ Imagen del producto -->
+          <img [src]="getImagenProducto(p)" alt="Imagen del producto" class="product-image" />
 
-      <ion-button fill="clear" color="danger" (click)="eliminarFavorito(p.id)">
-        <ion-icon name="trash-outline"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-list>
+          <!-- ℹ️ Información -->
+          <div class="product-info">
+            <h2>{{ p.titulo }}</h2>
+            <p class="desc">{{ p.descripcion }}</p>
+            <p class="price">
+              <ion-icon name="trophy-outline"></ion-icon>
+              {{ p.valor_puntos }} pts
+            </p>
+            <p class="ubicacion">{{ p.region }} - {{ p.ciudad }}</p>
+
+            <ion-button
+              expand="block"
+              shape="round"
+              class="custom-button"
+              (click)="verDetalle(p)">
+              Detalle Producto
+            </ion-button>
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
   <!-- 🪶 Sin favoritos -->
   <div *ngIf="!loading && favoritos.length === 0" class="empty-list">
-    <ion-icon name="heart-outline" style="font-size: 3em; opacity: 0.5;"></ion-icon>
+    <ion-icon name="heart-outline"></ion-icon>
     <p>No tienes productos en tu lista de deseos aún ❤️</p>
   </div>
 </ion-content>

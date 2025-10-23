@@ -39,3 +39,37 @@ ion-back-button:hover {
   transform: scale(1.05);
   filter: drop-shadow(0 0 6px #1fd39a); /* leve brillo verde */
 }
+
+
+.floating-points {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  color: #1fd39a;
+  font-size: 2rem;
+  font-weight: 800;
+  text-shadow: 0 0 15px rgba(31, 211, 154, 0.7);
+  animation: bounceUpFade 1.5s ease-out forwards;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+@keyframes bounceUpFade {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(-50%, -60%) scale(1.1);
+  }
+  75% {
+    opacity: 1;
+    transform: translate(-50%, -80%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -100%) scale(0.8);
+  }
+}

@@ -1,8 +1,7 @@
-// ✅ Componente para crear o editar un "enser" (producto) y subir múltiples imágenes a Supabase Storage
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 import { v4 as uuidv4 } from 'uuid';
@@ -86,11 +85,10 @@ export class SproductoPage implements OnInit {
   constructor(
     private navCtrl: NavController,
     private router: Router,
-    private activateRoute: ActivatedRoute,
+    private route: ActivatedRoute,
     private toastController: ToastController,
-    private enserService: EnserService,
-    private categoriaService: CategoriaService,
-    private productosBackend: ProductosBackendService
+    private http: HttpClient,
+    private categoriaService: CategoriaService
   ) {}
 
   async ngOnInit() {
@@ -107,12 +105,19 @@ export class SproductoPage implements OnInit {
       this.userInfo = user;
       this.enser.propietario_id = user.id;
 
-      // ✅ Si viene desde Perfil con un borrador para editar
-      const state = this.router.getCurrentNavigation()?.extras?.state;
-      if (state && state['borrador']) {
-        this.enser = { ...state['borrador'] };
+      // 🧩 Intentar cargar borrador desde navegación o localStorage
+      const nav = this.router.getCurrentNavigation();
+      let borrador = nav?.extras?.state?.['borrador'];
+
+      if (!borrador) {
+        const guardado = localStorage.getItem('borrador_en_edicion');
+        if (guardado) borrador = JSON.parse(guardado);
+      }
+
+      if (borrador) {
+        this.enser = { ...borrador };
         this.editandoBorrador = true;
-        console.log('📝 Editando borrador existente:', this.enser);
+        console.log('📝 Editando borrador:', this.enser);
       }
 
       // ✅ Cargar categorías desde Supabase
@@ -128,7 +133,19 @@ export class SproductoPage implements OnInit {
     }
   }
 
-  // 📸 Manejar imágenes seleccionadas
+  // 📸 Subir imágenes a Supabase Storage
+  async uploadAllImages(): Promise<string[]> {
+    const urls: string[] = [];
+    for (let file of this.selectedFiles) {
+      const fileName = `${uuidv4()}-${file.name}`;
+      const { error } = await supabase.storage.from('enseres').upload(fileName, file);
+      if (error) throw error;
+      const { data: publicData } = supabase.storage.from('enseres').getPublicUrl(fileName);
+      urls.push(publicData.publicUrl);
+    }
+    return urls;
+  }
+
   onFilesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files) return;
@@ -150,19 +167,7 @@ export class SproductoPage implements OnInit {
     this.selectedFiles.splice(index, 1);
   }
 
-  async uploadAllImages(): Promise<string[]> {
-    const urls: string[] = [];
-    for (let file of this.selectedFiles) {
-      const fileName = `${uuidv4()}-${file.name}`;
-      const { error } = await supabase.storage.from('enseres').upload(fileName, file);
-      if (error) throw error;
-      const { data: publicData } = supabase.storage.from('enseres').getPublicUrl(fileName);
-      urls.push(publicData.publicUrl);
-    }
-    return urls;
-  }
-
-  // 💾 Publicar o actualizar producto (borrador → publicado o nuevo)
+  // 🟢 Publicar producto (nuevo o desde borrador)
   async onSubmit(form: NgForm) {
     if (form.invalid) {
       this.presentToast('Completa todos los campos obligatorios.');
@@ -175,54 +180,51 @@ export class SproductoPage implements OnInit {
       this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
       this.enser.estado = 'publicado';
 
-      const enserToSave = { ...this.enser };
-      Object.keys(enserToSave).forEach((key) => {
-        const value = enserToSave[key as keyof typeof enserToSave];
-        if (value === '' || value === null) delete enserToSave[key as keyof typeof enserToSave];
-      });
+      let result: any;
 
-      // ✅ Si es un borrador existente → publicar con endpoint especial
       if (this.editandoBorrador && this.enser.id) {
-        const response = await fetch(`http://localhost:4000/api/publishDraft/${this.enser.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+        // 🔁 Publicar borrador existente
+        result = await this.http
+          .put(`http://localhost:4000/api/publishDraft/${this.enser.id}`, {
             valor_puntos: this.enser.valor_puntos,
             propietario_id: this.enser.propietario_id,
             titulo: this.enser.titulo,
-          }),
-        });
-
-        if (!response.ok) throw new Error('Error al publicar borrador');
-
-        await this.presentToast(`✅ El borrador "${this.enser.titulo}" fue publicado y movido a Mis Productos.`);
-
-        // 🔁 Navegar al perfil y eliminar borrador localmente
-        this.router.navigateByUrl('/perfil', {
-          state: {
-            openTab: 'productos',
-            refresh: true,
-            removeDraftId: this.enser.id,
-            publishedTitle: this.enser.titulo,
-          },
-        });
-        return;
+          })
+          .toPromise();
+      } else {
+        // 🆕 Nuevo producto publicado
+        result = await this.http
+          .post(`http://localhost:4000/api/uploadProduct`, this.enser)
+          .toPromise();
       }
 
-      // 🟩 Si es un nuevo producto → subir normalmente
-      await this.productosBackend.uploadProduct(enserToSave).toPromise();
+      if (result?.success) {
+        this.presentToast(result.message || '✅ Producto publicado correctamente.');
 
-      this.presentToast('✅ Producto publicado correctamente.');
-      this.router.navigateByUrl('/perfil', {
-        state: { openTab: 'productos', refresh: true },
-      });
+        // 💰 Emitir evento global de puntos
+        if (result.total_points) {
+          window.dispatchEvent(
+            new CustomEvent('puntosActualizados', {
+              detail: { total_points: Number(result.total_points), valor_puntos: Number(this.enser.valor_puntos) },
+            })
+          );
+        }
+
+        // 🧹 Limpieza y redirección
+        localStorage.removeItem('borrador_en_edicion');
+        this.router.navigateByUrl('/perfil', {
+          state: { openTab: 'productos', refresh: true },
+        });
+      } else {
+        this.presentToast('⚠️ Ocurrió un error al publicar.');
+      }
     } catch (err: any) {
       console.error('❌ Error al publicar:', err);
       this.presentToast('Error al subir el producto.');
     }
   }
 
-  // 💾 Guardar como borrador o actualizarlo
+  // 📝 Guardar o actualizar borrador
   async guardarBorrador(form: NgForm) {
     try {
       const imageUrls = await this.uploadAllImages();
@@ -230,20 +232,19 @@ export class SproductoPage implements OnInit {
       this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
       this.enser.estado = 'borrador';
 
-      if (this.editandoBorrador && this.enser.id) {
-        await fetch(`http://localhost:4000/api/updateDraft/${this.enser.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(this.enser),
-        });
-      } else {
-        await this.productosBackend.uploadProduct(this.enser).toPromise();
-      }
+      const result = await this.http
+        .post(`http://localhost:4000/api/uploadProduct`, this.enser)
+        .toPromise();
 
-      this.presentToast('📝 Borrador guardado correctamente.');
-      this.router.navigateByUrl('/perfil', {
-        state: { openTab: 'borradores', refresh: true },
-      });
+      if (result) {
+        localStorage.setItem('borrador_en_edicion', JSON.stringify(this.enser));
+        this.editandoBorrador = true;
+        this.presentToast('📝 Borrador guardado correctamente.');
+
+        this.router.navigateByUrl('/perfil', {
+          state: { openTab: 'borradores', refresh: true },
+        });
+      }
     } catch (error) {
       console.error('❌ Error al guardar borrador:', error);
       this.presentToast('Error al guardar el borrador.');

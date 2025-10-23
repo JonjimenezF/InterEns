@@ -1,30 +1,124 @@
-.spinner-container, .empty-list {
+:host {
+  --bg: #0c0f13;
+  --card: #14161a;
+  --stroke: #2b3036;
+  --txt: #ffffff;
+  --muted: #b8bec6;
+  --accent: #1fd39a;
+}
+
+ion-content {
+  --background: var(--bg);
+  color: var(--txt);
+}
+
+/* 🌀 Spinner / mensaje vacío */
+.spinner-container,
+.empty-list {
   text-align: center;
-  margin-top: 30%;
-  color: #b8bec6;
+  margin-top: 20%;
+  color: var(--muted);
 }
 
-ion-thumbnail img {
-  border-radius: 10px;
+.empty-list ion-icon {
+  font-size: 3em;
+  opacity: 0.5;
+  margin-bottom: 10px;
 }
 
-ion-button {
-  --color: #ff4d4d;
+/* 🛍️ Tarjetas de favoritos */
+ion-grid {
+  padding: 10px;
 }
 
+ion-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--stroke);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+ion-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 12px rgba(31, 211, 154, 0.25);
+}
+
+/* 🖼️ Imagen */
+.product-image {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--stroke);
+}
+
+/* ❤️ Botón de favoritos (arriba a la derecha) */
 .fav-btn {
   position: absolute;
   top: 10px;
   right: 10px;
   --padding-start: 0;
   --padding-end: 0;
-  z-index: 5;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  width: 38px;
+  height: 38px;
+
   ion-icon {
-    font-size: 1.7em;
+    font-size: 22px;
+    color: #ff4d4d;
     transition: transform 0.2s ease;
   }
+
   &:active ion-icon {
     transform: scale(1.2);
   }
 }
 
+/* 🧾 Información del producto */
+.product-info {
+  padding: 15px;
+  text-align: center;
+}
+
+.product-info h2 {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+  color: var(--txt);
+}
+
+.product-info .desc {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.product-info .price {
+  color: var(--accent);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.product-info .ubicacion {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-bottom: 10px;
+}
+
+/* 💚 Botón Detalle */
+.custom-button {
+  --background: var(--accent);
+  --color: #0c0f13;
+  font-weight: 600;
+  border-radius: 20px;
+  transition: transform 0.2s ease;
+}
+
+.custom-button:hover {
+  transform: scale(1.03);
+}

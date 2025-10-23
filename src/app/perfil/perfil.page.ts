@@ -46,13 +46,14 @@ export class PerfilPage implements OnInit, OnDestroy {
     await this.loadMyProducts();
     await this.loadBorradores();
 
-    // 🔄 Escuchar evento global (por si otros componentes actualizan productos)
+    // 🔄 Escuchar evento global
     this.eventListener = () => this.loadMyProducts();
     window.addEventListener('productoIntercambiado', this.eventListener);
   }
 
   ngOnDestroy() {
-    if (this.eventListener) window.removeEventListener('productoIntercambiado', this.eventListener);
+    if (this.eventListener)
+      window.removeEventListener('productoIntercambiado', this.eventListener);
   }
 
   async ionViewWillEnter() {
@@ -64,7 +65,9 @@ export class PerfilPage implements OnInit, OnDestroy {
     await this.loadMyProducts();
 
     if (removeDraftId) {
-      const draftIndex = this.borradores.findIndex((b) => Number(b.id) === Number(removeDraftId));
+      const draftIndex = this.borradores.findIndex(
+        (b) => Number(b.id) === Number(removeDraftId)
+      );
       if (draftIndex !== -1) {
         this.borradores.splice(draftIndex, 1);
         await this.presentAnimatedToast(
@@ -80,7 +83,9 @@ export class PerfilPage implements OnInit, OnDestroy {
   // PERFIL
   // =========================
   async loadPerfil() {
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
     const token = session?.access_token;
     if (!token) return;
 
@@ -101,7 +106,9 @@ export class PerfilPage implements OnInit, OnDestroy {
   async loadMyProducts() {
     this.prodLoading = true;
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       const token = session?.access_token;
       const resp = await fetch(`http://127.0.0.1:4000/product_usuario/usuario`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -110,8 +117,9 @@ export class PerfilPage implements OnInit, OnDestroy {
       this.productos =
         data.items?.filter(
           (p: any) =>
-            `${p.estado}`.toLowerCase() === 'publicado' ||
-            `${p.estado}`.toLowerCase() === 'aprobado'
+            ['publicado', 'aprobado', 'no_disponible'].includes(
+              `${p.estado}`.toLowerCase()
+            )
         ) || [];
     } catch (e) {
       console.error('❌ Error cargando productos:', e);
@@ -133,7 +141,9 @@ export class PerfilPage implements OnInit, OnDestroy {
       .subscribe({
         next: (res: any) => {
           this.borradores =
-            (res || []).filter((b: any) => `${b.estado}`.toLowerCase() === 'borrador') || [];
+            (res || []).filter(
+              (b: any) => `${b.estado}`.toLowerCase() === 'borrador'
+            ) || [];
           this.borrLoading = false;
         },
         error: (err) => {
@@ -153,7 +163,9 @@ export class PerfilPage implements OnInit, OnDestroy {
       .subscribe({
         next: (res: any) => {
           this.borradores =
-            (res || []).filter((b: any) => `${b.estado}`.toLowerCase() === 'borrador') || [];
+            (res || []).filter(
+              (b: any) => `${b.estado}`.toLowerCase() === 'borrador'
+            ) || [];
           this.borrLoading = false;
         },
         error: (err) => {
@@ -180,12 +192,18 @@ export class PerfilPage implements OnInit, OnDestroy {
       case 'rechazado':
       case 'borrador':
         return 'medium';
+      case 'no_disponible':
+        return 'tertiary';
       default:
         return 'light';
     }
   }
 
+  // =========================
+  // ✏️ EDITAR / ELIMINAR BORRADOR
+  // =========================
   editarBorrador(borrador: any) {
+    localStorage.setItem('borrador_en_edicion', JSON.stringify(borrador));
     this.router.navigate(['/sproducto'], { state: { borrador } });
   }
 
@@ -193,7 +211,9 @@ export class PerfilPage implements OnInit, OnDestroy {
     if (!confirm('¿Seguro que deseas eliminar este borrador?')) return;
     this.http.delete(`http://localhost:4000/api/deleteDraft/${id}`).subscribe({
       next: async () => {
-        this.borradores = this.borradores.filter((b) => Number(b.id) !== Number(id));
+        this.borradores = this.borradores.filter(
+          (b) => Number(b.id) !== Number(id)
+        );
         await this.presentAnimatedToast('🗑️ Borrador eliminado correctamente');
       },
       error: async (err) => {
@@ -204,29 +224,28 @@ export class PerfilPage implements OnInit, OnDestroy {
   }
 
   // =========================
-  // ♻️ MARCAR INTERCAMBIADO
+  // ♻️ DISPONIBILIDAD / INTERCAMBIO
   // =========================
- async marcarIntercambiado(productoId: number) {
-  if (!confirm('¿Seguro que deseas marcar este producto como intercambiado?')) return;
+  async marcarIntercambiado(producto: any) {
+    try {
+      const id = producto.id;
+      const resp: any = await this.http
+        .put(`http://localhost:4000/api/toggleAvailability/${id}`, {})
+        .toPromise();
 
-  try {
-    await this.http.put(`http://localhost:4000/api/markExchanged/${productoId}`, {}).toPromise();
+      producto.estado = resp.nuevoEstado;
+      producto.activo = resp.nuevoEstado === 'publicado';
 
-    // ✅ Eliminarlo de la lista local
-    this.productos = this.productos.filter((p) => Number(p.id) !== Number(productoId));
-
-    // 🧩 Mostrar toast
-    await this.presentToast('♻️ Producto marcado como intercambiado y removido de Mis Productos.', 'success');
-
-    // 🚀 🔥 Disparar evento global para refrescar otras páginas
-    window.dispatchEvent(new CustomEvent('productoIntercambiado'));
-
-  } catch (error) {
-    console.error('❌ Error al marcar como intercambiado:', error);
-    await this.presentToast('Error al marcar producto como intercambiado.', 'danger');
+      const msg =
+        resp.nuevoEstado === 'publicado'
+          ? '✅ Producto reactivado y disponible nuevamente.'
+          : '♻️ Producto marcado como no disponible.';
+      await this.presentToast(msg, 'success');
+    } catch (error) {
+      console.error('❌ Error al cambiar disponibilidad:', error);
+      await this.presentToast('Error al cambiar estado del producto.', 'danger');
+    }
   }
-}
-
 
   editarperfil() {
     this.router.navigate(['/edit-perfil']);
@@ -249,7 +268,6 @@ export class PerfilPage implements OnInit, OnDestroy {
     await toast.present();
   }
 
-  // 🪄 Toast animado estilo InterEns
   async presentAnimatedToast(message: string) {
     const toast = await this.toastController.create({
       message,
