@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-title>Asistente InterEns 🤖</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="chat-container">
+  <div class="mensajes">
+    <div
+      *ngFor="let msg of historial"
+      class="burbuja"
+      [ngClass]="msg.remitente"
+    >
+      <div class="texto">{{ msg.texto }}</div>
+    </div>
+
+    <div *ngIf="cargando" class="burbuja bot typing">
+      <div class="puntos">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer class="footer">
+  <div class="input-area">
+    <ion-input
+      [(ngModel)]="mensajeUsuario"
+      placeholder="Escribe tu mensaje..."
+      class="input"
+      (keyup.enter)="enviarMensaje()"
+    ></ion-input>
+    <ion-button class="btn-enviar" (click)="enviarMensaje()">
+      Enviar
+    </ion-button>
+  </div>
+</ion-footer>

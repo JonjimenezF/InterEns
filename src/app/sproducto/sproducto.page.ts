@@ -8,9 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 // 🧩 Servicios
 import { supabase } from '../services/supabase.client';
-import { EnserService } from '../services/enser.service';
 import { CategoriaService } from '../servicios/categoria.service';
-import { ProductosBackendService } from '../servicios/productos-backend.service';
 
 // 🧩 Ionic standalone imports
 import {
@@ -176,7 +174,11 @@ export class SproductoPage implements OnInit {
 
     try {
       const imageUrls = await this.uploadAllImages();
-      this.enser.imagen_url = imageUrls[0] || this.enser.imagen_url;
+
+      // ✅ Si el usuario no seleccionó ninguna imagen → asignar una por defecto
+      const imagenPorDefecto = 'assets/img/default.png';
+      this.enser.imagen_url = imageUrls[0] || this.enser.imagen_url || imagenPorDefecto;
+
       this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
       this.enser.estado = 'publicado';
 
@@ -201,7 +203,6 @@ export class SproductoPage implements OnInit {
       if (result?.success) {
         this.presentToast(result.message || '✅ Producto publicado correctamente.');
 
-        // 💰 Emitir evento global de puntos
         if (result.total_points) {
           window.dispatchEvent(
             new CustomEvent('puntosActualizados', {
@@ -210,7 +211,6 @@ export class SproductoPage implements OnInit {
           );
         }
 
-        // 🧹 Limpieza y redirección
         localStorage.removeItem('borrador_en_edicion');
         this.router.navigateByUrl('/perfil', {
           state: { openTab: 'productos', refresh: true },
@@ -228,7 +228,11 @@ export class SproductoPage implements OnInit {
   async guardarBorrador(form: NgForm) {
     try {
       const imageUrls = await this.uploadAllImages();
-      this.enser.imagen_url = imageUrls[0] || this.enser.imagen_url;
+
+      // ✅ También usa imagen por defecto si no hay
+      const imagenPorDefecto = 'https://your-supabase-url/storage/v1/object/public/interens/default.png';
+      this.enser.imagen_url = imageUrls[0] || this.enser.imagen_url || imagenPorDefecto;
+
       this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
       this.enser.estado = 'borrador';
 

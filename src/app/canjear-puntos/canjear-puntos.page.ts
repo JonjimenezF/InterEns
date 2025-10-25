@@ -106,20 +106,22 @@ export class CanjearPuntosPage implements OnInit, OnDestroy {
   }
 
   // 🛍️ Obtener todos los productos disponibles para canjear
-  obtenerProductos() {
-    this.loading = true;
-    this.puntosService.getAllProducts().subscribe({
-      next: (data: any[]) => {
-        this.productos = data;
-        this.loading = false;
-        console.log(`🎁 Productos disponibles para canje: ${this.productos.length}`);
-      },
-      error: (err: any) => {
-        console.error('❌ Error al cargar productos:', err);
-        this.loading = false;
-      },
-    });
-  }
+obtenerProductos() {
+  this.loading = true;
+  this.puntosService.getAllProducts().subscribe({
+    next: (data: any[]) => {
+      // ✅ Solo productos activos y publicados
+      this.productos = data.filter(p => p.activo && p.estado === 'publicado');
+      this.loading = false;
+      console.log(`🎁 Productos disponibles para canje: ${this.productos.length}`);
+    },
+    error: (err: any) => {
+      console.error('❌ Error al cargar productos:', err);
+      this.loading = false;
+    },
+  });
+}
+
 
   // 🖼️ Imagen del producto o fallback
   getImagenProducto(producto: any): string {

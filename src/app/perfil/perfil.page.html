@@ -49,38 +49,33 @@
         </ion-thumbnail>
 
         <ion-label>
-          <h3>{{ p.titulo || p.title }}</h3>
-          <p class="ion-text-wrap">{{ p.descripcion || p.description }}</p>
-          <small *ngIf="p.created_at">
-            Publicado: {{ p.created_at | date: 'shortDate' }}
-          </small>
+          <h3>{{ p.title || p.titulo }}</h3>
+          <p class="ion-text-wrap">{{ p.description || p.descripcion }}</p>
+          <small *ngIf="p.created_at">Publicado: {{ p.created_at | date: 'shortDate' }}</small>
         </ion-label>
 
-        <!-- Estado -->
-        <ion-badge [color]="statusColor(p)">{{ p.estado }}</ion-badge>
+        <ion-badge [color]="statusColor(p)">
+          {{ formatEstado(p.estado) }}
+        </ion-badge>
 
-        <!-- ♻️ Botón de disponibilidad -->
+        <!-- ♻️ Botón Intercambiar / Reactivar -->
         <ion-buttons slot="end">
           <ion-button
             fill="outline"
+            [color]="p.estado === 'no_disponible' ? 'success' : 'tertiary'"
             class="intercambiado-btn"
-            [ngClass]="{ 'disabled-btn': p.estado === 'no_disponible' }"
-            (click)="marcarIntercambiado(p)"
-          >
+            (click)="marcarIntercambiado(p)">
             <ion-icon
-              [name]="p.estado === 'no_disponible' ? 'lock-closed-outline' : 'swap-horizontal-outline'"
-            ></ion-icon>
-            {{ p.estado === 'no_disponible' ? 'NO DISPONIBLE' : 'INTERCAMBIAR' }}
+              [name]="p.estado === 'no_disponible' ? 'reload-outline' : 'swap-horizontal-outline'">
+            </ion-icon>
+            {{ p.estado === 'no_disponible' ? 'HABILITAR' : 'INTERCAMBIAR' }}
           </ion-button>
         </ion-buttons>
       </ion-item>
     </ion-list>
 
     <!-- 🕳️ Sin productos -->
-    <div
-      *ngIf="!prodLoading && productos.length === 0"
-      class="ion-text-center ion-margin-top"
-    >
+    <div *ngIf="!prodLoading && productos.length === 0" class="ion-text-center ion-margin-top">
       <ion-icon name="cube-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
       <p>Sin productos publicados aún.</p>
     </div>
@@ -99,9 +94,7 @@
         <ion-label>
           <h3>{{ b.titulo }}</h3>
           <p class="ion-text-wrap">{{ b.descripcion || 'Sin descripción' }}</p>
-          <small *ngIf="b.updated_at">
-            Última edición: {{ b.updated_at | date: 'short' }}
-          </small>
+          <small *ngIf="b.updated_at">Última edición: {{ b.updated_at | date: 'short' }}</small>
         </ion-label>
 
         <!-- Botones de acción -->
@@ -120,10 +113,7 @@
     </ion-list>
 
     <!-- 📭 Sin borradores -->
-    <div
-      *ngIf="!borrLoading && borradores.length === 0"
-      class="ion-text-center ion-margin-top"
-    >
+    <div *ngIf="!borrLoading && borradores.length === 0" class="ion-text-center ion-margin-top">
       <ion-icon name="document-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
       <p>No tienes borradores guardados.</p>
     </div>

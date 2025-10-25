@@ -199,6 +199,12 @@ export class PerfilPage implements OnInit, OnDestroy {
     }
   }
 
+  // ✅ Nueva función para mostrar estados con formato bonito
+  formatEstado(estado: string): string {
+    if (!estado) return '';
+    return estado.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
+
   // =========================
   // ✏️ EDITAR / ELIMINAR BORRADOR
   // =========================

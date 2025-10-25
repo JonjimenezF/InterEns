@@ -193,6 +193,10 @@ export const routes: Routes = [
     path: 'favoritos',
     loadComponent: () => import('./favoritos/favoritos.page').then( m => m.FavoritosPage)
   },
+  {
+    path: 'chatbox',
+    loadComponent: () => import('./chatbox/chatbox.page').then( m => m.ChatboxPage)
+  },
 
 
 
