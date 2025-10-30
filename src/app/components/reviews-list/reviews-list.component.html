@@ -1,0 +1,54 @@
+<div class="reviews-container">
+  <h3 *ngIf="showTitle" class="reviews-title">
+    Reseñas de usuarios
+  </h3>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando reseñas...</p>
+  </div>
+
+  <!-- Lista de reseñas -->
+  <div *ngIf="!loading && reviews.length > 0" class="reviews-list">
+    <ion-card *ngFor="let review of reviews" class="review-card">
+      <ion-card-content>
+        <div class="review-header">
+          <div class="user-info">
+            <ion-avatar class="user-avatar">
+              <ion-icon name="person" class="avatar-icon"></ion-icon>
+            </ion-avatar>
+            <div class="user-details">
+              <h4 class="user-name">{{ review.nombre_calificador }}</h4>
+              <p class="review-date">{{ getTimeAgo(review.created_at) }}</p>
+            </div>
+          </div>
+          
+          <div class="rating-display">
+            <app-star-rating 
+              [rating]="review.puntuacion" 
+              [totalReviews]="0"
+              [showText]="false"
+              size="small">
+            </app-star-rating>
+          </div>
+        </div>
+
+        <div class="review-content" *ngIf="review.comentario">
+          <p>{{ review.comentario }}</p>
+        </div>
+        
+        <div class="review-content" *ngIf="!review.comentario">
+          <p class="no-comment">Sin comentario adicional</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Sin reseñas -->
+  <div *ngIf="!loading && reviews.length === 0" class="no-reviews">
+    <ion-icon name="chatbubbles-outline" class="no-reviews-icon"></ion-icon>
+    <h4>Sin reseñas aún</h4>
+    <p>Este usuario no ha recibido reseñas todavía.</p>
+  </div>
+</div>

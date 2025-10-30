@@ -6,6 +6,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons,
 import { ChatService } from '../servicios/chat.service';
 import { supabase } from '../services/supabase.client';
 import { RatingComponent } from '../components/rating/rating.component';
+import { ReportComponent } from '../components/report/report.component';
 
 @Component({
   selector: 'app-chat-usuario',
@@ -205,6 +206,32 @@ export class ChatUsuarioPage implements OnInit {
     const { data } = await modal.onDidDismiss();
     if (data?.success) {
       this.presentToast('✅ Calificación enviada correctamente');
+    }
+  }
+
+  async reportarUsuario() {
+    if (!this.otroUsuarioId || !this.usuarioActual) {
+      this.presentToast('❌ Error: No se puede reportar en este momento');
+      return;
+    }
+
+    const modal = await this.modalController.create({
+      component: ReportComponent,
+      componentProps: {
+        tipoReporte: 'usuario',
+        objetoId: this.otroUsuarioId,
+        objetoNombre: this.otroUsuarioNombre || 'Usuario'
+      },
+      cssClass: 'report-modal',
+      backdropDismiss: true,
+      showBackdrop: true
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data?.success) {
+      this.presentToast('✅ Denuncia enviada correctamente');
     }
   }
 

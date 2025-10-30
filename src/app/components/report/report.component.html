@@ -1,0 +1,67 @@
+<div class="report-modal">
+  <div class="modal-header">
+    <h2>Reportar {{ tipoReporte === 'usuario' ? 'Usuario' : 'Producto' }}</h2>
+    <ion-button fill="clear" (click)="cerrar()" class="close-btn">✕</ion-button>
+  </div>
+
+  <div class="modal-content">
+    <!-- Información del objeto reportado -->
+    <div class="report-info" *ngIf="objetoNombre">
+      <p><strong>{{ tipoReporte === 'usuario' ? 'Usuario:' : 'Producto:' }}</strong> {{ objetoNombre }}</p>
+    </div>
+
+    <!-- Motivo -->
+    <div class="form-section">
+      <ion-item class="form-item">
+        <ion-select 
+          [(ngModel)]="motivo"
+          placeholder="Selecciona el motivo"
+          interface="popover">
+          <ion-select-option *ngFor="let m of motivos" [value]="m.value">
+            {{ m.label }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+
+    <!-- Descripción -->
+    <div class="form-section">
+      <ion-item class="form-item">
+        <ion-textarea
+          [(ngModel)]="descripcion"
+          placeholder="Describe el problema (obligatorio)"
+          rows="4"
+          maxlength="500">
+        </ion-textarea>
+      </ion-item>
+      <small class="char-count">{{ descripcion.length }}/500</small>
+    </div>
+
+    <!-- Botones -->
+    <div class="button-group">
+      <ion-button 
+        expand="block" 
+        (click)="enviarDenuncia()"
+        [disabled]="!motivo || !descripcion.trim() || isLoading"
+        class="submit-btn">
+        <ion-spinner *ngIf="isLoading" name="crescent" size="small"></ion-spinner>
+        <span *ngIf="!isLoading">Enviar Denuncia</span>
+        <span *ngIf="isLoading">Enviando...</span>
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        (click)="cerrar()"
+        class="cancel-btn">
+        Cancelar
+      </ion-button>
+    </div>
+
+    <!-- Aviso -->
+    <div class="disclaimer">
+      <ion-icon name="information-circle-outline"></ion-icon>
+      <p>Las denuncias falsas pueden resultar en la suspensión de tu cuenta.</p>
+    </div>
+  </div>
+</div>

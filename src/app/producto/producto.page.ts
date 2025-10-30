@@ -198,6 +198,7 @@ export class ProductoPage implements OnInit, OnDestroy {
   }
 
   verDetalle(producto: any) {
+    console.log('🔍 Navegando a detalle con producto:', producto);
     this.router.navigate(['/detalle-producto'], { state: { producto } });
   }
 

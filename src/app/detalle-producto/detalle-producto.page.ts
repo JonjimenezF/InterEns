@@ -4,50 +4,39 @@ import { Router } from '@angular/router';
 import { NavController, ModalController, ToastController } from '@ionic/angular';
 import { supabase } from '../services/supabase.client';
 import { RatingComponent } from '../components/rating/rating.component';
-import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonButtons,
-  IonBackButton,
-  IonImg,
-  IonIcon,
-  IonButton,
-  IonFooter,
-} from '@ionic/angular/standalone';
+import { ReputacionService } from '../servicios/reputacion.service';
+import { StarRatingComponent } from '../components/star-rating/star-rating.component';
+import { ReviewsListComponent } from '../components/reviews-list/reviews-list.component';
+import { ReportComponent } from '../components/report/report.component';
+import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-detalle-producto',
   templateUrl: './detalle-producto.page.html',
-  styleUrls: ['./detalle-producto.page.scss'],
+  styleUrls: ['./detalle-producto.page.scss', './detalle-producto-styles.scss'],
   standalone: true,
   imports: [
     CommonModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonButtons,
-    IonBackButton,
-    IonImg,
-    IonIcon,
-    IonButton,
-    IonFooter,
+    IonicModule,
     FooterInterensComponent,
+    StarRatingComponent,
+    ReviewsListComponent,
+    ReportComponent
   ],
 })
 export class DetalleProductoPage implements OnInit {
   producto: any;
   puedeCalificar = false;
   usuarioActual?: string;
+  vendedorReputacion: any = null;
 
   constructor(
     private router: Router, 
     private navCtrl: NavController,
     private modalController: ModalController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private reputacionService: ReputacionService
   ) {}
 
   async ngOnInit() {
@@ -61,6 +50,11 @@ export class DetalleProductoPage implements OnInit {
 
     // Verificar si puede calificar
     await this.verificarPuedeCalificar();
+    
+    // Cargar reputación del vendedor
+    if (this.producto?.propietario_id) {
+      await this.cargarReputacionVendedor();
+    }
   }
 
   // ✅ Soluciona el error del botón de retroceso
@@ -176,5 +170,36 @@ export class DetalleProductoPage implements OnInit {
       position: 'bottom'
     });
     toast.present();
+  }
+
+  async cargarReputacionVendedor() {
+    if (!this.producto?.propietario_id) return;
+    
+    try {
+      this.vendedorReputacion = await this.reputacionService.obtenerReputacion(this.producto.propietario_id);
+    } catch (error) {
+      console.error('Error cargando reputación del vendedor:', error);
+    }
+  }
+
+  async reportarProducto() {
+    const modal = await this.modalController.create({
+      component: ReportComponent,
+      componentProps: {
+        tipoReporte: 'producto',
+        objetoId: this.producto.id.toString(),
+        objetoNombre: this.producto.titulo
+      },
+      cssClass: 'report-modal',
+      backdropDismiss: true,
+      showBackdrop: true
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data?.success) {
+      this.presentToast('✅ Denuncia enviada correctamente');
+    }
   }
 }

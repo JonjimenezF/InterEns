@@ -1,0 +1,55 @@
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
+}
+
+.star-icon {
+  color: #ffd700;
+  
+  &[name="star-outline"] {
+    color: #666;
+  }
+}
+
+.rating-text {
+  color: #ccc;
+  font-weight: 500;
+}
+
+/* Tamaños */
+.size-small {
+  .star-icon {
+    font-size: 14px;
+  }
+  
+  .rating-text {
+    font-size: 12px;
+  }
+}
+
+.size-medium {
+  .star-icon {
+    font-size: 18px;
+  }
+  
+  .rating-text {
+    font-size: 14px;
+  }
+}
+
+.size-large {
+  .star-icon {
+    font-size: 24px;
+  }
+  
+  .rating-text {
+    font-size: 16px;
+    font-weight: 600;
+  }
+}

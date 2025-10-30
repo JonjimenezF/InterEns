@@ -77,6 +77,12 @@ ion-header {
     font-size: 14px;
     opacity: 0.8;
   }
+  
+  .reputacion {
+    margin-top: 8px;
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .edit-btn {
@@ -371,4 +377,24 @@ ion-content::-webkit-scrollbar-track {
   0% { transform: scale(1); }
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
+}
+
+.pickup-btn {
+  --color: #1fd39a;
+  --border-color: #1fd39a;
+  font-weight: 600;
+  font-size: 12px;
+  margin-left: 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    --background: #1fd39a;
+    --color: white;
+    transform: translateY(-1px);
+  }
+
+  ion-icon {
+    margin-right: 4px;
+  }
 }

@@ -1,0 +1,13 @@
+<div class="star-rating" [class]="'size-' + size">
+  <div class="stars">
+    <ion-icon 
+      *ngFor="let starType of stars" 
+      [name]="starType"
+      class="star-icon">
+    </ion-icon>
+  </div>
+  
+  <span class="rating-text" *ngIf="showText">
+    {{ ratingText }}
+  </span>
+</div>

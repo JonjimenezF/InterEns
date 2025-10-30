@@ -1,19 +1,23 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonicModule, ToastController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { supabase } from 'src/shared/supabase/supabase.client';
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 import { HttpClient } from '@angular/common/http';
 import { ChatService } from '../servicios/chat.service';
+import { ReputacionService } from '../servicios/reputacion.service';
+import { StarRatingComponent } from '../components/star-rating/star-rating.component';
+import { ReviewsListComponent } from '../components/reviews-list/reviews-list.component';
+import { PickupRequestComponent } from '../components/pickup-request/pickup-request.component';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule, FooterInterensComponent],
+  imports: [CommonModule, FormsModule, IonicModule, FooterInterensComponent, StarRatingComponent, ReviewsListComponent],
 })
 export class PerfilPage implements OnInit, OnDestroy {
   nombre: string | null = null;
@@ -27,6 +31,7 @@ export class PerfilPage implements OnInit, OnDestroy {
   prodLoading = false;
   borrLoading = false;
   mensajesLoading = false;
+  reputacion: any = null;
 
   selectedTab: string = 'productos';
   userId: string | null = null;
@@ -37,7 +42,9 @@ export class PerfilPage implements OnInit, OnDestroy {
     private router: Router,
     private http: HttpClient,
     private toastController: ToastController,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private reputacionService: ReputacionService,
+    private modalController: ModalController
   ) {}
 
   async ngOnInit() {
@@ -50,6 +57,7 @@ export class PerfilPage implements OnInit, OnDestroy {
     await this.loadMyProducts();
     await this.loadBorradores();
     await this.loadConversaciones();
+    await this.cargarReputacion();
 
     // 🔄 Escuchar evento global
     this.eventListener = () => this.loadMyProducts();
@@ -383,5 +391,37 @@ export class PerfilPage implements OnInit, OnDestroy {
       : conversacion.usuario1_id;
     
     this.router.navigate(['/chat-usuario', otroUsuarioId, conversacion.producto_id || '']);
+  }
+
+  // =========================
+  // REPUTACIÓN
+  // =========================
+  async cargarReputacion() {
+    if (!this.userId) return;
+    
+    try {
+      this.reputacion = await this.reputacionService.obtenerReputacion(this.userId);
+    } catch (error) {
+      console.error('Error cargando reputación:', error);
+    }
+  }
+
+  async solicitarRetiro(producto: any) {
+    const modal = await this.modalController.create({
+      component: PickupRequestComponent,
+      componentProps: {
+        producto: producto
+      },
+      cssClass: 'pickup-modal',
+      backdropDismiss: true,
+      showBackdrop: true
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data?.success) {
+      this.presentAnimatedToast('✅ Solicitud de retiro enviada correctamente');
+    }
   }
 }

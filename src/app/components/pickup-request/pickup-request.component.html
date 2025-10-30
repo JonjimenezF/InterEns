@@ -1,0 +1,96 @@
+<div class="pickup-modal">
+  <div class="modal-header">
+    <h2>Solicitar Retiro</h2>
+    <ion-button fill="clear" (click)="cerrar()" class="close-btn">✕</ion-button>
+  </div>
+
+  <div class="modal-content">
+    <!-- Información del producto -->
+    <div class="product-info">
+      <img [src]="producto.imagen_url || 'assets/img/default.png'" class="product-thumb" alt="producto">
+      <div class="product-details">
+        <h3>{{ producto.titulo }}</h3>
+        <p>{{ producto.valor_puntos }} InterCoins</p>
+      </div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="form-section">
+      <!-- Dirección -->
+      <ion-item class="form-item">
+        <ion-input
+          [(ngModel)]="direccion"
+          placeholder="Dirección completa para retiro *"
+          type="text">
+        </ion-input>
+      </ion-item>
+
+      <!-- Teléfono -->
+      <ion-item class="form-item">
+        <ion-input
+          [(ngModel)]="telefono"
+          placeholder="Teléfono de contacto *"
+          type="tel">
+        </ion-input>
+      </ion-item>
+
+      <!-- Horario preferido -->
+      <ion-item class="form-item">
+        <ion-select 
+          [(ngModel)]="horarioPreferido"
+          placeholder="Horario preferido *"
+          interface="popover">
+          <ion-select-option *ngFor="let h of horariosDisponibles" [value]="h.value">
+            {{ h.label }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Comentarios -->
+      <ion-item class="form-item">
+        <ion-textarea
+          [(ngModel)]="comentarios"
+          placeholder="Comentarios adicionales (opcional)"
+          rows="3"
+          maxlength="300">
+        </ion-textarea>
+      </ion-item>
+      <small class="char-count">{{ comentarios.length }}/300</small>
+    </div>
+
+    <!-- Botones -->
+    <div class="button-group">
+      <ion-button 
+        expand="block" 
+        (click)="solicitarRetiro()"
+        [disabled]="!direccion.trim() || !telefono.trim() || !horarioPreferido || isLoading"
+        class="submit-btn">
+        <ion-spinner *ngIf="isLoading" name="crescent" size="small"></ion-spinner>
+        <span *ngIf="!isLoading">Solicitar Retiro</span>
+        <span *ngIf="isLoading">Enviando...</span>
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        (click)="cerrar()"
+        class="cancel-btn">
+        Cancelar
+      </ion-button>
+    </div>
+
+    <!-- Información -->
+    <div class="info-section">
+      <ion-icon name="information-circle-outline"></ion-icon>
+      <div>
+        <p><strong>¿Cómo funciona?</strong></p>
+        <ul>
+          <li>Nuestro equipo coordinará el retiro</li>
+          <li>Te contactaremos para confirmar fecha y hora</li>
+          <li>El retiro es gratuito dentro de la ciudad</li>
+          <li>Tiempo estimado: 24-48 horas</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

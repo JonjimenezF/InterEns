@@ -31,12 +31,30 @@
       <div class="info-secundaria">
         <p><strong>Condición:</strong> {{ producto.condicion || 'No especificada' }}</p>
         <p><strong>Ubicación:</strong> {{ producto.region }} - {{ producto.ciudad }}</p>
+        
+        <!-- Reputación del vendedor -->
+        <div class="vendedor-reputacion" *ngIf="vendedorReputacion">
+          <p><strong>Vendedor:</strong></p>
+          <app-star-rating 
+            [rating]="vendedorReputacion.promedio" 
+            [totalReviews]="vendedorReputacion.totalReviews"
+            size="small">
+          </app-star-rating>
+        </div>
       </div>
 
       <!-- Bloque de puntos -->
       <div class="puntos-box">
         <ion-icon name="trophy-outline" class="icono-puntos"></ion-icon>
         <h2>{{ producto.valor_puntos }} InterCoins</h2>
+      </div>
+
+      <!-- Reseñas del vendedor -->
+      <div class="resenas-vendedor" *ngIf="producto?.propietario_id">
+        <app-reviews-list 
+          [usuarioId]="producto.propietario_id"
+          [showTitle]="true">
+        </app-reviews-list>
       </div>
 
       <!-- Botones de acción -->
@@ -49,6 +67,11 @@
         <ion-button expand="block" shape="round" class="btn-calificar" (click)="calificarVendedor()" *ngIf="puedeCalificar">
           <ion-icon name="star" slot="start"></ion-icon>
           Calificar vendedor
+        </ion-button>
+        
+        <ion-button expand="block" shape="round" class="btn-reportar" (click)="reportarProducto()">
+          <ion-icon name="flag" slot="start"></ion-icon>
+          Reportar producto
         </ion-button>
         
         <ion-button expand="block" shape="round" class="btn-canjear" (click)="canjearProducto()">

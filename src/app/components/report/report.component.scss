@@ -1,0 +1,143 @@
+.report-modal {
+  background: #1a1a1a;
+  border-radius: 16px;
+  padding: 0;
+  max-width: 450px;
+  width: 90vw;
+  max-height: 80vh;
+  color: white;
+  margin: auto;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  outline: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #333;
+
+  h2 {
+    margin: 0;
+    color: #ff4757;
+    font-weight: 600;
+    font-size: 20px;
+  }
+
+  .close-btn {
+    --color: #999;
+    font-size: 24px;
+    font-weight: bold;
+  }
+}
+
+.modal-content {
+  padding: 24px;
+}
+
+.report-info {
+  background: rgba(255, 71, 87, 0.1);
+  border: 1px solid rgba(255, 71, 87, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+
+  p {
+    margin: 0;
+    color: #ff4757;
+    font-size: 14px;
+  }
+}
+
+.form-section {
+  margin-bottom: 20px;
+
+  .form-item {
+    --background: #2a2a2a;
+    --color: white;
+    border-radius: 8px;
+    margin-bottom: 8px;
+
+    ion-select,
+    ion-textarea {
+      --color: white;
+      --placeholder-color: #999;
+    }
+  }
+
+  .char-count {
+    color: #999;
+    font-size: 12px;
+    text-align: right;
+    display: block;
+  }
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+
+  .submit-btn {
+    --background: linear-gradient(135deg, #ff4757, #ff3742);
+    --color: white;
+    font-weight: 600;
+    height: 48px;
+    border-radius: 12px;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+    }
+
+    &[disabled] {
+      opacity: 0.6;
+      transform: none;
+    }
+
+    ion-spinner {
+      margin-right: 8px;
+    }
+  }
+
+  .cancel-btn {
+    --color: #999;
+    --border-color: #555;
+    height: 44px;
+    border-radius: 12px;
+
+    &:hover {
+      --color: white;
+      --border-color: #777;
+    }
+  }
+}
+
+.disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+
+  ion-icon {
+    color: #ffc107;
+    font-size: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  p {
+    margin: 0;
+    color: #ffc107;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+}
