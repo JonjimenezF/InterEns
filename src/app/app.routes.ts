@@ -189,7 +189,8 @@ export const routes: Routes = [
   {
     path: 'edit-perfil',
     loadComponent: () => import('./edit-perfil/edit-perfil.page').then( m => m.EditPerfilPage)
-  },  {
+  },
+  {
     path: 'favoritos',
     loadComponent: () => import('./favoritos/favoritos.page').then( m => m.FavoritosPage)
   },
@@ -200,7 +201,13 @@ export const routes: Routes = [
   {
     path: 'misiones',
     loadComponent: () => import('./misiones/misiones.page').then( m => m.MisionesPage)
+  },  {
+    path: 'consejos',
+    loadComponent: () => import('./consejos/consejos.page').then( m => m.ConsejosPage)
   },
+
+  
+  
 
 
 

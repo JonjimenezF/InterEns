@@ -237,6 +237,10 @@ export class HomePage implements OnDestroy {
     this.navCtrl.back();
   }
 
+  goConsejos() {
+  this.navCtrl.navigateForward('/consejos');
+}
+
   inter() {
     this.router.navigate(['/que-es'], { state: { userInfo: this.userInfo } });
   }
