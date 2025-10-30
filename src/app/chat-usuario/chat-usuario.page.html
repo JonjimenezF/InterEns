@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar class="chat-header">
+    <ion-buttons slot="start">
+      <ion-button (click)="volver()" class="back-button" fill="clear">
+        <ion-icon name="arrow-back"></ion-icon>
+        Atrás
+      </ion-button>
+    </ion-buttons>
+    
+    <div class="chat-info" slot="">
+      <img 
+        [src]="productoImagen || 'assets/img/default.png'" 
+        class="producto-thumb"
+        alt="producto">
+      <div class="chat-details">
+        <ion-title class="chat-title">{{ productoTitulo || 'Chat' }}</ion-title>
+        <p class="chat-subtitle">{{ otroUsuarioNombre || 'Usuario' }}</p>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="chat-content">
+  <div class="messages-container">
+    <div *ngFor="let mensaje of mensajes; let i = index" 
+         class="message" 
+         [ngClass]="{'my-message': mensaje.remitente_id === usuarioActual, 'other-message': mensaje.remitente_id !== usuarioActual}"
+         [style.animation-delay]="i * 0.1 + 's'">
+      
+      <div class="message-bubble">
+        <p>{{ mensaje.mensaje }}</p>
+        <span class="message-time">{{ mensaje.created_at | date:'short' }}</span>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <div class="message-input-container">
+    <div class="input-wrapper">
+      <ion-input 
+        [(ngModel)]="nuevoMensaje" 
+        placeholder="Escribe un mensaje..."
+        (keyup.enter)="enviarMensaje()"
+        [disabled]="cargando"
+        class="message-input">
+      </ion-input>
+      <ion-button 
+        (click)="enviarMensaje()"
+        [disabled]="!nuevoMensaje.trim() || cargando"
+        class="send-button"
+        [class.sending]="cargando"
+        fill="clear">
+        <ion-icon 
+          [name]="cargando ? 'hourglass-outline' : 'send'"
+          slot="icon-only">
+        </ion-icon>
+      </ion-button>
+    </div>
+  </div>
+</ion-footer>

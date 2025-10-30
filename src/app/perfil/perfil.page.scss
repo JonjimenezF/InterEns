@@ -202,28 +202,7 @@ ion-content::-webkit-scrollbar-track {
   --accent: #1fd39a; /* tu verde InterEns */
 }
 
-.intercambiado-btn {
-  --border-color: var(--accent);
-  --color: var(--accent);
-  font-weight: 500;
-  border: 1px solid var(--accent);
-  transition: all 0.25s ease;
-  border-radius: 10px;
 
-  ion-icon {
-    margin-right: 5px;
-    color: var(--accent);
-  }
-
-  &:hover {
-    background: var(--accent);
-    color: #0c0f13;
-    ion-icon {
-      color: #0c0f13;
-    }
-    transform: scale(1.03);
-  }
-}
 
 
 /* 💚 Toast animado estilo InterEns */
@@ -282,4 +261,60 @@ ion-content::-webkit-scrollbar-track {
     transform: scale(1.05);
     box-shadow: 0 0 10px rgba(31, 211, 154, 0.4);
   }
+}
+
+/* ===== ESTILOS PARA MENSAJES ===== */
+.unread-conversation {
+  border-left: 4px solid #ff4444;
+  background: rgba(255, 68, 68, 0.05);
+}
+
+.mensaje-preview {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  
+  .mensaje-indicador {
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+    min-width: 30px;
+  }
+  
+  span:last-child {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.mensaje-bold {
+  font-weight: 600;
+  color: var(--txt) !important;
+}
+
+.mensaje-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.unread-badge {
+  background: #ff4444;
+  color: white;
+  font-size: 11px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }

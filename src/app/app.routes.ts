@@ -197,6 +197,10 @@ export const routes: Routes = [
     path: 'chatbox',
     loadComponent: () => import('./chatbox/chatbox.page').then( m => m.ChatboxPage)
   },
+  {
+    path: 'chat-usuario/:usuarioId/:enserId',
+    loadComponent: () => import('./chat-usuario/chat-usuario.page').then( m => m.ChatUsuarioPage)
+  },
 
 
 

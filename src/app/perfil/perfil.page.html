@@ -29,6 +29,10 @@
       <ion-label>Mis Productos</ion-label>
     </ion-segment-button>
 
+    <ion-segment-button value="mensajes">
+      <ion-label>Mensajes</ion-label>
+    </ion-segment-button>
+
     <ion-segment-button value="borradores">
       <ion-label>Mis Borradores</ion-label>
     </ion-segment-button>
@@ -37,6 +41,56 @@
       <ion-label>Mis Reseñas</ion-label>
     </ion-segment-button>
   </ion-segment>
+
+  <!-- ===================== -->
+  <!-- TAB: MENSAJES -->
+  <!-- ===================== -->
+  <ng-container *ngIf="selectedTab === 'mensajes'">
+    <ion-list *ngIf="conversaciones.length > 0">
+      <ion-item *ngFor="let conv of conversaciones" button (click)="abrirChat(conv)" 
+                [class.unread-conversation]="conv.mensajes_no_leidos > 0">
+        <ion-thumbnail slot="start">
+          <img [src]="conv.enser_imagen || 'assets/img/default.png'" alt="producto" />
+        </ion-thumbnail>
+
+        <ion-label>
+          <h3>{{ conv.enser_titulo || 'Producto sin título' }}</h3>
+          
+          <!-- Último mensaje con indicador -->
+          <p class="ion-text-wrap mensaje-preview" *ngIf="conv.ultimo_mensaje_real">
+            <span class="mensaje-indicador" [style.color]="conv.es_mio ? '#1fd39a' : '#ffffff'">
+              {{ conv.es_mio ? 'Tú:' : (conv.otro_usuario_nombre + ':') }}
+            </span>
+            <span [class.mensaje-bold]="conv.mensajes_no_leidos > 0 && !conv.es_mio">
+              {{ conv.ultimo_mensaje_real }}
+            </span>
+          </p>
+          
+          <p class="ion-text-wrap" *ngIf="!conv.ultimo_mensaje_real">
+            <ion-icon name="chatbubble-outline" color="medium"></ion-icon>
+            Sin mensajes aún
+          </p>
+          
+          <small>{{ (conv.ultimo_mensaje_fecha || conv.updated_at) | date:'short' }}</small>
+        </ion-label>
+
+        <!-- Badge de mensajes no leídos -->
+        <div slot="end" class="mensaje-status">
+          <ion-badge color="danger" *ngIf="conv.mensajes_no_leidos > 0" class="unread-badge">
+            {{ conv.mensajes_no_leidos }}
+          </ion-badge>
+          <ion-icon name="chevron-forward-outline" color="medium"></ion-icon>
+        </div>
+      </ion-item>
+    </ion-list>
+
+    <!-- 📬 Sin conversaciones -->
+    <div *ngIf="!mensajesLoading && conversaciones.length === 0" class="ion-text-center ion-margin-top">
+      <ion-icon name="chatbubbles-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
+      <p>No tienes conversaciones aún.</p>
+      <p><small>Contacta a vendedores desde los productos para iniciar chats.</small></p>
+    </div>
+  </ng-container>
 
   <!-- ===================== -->
   <!-- TAB: MIS PRODUCTOS -->

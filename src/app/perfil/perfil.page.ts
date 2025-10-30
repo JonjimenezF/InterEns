@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { supabase } from 'src/shared/supabase/supabase.client';
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 import { HttpClient } from '@angular/common/http';
+import { ChatService } from '../servicios/chat.service';
 
 @Component({
   selector: 'app-perfil',
@@ -22,8 +23,10 @@ export class PerfilPage implements OnInit, OnDestroy {
 
   productos: any[] = [];
   borradores: any[] = [];
+  conversaciones: any[] = [];
   prodLoading = false;
   borrLoading = false;
+  mensajesLoading = false;
 
   selectedTab: string = 'productos';
   userId: string | null = null;
@@ -33,7 +36,8 @@ export class PerfilPage implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private http: HttpClient,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private chatService: ChatService
   ) {}
 
   async ngOnInit() {
@@ -45,6 +49,7 @@ export class PerfilPage implements OnInit, OnDestroy {
 
     await this.loadMyProducts();
     await this.loadBorradores();
+    await this.loadConversaciones();
 
     // 🔄 Escuchar evento global
     this.eventListener = () => this.loadMyProducts();
@@ -77,6 +82,11 @@ export class PerfilPage implements OnInit, OnDestroy {
     }
 
     await this.refreshBorradoresFromDB();
+    
+    // Cargar conversaciones si está en la pestaña mensajes
+    if (this.selectedTab === 'mensajes') {
+      await this.loadConversaciones();
+    }
   }
 
   // =========================
@@ -284,5 +294,94 @@ export class PerfilPage implements OnInit, OnDestroy {
       mode: 'ios',
     });
     await toast.present();
+  }
+
+  // =========================
+  // MENSAJES / CONVERSACIONES
+  // =========================
+  async loadConversaciones() {
+    if (!this.userId) return;
+    
+    this.mensajesLoading = true;
+    try {
+      const { data: conversaciones } = await this.chatService.obtenerConversacionesUsuario(this.userId);
+      
+      if (conversaciones) {
+        // Enriquecer con datos del enser, último mensaje y nombres de usuarios
+        for (let conv of conversaciones) {
+          // Obtener datos del enser
+          if (conv.producto_id) {
+            const { data: enser } = await supabase
+              .from('enseres')
+              .select('titulo, imagen_url')
+              .eq('id', conv.producto_id)
+              .single();
+            
+            if (enser) {
+              conv.enser_titulo = enser.titulo;
+              conv.enser_imagen = enser.imagen_url;
+            }
+          }
+          
+          // Obtener nombres de los usuarios
+          const otroUsuarioId = conv.usuario1_id === this.userId ? conv.usuario2_id : conv.usuario1_id;
+          
+          try {
+            const resp = await fetch(`http://127.0.0.1:4000/profile/${otroUsuarioId}`);
+            const perfil = await resp.json();
+            conv.otro_usuario_nombre = perfil?.nombre_completo || 'Usuario';
+          } catch {
+            conv.otro_usuario_nombre = 'Usuario';
+          }
+          
+          // Obtener último mensaje real
+          const { data: ultimoMensaje } = await supabase
+            .from('mensajes')
+            .select('mensaje, remitente_id, created_at')
+            .eq('conversacion_id', conv.id)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single();
+          
+          if (ultimoMensaje) {
+            conv.ultimo_mensaje_real = ultimoMensaje.mensaje;
+            conv.ultimo_mensaje_fecha = ultimoMensaje.created_at;
+            conv.ultimo_remitente = ultimoMensaje.remitente_id;
+            conv.es_mio = ultimoMensaje.remitente_id === this.userId;
+          }
+          
+          // Contar mensajes no leídos
+          const { count } = await supabase
+            .from('mensajes')
+            .select('*', { count: 'exact', head: true })
+            .eq('conversacion_id', conv.id)
+            .eq('leido', false)
+            .neq('remitente_id', this.userId);
+          
+          conv.mensajes_no_leidos = count || 0;
+        }
+        
+        this.conversaciones = conversaciones;
+      }
+    } catch (error) {
+      console.error('Error cargando conversaciones:', error);
+    } finally {
+      this.mensajesLoading = false;
+    }
+  }
+
+  async abrirChat(conversacion: any) {
+    // Marcar mensajes como leídos
+    if (conversacion.mensajes_no_leidos > 0) {
+      await this.chatService.marcarComoLeido(conversacion.id, this.userId!);
+      conversacion.mensajes_no_leidos = 0;
+    }
+    
+    // Determinar el otro usuario
+    const otroUsuarioId = conversacion.usuario1_id === this.userId 
+      ? conversacion.usuario2_id 
+      : conversacion.usuario1_id;
+    
+    this.router.navigate(['/chat-usuario', otroUsuarioId, conversacion.producto_id || '']);
   }
 }
