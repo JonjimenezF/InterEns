@@ -8,6 +8,7 @@ import { ReputacionService } from '../servicios/reputacion.service';
 import { StarRatingComponent } from '../components/star-rating/star-rating.component';
 import { ReviewsListComponent } from '../components/reviews-list/reviews-list.component';
 import { ReportComponent } from '../components/report/report.component';
+import { TransaccionService } from '../servicios/transaccion.service';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 
@@ -36,7 +37,8 @@ export class DetalleProductoPage implements OnInit {
     private navCtrl: NavController,
     private modalController: ModalController,
     private toastController: ToastController,
-    private reputacionService: ReputacionService
+    private reputacionService: ReputacionService,
+    private transaccionService: TransaccionService
   ) {}
 
   async ngOnInit() {
@@ -62,18 +64,60 @@ export class DetalleProductoPage implements OnInit {
     this.navCtrl.back();
   }
 
-  // 🟩 Redirigir a la página de canje, enviando el producto
-  canjearProducto() {
+  // 🟩 Crear transacción para canjear producto
+  async canjearProducto() {
     if (!this.producto) {
-      alert('No se encontró información del producto.');
+      this.presentToast('❌ No se encontró información del producto.');
       return;
     }
 
-    console.log('➡️ Redirigiendo a canjear-puntos con producto:', this.producto);
+    // Verificar que el usuario esté logueado
+    const { data: session } = await supabase.auth.getSession();
+    if (!session?.session?.user) {
+      this.presentToast('❌ Debes iniciar sesión para canjear productos');
+      this.router.navigate(['/login']);
+      return;
+    }
 
-    this.router.navigate(['/canjear-puntos'], {
-      state: { producto: this.producto },
-    });
+    const usuarioId = session.session.user.id;
+
+    // No permitir canjear su propio producto
+    if (usuarioId === this.producto.propietario_id) {
+      this.presentToast('❌ No puedes canjear tu propio producto');
+      return;
+    }
+
+    try {
+      // Crear transacción directamente en Supabase
+      const { data, error } = await supabase
+        .from('transacciones')
+        .insert({
+          enser_id: this.producto.id,
+          propietario_id: this.producto.propietario_id,
+          solicitante_id: usuarioId,
+          estado: 'pendiente',
+          mensaje: `Solicitud de canje por ${this.producto.valor_puntos} InterCoins`,
+          creado_en: new Date().toISOString()
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error creando transacción:', error);
+        this.presentToast('❌ Error al crear la solicitud de canje');
+        return;
+      }
+
+      this.presentToast('✅ Solicitud de canje enviada al vendedor');
+      console.log('✅ Transacción creada:', data);
+      
+      // Opcional: redirigir al perfil
+      // this.router.navigate(['/perfil']);
+      
+    } catch (error) {
+      console.error('Error:', error);
+      this.presentToast('❌ Error al procesar la solicitud');
+    }
   }
 
   // 💬 Contactar al vendedor

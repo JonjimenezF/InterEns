@@ -213,5 +213,9 @@ export const routes: Routes = [
   //   path: 'reciclaje',
   //   loadComponent: () => import('./reciclaje/reciclaje.page').then( m => m.ReciclajePage)
   // },
+  {
+    path: 'confirmar-recepcion/:id',
+    loadComponent: () => import('./confirmar-recepcion/confirmar-recepcion.page').then( m => m.ConfirmarRecepcionPage)
+  },
 ];
 

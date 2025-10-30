@@ -49,6 +49,14 @@
     <ion-segment-button value="reseñas">
       <ion-label>Mis Reseñas</ion-label>
     </ion-segment-button>
+
+    <ion-segment-button value="transacciones">
+      <ion-label>Confirmar Recepción</ion-label>
+    </ion-segment-button>
+
+    <ion-segment-button value="solicitudes">
+      <ion-label>Solicitudes</ion-label>
+    </ion-segment-button>
   </ion-segment>
 
   <!-- ===================== -->
@@ -204,6 +212,96 @@
     <div *ngIf="!userId" class="ion-text-center ion-margin-top">
       <ion-icon name="star-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
       <p>Error cargando reseñas.</p>
+    </div>
+  </ng-container>
+
+  <!-- ===================== -->
+  <!-- TAB: TRANSACCIONES -->
+  <!-- ===================== -->
+  <ng-container *ngIf="selectedTab === 'transacciones'">
+    <ion-list *ngIf="transaccionesPendientes.length > 0">
+      <ion-item *ngFor="let transaccion of transaccionesPendientes">
+        <ion-thumbnail slot="start">
+          <img [src]="transaccion.producto_imagen || 'assets/img/default.png'" alt="producto" />
+        </ion-thumbnail>
+
+        <ion-label>
+          <h3>{{ transaccion.producto_nombre }}</h3>
+          <p>Vendedor: {{ transaccion.vendedor_nombre }}</p>
+          <p>Precio: ${{ transaccion.precio | number }}</p>
+          <p><ion-badge color="warning">{{ transaccion.estado | titlecase }}</ion-badge></p>
+          <small>Fecha de envío: {{ transaccion.fecha_creacion | date: 'short' }}</small>
+        </ion-label>
+
+        <ion-buttons slot="end" *ngIf="transaccion.estado === 'en_logistica'">
+          <ion-button 
+            fill="solid" 
+            color="success" 
+            (click)="confirmarRecepcionProducto(transaccion.id)">
+            <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+            Confirmar Recepción
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-list>
+
+    <div *ngIf="transaccionesPendientes.length === 0" class="ion-text-center ion-margin-top">
+      <ion-icon name="checkmark-done-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
+      <p>No tienes transacciones pendientes de confirmación.</p>
+    </div>
+  </ng-container>
+
+  <!-- ===================== -->
+  <!-- TAB: SOLICITUDES -->
+  <!-- ===================== -->
+  <ng-container *ngIf="selectedTab === 'solicitudes'">
+    <ion-list *ngIf="solicitudesPendientes.length > 0">
+      <ion-item *ngFor="let solicitud of solicitudesPendientes">
+        <ion-thumbnail slot="start">
+          <img [src]="solicitud.producto_imagen || 'assets/img/default.png'" alt="producto" />
+        </ion-thumbnail>
+
+        <ion-label>
+          <h3>{{ solicitud.producto_nombre }}</h3>
+          <p>Solicitante: {{ solicitud.solicitante_nombre }}</p>
+          <p>Puntos: {{ solicitud.valor_puntos }}</p>
+          <p><ion-badge color="warning">{{ solicitud.estado | titlecase }}</ion-badge></p>
+          <small>Fecha: {{ solicitud.creado_en | date: 'short' }}</small>
+        </ion-label>
+
+        <ion-buttons slot="end" *ngIf="solicitud.estado === 'pendiente'">
+          <ion-button 
+            fill="solid" 
+            color="success" 
+            size="small"
+            (click)="aceptarSolicitud(solicitud.id)">
+            <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button 
+            fill="solid" 
+            color="danger" 
+            size="small"
+            (click)="rechazarSolicitud(solicitud.id)">
+            <ion-icon name="close" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        
+        <ion-buttons slot="end" *ngIf="solicitud.estado === 'aceptada'">
+          <ion-button 
+            fill="solid" 
+            color="tertiary" 
+            size="small"
+            (click)="marcarComoEnviado(solicitud.id)">
+            <ion-icon name="car" slot="start"></ion-icon>
+            Enviado
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-list>
+
+    <div *ngIf="solicitudesPendientes.length === 0" class="ion-text-center ion-margin-top">
+      <ion-icon name="mail-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
+      <p>No tienes solicitudes de canje pendientes.</p>
     </div>
   </ng-container>
 </ion-content>

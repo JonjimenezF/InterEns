@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Confirmar Recepción</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="confirmation-container">
+    <ion-icon name="checkmark-circle-outline" class="success-icon"></ion-icon>
+    
+    <h2>¿Recibiste tu artículo?</h2>
+    
+    <!-- Información del producto -->
+    <ion-card class="product-info" *ngIf="transaccion">
+      <ion-card-content>
+        <h3>{{ transaccion.producto_nombre }}</h3>
+        <p><strong>Vendedor:</strong> {{ transaccion.vendedor_nombre }}</p>
+        <p><strong>Precio:</strong> ${{ transaccion.precio | number }}</p>
+      </ion-card-content>
+    </ion-card>
+    
+    <p class="description">
+      Al confirmar la recepción, estarás indicando que:
+    </p>
+    
+    <ion-list class="checklist">
+      <ion-item>
+        <ion-icon name="checkmark" slot="start" color="success"></ion-icon>
+        <ion-label>Recibiste el artículo</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="checkmark" slot="start" color="success"></ion-icon>
+        <ion-label>El artículo está en buen estado</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="checkmark" slot="start" color="success"></ion-icon>
+        <ion-label>La transacción se completará</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-button 
+      expand="block" 
+      color="success" 
+      (click)="confirmarRecepcion()"
+      class="confirm-button">
+      <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+      Confirmar Recepción
+    </ion-button>
+  </div>
+</ion-content>

@@ -140,7 +140,7 @@ ion-content.fondodetalle {
 
 .btn-canjear {
   --background: var(--accent);
-  --color: #fff;
+  --color: #0c0f13;
   font-weight: 700;
   border-radius: 30px;
   box-shadow: 0 0 15px rgba(31, 211, 154, 0.4);
@@ -149,6 +149,20 @@ ion-content.fondodetalle {
   &:hover {
     transform: scale(1.05);
     box-shadow: 0 0 20px rgba(31, 211, 154, 0.6);
+  }
+}
+
+.btn-reportar {
+  --background: linear-gradient(135deg, #ff4757, #ff3742);
+  --color: white;
+  font-weight: 600;
+  border-radius: 30px;
+  box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 71, 87, 0.6);
   }
 }
 

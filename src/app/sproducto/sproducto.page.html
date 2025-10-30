@@ -67,6 +67,8 @@
               [(ngModel)]="enser.categoria_id"
               name="categoria_id"
               placeholder="Selecciona una categoría *"
+              interface="popover"
+              class="custom-select"
               required>
               <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id">
                 {{ categoria.nombre }}
@@ -80,6 +82,8 @@
               [(ngModel)]="enser.condicion"
               name="condicion"
               placeholder="Condición del Enser"
+              interface="popover"
+              class="custom-select"
               required>
               <ion-select-option value="nuevo">Nuevo</ion-select-option>
               <ion-select-option value="como_nuevo">Como nuevo</ion-select-option>

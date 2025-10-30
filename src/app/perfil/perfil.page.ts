@@ -11,6 +11,8 @@ import { ReputacionService } from '../servicios/reputacion.service';
 import { StarRatingComponent } from '../components/star-rating/star-rating.component';
 import { ReviewsListComponent } from '../components/reviews-list/reviews-list.component';
 import { PickupRequestComponent } from '../components/pickup-request/pickup-request.component';
+import { TransaccionService } from '../servicios/transaccion.service';
+import { Transaccion } from '../models/transaccion';
 
 @Component({
   selector: 'app-perfil',
@@ -35,6 +37,8 @@ export class PerfilPage implements OnInit, OnDestroy {
 
   selectedTab: string = 'productos';
   userId: string | null = null;
+  transaccionesPendientes: any[] = [];
+  solicitudesPendientes: any[] = [];
 
   private eventListener: any;
 
@@ -44,7 +48,8 @@ export class PerfilPage implements OnInit, OnDestroy {
     private toastController: ToastController,
     private chatService: ChatService,
     private reputacionService: ReputacionService,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private transaccionService: TransaccionService
   ) {}
 
   async ngOnInit() {
@@ -58,6 +63,8 @@ export class PerfilPage implements OnInit, OnDestroy {
     await this.loadBorradores();
     await this.loadConversaciones();
     await this.cargarReputacion();
+    await this.loadTransaccionesPendientes();
+    await this.loadSolicitudesPendientes();
 
     // 🔄 Escuchar evento global
     this.eventListener = () => this.loadMyProducts();
@@ -94,6 +101,16 @@ export class PerfilPage implements OnInit, OnDestroy {
     // Cargar conversaciones si está en la pestaña mensajes
     if (this.selectedTab === 'mensajes') {
       await this.loadConversaciones();
+    }
+    
+    // Cargar transacciones si está en la pestaña transacciones
+    if (this.selectedTab === 'transacciones') {
+      await this.loadTransaccionesPendientes();
+    }
+    
+    // Cargar solicitudes si está en la pestaña solicitudes
+    if (this.selectedTab === 'solicitudes') {
+      await this.loadSolicitudesPendientes();
     }
   }
 
@@ -424,4 +441,157 @@ export class PerfilPage implements OnInit, OnDestroy {
       this.presentAnimatedToast('✅ Solicitud de retiro enviada correctamente');
     }
   }
+
+  // =========================
+  // TRANSACCIONES
+  // =========================
+  async loadTransaccionesPendientes() {
+    if (!this.userId) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('transacciones')
+        .select(`
+          *,
+          enseres:enser_id (
+            id,
+            titulo,
+            imagen_url,
+            valor_puntos
+          ),
+          propietario:propietario_id (
+            nombre_completo
+          )
+        `)
+        .eq('solicitante_id', this.userId)
+        .eq('estado', 'en_logistica');
+        
+      if (error) {
+        console.error('Error cargando transacciones:', error);
+        this.transaccionesPendientes = [];
+        return;
+      }
+      
+      this.transaccionesPendientes = data.map(t => ({
+        id: t.id,
+        producto_nombre: t.enseres?.titulo || 'Producto',
+        producto_imagen: t.enseres?.imagen_url || 'assets/img/default.png',
+        vendedor_nombre: t.propietario?.nombre_completo || 'Vendedor',
+        estado: t.estado,
+        fecha_creacion: new Date(t.creado_en),
+        precio: t.enseres?.valor_puntos || 0
+      }));
+      
+      console.log('Transacciones pendientes cargadas:', this.transaccionesPendientes);
+    } catch (error) {
+      console.error('Error cargando transacciones:', error);
+      this.transaccionesPendientes = [];
+    }
+  }
+
+  confirmarRecepcionProducto(transaccionId: string) {
+    this.router.navigate(['/confirmar-recepcion', transaccionId]);
+  }
+
+  // =========================
+  // SOLICITUDES DE CANJE
+  // =========================
+  async loadSolicitudesPendientes() {
+    if (!this.userId) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('transacciones')
+        .select(`
+          *,
+          enseres:enser_id (
+            id,
+            titulo,
+            imagen_url,
+            valor_puntos
+          ),
+          solicitante:solicitante_id (
+            nombre_completo
+          )
+        `)
+        .eq('propietario_id', this.userId)
+        .in('estado', ['pendiente', 'aceptada']);
+        
+      if (error) {
+        console.error('Error cargando solicitudes:', error);
+        return;
+      }
+      
+      this.solicitudesPendientes = data.map(s => ({
+        id: s.id,
+        producto_nombre: s.enseres?.titulo || 'Producto',
+        producto_imagen: s.enseres?.imagen_url || 'assets/img/default.png',
+        solicitante_nombre: s.solicitante?.nombre_completo || 'Usuario',
+        valor_puntos: s.enseres?.valor_puntos || 0,
+        estado: s.estado,
+        creado_en: s.creado_en
+      }));
+    } catch (error) {
+      console.error('Error cargando solicitudes:', error);
+    }
+  }
+
+  async aceptarSolicitud(transaccionId: number) {
+    try {
+      const { error } = await supabase
+        .from('transacciones')
+        .update({ estado: 'aceptada' })
+        .eq('id', transaccionId);
+        
+      if (error) {
+        await this.presentToast('Error al aceptar solicitud', 'danger');
+        return;
+      }
+      
+      await this.presentToast('✅ Solicitud aceptada', 'success');
+      await this.loadSolicitudesPendientes();
+    } catch (error) {
+      await this.presentToast('Error al aceptar solicitud', 'danger');
+    }
+  }
+
+  async rechazarSolicitud(transaccionId: number) {
+    try {
+      const { error } = await supabase
+        .from('transacciones')
+        .update({ estado: 'cancelada' })
+        .eq('id', transaccionId);
+        
+      if (error) {
+        await this.presentToast('Error al rechazar solicitud', 'danger');
+        return;
+      }
+      
+      await this.presentToast('❌ Solicitud rechazada', 'success');
+      await this.loadSolicitudesPendientes();
+    } catch (error) {
+      await this.presentToast('Error al rechazar solicitud', 'danger');
+    }
+  }
+
+  async marcarComoEnviado(transaccionId: number) {
+    try {
+      const { error } = await supabase
+        .from('transacciones')
+        .update({ estado: 'en_logistica' })
+        .eq('id', transaccionId);
+        
+      if (error) {
+        await this.presentToast('Error al marcar como enviado', 'danger');
+        return;
+      }
+      
+      await this.presentToast('🚚 Producto marcado como enviado', 'success');
+      await this.loadSolicitudesPendientes();
+    } catch (error) {
+      await this.presentToast('Error al marcar como enviado', 'danger');
+    }
+  }
+
+
 }
