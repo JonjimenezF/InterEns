@@ -197,6 +197,10 @@ export const routes: Routes = [
     path: 'chatbox',
     loadComponent: () => import('./chatbox/chatbox.page').then( m => m.ChatboxPage)
   },
+  {
+    path: 'misiones',
+    loadComponent: () => import('./misiones/misiones.page').then( m => m.MisionesPage)
+  },
 
 
 

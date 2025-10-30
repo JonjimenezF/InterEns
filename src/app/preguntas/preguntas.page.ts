@@ -4,15 +4,13 @@ import { FormsModule } from '@angular/forms';
 import {
   IonHeader,
   IonToolbar,
-  IonTitle,
   IonButtons,
   IonBackButton,
   IonContent,
-  IonImg,
-  IonFooter,
   IonButton,
   IonIcon,
-  IonInput, // ✅ <--- IMPORTANTE
+  IonInput,
+  IonFooter
 } from '@ionic/angular/standalone';
 import { NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -28,23 +26,20 @@ import { FooterInterensComponent } from '../components/footer-interens/footer-in
     FormsModule,
     IonHeader,
     IonToolbar,
-    IonTitle,
     IonButtons,
     IonBackButton,
     IonContent,
-    IonImg,
-    IonFooter,
     IonButton,
     IonIcon,
-    IonInput, // ✅ aquí también
+    IonInput,
+    IonFooter,
     FooterInterensComponent,
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA], // ✅ evita futuros errores similares
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class PreguntasPage implements OnInit {
-  respuestasVisibles: boolean[] = [];
   chatVisible = false;
-  mensajeUsuario: string = ''; // ✅ asegúrate de que sea tipo string
+  mensajeUsuario: string = '';
   chatHistorial: { remitente: string; texto: string }[] = [];
   cargando = false;
 
@@ -52,24 +47,30 @@ export class PreguntasPage implements OnInit {
 
   ngOnInit(): void {}
 
-  toggleAnswer(answerId: string) {
-    const answer = document.getElementById(answerId);
-    const arrow = answer?.previousElementSibling?.querySelector('.arrow');
+  /** ✅ Alternar visibilidad de respuesta en FAQ */
+  toggleAnswer(id: string) {
+    const answer = document.getElementById(id);
+    const icon = answer?.previousElementSibling?.querySelector('.arrow');
 
-    if (answer?.style.display === 'block') {
-      answer.style.display = 'none';
-      if (arrow) arrow.innerHTML = '&#9660;';
-    } else {
-      answer!.style.display = 'block';
-      if (arrow) arrow.innerHTML = '&#9650;';
+    if (answer && icon) {
+      const visible = answer.classList.toggle('show');
+      icon.setAttribute('name', visible ? 'chevron-up-outline' : 'chevron-down-outline');
     }
   }
 
-  goBack() { this.navCtrl.back(); }
-  goContacto() { this.router.navigate(['/contacto']); }
+  /** Navegación */
+  goBack() {
+    this.navCtrl.back();
+  }
 
+  goContacto() {
+    this.router.navigate(['/contacto']);
+  }
+
+  /** Abrir/Cerrar chat */
   toggleChat() {
     this.chatVisible = !this.chatVisible;
+
     if (this.chatVisible && this.chatHistorial.length === 0) {
       this.chatHistorial.push({
         remitente: 'bot',
@@ -78,16 +79,14 @@ export class PreguntasPage implements OnInit {
     }
   }
 
+  /** Enviar mensaje al bot */
   async enviarMensaje() {
     if (!this.mensajeUsuario.trim()) return;
 
     const mensaje = this.mensajeUsuario.trim();
     this.chatHistorial.push({ remitente: 'usuario', texto: mensaje });
     this.mensajeUsuario = '';
-
-    // Muestra "InterBot está escribiendo..."
     this.cargando = true;
-    this.chatHistorial.push({ remitente: 'bot', texto: '•••' });
 
     try {
       const resp = await fetch('http://localhost:4000/api/chat', {
@@ -97,14 +96,12 @@ export class PreguntasPage implements OnInit {
       });
 
       const data = await resp.json();
-      this.chatHistorial.pop();
       this.chatHistorial.push({
         remitente: 'bot',
         texto: data.respuesta || '🤔 No tengo respuesta para eso aún.',
       });
     } catch (error) {
-      console.error('❌ Error al enviar mensaje:', error);
-      this.chatHistorial.pop();
+      console.error('Error al enviar mensaje:', error);
       this.chatHistorial.push({
         remitente: 'bot',
         texto: '⚠️ Error al conectar con el servidor. Inténtalo más tarde.',

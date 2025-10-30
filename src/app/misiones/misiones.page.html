@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="titulo">
+      <ion-icon name="trophy-outline"></ion-icon>
+      Misiones
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="misiones-container">
+
+  <!-- 🧾 Tabla informativa de misiones -->
+  <div class="tabla-misiones">
+    <h3>Misiones disponibles</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Misión</th>
+          <th>Condición</th>
+          <th>Recompensa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let info of infoMisiones">
+          <td>{{ info.nombre }}</td>
+          <td>{{ info.condicion }}</td>
+          <td class="recompensa">+{{ info.puntos }} pts</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 🧮 Resumen de progreso -->
+  <div class="resumen-card" *ngIf="!cargando">
+    <h3>Resumen</h3>
+    <div class="resumen-stats">
+      <div>
+        <strong>{{ completadas }}</strong> / {{ totalMisiones }}
+        <span>Misiones completadas</span>
+      </div>
+      <div>
+        <strong>{{ puntosTotales }}</strong>
+        <span>Puntos obtenidos</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🧩 Lista de misiones del usuario -->
+  <div *ngIf="!cargando">
+    <div *ngFor="let m of misiones" class="mision-card" [class.completada]="m.completada">
+      <div class="mision-header">
+        <div class="icon-wrapper" [class.completada]="m.completada">
+          <ion-icon
+            [name]="m.completada ? 'trophy' : 'flag-outline'"
+            class="icon-mision"
+          ></ion-icon>
+        </div>
+        <div class="titulo-box">
+          <h2>{{ m.nombre }}</h2>
+          <p>{{ m.descripcion }}</p>
+        </div>
+        <div class="puntos-box">
+          <span class="puntos">+{{ m.puntos }} pts</span>
+        </div>
+      </div>
+
+      <div class="barra">
+        <ion-progress-bar
+          [value]="m.porcentaje"
+          color="tertiary"
+        ></ion-progress-bar>
+      </div>
+
+      <div class="info">
+        <span>{{ m.progreso }}/{{ m.cantidad }}</span>
+        <ion-badge color="success" *ngIf="m.completada">
+          Completada {{ m.veces_completada > 1 ? '(' + m.veces_completada + 'x)' : '' }}
+        </ion-badge>
+        <ion-badge color="medium" *ngIf="!m.completada">En progreso</ion-badge>
+      </div>
+    </div>
+  </div>
+  <app-footer-interens></app-footer-interens>
+</ion-content>
+
+

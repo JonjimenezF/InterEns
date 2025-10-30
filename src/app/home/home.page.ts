@@ -199,6 +199,10 @@ export class HomePage implements OnDestroy {
     this.router.navigate(['/home']);
   }
 
+   misiones() {
+    this.router.navigate(['/misiones']);
+  }
+
   perfil() {
     this.router.navigate(['/perfil']);
   }

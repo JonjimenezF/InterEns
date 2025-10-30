@@ -8,7 +8,7 @@
 
 <ion-content class="ion-padding">
   <div class="faq-container">
-    <!-- Preguntas -->
+    <!-- Preguntas frecuentes -->
     <div class="faq-item" (click)="toggleAnswer('faq1')">
       <div class="faq-question">
         <ion-icon name="information-circle-outline" class="faq-icon"></ion-icon>
@@ -89,11 +89,14 @@
     </div>
   </div>
 
-  <!-- 💬 Chat flotante -->
-  <div class="chat-fab" (click)="toggleChat()">
-    <ion-icon name="chatbubbles-outline"></ion-icon>
-  </div>
+  <!-- 💬 Botón flotante -->
+  <!-- 💬 Botón flotante fijo -->
+<div class="chat-fab" (click)="toggleChat()">
+  <ion-icon name="chatbubbles" class="chat-icon"></ion-icon>
+</div>
 
+
+  <!-- 💬 Chat emergente -->
   <div class="chat-popup" *ngIf="chatVisible">
     <div class="chat-header">
       <span>InterBot 🤖</span>
@@ -110,16 +113,16 @@
       </div>
     </div>
 
+    <!-- Footer chat -->
     <div class="chat-footer">
-  <ion-input
-    [value]="mensajeUsuario"
-    (ionInput)="mensajeUsuario = $any($event.detail.value) || ''"
-    placeholder="Escribe tu mensaje..."
-    (keyup.enter)="enviarMensaje()"
-  ></ion-input>
-  <ion-icon name="send-outline" class="send-btn" (click)="enviarMensaje()"></ion-icon>
-</div>
-
+      <ion-input
+        [value]="mensajeUsuario"
+        (ionInput)="mensajeUsuario = $any($event.detail.value) || ''"
+        placeholder="Escribe tu mensaje..."
+        (keyup.enter)="enviarMensaje()">
+      </ion-input>
+      <ion-button class="btn-enviar" (click)="enviarMensaje()">Enviar</ion-button>
+    </div>
   </div>
 </ion-content>
 
