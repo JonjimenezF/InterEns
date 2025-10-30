@@ -74,9 +74,24 @@
           Reportar producto
         </ion-button>
         
-        <ion-button expand="block" shape="round" class="btn-canjear" (click)="canjearProducto()">
+        <ion-button 
+          expand="block" 
+          shape="round" 
+          class="btn-canjear" 
+          (click)="canjearProducto()"
+          *ngIf="producto.estado !== 'no_disponible'">
           <ion-icon name="trophy" slot="start"></ion-icon>
           Canjear por {{ producto.valor_puntos }} InterCoins
+        </ion-button>
+        
+        <ion-button 
+          expand="block" 
+          shape="round" 
+          class="btn-no-disponible" 
+          disabled
+          *ngIf="producto.estado === 'no_disponible'">
+          <ion-icon name="close-circle" slot="start"></ion-icon>
+          Producto No Disponible
         </ion-button>
       </div>
     </div>

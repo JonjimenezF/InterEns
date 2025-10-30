@@ -99,16 +99,15 @@ export class ConfirmarRecepcionPage implements OnInit {
 
   private async procesarConfirmacion() {
     try {
-      const { error } = await supabase
+      // Primero obtener el enser_id de la transacción
+      const { data: transaccion, error: errorTransaccion } = await supabase
         .from('transacciones')
-        .update({ 
-          estado: 'completada',
-          actualizado_en: new Date().toISOString()
-        })
-        .eq('id', parseInt(this.transaccionId));
+        .select('enser_id')
+        .eq('id', parseInt(this.transaccionId))
+        .single();
         
-      if (error) {
-        console.error('Error confirmando recepción:', error);
+      if (errorTransaccion || !transaccion) {
+        console.error('Error obteniendo transacción:', errorTransaccion);
         const toast = await this.toastController.create({
           message: 'Error al confirmar recepción',
           duration: 2000,
@@ -116,6 +115,40 @@ export class ConfirmarRecepcionPage implements OnInit {
         });
         await toast.present();
         return;
+      }
+      
+      // Actualizar transacción a completada
+      const { error: errorUpdate } = await supabase
+        .from('transacciones')
+        .update({ 
+          estado: 'completada',
+          actualizado_en: new Date().toISOString()
+        })
+        .eq('id', parseInt(this.transaccionId));
+        
+      if (errorUpdate) {
+        console.error('Error actualizando transacción:', errorUpdate);
+        const toast = await this.toastController.create({
+          message: 'Error al confirmar recepción',
+          duration: 2000,
+          color: 'danger'
+        });
+        await toast.present();
+        return;
+      }
+      
+      // Marcar el enser como no disponible
+      const { error: errorEnser } = await supabase
+        .from('enseres')
+        .update({ 
+          estado: 'no_disponible',
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', transaccion.enser_id);
+        
+      if (errorEnser) {
+        console.error('Error actualizando enser:', errorEnser);
+        // No bloqueamos el flujo, solo logueamos el error
       }
       
       const toast = await this.toastController.create({

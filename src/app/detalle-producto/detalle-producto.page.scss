@@ -166,6 +166,15 @@ ion-content.fondodetalle {
   }
 }
 
+.btn-no-disponible {
+  --background: var(--muted);
+  --color: var(--bg);
+  font-weight: 600;
+  border-radius: 30px;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* 🚫 Sin producto */
 .sin-producto {
   display: flex;

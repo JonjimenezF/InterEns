@@ -86,6 +86,25 @@ export class DetalleProductoPage implements OnInit {
       this.presentToast('❌ No puedes canjear tu propio producto');
       return;
     }
+    
+    // Verificar que el producto esté disponible
+    if (this.producto.estado === 'no_disponible') {
+      this.presentToast('❌ Este producto ya no está disponible');
+      return;
+    }
+    
+    // Verificar si ya existe una transacción pendiente para este producto
+    const { data: transaccionExistente } = await supabase
+      .from('transacciones')
+      .select('id')
+      .eq('enser_id', this.producto.id)
+      .in('estado', ['pendiente', 'aceptada', 'en_logistica'])
+      .limit(1);
+      
+    if (transaccionExistente && transaccionExistente.length > 0) {
+      this.presentToast('❌ Este producto ya tiene una transacción en proceso');
+      return;
+    }
 
     try {
       // Crear transacción directamente en Supabase
