@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonFooter, IonInput, IonButton, IonItem, IonLabel, IonIcon } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonBackButton, IonButtons, IonFooter, IonInput, IonButton, IonItem, IonLabel, IonIcon, ModalController, ToastController } from '@ionic/angular/standalone';
 import { ChatService } from '../servicios/chat.service';
 import { supabase } from '../services/supabase.client';
+import { RatingComponent } from '../components/rating/rating.component';
 
 @Component({
   selector: 'app-chat-usuario',
@@ -26,11 +27,15 @@ export class ChatUsuarioPage implements OnInit {
   productoTitulo = '';
   productoImagen = '';
   otroUsuarioNombre = '';
+  otroUsuarioId = '';
+  productoId?: number;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private modalController: ModalController,
+    private toastController: ToastController
   ) {}
 
   async ngOnInit() {
@@ -57,6 +62,9 @@ export class ChatUsuarioPage implements OnInit {
 
   async inicializarChat(otroUsuarioId: string, enserId?: number) {
     try {
+      this.otroUsuarioId = otroUsuarioId;
+      this.productoId = enserId;
+      
       // Obtener o crear conversación
       const { data: conversacion } = await this.chatService.obtenerConversacion(
         this.usuarioActual!,
@@ -157,5 +165,55 @@ export class ChatUsuarioPage implements OnInit {
 
   volver() {
     this.router.navigate(['/home']);
+  }
+
+  async abrirCalificacion() {
+    if (!this.otroUsuarioId || !this.usuarioActual) {
+      this.presentToast('❌ Error: No se puede calificar en este momento');
+      return;
+    }
+
+    // Verificar si ya calificó
+    const { data: existeCalificacion } = await supabase
+      .from('calificaciones')
+      .select('id')
+      .eq('usuario_calificador', this.usuarioActual)
+      .eq('usuario_calificado', this.otroUsuarioId)
+      .eq('conversacion_id', this.conversacionId)
+      .single();
+
+    if (existeCalificacion) {
+      this.presentToast('ℹ️ Ya has calificado a este usuario');
+      return;
+    }
+
+    const modal = await this.modalController.create({
+      component: RatingComponent,
+      componentProps: {
+        usuarioCalificado: this.otroUsuarioId,
+        usuarioCalificador: this.usuarioActual,
+        productoId: this.productoId?.toString(),
+        conversacionId: this.conversacionId?.toString()
+      },
+      cssClass: 'rating-modal',
+      backdropDismiss: true,
+      showBackdrop: true
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data?.success) {
+      this.presentToast('✅ Calificación enviada correctamente');
+    }
+  }
+
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500,
+      position: 'bottom'
+    });
+    toast.present();
   }
 }

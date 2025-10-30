@@ -1,0 +1,147 @@
+.rating-modal {
+  background: #1a1a1a;
+  border-radius: 16px;
+  padding: 0;
+  max-width: 400px;
+  width: 90vw;
+  max-height: 80vh;
+  color: white;
+  margin: auto;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  outline: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #333;
+
+  h2 {
+    margin: 0;
+    color: #1fd39a;
+    font-weight: 600;
+    font-size: 20px;
+  }
+
+  .close-btn {
+    --color: #999;
+    font-size: 24px;
+    font-weight: bold;
+  }
+}
+
+.modal-content {
+  padding: 24px;
+}
+
+.rating-section {
+  text-align: center;
+  margin-bottom: 24px;
+
+  .rating-label {
+    color: #ccc;
+    margin-bottom: 16px;
+    font-size: 16px;
+  }
+
+  .stars-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+
+    .star {
+      font-size: 32px;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: scale(1.2);
+        color: #ffd700;
+      }
+
+      &.active {
+        color: #ffd700;
+        animation: starPulse 0.3s ease;
+      }
+    }
+  }
+
+  .rating-text {
+    color: #1fd39a;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+.comment-section {
+  margin-bottom: 24px;
+
+  .comment-item {
+    --background: #2a2a2a;
+    --color: white;
+    border-radius: 8px;
+    margin-bottom: 8px;
+
+    ion-textarea {
+      --color: white;
+      --placeholder-color: #999;
+    }
+  }
+
+  .char-count {
+    color: #999;
+    font-size: 12px;
+    text-align: right;
+    display: block;
+  }
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .submit-btn {
+    --background: linear-gradient(135deg, #1fd39a, #17c085);
+    --color: #0c0f13;
+    font-weight: 600;
+    height: 48px;
+    border-radius: 12px;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(31, 211, 154, 0.4);
+    }
+
+    &[disabled] {
+      opacity: 0.6;
+      transform: none;
+    }
+  }
+
+  .cancel-btn {
+    --color: #999;
+    --border-color: #555;
+    height: 44px;
+    border-radius: 12px;
+
+    &:hover {
+      --color: white;
+      --border-color: #777;
+    }
+  }
+}
+
+@keyframes starPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}

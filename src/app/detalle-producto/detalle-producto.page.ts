@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 import { Router } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { NavController, ModalController, ToastController } from '@ionic/angular';
 import { supabase } from '../services/supabase.client';
+import { RatingComponent } from '../components/rating/rating.component';
 import {
   IonHeader,
   IonToolbar,
@@ -39,10 +40,17 @@ import { CommonModule } from '@angular/common';
 })
 export class DetalleProductoPage implements OnInit {
   producto: any;
+  puedeCalificar = false;
+  usuarioActual?: string;
 
-  constructor(private router: Router, private navCtrl: NavController) {} // ✅ agregado NavController
+  constructor(
+    private router: Router, 
+    private navCtrl: NavController,
+    private modalController: ModalController,
+    private toastController: ToastController
+  ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     const nav = this.router.getCurrentNavigation();
     if (nav?.extras?.state?.['producto']) {
       this.producto = nav.extras.state['producto'];
@@ -50,6 +58,9 @@ export class DetalleProductoPage implements OnInit {
     } else {
       console.warn('⚠️ No se encontró el producto en el estado.');
     }
+
+    // Verificar si puede calificar
+    await this.verificarPuedeCalificar();
   }
 
   // ✅ Soluciona el error del botón de retroceso
@@ -101,5 +112,69 @@ export class DetalleProductoPage implements OnInit {
     
     // Navegar al chat
     this.router.navigate(['/chat-usuario', this.producto.propietario_id, this.producto.id]);
+  }
+
+  async verificarPuedeCalificar() {
+    const { data: session } = await supabase.auth.getSession();
+    this.usuarioActual = session?.session?.user?.id;
+
+    if (!this.usuarioActual || !this.producto) {
+      this.puedeCalificar = false;
+      return;
+    }
+
+    // No puede calificarse a sí mismo
+    if (this.usuarioActual === this.producto.propietario_id) {
+      this.puedeCalificar = false;
+      return;
+    }
+
+    // Verificar si ya calificó a este vendedor
+    const { data: existeCalificacion } = await supabase
+      .from('calificaciones')
+      .select('id')
+      .eq('usuario_calificador', this.usuarioActual)
+      .eq('usuario_calificado', this.producto.propietario_id)
+      .eq('producto_id', this.producto.id)
+      .single();
+
+    this.puedeCalificar = !existeCalificacion;
+  }
+
+  async calificarVendedor() {
+    if (!this.usuarioActual || !this.producto) {
+      this.presentToast('❌ Error: No se puede calificar en este momento');
+      return;
+    }
+
+    const modal = await this.modalController.create({
+      component: RatingComponent,
+      componentProps: {
+        usuarioCalificado: this.producto.propietario_id,
+        usuarioCalificador: this.usuarioActual,
+        productoId: this.producto.id.toString(),
+        conversacionId: null
+      },
+      cssClass: 'rating-modal',
+      backdropDismiss: true,
+      showBackdrop: true
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data?.success) {
+      this.presentToast('✅ Calificación enviada correctamente');
+      this.puedeCalificar = false; // Ocultar botón después de calificar
+    }
+  }
+
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500,
+      position: 'bottom'
+    });
+    toast.present();
   }
 }

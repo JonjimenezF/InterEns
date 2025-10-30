@@ -29,6 +29,7 @@ import {
   IonButton,
   IonFooter,
   IonTitle,
+  IonSpinner,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -54,6 +55,7 @@ import {
     IonButton,
     IonFooter,
     IonTitle,
+    IonSpinner,
     FooterInterensComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -78,6 +80,8 @@ export class SproductoPage implements OnInit {
 
   selectedFiles: File[] = [];
   previewUrls: string[] = [];
+  isLoading = false;
+  isUploadingImages = false;
 
   constructor(
     private navCtrl: NavController,
@@ -162,6 +166,13 @@ export class SproductoPage implements OnInit {
     if (!input.files) return;
 
     const files: File[] = Array.from(input.files);
+    
+    // Validar límite total de imágenes
+    if (this.selectedFiles.length + files.length > 5) {
+      this.presentToast('Máximo 5 imágenes permitidas.');
+      return;
+    }
+
     for (const file of files) {
       if (!file.type.startsWith('image/')) {
         this.presentToast('Solo puedes subir imágenes.');
@@ -191,25 +202,54 @@ export class SproductoPage implements OnInit {
 
   // 🟢 Publicar producto (nuevo o desde borrador)
   async onSubmit(form: NgForm) {
+    // Validaciones mejoradas
     if (form.invalid) {
-      this.presentToast('Completa todos los campos obligatorios.');
+      this.presentToast('❌ Completa todos los campos obligatorios.');
+      return;
+    }
+
+    if (!this.enser.titulo?.trim()) {
+      this.presentToast('❌ El título es obligatorio.');
+      return;
+    }
+
+    if (!this.enser.descripcion?.trim()) {
+      this.presentToast('❌ La descripción es obligatoria.');
+      return;
+    }
+
+    if (!this.enser.valor_puntos || this.enser.valor_puntos <= 0) {
+      this.presentToast('❌ El valor de puntos debe ser mayor a 0.');
+      return;
+    }
+
+    if (!this.enser.categoria_id) {
+      this.presentToast('❌ Selecciona una categoría.');
       return;
     }
 
     if (!this.userInfo?.id) {
-      this.presentToast('Debes iniciar sesión antes de subir un producto.');
+      this.presentToast('❌ Debes iniciar sesión antes de subir un producto.');
       return;
     }
 
+    this.isLoading = true;
+    this.isUploadingImages = true;
+
     try {
-      this.presentToast('Subiendo imágenes...', 1500);
+      this.presentToast('📤 Subiendo imágenes...', 1500);
       const imageUrls = await this.uploadAllImages();
+      this.isUploadingImages = false;
 
-      // ✅ Si el usuario no seleccionó ninguna imagen → asignar una por defecto
-      const imagenPorDefecto = 'assets/img/default.png';
-      this.enser.imagen_url = imageUrls[0] || this.enser.imagen_url || imagenPorDefecto;
-
-      this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
+      // ✅ Manejo correcto de múltiples imágenes
+      if (imageUrls.length > 0) {
+        this.enser.imagen_url = imageUrls[0]; // Primera imagen como principal
+        this.enser.imagenes_extra = imageUrls.slice(1); // Resto como extras
+      } else {
+        // Solo usar imagen por defecto si no hay ninguna imagen existente
+        this.enser.imagen_url = this.enser.imagen_url || 'assets/img/default.png';
+      }
+      
       this.enser.estado = 'publicado';
 
       let result: any;
@@ -231,7 +271,7 @@ export class SproductoPage implements OnInit {
       }
 
       if (result?.success) {
-        this.presentToast(result.message || '✅ Producto publicado correctamente.');
+        this.presentToast('✅ ' + (result.message || 'Producto publicado correctamente.'));
 
         if (result.total_points) {
           window.dispatchEvent(
@@ -256,19 +296,36 @@ export class SproductoPage implements OnInit {
       } else {
         this.presentToast('❌ Error al guardar el producto.');
       }
+    } finally {
+      this.isLoading = false;
+      this.isUploadingImages = false;
     }
   }
 
   // 📝 Guardar o actualizar borrador
   async guardarBorrador(form: NgForm) {
+    // Validación mínima para borradores
+    if (!this.enser.titulo?.trim()) {
+      this.presentToast('❌ El título es obligatorio para guardar.');
+      return;
+    }
+
+    this.isLoading = true;
+    this.isUploadingImages = true;
+
     try {
+      this.presentToast('💾 Guardando borrador...', 1000);
       const imageUrls = await this.uploadAllImages();
+      this.isUploadingImages = false;
 
-      // ✅ También usa imagen por defecto si no hay
-      const imagenPorDefecto = 'assets/img/default.png';
-      this.enser.imagen_url = imageUrls[0] || this.enser.imagen_url || imagenPorDefecto;
-
-      this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
+      // ✅ Manejo correcto de múltiples imágenes para borradores
+      if (imageUrls.length > 0) {
+        this.enser.imagen_url = imageUrls[0]; // Primera imagen como principal
+        this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls.slice(1)]; // Agregar extras
+      } else if (!this.enser.imagen_url) {
+        this.enser.imagen_url = 'assets/img/default.png';
+      }
+      
       this.enser.estado = 'borrador';
 
       const result = await this.http
@@ -286,7 +343,10 @@ export class SproductoPage implements OnInit {
       }
     } catch (error) {
       console.error('❌ Error al guardar borrador:', error);
-      this.presentToast('Error al guardar el borrador.');
+      this.presentToast('❌ Error al guardar el borrador.');
+    } finally {
+      this.isLoading = false;
+      this.isUploadingImages = false;
     }
   }
 
@@ -295,11 +355,14 @@ export class SproductoPage implements OnInit {
   }
 
   async presentToast(message: string, duration: number = 2500) {
+    const color = message.includes('❌') ? 'danger' : 
+                 message.includes('⚠️') ? 'warning' : 'success';
+    
     const toast = await this.toastController.create({
       message,
       duration,
       position: 'bottom',
-      color: 'success',
+      color,
     });
     toast.present();
   }

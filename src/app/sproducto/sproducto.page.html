@@ -25,11 +25,11 @@
         <form #form="ngForm" (ngSubmit)="onSubmit(form)">
           
           <!-- Nombre / Título -->
-          <ion-item class="custom-item">
+          <ion-item class="custom-item" [class.error]="!enser.titulo?.trim() && form.submitted">
             <ion-input
               class="custom-input"
               type="text"
-              placeholder="Título del Enser"
+              placeholder="Título del Enser *"
               [(ngModel)]="enser.titulo"
               name="titulo"
               required>
@@ -37,10 +37,10 @@
           </ion-item>
 
           <!-- Descripción -->
-          <ion-item class="custom-item">
+          <ion-item class="custom-item" [class.error]="!enser.descripcion?.trim() && form.submitted">
             <ion-textarea
               class="custom-input"
-              placeholder="Descripción"
+              placeholder="Descripción *"
               [(ngModel)]="enser.descripcion"
               name="descripcion"
               rows="5"
@@ -49,23 +49,24 @@
           </ion-item>
 
           <!-- Valor de puntos -->
-          <ion-item class="custom-item">
+          <ion-item class="custom-item" [class.error]="(!enser.valor_puntos || enser.valor_puntos <= 0) && form.submitted">
             <ion-input
               class="custom-input"
               type="number"
-              placeholder="Valor de puntos"
+              placeholder="Valor de puntos *"
               [(ngModel)]="enser.valor_puntos"
               name="valor_puntos"
+              min="1"
               required>
             </ion-input>
           </ion-item>
 
           <!-- Categoría -->
-          <ion-item class="custom-item">
+          <ion-item class="custom-item" [class.error]="!enser.categoria_id && form.submitted">
             <ion-select
               [(ngModel)]="enser.categoria_id"
               name="categoria_id"
-              placeholder="Selecciona una categoría"
+              placeholder="Selecciona una categoría *"
               required>
               <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id">
                 {{ categoria.nombre }}
@@ -112,17 +113,19 @@
           <!-- Subir Imágenes -->
           <ion-item class="custom-item">
             <div class="upload-container">
-              <label class="upload-label">Seleccionar imágenes</label>
+              <label class="upload-label">Seleccionar imágenes (máx. 5)</label>
               <input type="file" multiple (change)="onFilesSelected($event)" accept="image/*" />
+              <small class="upload-info">{{ selectedFiles.length }}/5 imágenes seleccionadas</small>
             </div>
           </ion-item>
 
           <!-- 🖼️ Previsualización de imágenes -->
           <div class="preview-container" *ngIf="previewUrls.length > 0">
-            <h4>Previsualización</h4>
+            <h4>Previsualización ({{ previewUrls.length }} imágenes)</h4>
             <div class="image-preview-grid">
               <div *ngFor="let url of previewUrls; let i = index" class="preview-wrapper">
                 <img [src]="url" class="preview-img" alt="preview" />
+                <div class="image-badge" *ngIf="i === 0">Principal</div>
                 <button type="button" class="remove-btn" (click)="removeImage(i)">✖</button>
               </div>
             </div>
@@ -136,8 +139,12 @@
               class="custom-button white-background"
               fill="solid"
               shape="round"
-              expand="block">
-              {{ editandoBorrador ? 'Publicar Borrador' : 'Publicar Enser' }}
+              expand="block"
+              [disabled]="isLoading || form.invalid">
+              <ion-spinner *ngIf="isLoading && !isUploadingImages" name="crescent" size="small"></ion-spinner>
+              <span *ngIf="isUploadingImages">📤 Subiendo imágenes...</span>
+              <span *ngIf="isLoading && !isUploadingImages">💾 Guardando...</span>
+              <span *ngIf="!isLoading">{{ editandoBorrador ? 'Publicar Borrador' : 'Publicar Enser' }}</span>
             </ion-button>
 
             <!-- 📝 Guardar Borrador -->
@@ -146,8 +153,10 @@
               expand="block"
               class="btn-borrador"
               color="medium"
+              [disabled]="isLoading || !enser.titulo?.trim()"
               (click)="guardarBorrador(form)">
-              Guardar como borrador
+              <ion-spinner *ngIf="isLoading" name="crescent" size="small"></ion-spinner>
+              <span *ngIf="!isLoading">Guardar como borrador</span>
             </ion-button>
           </div>
         </form>
@@ -158,56 +167,3 @@
   <app-footer-interens></app-footer-interens>
 </ion-content>
 
-<style>
-  ion-content {
-    --background: #1a1a1a;
-    color: white;
-  }
-
-  h4 {
-    color: #fff;
-    text-align: center;
-    margin-top: 1em;
-  }
-
-  .image-preview-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin: 1em 0;
-  }
-
-  .preview-wrapper {
-    position: relative;
-    display: inline-block;
-  }
-
-  .preview-img {
-    width: 90px;
-    height: 90px;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 2px solid #6bc3ff;
-  }
-
-  .remove-btn {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: rgba(255, 0, 0, 0.8);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    width: 22px;
-    height: 22px;
-    font-size: 14px;
-    line-height: 20px;
-  }
-
-  .centrar {
-    text-align: center;
-    margin-top: 1.5em;
-  }
-</style>

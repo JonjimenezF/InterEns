@@ -15,9 +15,9 @@
       class="avatar"
       style="cursor: pointer"
     />
-    <ion-label>
+    <ion-label class="profile-info">
       <div class="nombre">{{ nombre || 'Usuario' }}</div>
-      <small *ngIf="email">{{ email }}</small>
+      <small class="email" *ngIf="email">{{ email }}</small>
     </ion-label>
 
     <ion-button class="edit-btn" (click)="editarperfil()">Editar Perfil</ion-button>

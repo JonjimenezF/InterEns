@@ -1,0 +1,61 @@
+<div class="rating-modal">
+  <div class="modal-header">
+    <h2>Calificar Usuario</h2>
+    <ion-button fill="clear" (click)="cerrar()" class="close-btn">✕</ion-button>
+  </div>
+
+  <div class="modal-content">
+    <!-- Estrellas de calificación -->
+    <div class="rating-section">
+      <p class="rating-label">¿Cómo fue tu experiencia?</p>
+      <div class="stars-container">
+        <ion-icon 
+          *ngFor="let star of [1,2,3,4,5]; let i = index"
+          [name]="i < rating ? 'star' : 'star-outline'"
+          class="star"
+          [class.active]="i < rating"
+          (click)="setRating(i + 1)">
+        </ion-icon>
+      </div>
+      <p class="rating-text" *ngIf="rating > 0">
+        {{ rating === 1 ? 'Muy malo' : 
+           rating === 2 ? 'Malo' : 
+           rating === 3 ? 'Regular' : 
+           rating === 4 ? 'Bueno' : 'Excelente' }}
+      </p>
+    </div>
+
+    <!-- Comentario opcional -->
+    <div class="comment-section">
+      <ion-item class="comment-item">
+        <ion-textarea
+          [(ngModel)]="comentario"
+          placeholder="Comentario opcional..."
+          rows="3"
+          maxlength="200">
+        </ion-textarea>
+      </ion-item>
+      <small class="char-count">{{ comentario.length }}/200</small>
+    </div>
+
+    <!-- Botones -->
+    <div class="button-group">
+      <ion-button 
+        expand="block" 
+        (click)="enviarCalificacion()"
+        [disabled]="rating === 0 || isLoading"
+        class="submit-btn">
+        <span *ngIf="!isLoading">Enviar Calificación</span>
+        <span *ngIf="isLoading">Enviando...</span>
+      </ion-button>
+      
+      <ion-button 
+        expand="block" 
+        fill="outline" 
+        (click)="cerrar()"
+        class="cancel-btn">
+        Cancelar
+      </ion-button>
+    </div>
+  </div>
+</div>

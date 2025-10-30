@@ -31,6 +31,13 @@ ion-content {
   padding: 15px;
   border-radius: 12px;
   gap: 10px;
+  color: var(--txt);
+}
+
+.welcome-card h2,
+.welcome-card p {
+  color: var(--txt) !important;
+  margin: 0;
 }
 
 .welcome-card ion-avatar img {

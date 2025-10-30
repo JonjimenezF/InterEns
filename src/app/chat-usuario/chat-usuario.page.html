@@ -17,6 +17,16 @@
         <p class="chat-subtitle">{{ otroUsuarioNombre || 'Usuario' }}</p>
       </div>
     </div>
+    
+    <ion-buttons slot="end">
+      <ion-button 
+        fill="solid" 
+        (click)="abrirCalificacion()"
+        class="rate-btn">
+        <ion-icon name="star" slot="start"></ion-icon>
+        Calificar
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

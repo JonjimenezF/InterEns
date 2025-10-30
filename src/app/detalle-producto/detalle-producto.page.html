@@ -46,6 +46,11 @@
           Contactar vendedor
         </ion-button>
         
+        <ion-button expand="block" shape="round" class="btn-calificar" (click)="calificarVendedor()" *ngIf="puedeCalificar">
+          <ion-icon name="star" slot="start"></ion-icon>
+          Calificar vendedor
+        </ion-button>
+        
         <ion-button expand="block" shape="round" class="btn-canjear" (click)="canjearProducto()">
           Canjear este producto
         </ion-button>

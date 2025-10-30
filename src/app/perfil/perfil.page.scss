@@ -15,6 +15,15 @@ ion-content {
   padding: 16px;
 }
 
+ion-toolbar {
+  --background: var(--card);
+  --color: var(--txt);
+}
+
+ion-header {
+  --background: var(--bg);
+}
+
 /* ===== HEADER DEL PERFIL ===== */
 .profile-header {
   display: flex;
@@ -43,8 +52,31 @@ ion-content {
 
 .profile-header h2 {
   margin: 8px 0;
-  color: var(--txt);
+  color: var(--txt) !important;
   font-weight: 700;
+}
+
+.profile-header p {
+  color: var(--muted) !important;
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.profile-info {
+  text-align: center;
+  
+  .nombre {
+    color: var(--txt) !important;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  
+  .email {
+    color: var(--muted) !important;
+    font-size: 14px;
+    opacity: 0.8;
+  }
 }
 
 .edit-btn {
@@ -65,9 +97,10 @@ ion-content {
 ion-segment {
   display: flex;
   justify-content: center;
-  background: transparent;
+  background: var(--bg);
   margin: 20px 0;
   gap: 10px;
+  --background: var(--bg);
 }
 
 ion-segment-button {
@@ -75,6 +108,7 @@ ion-segment-button {
   --color: var(--txt);
   --color-checked: #0b1115;
   --background-checked: var(--accent);
+  --border-color: var(--stroke);
   border-radius: 12px;
   font-weight: 600;
   text-transform: none;
@@ -97,6 +131,9 @@ ion-segment-button[aria-pressed='true'] {
 /* ===== TARJETAS DE PRODUCTOS / BORRADORES ===== */
 ion-item {
   --background: var(--card);
+  --color: var(--txt);
+  --border-color: transparent;
+  --inner-border-width: 0;
   margin-bottom: 12px;
   border-radius: 12px;
   --inner-padding-end: 12px;
@@ -104,6 +141,7 @@ ion-item {
   --min-height: 90px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: none;
 }
 
 ion-item:hover {
@@ -174,6 +212,22 @@ ion-button[color='danger']:hover {
 /* ===== ESTADOS VACÍOS ===== */
 .ion-text-center {
   color: var(--muted);
+  background: var(--bg);
+}
+
+/* ===== ELIMINAR BORDES BLANCOS ===== */
+ion-list {
+  background: var(--bg);
+  --ion-item-background: var(--card);
+}
+
+ion-content {
+  --ion-background-color: var(--bg);
+}
+
+.segment-content {
+  background: var(--bg);
+  padding: 0;
 }
 
 .ion-text-center ion-icon {
