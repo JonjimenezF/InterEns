@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, NavController, ToastController } from '@ionic/angular';
@@ -7,6 +7,12 @@ import { ProductoService } from '../servicios/producto.service';
 import { CategoriaService } from '../servicios/categoria.service';
 import { CarritoService } from '../servicios/carrito.service';
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
+import { FavoritosService } from '../servicios/favoritos.service';
+import { supabase } from 'src/shared/supabase/supabase.client';
+import { addIcons } from 'ionicons';
+import { heart, heartOutline } from 'ionicons/icons';
+
+addIcons({ heart, heartOutline });
 
 @Component({
   selector: 'app-producto',
@@ -15,10 +21,11 @@ import { FooterInterensComponent } from '../components/footer-interens/footer-in
   standalone: true,
   imports: [CommonModule, FormsModule, IonicModule, FooterInterensComponent],
 })
-export class ProductoPage implements OnInit {
+export class ProductoPage implements OnInit, OnDestroy {
   categorias: any[] = [];
   productos: any[] = [];
   filteredProducts: any[] = [];
+  favoritos: number[] = [];
   loading = true;
 
   searchQuery = '';
@@ -26,6 +33,9 @@ export class ProductoPage implements OnInit {
   precioMax = '';
   categoriaSeleccionada = '';
   userInfo?: any;
+  userId: string | null = null;
+
+  private intercambiadoHandler?: (event: any) => void;
 
   constructor(
     private router: Router,
@@ -33,33 +43,52 @@ export class ProductoPage implements OnInit {
     private productoService: ProductoService,
     private categoriaService: CategoriaService,
     private carritoService: CarritoService,
+    private favoritosService: FavoritosService,
     private toastController: ToastController,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    const { data: session } = await supabase.auth.getSession();
+    this.userId = session?.session?.user?.id || null;
+
     this.getCategorias();
     this.getProductos();
+
+    // ♻️ Listener cuando un producto cambia estado
+    this.intercambiadoHandler = () => {
+      console.log('♻️ Evento productoIntercambiado → recargando lista');
+      this.getProductos();
+      if (this.userId) this.loadFavoritos();
+    };
+    window.addEventListener('productoIntercambiado', this.intercambiadoHandler);
+  }
+
+  ngOnDestroy() {
+    if (this.intercambiadoHandler)
+      window.removeEventListener('productoIntercambiado', this.intercambiadoHandler);
   }
 
   // 🔹 Obtener categorías
   async getCategorias() {
     try {
       this.categorias = await this.categoriaService.getTodasCategorias();
-      console.log('✅ Categorías cargadas:', this.categorias);
     } catch (error) {
       console.error('❌ Error al obtener categorías:', error);
     }
   }
 
-  // 🔹 Obtener productos desde el backend
+  // 🔹 Obtener productos activos desde el backend
   getProductos() {
     this.loading = true;
     this.productoService.getAllProducts().subscribe({
       next: (data) => {
-        this.productos = data;
-        this.filteredProducts = data;
+        // ✅ Solo productos activos y publicados (por seguridad)
+        this.productos = data.filter(p => p.activo && p.estado === 'publicado');
+        this.filteredProducts = [...this.productos];
         this.loading = false;
+
+        if (this.userId) setTimeout(() => this.loadFavoritos(), 300);
       },
       error: (error) => {
         console.error('❌ Error al cargar productos:', error);
@@ -68,14 +97,62 @@ export class ProductoPage implements OnInit {
     });
   }
 
-  // 🧩 Aplica todos los filtros combinados
+  // ❤️ Cargar favoritos activos
+  loadFavoritos() {
+    if (!this.userId) return;
+    this.favoritosService.getFavoritos(this.userId).subscribe({
+      next: (res) => {
+        this.favoritos = res
+          .filter((f: any) => f.producto?.activo && f.producto?.estado === 'publicado')
+          .map((f: any) => f.producto_id);
+        this.changeDetectorRef.detectChanges();
+      },
+      error: (err) => console.error('❌ Error al cargar favoritos:', err),
+    });
+  }
+
+  isFavorito(productoId: number): boolean {
+    return this.favoritos.includes(productoId);
+  }
+
+  toggleFavorito(event: Event, producto: any) {
+    event.stopPropagation();
+
+    if (!this.userId) {
+      this.showToast('Debes iniciar sesión para usar favoritos ❤️');
+      return;
+    }
+
+    const id = producto.id;
+
+    if (this.isFavorito(id)) {
+      this.favoritosService.removeFavorito(this.userId, id).subscribe({
+        next: async () => {
+          this.favoritos = this.favoritos.filter(fid => fid !== id);
+          await this.showToast('💔 Eliminado de favoritos');
+          this.changeDetectorRef.detectChanges();
+        },
+        error: (err) => console.error('❌ Error al quitar favorito:', err),
+      });
+    } else {
+      this.favoritosService.addFavorito(this.userId, id).subscribe({
+        next: async () => {
+          this.favoritos.push(id);
+          await this.showToast('❤️ Agregado a favoritos');
+          this.changeDetectorRef.detectChanges();
+        },
+        error: (err) => console.error('❌ Error al agregar favorito:', err),
+      });
+    }
+  }
+
   applyAllFilters() {
     const query = this.searchQuery.trim().toLowerCase();
     const min = parseFloat(this.precioMin) || 0;
     const max = parseFloat(this.precioMax) || Infinity;
     const categoria = this.categoriaSeleccionada;
 
-    this.filteredProducts = this.productos.filter((p) => {
+    this.filteredProducts = this.productos.filter(p => {
       const matchesSearch =
         p.titulo?.toLowerCase().includes(query) ||
         p.descripcion?.toLowerCase().includes(query);
@@ -85,7 +162,6 @@ export class ProductoPage implements OnInit {
     });
   }
 
-  // 🔄 Restablecer filtros
   resetFilters() {
     this.searchQuery = '';
     this.precioMin = '';
@@ -94,12 +170,10 @@ export class ProductoPage implements OnInit {
     this.filteredProducts = [...this.productos];
   }
 
-  // 🖼️ Obtener imagen del producto o fallback
   getImagenProducto(producto: any): string {
     return producto.imagen_url || 'assets/img/default.png';
   }
 
-  // 🛒 Agregar al carrito (opcional)
   agregarCarrito(event: Event, producto: any) {
     event.stopPropagation();
     const item = {
@@ -123,21 +197,11 @@ export class ProductoPage implements OnInit {
     await toast.present();
   }
 
-  goDetalleProducto(producto: any) {
+  verDetalle(producto: any) {
     this.router.navigate(['/detalle-producto'], { state: { producto } });
   }
 
-  verDetalle(producto: any) {
-  console.log('➡️ Navegando al detalle de producto:', producto);
-  this.router.navigate(['/detalle-producto'], { state: { producto } });
-}
-
-
-  goBack() {
-    this.navCtrl.back();
-  }
-
-  // 🔗 Navegación Footer
+  goBack() { this.navCtrl.back(); }
   home() { this.router.navigate(['/home']); }
   perfil() { this.router.navigate(['/perfil']); }
   goProducto() { this.router.navigate(['/sproducto']); }

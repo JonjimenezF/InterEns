@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   IonBackButton,
@@ -236,4 +236,9 @@ export class HomePage implements OnDestroy {
   inter() {
     this.router.navigate(['/que-es'], { state: { userInfo: this.userInfo } });
   }
+
+  favoritos() {
+  this.router.navigate(['/favoritos']);
+}
+
 }

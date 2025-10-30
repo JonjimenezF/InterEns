@@ -55,7 +55,6 @@ ion-content {
   --background: var(--bg);
   margin-bottom: 15px;
   --ion-item-background: transparent;
-  --ion-item-border-width: 0;
   border-radius: 10px;
   border: 1px solid var(--stroke);
   transition: border-color 0.3s ease;
@@ -94,6 +93,9 @@ ion-select::part(placeholder) {
   display: flex;
   flex-direction: column;
   width: 100%;
+  background-color: #1a1d22;
+  padding: 12px;
+  border-radius: 10px;
 
   .upload-label {
     color: var(--muted);
@@ -102,87 +104,114 @@ ion-select::part(placeholder) {
   }
 
   input[type="file"] {
-    background-color: transparent;
-    color: var(--txt);
-    border: 1px dashed var(--accent);
-    border-radius: 8px;
-    padding: 10px;
-    transition: 0.3s ease;
+    background: transparent;
+    color: var(--muted);
+    border: none; /* ❌ sin bordes duplicados */
+    border-radius: 6px;
+    padding: 6px;
     cursor: pointer;
+    font-size: 14px;
 
-    &:hover {
-      background-color: rgba(31, 211, 154, 0.05);
-      border-color: var(--accent);
+    &::-webkit-file-upload-button {
+      background: var(--accent);
+      color: #0c0f13;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    &::-webkit-file-upload-button:hover {
+      transform: scale(1.05);
     }
   }
 }
 
+/* ====== PREVISUALIZACIÓN DE IMÁGENES ====== */
 .preview-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 10px;
-
-  img {
-    width: 100px;
-    height: 100px;
-    margin: 6px;
-    border-radius: 10px;
-    border: 1px solid var(--stroke);
-    transition: transform 0.2s ease;
-
-    &:hover {
-      transform: scale(1.05);
-      border-color: var(--accent);
-    }
-  }
-}
-
-/* ====== BOTONES ====== */
-/* ===========================
-   BOTONES PRINCIPALES
-   =========================== */
-
-.button-row {
-  display: flex;
-  flex-direction: column;
   gap: 10px;
   margin-top: 15px;
 }
 
-ion-button {
-  font-weight: 700;
-  text-transform: none;
-  border-radius: 12px;
-  transition: all 0.3s ease;
+.image-wrapper {
+  position: relative;
+  display: inline-block;
 }
 
-/* Ambos botones: borde verde y fondo transparente */
-.custom-button,
-.btn-borrador {
-  --background: transparent;
-  --border-color: var(--accent);
-  --border-width: 2px;
-  --color: var(--accent);
-  width: 100%;
-  font-weight: 700;
-  letter-spacing: 0.5px;
+.preview-img {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid var(--accent, #1fd39a);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease-in-out;
 }
 
-/* Hover: se rellenan con verde */
-.custom-button:hover,
-.btn-borrador:hover {
+.preview-img:hover {
+  transform: scale(1.05);
+}
+
+.delete-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ff4b4b;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: background 0.2s;
+}
+
+.delete-btn:hover {
+  background: #ff1f1f;
+}
+
+/* ====== BOTONES ====== */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* 🟢 Botón principal (fondo verde) */
+.custom-button {
   --background: var(--accent);
   --color: #0b1115;
-  transform: scale(1.03);
+  font-weight: 700;
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 15px rgba(31, 211, 154, 0.6);
+  }
 }
 
-/* Pequeña diferencia opcional */
-.custom-button {
-  border: 2px solid var(--accent);
+/* 📝 Botón borrador (gris) */
+.btn-borrador {
+  --background: #b8bec6;
+  --color: #0b1115;
+  font-weight: 700;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    --background: #d6d8da;
+    transform: scale(1.02);
+  }
 }
-
-
 
 /* ====== FOOTER ====== */
 app-footer-interens {

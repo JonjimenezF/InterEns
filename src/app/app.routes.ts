@@ -189,12 +189,16 @@ export const routes: Routes = [
   {
     path: 'edit-perfil',
     loadComponent: () => import('./edit-perfil/edit-perfil.page').then( m => m.EditPerfilPage)
+  },  {
+    path: 'favoritos',
+    loadComponent: () => import('./favoritos/favoritos.page').then( m => m.FavoritosPage)
   },
   {
-    path: 'borradores',
-    loadComponent: () => import('./borradores/borradores.page').then(m => m.BorradoresPage)
-
+    path: 'chatbox',
+    loadComponent: () => import('./chatbox/chatbox.page').then( m => m.ChatboxPage)
   },
+
+
 
 
   // {

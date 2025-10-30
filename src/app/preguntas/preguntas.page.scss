@@ -7,6 +7,7 @@
   --accent: #1fd39a;
 }
 
+/* === GENERAL === */
 ion-content {
   --background: var(--bg);
   color: var(--txt);
@@ -22,6 +23,7 @@ ion-back-button {
   --color: var(--accent);
 }
 
+/* === CONTENEDOR FAQ === */
 .faq-container {
   padding: 20px;
   display: flex;
@@ -29,7 +31,7 @@ ion-back-button {
   gap: 16px;
 }
 
-/* === Tarjetas FAQ === */
+/* === TARJETAS FAQ === */
 .faq-item {
   background-color: var(--card);
   border: 1.5px solid var(--stroke);
@@ -90,11 +92,17 @@ ion-back-button {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* === Sección Contacto === */
+/* === SECCIÓN CONTACTO === */
 .contact-section {
   background-color: var(--card);
   border: 1.5px solid var(--accent);
@@ -131,4 +139,183 @@ ion-back-button {
       box-shadow: 0 0 18px rgba(31, 211, 154, 0.8);
     }
   }
+}
+/* === CHAT FLOTANTE === */
+.chat-fab {
+  position: fixed;
+  bottom: 85px;
+  right: 24px;
+  background: var(--accent);
+  color: #0c0f13;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 0 20px rgba(31, 211, 154, 0.6);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  z-index: 100;
+
+  &:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 26px rgba(31, 211, 154, 0.9);
+  }
+}
+
+/* === Ventana del chat === */
+.chat-popup {
+  position: fixed;
+  bottom: 140px;
+  right: 25px;
+  width: 320px;
+  background: linear-gradient(160deg, #111418, #0d0f12);
+  border: 1px solid rgba(31, 211, 154, 0.25);
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(31, 211, 154, 0.15);
+  display: flex;
+  flex-direction: column;
+  z-index: 120;
+  overflow: hidden;
+  animation: slideUp 0.35s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* === Cabecera === */
+.chat-header {
+  background: var(--accent);
+  color: #0b1115;
+  font-weight: 800;
+  padding: 10px 15px;
+  font-size: 15px;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 10px rgba(31, 211, 154, 0.2);
+
+  ion-icon {
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+/* === Cuerpo del chat === */
+.chat-body {
+  padding: 12px;
+  height: 260px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #0c0f13;
+
+  /* Scroll personalizado */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(31, 211, 154, 0.35);
+    border-radius: 4px;
+  }
+}
+
+.msg {
+  padding: 8px 12px;
+  border-radius: 12px;
+  max-width: 80%;
+  font-size: 14px;
+  word-wrap: break-word;
+  animation: fadeIn 0.25s ease;
+  line-height: 1.4;
+}
+
+.msg.usuario {
+  align-self: flex-end;
+  background: var(--accent);
+  color: #0b1115;
+  box-shadow: 0 0 12px rgba(31, 211, 154, 0.3);
+}
+
+.msg.bot {
+  align-self: flex-start;
+  background: #1a1e23;
+  color: #ffffff;
+  border: 1px solid rgba(31, 211, 154, 0.15);
+}
+
+/* === Input === */
+.chat-footer {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid var(--stroke);
+  background: #111418;
+  padding: 8px 10px;
+}
+
+.chat-footer ion-input {
+  flex: 1;
+  --background: transparent;
+  --color: var(--txt);
+  font-size: 14px;
+  border: none;
+  outline: none;
+}
+
+.send-btn {
+  font-size: 22px;
+  color: var(--accent);
+  margin-left: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    color: #3ef0b7;
+  }
+}
+
+/* === Animación de escritura === */
+.typing {
+  display: flex;
+  gap: 4px;
+  padding: 4px 12px;
+}
+
+.typing span {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: blink 1.4s infinite both;
+}
+
+.typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0% { opacity: 0.2; transform: translateY(0); }
+  20% { opacity: 1; transform: translateY(-3px); }
+  100% { opacity: 0.2; transform: translateY(0); }
+}
+
+/* Animación entrada de mensajes */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }

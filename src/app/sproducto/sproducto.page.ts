@@ -1,17 +1,19 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 import { v4 as uuidv4 } from 'uuid';
 
 // Servicios
 import { supabase } from '../services/supabase.client';
+import { CategoriaService } from '../servicios/categoria.service';
 
 // Componentes
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
 
+// 🧩 Ionic standalone imports
 import {
   IonHeader,
   IonToolbar,
@@ -59,8 +61,9 @@ import {
 export class SproductoPage implements OnInit {
   userInfo?: any;
   categorias: { id: number; nombre: string }[] = [];
+  editandoBorrador = false;
 
-  enser = {
+  enser: any = {
     propietario_id: '',
     titulo: '',
     descripcion: '',
@@ -79,7 +82,10 @@ export class SproductoPage implements OnInit {
   constructor(
     private navCtrl: NavController,
     private router: Router,
-    private toastController: ToastController
+    private route: ActivatedRoute,
+    private toastController: ToastController,
+    private http: HttpClient,
+    private categoriaService: CategoriaService
   ) {}
 
   // Inicialización y carga de categorías
@@ -99,6 +105,22 @@ export class SproductoPage implements OnInit {
       this.userInfo = user;
       this.enser.propietario_id = user.id;
 
+      // 🧩 Intentar cargar borrador desde navegación o localStorage
+      const nav = this.router.getCurrentNavigation();
+      let borrador = nav?.extras?.state?.['borrador'];
+
+      if (!borrador) {
+        const guardado = localStorage.getItem('borrador_en_edicion');
+        if (guardado) borrador = JSON.parse(guardado);
+      }
+
+      if (borrador) {
+        this.enser = { ...borrador };
+        this.editandoBorrador = true;
+        console.log('📝 Editando borrador:', this.enser);
+      }
+
+      // ✅ Cargar categorías desde Supabase
       const { data: categorias, error: catErr } = await supabase
         .from('categorias')
         .select('id, nombre')
@@ -110,6 +132,28 @@ export class SproductoPage implements OnInit {
       console.error('[SPRODUCTO] Error en ngOnInit:', error);
       this.presentToast('❌ Error al cargar datos iniciales.');
     }
+  }
+
+  // 📸 Subir imágenes a Supabase Storage con sanitización de nombres
+  sanitizeFileName(name: string): string {
+    return name
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9.\-_]/g, '_')
+      .toLowerCase();
+  }
+
+  async uploadAllImages(): Promise<string[]> {
+    const urls: string[] = [];
+    for (let file of this.selectedFiles) {
+      const cleanName = this.sanitizeFileName(file.name);
+      const fileName = `${uuidv4()}-${cleanName}`;
+      const { error } = await supabase.storage.from('enseres').upload(fileName, file);
+      if (error) throw error;
+      const { data: publicData } = supabase.storage.from('enseres').getPublicUrl(fileName);
+      urls.push(publicData.publicUrl);
+    }
+    return urls;
   }
 
   // Manejo de selección de archivos
@@ -145,29 +189,8 @@ export class SproductoPage implements OnInit {
     this.selectedFiles.splice(index, 1);
   }
 
-  sanitizeFileName(name: string): string {
-    return name
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-zA-Z0-9.\-_]/g, '_')
-      .toLowerCase();
-  }
-
-  async uploadAllImages(): Promise<string[]> {
-    const urls: string[] = [];
-    for (let file of this.selectedFiles) {
-      const cleanName = this.sanitizeFileName(file.name);
-      const fileName = `${uuidv4()}-${cleanName}`;
-      const { error } = await supabase.storage.from('enseres').upload(fileName, file);
-      if (error) throw error;
-      const { data: publicData } = supabase.storage.from('enseres').getPublicUrl(fileName);
-      urls.push(publicData.publicUrl);
-    }
-    return urls;
-  }
-
-  // Guardar producto (usa el backend)
-  async onSubmit(form: NgForm, modo: 'borrador' | 'publicado') {
+  // 🟢 Publicar producto (nuevo o desde borrador)
+  async onSubmit(form: NgForm) {
     if (form.invalid) {
       this.presentToast('Completa todos los campos obligatorios.');
       return;
@@ -182,26 +205,48 @@ export class SproductoPage implements OnInit {
       this.presentToast('Subiendo imágenes...', 1500);
       const imageUrls = await this.uploadAllImages();
 
-      this.enser.imagen_url = imageUrls[0] || null;
-      this.enser.estado = modo; // 🟢 guarda como borrador o publicado
+      // ✅ Si el usuario no seleccionó ninguna imagen → asignar una por defecto
+      const imagenPorDefecto = 'assets/img/default.png';
+      this.enser.imagen_url = imageUrls[0] || this.enser.imagen_url || imagenPorDefecto;
 
-      // Enviar los datos al backend Fastify
-      const response = await fetch('http://localhost:4000/api/uploadProduct', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.enser),
-      });
+      this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
+      this.enser.estado = 'publicado';
 
-      const result = await response.json();
+      let result: any;
 
-      if (result.success) {
-        const msg = modo === 'borrador'
-          ? '📝 Producto guardado como borrador.'
-          : '✅ Producto publicado correctamente.';
-        this.presentToast(msg);
-        this.router.navigate(['/home']);
+      if (this.editandoBorrador && this.enser.id) {
+        // 🔁 Publicar borrador existente
+        result = await this.http
+          .put(`http://localhost:4000/api/publishDraft/${this.enser.id}`, {
+            valor_puntos: this.enser.valor_puntos,
+            propietario_id: this.enser.propietario_id,
+            titulo: this.enser.titulo,
+          })
+          .toPromise();
       } else {
-        throw new Error(result.error || 'Error desconocido.');
+        // 🆕 Nuevo producto publicado
+        result = await this.http
+          .post(`http://localhost:4000/api/uploadProduct`, this.enser)
+          .toPromise();
+      }
+
+      if (result?.success) {
+        this.presentToast(result.message || '✅ Producto publicado correctamente.');
+
+        if (result.total_points) {
+          window.dispatchEvent(
+            new CustomEvent('puntosActualizados', {
+              detail: { total_points: Number(result.total_points), valor_puntos: Number(this.enser.valor_puntos) },
+            })
+          );
+        }
+
+        localStorage.removeItem('borrador_en_edicion');
+        this.router.navigateByUrl('/perfil', {
+          state: { openTab: 'productos', refresh: true },
+        });
+      } else {
+        this.presentToast('⚠️ Ocurrió un error al publicar.');
       }
     } catch (err: any) {
       console.error('[SPRODUCTO] Error al guardar:', err);
@@ -214,17 +259,48 @@ export class SproductoPage implements OnInit {
     }
   }
 
+  // 📝 Guardar o actualizar borrador
+  async guardarBorrador(form: NgForm) {
+    try {
+      const imageUrls = await this.uploadAllImages();
+
+      // ✅ También usa imagen por defecto si no hay
+      const imagenPorDefecto = 'assets/img/default.png';
+      this.enser.imagen_url = imageUrls[0] || this.enser.imagen_url || imagenPorDefecto;
+
+      this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
+      this.enser.estado = 'borrador';
+
+      const result = await this.http
+        .post(`http://localhost:4000/api/uploadProduct`, this.enser)
+        .toPromise();
+
+      if (result) {
+        localStorage.setItem('borrador_en_edicion', JSON.stringify(this.enser));
+        this.editandoBorrador = true;
+        this.presentToast('📝 Borrador guardado correctamente.');
+
+        this.router.navigateByUrl('/perfil', {
+          state: { openTab: 'borradores', refresh: true },
+        });
+      }
+    } catch (error) {
+      console.error('❌ Error al guardar borrador:', error);
+      this.presentToast('Error al guardar el borrador.');
+    }
+  }
+
+  goBack() {
+    this.navCtrl.back();
+  }
 
   async presentToast(message: string, duration: number = 2500) {
     const toast = await this.toastController.create({
       message,
       duration,
       position: 'bottom',
+      color: 'success',
     });
     toast.present();
-  }
-
-  goBack() {
-    this.navCtrl.back();
   }
 }

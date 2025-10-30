@@ -1,183 +1,288 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { supabase } from 'src/shared/supabase/supabase.client';
-import { ViewChild, ElementRef } from '@angular/core';
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
-
-type ProductoUsuario = {
-  id: string;
-  title: string;
-  description?: string | null;
-  estado: 'PENDIENTE' | 'APROBADO' | 'RECHAZADO' | string;
-  points?: number | null;
-  created_at?: string | null;
-  condicion?: string | null;
-  categoria_id?: string | null;
-  cover_url?: string | null;
-};
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,              // 👈 ya incluye IonHeader, IonToolbar, IonFooter, IonButton, etc.
-    FooterInterensComponent   // 👈 nuestro footer personalizado
-  ]
+  imports: [CommonModule, FormsModule, IonicModule, FooterInterensComponent],
 })
-export class PerfilPage implements OnInit {
+export class PerfilPage implements OnInit, OnDestroy {
   nombre: string | null = null;
   email: string | null = null;
   avatarUrl: string | null = null;
-  perfile: any; loading = true;
-  uploading = false;
+  loading = true;
 
-  userId: string | undefined;
-  userInfo?: any;
+  productos: any[] = [];
+  borradores: any[] = [];
+  prodLoading = false;
+  borrLoading = false;
 
-  selectedTab: string = 'productos'; 
+  selectedTab: string = 'productos';
+  userId: string | null = null;
 
- 
-  constructor(private router: Router) { }
+  private eventListener: any;
 
-  
-  
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private toastController: ToastController
+  ) {}
 
   async ngOnInit() {
-    this.loading = true;
     await this.loadPerfil();
-    await this.loadMyProducts(true);   
 
+    const nav = this.router.getCurrentNavigation();
+    const openTab = nav?.extras?.state?.['openTab'];
+    if (openTab) this.selectedTab = openTab;
+
+    await this.loadMyProducts();
+    await this.loadBorradores();
+
+    // 🔄 Escuchar evento global
+    this.eventListener = () => this.loadMyProducts();
+    window.addEventListener('productoIntercambiado', this.eventListener);
+  }
+
+  ngOnDestroy() {
+    if (this.eventListener)
+      window.removeEventListener('productoIntercambiado', this.eventListener);
   }
 
   async ionViewWillEnter() {
-    await this.loadPerfil();
-    await this.loadMyProducts(true);
+    console.log('♻️ Refrescando perfil...');
+    const nav = this.router.getCurrentNavigation();
+    const removeDraftId = nav?.extras?.state?.['removeDraftId'];
+    const publishedTitle = nav?.extras?.state?.['publishedTitle'];
+
+    await this.loadMyProducts();
+
+    if (removeDraftId) {
+      const draftIndex = this.borradores.findIndex(
+        (b) => Number(b.id) === Number(removeDraftId)
+      );
+      if (draftIndex !== -1) {
+        this.borradores.splice(draftIndex, 1);
+        await this.presentAnimatedToast(
+          `✅ El borrador "${publishedTitle || 'sin título'}" fue publicado y movido a Mis Productos`
+        );
+      }
+    }
+
+    await this.refreshBorradoresFromDB();
   }
 
-  private async loadPerfil() {
-    const { data: { session } } = await supabase.auth.getSession();
+  // =========================
+  // PERFIL
+  // =========================
+  async loadPerfil() {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
     const token = session?.access_token;
     if (!token) return;
 
-    const r = await fetch('http://127.0.0.1:4000/profile/me', {
-      headers: { Authorization: `Bearer ${token}` }
+    const res = await fetch('http://127.0.0.1:4000/profile/me', {
+      headers: { Authorization: `Bearer ${token}` },
     });
-    const perfil = await r.json();
+    const perfil = await res.json();
 
-    this.perfile = perfil;
     this.nombre = perfil?.nombre_completo ?? null;
-    this.email  = perfil?.email ?? null;
-
-    // por si el backend no trae ?v=... (cache-buster)
-    let url = perfil?.avatar_url ?? null;
-    if (url && !url.includes('?v=')) {
-      url = `${url}${url.includes('?') ? '&' : '?'}v=${Date.now()}`;
-    }
-    this.avatarUrl = url;
-
-    this.loading = false;
+    this.email = perfil?.email ?? null;
+    this.avatarUrl = perfil?.avatar_url ?? '/assets/img/avatar.png';
+    this.userId = session?.user?.id ?? perfil?.id ?? perfil?.user_id ?? null;
   }
-  
-  productos: ProductoUsuario[] = [];
-  prodLoading = false;
-  prodPageSize = 10;
-  prodNextCursor: string | null = null;              // viene como offset en string
-  prodHasMore = true;
 
-  async loadMyProducts(reset = false) {
-    if (this.prodLoading) return;
+  // =========================
+  // PRODUCTOS PUBLICADOS
+  // =========================
+  async loadMyProducts() {
     this.prodLoading = true;
-
     try {
-      if (reset) {
-        this.productos = [];
-        this.prodNextCursor = null;
-        this.prodHasMore = true;
-      }
-      if (!this.prodHasMore) return;
-
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       const token = session?.access_token;
-      if (!token) return;
-
-      const params = new URLSearchParams();
-      params.set('limit', String(this.prodPageSize));
-      if (this.prodNextCursor) params.set('offset', this.prodNextCursor); // nuestro cursor = offset
-
-      const resp = await fetch(`http://127.0.0.1:4000/product_usuario/usuario?` + params.toString(), {
-        headers: { Authorization: `Bearer ${token}` }
+      const resp = await fetch(`http://127.0.0.1:4000/product_usuario/usuario`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-
-      if (!resp.ok) {
-        console.error('Error HTTP productos:', resp.status, await resp.text());
-        return;
-      }
-
-      const data: { items: ProductoUsuario[]; total: number; nextCursor: string | null } = await resp.json();
-
-      this.productos = [...this.productos, ...(data.items || [])];
-      this.prodNextCursor = data.nextCursor;         // null si no hay más
-      this.prodHasMore = !!this.prodNextCursor;
+      const data = await resp.json();
+      this.productos =
+        data.items?.filter(
+          (p: any) =>
+            ['publicado', 'aprobado', 'no_disponible'].includes(
+              `${p.estado}`.toLowerCase()
+            )
+        ) || [];
     } catch (e) {
-      console.error('Error cargando productos usuario:', e);
+      console.error('❌ Error cargando productos:', e);
     } finally {
       this.prodLoading = false;
     }
   }
 
-  // helpers para UI (si los usas en el HTML)
-  cover(p: ProductoUsuario) {
-    return p.cover_url || '/assets/img/placeholder.png';
+  // =========================
+  // BORRADORES
+  // =========================
+  async loadBorradores() {
+    if (!this.userId) return;
+    this.borrLoading = true;
+    const antiCache = Date.now();
+
+    this.http
+      .get(`http://localhost:4000/api/getUserDrafts/${this.userId}?t=${antiCache}`)
+      .subscribe({
+        next: (res: any) => {
+          this.borradores =
+            (res || []).filter(
+              (b: any) => `${b.estado}`.toLowerCase() === 'borrador'
+            ) || [];
+          this.borrLoading = false;
+        },
+        error: (err) => {
+          console.error('❌ Error al obtener borradores:', err);
+          this.borrLoading = false;
+        },
+      });
   }
 
-  statusColor(p: ProductoUsuario) {
-    switch (p.estado) {
-      case 'APROBADO': return 'success';
-      case 'PENDIENTE': return 'warning';
-      case 'RECHAZADO': return 'danger';
-      default: return 'medium';
+  async refreshBorradoresFromDB() {
+    if (!this.userId) return;
+    this.borrLoading = true;
+    const antiCache = Date.now();
+
+    this.http
+      .get(`http://localhost:4000/api/getUserDrafts/${this.userId}?t=${antiCache}`)
+      .subscribe({
+        next: (res: any) => {
+          this.borradores =
+            (res || []).filter(
+              (b: any) => `${b.estado}`.toLowerCase() === 'borrador'
+            ) || [];
+          this.borrLoading = false;
+        },
+        error: (err) => {
+          console.error('❌ Error refrescando borradores:', err);
+          this.borrLoading = false;
+        },
+      });
+  }
+
+  // =========================
+  // UTILIDADES
+  // =========================
+  cover(p: any) {
+    return p.cover_url || p.imagen_url || '/assets/img/placeholder.png';
+  }
+
+  statusColor(p: any) {
+    switch (`${p.estado}`.toLowerCase()) {
+      case 'aprobado':
+      case 'publicado':
+        return 'success';
+      case 'pendiente':
+        return 'warning';
+      case 'rechazado':
+      case 'borrador':
+        return 'medium';
+      case 'no_disponible':
+        return 'tertiary';
+      default:
+        return 'light';
     }
   }
 
-  // si usas pull-to-refresh o infinite scroll:
-  async doRefresh(ev: any) {
-    await this.loadMyProducts(true);
-    ev?.target?.complete?.();
-  }
-  async loadMore(ev: any) {
-    await this.loadMyProducts(false);
-    ev?.target?.complete?.();
+  // ✅ Nueva función para mostrar estados con formato bonito
+  formatEstado(estado: string): string {
+    if (!estado) return '';
+    return estado.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
   }
 
+  // =========================
+  // ✏️ EDITAR / ELIMINAR BORRADOR
+  // =========================
+  editarBorrador(borrador: any) {
+    localStorage.setItem('borrador_en_edicion', JSON.stringify(borrador));
+    this.router.navigate(['/sproducto'], { state: { borrador } });
+  }
 
-  editarperfil(): void {
+  eliminarBorrador(id: number) {
+    if (!confirm('¿Seguro que deseas eliminar este borrador?')) return;
+    this.http.delete(`http://localhost:4000/api/deleteDraft/${id}`).subscribe({
+      next: async () => {
+        this.borradores = this.borradores.filter(
+          (b) => Number(b.id) !== Number(id)
+        );
+        await this.presentAnimatedToast('🗑️ Borrador eliminado correctamente');
+      },
+      error: async (err) => {
+        console.error('❌ Error al eliminar borrador:', err);
+        await this.presentToast('Error al eliminar borrador', 'danger');
+      },
+    });
+  }
+
+  // =========================
+  // ♻️ DISPONIBILIDAD / INTERCAMBIO
+  // =========================
+  async marcarIntercambiado(producto: any) {
+    try {
+      const id = producto.id;
+      const resp: any = await this.http
+        .put(`http://localhost:4000/api/toggleAvailability/${id}`, {})
+        .toPromise();
+
+      producto.estado = resp.nuevoEstado;
+      producto.activo = resp.nuevoEstado === 'publicado';
+
+      const msg =
+        resp.nuevoEstado === 'publicado'
+          ? '✅ Producto reactivado y disponible nuevamente.'
+          : '♻️ Producto marcado como no disponible.';
+      await this.presentToast(msg, 'success');
+    } catch (error) {
+      console.error('❌ Error al cambiar disponibilidad:', error);
+      await this.presentToast('Error al cambiar estado del producto.', 'danger');
+    }
+  }
+
+  editarperfil() {
     this.router.navigate(['/edit-perfil']);
   }
 
-  goProducto(): void {
-    this.router.navigate(['/producto']);
+  // =========================
+  // TOASTS
+  // =========================
+  async presentToast(
+    message: string,
+    color: 'success' | 'danger' | 'warning' = 'success'
+  ) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500,
+      position: 'bottom',
+      color,
+      cssClass: 'interens-toast',
+    });
+    await toast.present();
   }
 
-  home(): void {
-    this.router.navigate(['/home']);
-  }
-
-  perfil(): void {
-    this.router.navigate(['/perfil']);
-  }
-
-  salir(): void {
-    // Acción al salir
-  }
-
-  puntoLimpio(): void {
-    this.router.navigate(['/punto-limpio']);
+  async presentAnimatedToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500,
+      position: 'bottom',
+      cssClass: 'interens-animated-toast',
+      animated: true,
+      mode: 'ios',
+    });
+    await toast.present();
   }
 }

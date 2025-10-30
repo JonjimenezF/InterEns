@@ -8,8 +8,7 @@
 
 <ion-content class="ion-padding">
   <div class="faq-container">
-
-    <!-- 💚 PREGUNTA 1 -->
+    <!-- Preguntas -->
     <div class="faq-item" (click)="toggleAnswer('faq1')">
       <div class="faq-question">
         <ion-icon name="information-circle-outline" class="faq-icon"></ion-icon>
@@ -17,13 +16,10 @@
         <ion-icon name="chevron-down-outline" class="arrow"></ion-icon>
       </div>
       <div class="faq-answer" id="faq1">
-        <li>
-          InterEns es una plataforma digital que facilita la donación, intercambio, venta y reparación de enseres domésticos en desuso, promoviendo la economía circular.
-        </li>
+        <li>InterEns es una plataforma que facilita la donación, intercambio y venta de enseres domésticos en desuso, promoviendo la economía circular.</li>
       </div>
     </div>
 
-    <!-- 💸 PREGUNTA 2 -->
     <div class="faq-item" (click)="toggleAnswer('faq2')">
       <div class="faq-question">
         <ion-icon name="cash-outline" class="faq-icon"></ion-icon>
@@ -35,7 +31,6 @@
       </div>
     </div>
 
-    <!-- 🧩 PREGUNTA 3 -->
     <div class="faq-item" (click)="toggleAnswer('faq3')">
       <div class="faq-question">
         <ion-icon name="apps-outline" class="faq-icon"></ion-icon>
@@ -50,7 +45,6 @@
       </div>
     </div>
 
-    <!-- 🏠 PREGUNTA 4 -->
     <div class="faq-item" (click)="toggleAnswer('faq4')">
       <div class="faq-question">
         <ion-icon name="home-outline" class="faq-icon"></ion-icon>
@@ -58,11 +52,10 @@
         <ion-icon name="chevron-down-outline" class="arrow"></ion-icon>
       </div>
       <div class="faq-answer" id="faq4">
-        <li>Puedes publicar muebles, electrodomésticos, utensilios y todo tipo de artículos del hogar.</li>
+        <li>Puedes publicar muebles, electrodomésticos, utensilios y artículos del hogar.</li>
       </div>
     </div>
 
-    <!-- 🔍 PREGUNTA 5 -->
     <div class="faq-item" (click)="toggleAnswer('faq5')">
       <div class="faq-question">
         <ion-icon name="search-outline" class="faq-icon"></ion-icon>
@@ -74,7 +67,6 @@
       </div>
     </div>
 
-    <!-- 🎁 PREGUNTA 6 -->
     <div class="faq-item" (click)="toggleAnswer('faq6')">
       <div class="faq-question">
         <ion-icon name="gift-outline" class="faq-icon"></ion-icon>
@@ -86,7 +78,7 @@
       </div>
     </div>
 
-    <!-- ✉️ BOTÓN CONTACTO -->
+    <!-- Sección contacto -->
     <div class="contact-section">
       <h2>¿Tienes otra duda?</h2>
       <p>Si no encuentras tu respuesta, puedes contactarte con nosotros directamente.</p>
@@ -95,6 +87,38 @@
         Contáctanos
       </ion-button>
     </div>
+  </div>
+
+  <!-- 💬 Chat flotante -->
+  <div class="chat-fab" (click)="toggleChat()">
+    <ion-icon name="chatbubbles-outline"></ion-icon>
+  </div>
+
+  <div class="chat-popup" *ngIf="chatVisible">
+    <div class="chat-header">
+      <span>InterBot 🤖</span>
+      <ion-icon name="close-outline" (click)="toggleChat()"></ion-icon>
+    </div>
+
+    <div class="chat-body">
+      <div *ngFor="let msg of chatHistorial" class="msg" [ngClass]="msg.remitente">
+        {{ msg.texto }}
+      </div>
+
+      <div *ngIf="cargando" class="typing">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="chat-footer">
+  <ion-input
+    [value]="mensajeUsuario"
+    (ionInput)="mensajeUsuario = $any($event.detail.value) || ''"
+    placeholder="Escribe tu mensaje..."
+    (keyup.enter)="enviarMensaje()"
+  ></ion-input>
+  <ion-icon name="send-outline" class="send-btn" (click)="enviarMensaje()"></ion-icon>
+</div>
 
   </div>
 </ion-content>

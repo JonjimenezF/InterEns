@@ -9,16 +9,23 @@
 <ion-content>
   <div class="form-wrapper">
     <div class="form-container">
-      <h1>Subir Producto</h1>
+      <!-- 🧩 Título dinámico -->
+      <h1>{{ editandoBorrador ? 'Editar Borrador' : 'Subir Producto' }}</h1>
+
       <div class="contact-info">
-        <p>
+        <p *ngIf="!editandoBorrador">
           Completa el siguiente formulario para agregar un nuevo enser a la plataforma.
           Puedes asignarle puntos y cargar imágenes desde tu dispositivo.
         </p>
+        <p *ngIf="editandoBorrador" class="info-borrador">
+          Estás editando un borrador guardado. Puedes modificar los datos y publicar o volver a guardar.
+        </p>
 
-        <form #productForm="ngForm" (ngSubmit)="onSubmit(productForm, 'publicado')">
+        <!-- 🧾 Formulario -->
+        <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+          
           <!-- Nombre / Título -->
-          <ion-item class="custom-item green-border">
+          <ion-item class="custom-item">
             <ion-input
               class="custom-input"
               type="text"
@@ -30,7 +37,7 @@
           </ion-item>
 
           <!-- Descripción -->
-          <ion-item class="custom-item green-border">
+          <ion-item class="custom-item">
             <ion-textarea
               class="custom-input"
               placeholder="Descripción"
@@ -42,7 +49,7 @@
           </ion-item>
 
           <!-- Valor de puntos -->
-          <ion-item class="custom-item green-border">
+          <ion-item class="custom-item">
             <ion-input
               class="custom-input"
               type="number"
@@ -54,7 +61,7 @@
           </ion-item>
 
           <!-- Categoría -->
-          <ion-item class="custom-item green-border">
+          <ion-item class="custom-item">
             <ion-select
               [(ngModel)]="enser.categoria_id"
               name="categoria_id"
@@ -67,7 +74,7 @@
           </ion-item>
 
           <!-- Condición -->
-          <ion-item class="custom-item green-border">
+          <ion-item class="custom-item">
             <ion-select
               [(ngModel)]="enser.condicion"
               name="condicion"
@@ -81,7 +88,7 @@
             </ion-select>
           </ion-item>
           <!-- Ciudad -->
-          <ion-item class="custom-item green-border">
+          <ion-item class="custom-item">
             <ion-input
               class="custom-input"
               type="text"
@@ -92,7 +99,7 @@
           </ion-item>
 
           <!-- Región -->
-          <ion-item class="custom-item green-border">
+          <ion-item class="custom-item">
             <ion-input
               class="custom-input"
               type="text"
@@ -103,14 +110,14 @@
           </ion-item>
 
           <!-- Subir Imágenes -->
-          <ion-item class="custom-item green-border">
+          <ion-item class="custom-item">
             <div class="upload-container">
               <label class="upload-label">Seleccionar imágenes</label>
               <input type="file" multiple (change)="onFilesSelected($event)" accept="image/*" />
             </div>
           </ion-item>
 
-          <!-- Previsualización -->
+          <!-- 🖼️ Previsualización de imágenes -->
           <div class="preview-container" *ngIf="previewUrls.length > 0">
             <h4>Previsualización</h4>
             <div class="image-preview-grid">
@@ -121,19 +128,25 @@
             </div>
           </div>
 
-          <!-- Botones -->
-          <div class="centrar">
+          <!-- 🧩 Botones -->
+          <div class="button-group">
+            <!-- 🟢 Publicar Enser -->
             <ion-button
               type="submit"
               class="custom-button white-background"
               fill="solid"
-              shape="round">
-              Publicar Enser
+              shape="round"
+              expand="block">
+              {{ editandoBorrador ? 'Publicar Borrador' : 'Publicar Enser' }}
             </ion-button>
-          </div>
 
-          <div class="button-row">
-            <ion-button expand="block" class="btn-borrador" (click)="onSubmit(productForm, 'borrador')">
+            <!-- 📝 Guardar Borrador -->
+            <ion-button
+              type="button"
+              expand="block"
+              class="btn-borrador"
+              color="medium"
+              (click)="guardarBorrador(form)">
               Guardar como borrador
             </ion-button>
           </div>
