@@ -5,13 +5,14 @@ import { IonicModule, AlertController, ToastController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TransaccionService } from '../servicios/transaccion.service';
 import { supabase } from '../services/supabase.client';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-confirmar-recepcion',
   templateUrl: './confirmar-recepcion.page.html',
   styleUrls: ['./confirmar-recepcion.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule]
+  imports: [CommonModule, FormsModule, IonicModule, HttpClientModule]
 })
 export class ConfirmarRecepcionPage implements OnInit {
   transaccionId: string = '';
@@ -42,9 +43,6 @@ export class ConfirmarRecepcionPage implements OnInit {
             titulo,
             imagen_url,
             valor_puntos
-          ),
-          propietario:propietario_id (
-            nombre_completo
           )
         `)
         .eq('id', parseInt(this.transaccionId))
@@ -54,7 +52,6 @@ export class ConfirmarRecepcionPage implements OnInit {
         console.error('Error cargando transacción:', error);
         this.transaccion = {
           producto_nombre: 'Producto no encontrado',
-          vendedor_nombre: 'Vendedor',
           precio: 0
         };
         return;
@@ -64,14 +61,12 @@ export class ConfirmarRecepcionPage implements OnInit {
         id: data.id,
         producto_nombre: data.enseres?.titulo || 'Producto',
         producto_imagen: data.enseres?.imagen_url || 'assets/img/default.png',
-        vendedor_nombre: data.propietario?.nombre_completo || 'Vendedor',
         precio: data.enseres?.valor_puntos || 0
       };
     } catch (error) {
       console.error('Error cargando transacción:', error);
       this.transaccion = {
         producto_nombre: 'Error cargando producto',
-        vendedor_nombre: 'Vendedor',
         precio: 0
       };
     }
@@ -99,23 +94,19 @@ export class ConfirmarRecepcionPage implements OnInit {
 
   private async procesarConfirmacion() {
     try {
-      // Primero obtener el enser_id de la transacción
-      const { data: transaccion, error: errorTransaccion } = await supabase
+      console.log('🚀 Iniciando confirmación para transacción:', this.transaccionId);
+      
+      // Obtener datos de la transacción para debugging
+      const { data: transaccionData } = await supabase
         .from('transacciones')
-        .select('enser_id')
+        .select('propietario_id, solicitante_id')
         .eq('id', parseInt(this.transaccionId))
         .single();
         
-      if (errorTransaccion || !transaccion) {
-        console.error('Error obteniendo transacción:', errorTransaccion);
-        const toast = await this.toastController.create({
-          message: 'Error al confirmar recepción',
-          duration: 2000,
-          color: 'danger'
-        });
-        await toast.present();
-        return;
-      }
+      console.log('🔍 IDs obtenidos:', {
+        vendedor: transaccionData?.propietario_id,
+        comprador: transaccionData?.solicitante_id
+      });
       
       // Actualizar transacción a completada
       const { error: errorUpdate } = await supabase
@@ -127,32 +118,63 @@ export class ConfirmarRecepcionPage implements OnInit {
         .eq('id', parseInt(this.transaccionId));
         
       if (errorUpdate) {
-        console.error('Error actualizando transacción:', errorUpdate);
-        const toast = await this.toastController.create({
-          message: 'Error al confirmar recepción',
-          duration: 2000,
-          color: 'danger'
-        });
-        await toast.present();
-        return;
+        throw new Error('Error actualizando transacción');
       }
       
-      // Marcar el enser como no disponible
-      const { error: errorEnser } = await supabase
-        .from('enseres')
-        .update({ 
-          estado: 'no_disponible',
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', transaccion.enser_id);
+      // 📧 PASO 4: Obtener emails desde perfiles_con_info
+      console.log('🔍 Obteniendo emails desde perfiles_con_info...');
+      
+      const [compradorPerfil, vendedorPerfil] = await Promise.all([
+        supabase.from('perfiles_con_info').select('email, nombre_completo').eq('usuario_id', transaccionData?.solicitante_id).single(),
+        supabase.from('perfiles_con_info').select('email, nombre_completo').eq('usuario_id', transaccionData?.propietario_id).single()
+      ]);
+      
+      console.log('📧 Emails obtenidos:', {
+        comprador: compradorPerfil.data?.email,
+        vendedor: vendedorPerfil.data?.email
+      });
+      
+      const emailComprador = compradorPerfil.data?.email;
+      const emailVendedor = vendedorPerfil.data?.email;
+      const nombreComprador = compradorPerfil.data?.nombre_completo || 'Comprador';
+      const nombreVendedor = vendedorPerfil.data?.nombre_completo || 'Vendedor';
+      
+      // ✅ PASO 5: Enviar correos si tenemos ambos emails
+      if (emailComprador && emailVendedor) {
+        console.log('📧 Enviando correos dinámicos...');
         
-      if (errorEnser) {
-        console.error('Error actualizando enser:', errorEnser);
-        // No bloqueamos el flujo, solo logueamos el error
+        const response = await fetch('http://localhost:4000/api/confirmar-intercambio', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            correoComprador: emailComprador,
+            correoVendedor: emailVendedor,
+            nombreComprador: nombreComprador,
+            nombreVendedor: nombreVendedor,
+            productoNombre: this.transaccion?.producto_nombre || 'Producto',
+            valorPuntos: this.transaccion?.precio || 0
+          })
+        });
+        
+        const result = await response.json();
+        console.log('📋 Respuesta del backend:', result);
+        
+        if (response.ok) {
+          console.log('✅ Correos enviados exitosamente');
+        } else {
+          console.error('❌ Error enviando correos:', result);
+        }
+      } else {
+        console.warn('⚠️ No se pudieron obtener ambos emails:', {
+          emailComprador,
+          emailVendedor
+        });
       }
       
       const toast = await this.toastController.create({
-        message: `✅ Recepción de "${this.transaccion?.producto_nombre}" confirmada exitosamente`,
+        message: `✅ Recepción confirmada exitosamente`,
         duration: 3000,
         color: 'success',
         position: 'top'
@@ -164,7 +186,7 @@ export class ConfirmarRecepcionPage implements OnInit {
         state: { openTab: 'transacciones' }
       });
     } catch (error) {
-      console.error('Error confirmando recepción:', error);
+      console.error('❌ Error confirmando recepción:', error);
       const toast = await this.toastController.create({
         message: 'Error al confirmar recepción',
         duration: 2000,
