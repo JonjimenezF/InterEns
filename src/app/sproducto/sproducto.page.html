@@ -9,145 +9,98 @@
 <ion-content>
   <div class="form-wrapper">
     <div class="form-container">
-      <!-- 🧩 Título dinámico -->
       <h1>{{ editandoBorrador ? 'Editar Borrador' : 'Subir Producto' }}</h1>
 
-      <div class="contact-info">
-        <p *ngIf="!editandoBorrador">
-          Completa el siguiente formulario para agregar un nuevo enser a la plataforma.
-          Puedes asignarle puntos y cargar imágenes desde tu dispositivo.
-        </p>
-        <p *ngIf="editandoBorrador" class="info-borrador">
-          Estás editando un borrador guardado. Puedes modificar los datos y publicar o volver a guardar.
-        </p>
+      <p *ngIf="!editandoBorrador">
+        Completa el siguiente formulario para agregar un nuevo enser a la plataforma.
+        Puedes asignarle puntos y cargar imágenes desde tu dispositivo.
+      </p>
 
-        <!-- 🧾 Formulario -->
-        <form #form="ngForm" (ngSubmit)="onSubmit(form)">
-          
-          <!-- Nombre / Título -->
-          <ion-item class="custom-item">
-            <ion-input
-              class="custom-input"
-              type="text"
-              placeholder="Título del Enser"
-              [(ngModel)]="enser.titulo"
-              name="titulo"
-              required>
-            </ion-input>
-          </ion-item>
+      <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+        <ion-item class="custom-item">
+          <ion-input type="text" placeholder="Título del Enser" [(ngModel)]="enser.titulo" name="titulo" required></ion-input>
+        </ion-item>
 
-          <!-- Descripción -->
-          <ion-item class="custom-item">
-            <ion-textarea
-              class="custom-input"
-              placeholder="Descripción"
-              [(ngModel)]="enser.descripcion"
-              name="descripcion"
-              rows="5"
-              required>
-            </ion-textarea>
-          </ion-item>
+        <ion-item class="custom-item">
+          <ion-textarea placeholder="Descripción" [(ngModel)]="enser.descripcion" name="descripcion" rows="5" required></ion-textarea>
+        </ion-item>
 
-          <!-- Valor de puntos -->
-          <ion-item class="custom-item">
-            <ion-input
-              class="custom-input"
-              type="number"
-              placeholder="Valor de puntos"
-              [(ngModel)]="enser.valor_puntos"
-              name="valor_puntos"
-              required>
-            </ion-input>
-          </ion-item>
+        <ion-item class="custom-item">
+          <ion-input type="number" placeholder="Valor de puntos" [(ngModel)]="enser.valor_puntos" name="valor_puntos" required></ion-input>
+        </ion-item>
 
-          <!-- Categoría -->
-          <ion-item class="custom-item">
-            <ion-select
-              [(ngModel)]="enser.categoria_id"
-              name="categoria_id"
-              placeholder="Selecciona una categoría"
-              required>
-              <ion-select-option *ngFor="let categoria of categorias" [value]="categoria.id">
-                {{ categoria.nombre }}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
+        <ion-item class="custom-item">
+          <ion-select [(ngModel)]="enser.categoria_id" name="categoria_id" placeholder="Selecciona una categoría" required>
+            <ion-select-option *ngFor="let c of categorias" [value]="c.id">{{ c.nombre }}</ion-select-option>
+          </ion-select>
+        </ion-item>
 
-          <!-- Condición -->
-          <ion-item class="custom-item">
-            <ion-select
-              [(ngModel)]="enser.condicion"
-              name="condicion"
-              placeholder="Condición del Enser"
-              required>
-              <ion-select-option value="nuevo">Nuevo</ion-select-option>
-              <ion-select-option value="usado">Usado</ion-select-option>
-              <ion-select-option value="para_reparar">Para reparar</ion-select-option>
-            </ion-select>
-          </ion-item>
+        <ion-item class="custom-item">
+          <ion-select [(ngModel)]="enser.condicion" name="condicion" placeholder="Condición del Enser" required>
+            <ion-select-option value="nuevo">Nuevo</ion-select-option>
+            <ion-select-option value="usado">Usado</ion-select-option>
+            <ion-select-option value="para_reparar">Para reparar</ion-select-option>
+          </ion-select>
+        </ion-item>
 
-          <!-- Ciudad -->
-          <ion-item class="custom-item">
-            <ion-input
-              class="custom-input"
-              type="text"
-              placeholder="Ciudad"
-              [(ngModel)]="enser.ciudad"
-              name="ciudad">
-            </ion-input>
-          </ion-item>
+        <!-- Región -->
+        <ion-item class="custom-item">
+          <ion-label position="stacked">Región</ion-label>
+          <ion-select
+            interface="popover"
+            [(ngModel)]="enser.region_id"
+            name="region_id"
+            placeholder="Selecciona una región"
+            (ionChange)="onRegionChange(enser.region_id)"
+            required
+          >
+            <ion-select-option *ngFor="let r of regiones" [value]="r.id">
+              {{ r.nombre }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
 
-          <!-- Región -->
-          <ion-item class="custom-item">
-            <ion-input
-              class="custom-input"
-              type="text"
-              placeholder="Región"
-              [(ngModel)]="enser.region"
-              name="region">
-            </ion-input>
-          </ion-item>
+        <!-- Comuna -->
+        <ion-item class="custom-item">
+          <ion-label position="stacked">Comuna</ion-label>
+          <ion-select
+            interface="popover"
+            [(ngModel)]="enser.comuna_id"
+            name="comuna_id"
+            placeholder="Selecciona una comuna"
+            [disabled]="!enser.region_id"
+            required
+          >
+            <ion-select-option *ngFor="let c of comunas" [value]="c.id">
+              {{ c.nombre }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
 
-          <!-- Subir Imágenes -->
-          <ion-item class="custom-item">
-            <div class="upload-container">
-              <label class="upload-label">Seleccionar imágenes</label>
-              <input type="file" multiple (change)="onFilesSelected($event)" />
-            </div>
-          </ion-item>
-
-          <!-- 🖼️ Previsualización de imágenes -->
-          <div class="preview-container" *ngIf="previewUrls.length > 0">
-            <div class="image-wrapper" *ngFor="let url of previewUrls; let i = index">
-              <img [src]="url" alt="preview" class="preview-img" />
-              <button type="button" class="delete-btn" (click)="removeImage(i)">✖</button>
-            </div>
+        <ion-item class="custom-item">
+          <div class="upload-container">
+            <label class="upload-label">Seleccionar imágenes</label>
+            <input type="file" multiple (change)="onFilesSelected($event)" />
           </div>
+        </ion-item>
 
-          <!-- 🧩 Botones -->
-          <div class="button-group">
-            <!-- 🟢 Publicar Enser -->
-            <ion-button
-              type="submit"
-              class="custom-button white-background"
-              fill="solid"
-              shape="round"
-              expand="block">
-              {{ editandoBorrador ? 'Publicar Borrador' : 'Publicar Enser' }}
-            </ion-button>
-
-            <!-- 📝 Guardar Borrador -->
-            <ion-button
-              type="button"
-              expand="block"
-              class="btn-borrador"
-              color="medium"
-              (click)="guardarBorrador(form)">
-              Guardar como borrador
-            </ion-button>
+        <div class="preview-container" *ngIf="previewUrls.length > 0">
+          <div class="image-wrapper" *ngFor="let url of previewUrls; let i = index">
+            <img [src]="url" alt="preview" class="preview-img" />
+            <button type="button" class="delete-btn" (click)="removeImage(i)">✖</button>
           </div>
-        </form>
-      </div>
+        </div>
+
+        <div class="button-group">
+          <ion-button type="submit" expand="block" color="success" shape="round">
+            {{ editandoBorrador ? 'Publicar Borrador' : 'Publicar Enser' }}
+          </ion-button>
+
+          <ion-button type="button" expand="block" class="btn-borrador" color="medium" (click)="guardarBorrador(form)">
+            Guardar como borrador
+          </ion-button>
+        </div>
+      </form>
     </div>
   </div>
 

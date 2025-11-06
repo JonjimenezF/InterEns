@@ -1,11 +1,18 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title class="titulo">
-      <ion-icon name="trophy-outline"></ion-icon>
-      Misiones
-    </ion-title>
+    <div class="toolbar-content">
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="home" text=""></ion-back-button>
+      </ion-buttons>
+
+      <div class="title-group">
+        <ion-icon name="trophy-outline" class="icon-trophy"></ion-icon>
+        <h1 class="titulo">Misiones</h1>
+      </div>
+    </div>
   </ion-toolbar>
 </ion-header>
+
 
 <ion-content class="misiones-container">
 
@@ -80,6 +87,11 @@
       </div>
     </div>
   </div>
+  <!-- ✨ Animación visual de puntos ganados -->
+<div *ngIf="mostrandoAnimacion" class="floating-points">
+  +{{ puntosGanados }} pts ✨
+</div>
+
   <app-footer-interens></app-footer-interens>
 </ion-content>
 
