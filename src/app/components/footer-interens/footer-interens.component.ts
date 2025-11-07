@@ -41,4 +41,8 @@ export class FooterInterensComponent {
   perfil() {
     this.router.navigate(['/perfil']);
   }
+mapa() {
+    this.router.navigate(['/mapa']);
+  }
+  
 }

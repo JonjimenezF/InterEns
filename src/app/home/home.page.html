@@ -99,14 +99,15 @@
         <p>Misiones</p>
       </div>
 
-      <div
-        class="action-card"
-        [class.selected]="selectedCard === 'retiro'"
-        (click)="selectCard('retiro'); contacto()"
-      >
-        <ion-icon name="cart-outline" class="faq-icon"></ion-icon>
-        <p>Retiro Producto</p>
-      </div>
+      <div 
+  class="action-card"
+  [class.selected]="selectedCard === 'mapa'"
+  (click)="mapa()"
+>
+  <ion-icon name="cart-outline" class="faq-icon"></ion-icon>
+  <p>Puntos Limpios</p>
+</div>
+
 
       <div
         class="action-card"

@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthCallbackPage } from './auth-callback/auth-callback.page';
 
+
+
 export const routes: Routes = [
   {
     path: 'home',
@@ -97,6 +99,12 @@ export const routes: Routes = [
     path: 'puntos-limpios',
     loadComponent: () => import('./puntos-limpios/puntos-limpios.page').then((m) => m.PuntosLimpiosPage),
   },
+  {
+  path: 'mapa',
+  loadComponent: () => import('./mapa/mapa.page').then(m => m.MapaPage),
+
+},
+
 
 
   
@@ -105,7 +113,7 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes),    ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

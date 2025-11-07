@@ -248,5 +248,8 @@ export class HomePage implements OnDestroy {
   favoritos() {
   this.router.navigate(['/favoritos']);
 }
+ mapa() {
+    this.router.navigate(['/mapa']);
+  }
 
 }
