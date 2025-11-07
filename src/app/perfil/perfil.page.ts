@@ -40,6 +40,42 @@ export class PerfilPage implements OnInit, OnDestroy {
   transaccionesPendientes: any[] = [];
   solicitudesPendientes: any[] = [];
 
+  // Variables de impacto ambiental
+  impacto: any = null;
+  nivel: string = '';
+  siguienteMeta: number = 0;
+  porcentajeNivel: number = 0;
+  equivalencias: any = {};
+  impactoPorCategoria: any[] = [];
+  maxCo2 = 0;
+
+  nivelesDisponibles = [
+    {
+      nombre: '🌱 Principiante Verde',
+      icono: 'leaf-outline',
+      meta: 10,
+      descripcion: 'Empiezas a contribuir con tus primeros enseres reutilizados.',
+    },
+    {
+      nombre: '🌿 Agente Circular',
+      icono: 'recycle-outline',
+      meta: 30,
+      descripcion: 'Reutilizas con frecuencia y ayudas a reducir el desperdicio.',
+    },
+    {
+      nombre: '🌳 Guardián del Bosque',
+      icono: 'earth-outline',
+      meta: 50,
+      descripcion: 'Tu impacto positivo se nota: ahorras recursos y evitas emisiones.',
+    },
+    {
+      nombre: '🌎 Eco Leyenda',
+      icono: 'planet-outline',
+      meta: 100,
+      descripcion: 'Eres un referente ecológico. ¡Gracias por cuidar el planeta!',
+    },
+  ];
+
   private eventListener: any;
 
   constructor(
@@ -65,6 +101,7 @@ export class PerfilPage implements OnInit, OnDestroy {
     await this.cargarReputacion();
     await this.loadTransaccionesPendientes();
     await this.loadSolicitudesPendientes();
+    await this.loadImpacto();
 
     // 🔄 Escuchar evento global
     this.eventListener = () => this.loadMyProducts();
@@ -593,5 +630,60 @@ export class PerfilPage implements OnInit, OnDestroy {
     }
   }
 
+  // =========================
+  // IMPACTO AMBIENTAL 🌍
+  // =========================
+  async loadImpacto() {
+    if (!this.userId) return;
+    const url = `http://localhost:4000/api/impacto/${this.userId}`;
+    this.http.get(url).subscribe({
+      next: (data: any) => {
+        this.impacto = data;
+        this.calcularNivel();
+        this.calcularEquivalencias();
+        this.calcularImpactoPorCategoria();
+      },
+      error: (err) => console.error('❌ Error al obtener impacto:', err),
+    });
+  }
 
+  calcularNivel() {
+    const reutilizados = this.impacto?.reutilizados || 0;
+    if (reutilizados < 10) {
+      this.nivel = '🌱 Principiante Verde';
+      this.siguienteMeta = 10;
+    } else if (reutilizados < 30) {
+      this.nivel = '🌿 Agente Circular';
+      this.siguienteMeta = 30;
+    } else if (reutilizados < 50) {
+      this.nivel = '🌳 Guardián del Bosque';
+      this.siguienteMeta = 50;
+    } else {
+      this.nivel = '🌎 Eco Leyenda';
+      this.siguienteMeta = reutilizados;
+    }
+    this.porcentajeNivel = Math.min(reutilizados / this.siguienteMeta, 1);
+  }
+
+  calcularEquivalencias() {
+    const co2 = this.impacto?.totales?.co2 || this.impacto?.co2 || 0;
+    const agua = this.impacto?.totales?.agua || this.impacto?.agua || 0;
+
+    this.equivalencias = {
+      viajesAuto: (co2 / 2.3).toFixed(0),
+      celulares: (co2 * 10).toFixed(0),
+      duchas: (agua / 50).toFixed(0),
+    };
+  }
+
+  calcularImpactoPorCategoria() {
+    const categorias = this.impacto?.categorias || {};
+    this.impactoPorCategoria = Object.entries(categorias).map(([nombre, datos]: any) => ({
+      nombre,
+      co2: datos.co2 || 0,
+      agua: datos.agua || 0,
+      arboles: datos.arboles || 0,
+    }));
+    this.maxCo2 = Math.max(...this.impactoPorCategoria.map((c) => c.co2), 1);
+  }
 }
