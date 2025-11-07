@@ -1,0 +1,67 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="volver()"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Comprar Puntos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <div class="header-section">
+      <ion-icon name="wallet-outline" class="wallet-icon"></ion-icon>
+      <h1>Comprar Puntos</h1>
+      <p>Elige el paquete que más te convenga</p>
+    </div>
+
+    <div class="paquetes-grid">
+      <ion-card 
+        *ngFor="let paquete of paquetes" 
+        class="paquete-card"
+        [class.popular]="paquete.popular"
+        (click)="comprarPuntos(paquete)">
+        
+        <div class="popular-badge" *ngIf="paquete.popular">
+          <ion-icon name="star"></ion-icon>
+          Popular
+        </div>
+
+        <ion-card-content>
+          <div class="puntos-amount">
+            {{paquete.puntos.toLocaleString()}}
+            <span class="puntos-text">puntos</span>
+          </div>
+          
+          <div class="precio">
+            ${{paquete.precio.toLocaleString()}} CLP
+          </div>
+          
+          <div class="conversion">
+            1 punto = 1 peso
+          </div>
+
+          <ion-button 
+            expand="block" 
+            [color]="paquete.popular ? 'primary' : 'medium'"
+            class="comprar-btn">
+            <ion-icon name="card-outline" slot="start"></ion-icon>
+            Comprar con Transbank
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div class="info-section">
+      <ion-card class="info-card">
+        <ion-card-content>
+          <h3>
+            <ion-icon name="shield-checkmark-outline"></ion-icon>
+            Pago Seguro
+          </h3>
+          <p>Procesado por Transbank, el medio de pago más confiable de Chile.</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

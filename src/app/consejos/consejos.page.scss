@@ -1,0 +1,109 @@
+:host {
+  --bg: #0d0f12;
+  --card: rgba(30, 32, 40, 0.6);
+  --stroke: #2e3340;
+  --txt: #ffffff;
+  --muted: #b3b9c6;
+  --accent-green: #1fd39a;
+  --accent-purple: #a874ff;
+}
+
+ion-content {
+  --background: var(--bg);
+  color: var(--txt);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+ion-toolbar {
+  --background: linear-gradient(90deg, #181b22, #262a33);
+  color: var(--txt);
+  border-bottom: 1px solid var(--stroke);
+  text-align: center;
+
+  ion-title {
+    font-weight: 600;
+    color: var(--accent-purple);
+    letter-spacing: 0.5px;
+  }
+}
+
+ion-card {
+  width: 95%;
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 10px 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-4px);
+    border: 1px solid var(--accent-purple);
+    box-shadow: 0 0 18px rgba(168, 116, 255, 0.3);
+  }
+
+  ion-card-title {
+    color: var(--accent-green);
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  ion-card-content {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    ul {
+      padding-left: 22px;
+      li {
+        margin-bottom: 8px;
+        list-style-type: "✦ ";
+      }
+    }
+  }
+}
+
+.btn-volver {
+  display: block;
+  margin: 30px auto 20px auto; /* 👈 centra horizontalmente */
+  width: 200px;
+  background: linear-gradient(135deg, var(--accent-purple), var(--accent-green));
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 14px;
+  padding: 12px 0;
+  letter-spacing: 0.4px;
+  transition: 0.3s ease;
+  box-shadow: 0 0 10px rgba(168, 116, 255, 0.4),
+              0 0 20px rgba(31, 211, 154, 0.2);
+
+  &:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+    box-shadow: 0 0 15px rgba(168, 116, 255, 0.6),
+                0 0 25px rgba(31, 211, 154, 0.4);
+  }
+}
+
+
+/* ✨ Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
