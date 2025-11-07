@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mapa</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Barra informativa -->
+  <div class="info-bar" *ngIf="destinoMasCercano">
+    <strong>Destino más cercano:</strong> {{ destinoMasCercano.nombre }}
+    <span *ngIf="distanciaKm">({{ distanciaKm.toFixed(1) }} km)</span>
+  </div>
+
+  <div #mapElement class="map-container"></div>
+
+  <ion-footer>
+    <ion-button expand="block" color="success" (click)="iniciarRuta()">INICIAR RUTA</ion-button>
+  </ion-footer>
+</ion-content>
