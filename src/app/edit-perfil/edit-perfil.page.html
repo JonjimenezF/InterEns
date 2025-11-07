@@ -29,47 +29,48 @@
       <ion-label position="stacked">Correo</ion-label>
       <ion-input [value]="email || ''" disabled inputmode="none"></ion-input>
     </ion-item>
-    <ion-item class="field" lines="none">
+    <!-- <ion-item class="field" lines="none">
       <ion-label position="stacked">Teléfono</ion-label>
       <ion-input [(ngModel)]="formTelefono" [disabled]="saving || loading" inputmode="tel"></ion-input>
-    </ion-item>
+    </ion-item> -->
   </div>
 
   <!-- Dirección -->
-  <div class="card">
-    <div class="group-title">Dirección</div>
+  
+<div class="card">
+  <div class="group-title">Dirección</div>
 
-    <ion-item class="field" lines="none">
-      <ion-label position="stacked">Alias (ej: Casa, Trabajo)</ion-label>
-      <ion-input [(ngModel)]="dir.alias" [disabled]="saving || loading"></ion-input>
-    </ion-item>
+  
 
-    <ion-item class="field" lines="none">
-      <ion-label position="stacked">Dirección</ion-label>
-      <ion-input [(ngModel)]="dir.linea_direccion" [disabled]="saving || loading" placeholder="Calle y número"></ion-input>
-    </ion-item>
+  <ion-item class="field" lines="none">
+    <ion-label position="stacked">Región</ion-label>
+    <ion-select
+      [(ngModel)]="dir.region_id"
+      [disabled]="saving || loading"
+      placeholder="Selecciona una región"
+      (ionChange)="cargarComunas()">
+      <ion-select-option *ngFor="let r of regiones" [value]="r.id">{{ r.nombre }}</ion-select-option>
+    </ion-select>
+  </ion-item>
 
-    <ion-item class="field two-cols" lines="none">
-      <div class="col">
-        <ion-label position="stacked">Ciudad</ion-label>
-        <ion-input [(ngModel)]="dir.ciudad" [disabled]="saving || loading"></ion-input>
-      </div>
-      <div class="col">
-        <ion-label position="stacked">Región</ion-label>
-        <ion-input [(ngModel)]="dir.region" [disabled]="saving || loading"></ion-input>
-      </div>
-    </ion-item>
-
-    <ion-item class="field" lines="none">
-      <ion-label position="stacked">Código postal</ion-label>
-      <ion-input [(ngModel)]="dir.codigo_postal" [disabled]="saving || loading"></ion-input>
-    </ion-item>
-
-    <ion-item class="field" lines="none">
-      <ion-label>Predeterminada</ion-label>
-      <ion-toggle [(ngModel)]="dir.es_predeterminada" [disabled]="saving || loading"></ion-toggle>
-    </ion-item>
-  </div>
+  <ion-item class="field" lines="none">
+    <ion-label position="stacked">Comuna</ion-label>
+    <ion-select
+      [(ngModel)]="dir.comuna_id"
+      [disabled]="saving || loading"
+      placeholder="Selecciona una comuna">
+      <ion-select-option *ngFor="let c of comunas" [value]="c.id">{{ c.nombre }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item class="field" lines="none">
+    <ion-label position="stacked">Dirección</ion-label>
+    <ion-input
+      [(ngModel)]="dir.linea_direccion"
+      [disabled]="saving || loading"
+      placeholder="Calle y número">
+    </ion-input>
+  </ion-item>
+</div>
 
   <div style="display:flex; justify-content:center; margin:16px 0 24px;">
     <ion-button class="edit-btn" (click)="guardar()" [disabled]="saving || loading" expand="block">
