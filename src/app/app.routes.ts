@@ -217,5 +217,9 @@ export const routes: Routes = [
     path: 'confirmar-recepcion/:id',
     loadComponent: () => import('./confirmar-recepcion/confirmar-recepcion.page').then( m => m.ConfirmarRecepcionPage)
   },
+  {
+    path: 'comprar-puntos',
+    loadComponent: () => import('./comprar-puntos/comprar-puntos.page').then(m => m.ComprarPuntosPage)
+  },
 ];
 
