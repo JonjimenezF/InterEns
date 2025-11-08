@@ -28,7 +28,6 @@
         </app-star-rating>
       </div>
     </ion-label>
-
     <ion-button class="edit-btn" (click)="editarperfil()">Editar Perfil</ion-button>
   </div>
 
@@ -307,6 +306,75 @@
       <ion-icon name="mail-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
       <p>No tienes solicitudes de canje pendientes.</p>
     </div>
+  </ng-container>
+
+  <!-- ===================== -->
+  <!-- TAB: IMPACTO POSITIVO 🌿 -->
+  <!-- ===================== -->
+  <ng-container *ngIf="selectedTab === 'impacto'">
+    <!-- Nivel -->
+    <ion-card class="nivel-card" *ngIf="nivel">
+      <ion-card-header><ion-card-title>{{ nivel }}</ion-card-title></ion-card-header>
+      <ion-card-content>
+        <p>Tu nivel refleja tu contribución al planeta 🌎</p>
+        <ion-progress-bar [value]="porcentajeNivel" color="success"></ion-progress-bar>
+        <small>Has reutilizado <b>{{ impacto.reutilizados }}</b> artículos.</small>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Impacto Global -->
+    <ion-card *ngIf="impacto">
+      <ion-card-header><ion-card-title>🌍 Impacto Global</ion-card-title></ion-card-header>
+      <ion-card-content>
+        <p>♻️ CO₂ evitado: <b>{{ impacto.co2 | number:'1.0-1' }} kg</b></p>
+        <p>💧 Agua ahorrada: <b>{{ impacto.agua | number:'1.0-0' }} L</b></p>
+        <p>🌳 Árboles equivalentes: <b>{{ impacto.arboles }}</b></p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Equivalencias -->
+    <ion-card *ngIf="equivalencias">
+      <ion-card-header><ion-card-title>💡 Equivalencias</ion-card-title></ion-card-header>
+      <ion-card-content>
+        <p>🚗 <b>{{ equivalencias.viajesAuto }}</b> viajes en auto evitados</p>
+        <p>📱 <b>{{ equivalencias.celulares }}</b> cargas de celular ahorradas</p>
+        <p>🚿 <b>{{ equivalencias.duchas }}</b> duchas cortas equivalentes</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Impacto por Categoría -->
+    <ion-card class="categoria-card" *ngIf="impactoPorCategoria.length > 0">
+      <ion-card-header><ion-card-title>📊 Impacto por Categoría</ion-card-title></ion-card-header>
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item *ngFor="let c of impactoPorCategoria">
+            <ion-label>
+              <h3>{{ c.nombre | titlecase }}</h3>
+              <p>CO₂ evitado: <b>{{ c.co2 | number:'1.0-1' }}</b> kg</p>
+              <ion-progress-bar [value]="c.co2 / maxCo2" color="success" class="barra-impacto"></ion-progress-bar>
+              <p>💧 Agua: <b>{{ c.agua }}</b> L | 🌳 Árboles: <b>{{ c.arboles }}</b></p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Niveles -->
+    <ion-card class="niveles-card">
+      <ion-card-header><ion-card-title>🌱 Niveles Ecológicos</ion-card-title></ion-card-header>
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item *ngFor="let n of nivelesDisponibles" [class.activo]="nivel === n.nombre">
+            <ion-icon [name]="n.icono" slot="start"></ion-icon>
+            <ion-label>
+              <h3>{{ n.nombre }}</h3>
+              <p>{{ n.descripcion }}</p>
+            </ion-label>
+            <ion-badge [color]="nivel === n.nombre ? 'success' : 'medium'">{{ n.meta }} artículos</ion-badge>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
   </ng-container>
 
   <!-- ===================== -->

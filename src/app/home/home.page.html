@@ -27,6 +27,18 @@
         <span>Contacto</span>
       </ion-button>
 
+      <ion-button fill="clear" (click)="goConsejos()" class="menu-btn" expand="block">
+  <ion-icon name="help-circle-outline" slot="start"></ion-icon>
+  <span>Consejos de envío</span>
+</ion-button>
+
+
+
+      
+
+
+      
+
     </div>
   </ion-content>
 </ion-menu>
@@ -81,20 +93,21 @@
       <div
         class="action-card"
         [class.selected]="selectedCard === 'misiones'"
-        (click)="selectCard('misiones'); contacto()"
+        (click)="selectCard('misiones'); misiones()"
       >
         <ion-icon name="trophy-outline" class="faq-icon"></ion-icon>
         <p>Misiones</p>
       </div>
 
-      <div
-        class="action-card"
-        [class.selected]="selectedCard === 'retiro'"
-        (click)="selectCard('retiro'); contacto()"
-      >
-        <ion-icon name="cart-outline" class="faq-icon"></ion-icon>
-        <p>Retiro Producto</p>
-      </div>
+      <div 
+  class="action-card"
+  [class.selected]="selectedCard === 'mapa'"
+  (click)="mapa()"
+>
+  <ion-icon name="cart-outline" class="faq-icon"></ion-icon>
+  <p>Puntos Limpios</p>
+</div>
+
 
       <div
         class="action-card"

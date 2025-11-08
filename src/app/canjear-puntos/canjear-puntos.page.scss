@@ -192,3 +192,32 @@ ion-content.fondocanjear {
     padding: 8px 16px;
   }
 }
+.own-product-msg {
+  text-align: center;
+  color: #6c757d;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.low-points-msg {
+  text-align: center;
+  color: #c43b3b;
+  font-size: 13px;
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.custom-button {
+  --background: #7bc16d;
+  --background-activated: #5fa854;
+  --color: #fff;
+  font-weight: 600;
+}
+

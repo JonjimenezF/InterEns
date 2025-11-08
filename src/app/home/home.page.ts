@@ -199,6 +199,10 @@ export class HomePage implements OnDestroy {
     this.router.navigate(['/home']);
   }
 
+   misiones() {
+    this.router.navigate(['/misiones']);
+  }
+
   perfil() {
     this.router.navigate(['/perfil']);
   }
@@ -233,6 +237,10 @@ export class HomePage implements OnDestroy {
     this.navCtrl.back();
   }
 
+  goConsejos() {
+  this.navCtrl.navigateForward('/consejos');
+}
+
   inter() {
     this.router.navigate(['/que-es'], { state: { userInfo: this.userInfo } });
   }
@@ -240,5 +248,8 @@ export class HomePage implements OnDestroy {
   favoritos() {
   this.router.navigate(['/favoritos']);
 }
+ mapa() {
+    this.router.navigate(['/mapa']);
+  }
 
 }

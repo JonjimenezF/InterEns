@@ -21,14 +21,28 @@
     </div>
 
     <ion-card *ngFor="let item of productos" class="reward-card">
+      <ion-img
+        [src]="item.imagen_url || 'assets/img/default.png'"
+        alt="{{ item.titulo }}"
+      ></ion-img>
 
-      <ion-img [src]="item.imagen_url || 'assets/img/default.png'" alt="{{ item.titulo }}"></ion-img>
       <ion-card-header>
         <ion-card-title>{{ item.titulo }}</ion-card-title>
-        <ion-card-subtitle>{{ item.valor_puntos }} puntos</ion-card-subtitle>
+        <ion-card-subtitle>
+          {{ item.valor_puntos }} puntos
+        </ion-card-subtitle>
       </ion-card-header>
+
       <ion-card-content>
+        <!-- 🚫 Si el producto pertenece al usuario -->
+        <div *ngIf="item.propietario_id === userId" class="own-product-msg">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span>Este producto es tuyo 💡</span>
+        </div>
+
+        <!-- 💱 Si es de otro usuario -->
         <ion-button
+          *ngIf="item.propietario_id !== userId"
           expand="block"
           shape="round"
           class="custom-button"
@@ -38,6 +52,15 @@
           <ion-icon name="swap-horizontal-outline" slot="start"></ion-icon>
           Canjear
         </ion-button>
+
+        <!-- 🔒 Mensaje si no tiene puntos suficientes -->
+        <p
+          *ngIf="puntosTotales < item.valor_puntos && item.propietario_id !== userId"
+          class="low-points-msg"
+        >
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          Te faltan {{ item.valor_puntos - puntosTotales }} puntos
+        </p>
       </ion-card-content>
     </ion-card>
   </section>

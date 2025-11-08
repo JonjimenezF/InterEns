@@ -5,8 +5,10 @@
   --txt: #ffffff;        
   --muted: #b8bec6;      
   --accent: #1fd39a;     
+  --accent-purple: #a874ff; /* 💜 nuevo tono para consejos */
 }
 
+/* === GENERAL === */
 ion-toolbar {
   --background: var(--card);
   color: var(--txt);
@@ -22,7 +24,7 @@ ion-content {
   color: var(--txt);
 }
 
-/* Bienvenida */
+/* === BIENVENIDA === */
 .welcome-card {
   display: flex;
   align-items: center;
@@ -46,7 +48,7 @@ ion-content {
   border-radius: 50%;
 }
 
-/* Saldo */
+/* === SALDO === */
 .balance-card {
   text-align: center;
   margin: 15px;
@@ -60,7 +62,7 @@ ion-content {
   font-weight: 700;
 }
 
-/* Grid de acciones */
+/* === GRID DE ACCIONES === */
 .grid-actions {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -73,31 +75,7 @@ ion-content {
   padding: 25px 15px;
   border-radius: 12px;
   text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.action-card ion-icon {
-  font-size: 32px;
-  color: var(--accent);
-  margin-bottom: 10px;
-}
-
-.action-card p {
-  color: var(--txt);
-  font-size: 14px;
-}
-
-.action-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-}
-
-.action-card {
-  background: var(--card);
-  padding: 25px 15px;
-  border-radius: 12px;
-  text-align: center;
-  border: 2px solid transparent; /* por defecto sin borde */
+  border: 2px solid transparent;
   transition: all 0.25s ease;
 }
 
@@ -118,70 +96,47 @@ ion-content {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
-/* Seleccionado (borde verde) */
+/* Seleccionado */
 .action-card.selected {
   border: 2px solid var(--accent);
   box-shadow: 0 0 10px rgba(31, 211, 154, 0.5);
   transform: scale(1.03);
 }
 
-
-.faq-icon {
-  width:60px;
-  height: 60px;
-  margin-right: 0.6rem;
-}
-
-.menu-btn {
-  color: #1fd39a; /* o el color que quieras, ej: #1fd39a */
-  font-weight: 600; /* opcional, para que resalte */
-  text-align: left; /* opcional, para que quede alineado a la izquierda */
-  margin-bottom: 10px; /* espacio entre botones */
-}
-
-
-.accent {
-  color: #1fd39a;
-  font-weight: 700;
-  transition: transform 0.4s ease, text-shadow 0.4s ease;
-}
-
-.accent.updated {
-  transform: scale(1.2);
-  text-shadow: 0 0 12px rgba(31, 211, 154, 0.8);
-}
-/* ✨ ANIMACIÓN FLOTANTE DE PUNTOS */
+/* === ANIMACIÓN PUNTOS === */
 .floating-points {
   position: fixed;
-  top: 50%;
+  top: 45%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  color: #1fd39a;
-  font-size: 2rem;
+  transform: translate(-50%, -50%);
+  color: var(--accent);
   font-weight: 800;
-  text-shadow: 0 0 15px rgba(31, 211, 154, 0.7);
-  animation: bounceUpFade 1.5s ease-out forwards;
+  font-size: 2.2rem;
+  text-shadow: 0 0 12px rgba(31, 211, 154, 0.7);
+  animation: floatUp 1.6s ease-out forwards;
   z-index: 9999;
   pointer-events: none;
 }
 
-@keyframes bounceUpFade {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.8);
-  }
-  25% {
-    opacity: 1;
-    transform: translate(-50%, -60%) scale(1.1);
-  }
-  75% {
-    opacity: 1;
-    transform: translate(-50%, -80%) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -100%) scale(0.8);
-  }
+@keyframes floatUp {
+  0% { opacity: 0; transform: translate(-50%, 10%) scale(0.8); }
+  30% { opacity: 1; transform: translate(-50%, -10%) scale(1.05); }
+  60% { opacity: 1; transform: translate(-50%, -30%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -60%) scale(0.9); }
+}
+
+.floating-points::after {
+  content: '✨';
+  position: absolute;
+  right: -20px;
+  top: -10px;
+  animation: spark 1.2s ease-in-out forwards;
+}
+
+@keyframes spark {
+  0% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.3) rotate(20deg); }
+  100% { opacity: 0; transform: scale(0.6) rotate(40deg); }
 }
 
 /* === MENÚ LATERAL === */
@@ -196,7 +151,7 @@ ion-content {
   padding: 5px 10px;
 }
 
-/* Botones del menú */
+/* === BOTONES DEL MENÚ === */
 .menu-btn {
   --color: var(--accent);
   display: flex;
@@ -219,68 +174,40 @@ ion-content {
   text-align: center;
 }
 
-/* Corazón (Favoritos) */
-.menu-btn ion-icon[name="heart-outline"],
-.menu-btn ion-icon[name="heart"] {
-  color: #ff4d4d;
-}
-
 /* Hover general */
 .menu-btn:hover {
   background-color: rgba(31, 211, 154, 0.1);
   transform: scale(1.02);
 }
 
-/* Ajuste visual para texto */
+/* Texto */
 .menu-btn span {
   flex-grow: 1;
   text-align: left;
   color: var(--txt);
 }
 
-
-.floating-points {
-  position: fixed;
-  left: 50%;
-  top: 45%;
-  transform: translate(-50%, -50%);
-  color: var(--accent);
-  font-weight: 800;
-  font-size: 2.2rem;
-  text-shadow: 0 0 12px rgba(31, 211, 154, 0.7);
-  animation: floatUp 1.6s ease-out forwards;
-  z-index: 9999;
-  pointer-events: none;
+/* ❤️ Favoritos */
+.menu-btn ion-icon[name="heart-outline"],
+.menu-btn ion-icon[name="heart"] {
+  color: #ff4d4d;
 }
 
-@keyframes floatUp {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, 10%) scale(0.8);
-  }
-  30% {
-    opacity: 1;
-    transform: translate(-50%, -10%) scale(1.05);
-  }
-  60% {
-    opacity: 1;
-    transform: translate(-50%, -30%) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -60%) scale(0.9);
-  }
-}
-.floating-points::after {
-  content: '✨';
-  position: absolute;
-  right: -20px;
-  top: -10px;
-  animation: spark 1.2s ease-in-out forwards;
+/* 💜 Consejos (botón destacado) */
+.menu-btn.consejos-btn {
+  --color: var(--accent-purple);
+  background: linear-gradient(135deg, rgba(168, 116, 255, 0.12), rgba(31, 211, 154, 0.08));
+  border: 1px solid rgba(168, 116, 255, 0.2);
+  box-shadow: 0 0 8px rgba(168, 116, 255, 0.15);
 }
 
-@keyframes spark {
-  0% { opacity: 0; transform: scale(0.5) rotate(0deg); }
-  50% { opacity: 1; transform: scale(1.3) rotate(20deg); }
-  100% { opacity: 0; transform: scale(0.6) rotate(40deg); }
+.menu-btn.consejos-btn ion-icon {
+  color: var(--accent-purple);
+  filter: drop-shadow(0 0 6px rgba(168, 116, 255, 0.4));
+}
+
+.menu-btn.consejos-btn:hover {
+  background: linear-gradient(135deg, rgba(168, 116, 255, 0.2), rgba(31, 211, 154, 0.15));
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(168, 116, 255, 0.4);
 }

@@ -31,7 +31,11 @@
                 "output": "assets"
               }
             ],
-            "styles": ["src/global.scss", "src/theme/variables.scss","node_modules/swiper/swiper.css"],
+            "styles": ["src/global.scss",
+             "src/theme/variables.scss",
+             "node_modules/swiper/swiper.css",
+             "node_modules/leaflet/dist/leaflet.css"
+            ],
             "scripts": []
           },
           "configurations": {

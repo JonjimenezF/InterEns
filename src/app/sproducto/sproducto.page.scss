@@ -346,3 +346,24 @@ app-footer-interens {
 ::-webkit-scrollbar-track {
   background-color: var(--card);
 }
+
+
+.loading-text {
+  color: var(--muted, #aaa);
+  font-size: 14px;
+  margin-top: 4px;
+  text-align: left;
+}
+
+
+// ====== SELECTS (Región / Comuna) ======
+ion-select {
+  --placeholder-color: #aaa;
+  --highlight-color-focused: var(--accent);
+  --padding-start: 10px;
+}
+
+ion-select-option {
+  background: var(--card-bg);
+  color: var(--text-color);
+}
