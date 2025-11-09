@@ -264,6 +264,22 @@ export class DetalleProductoPage implements OnInit, OnDestroy {
         return;
       }
 
+      try {
+        const reservarRes = await fetch(`${this.API_BASE}/api/reservar/${this.producto.id}`, { method: 'PUT' });
+        if (!reservarRes.ok) {
+          if (reservarRes.status === 409) {
+            console.warn('⚠️ Ya estaba reservado (409).');
+          } else {
+            const t = await reservarRes.text().catch(() => '');
+            console.warn('⚠️ No se pudo reservar en backend:', reservarRes.status, t);
+          }
+        } else {
+          console.log('✅ Producto reservado en backend');
+        }
+      } catch (e) {
+        console.warn('⚠️ Error de red al reservar producto en backend:', e);
+      }
+
       // ===== 3) Reflejar estado local =====
       this.userSaldo = Number(resp.nuevo_total ?? this.userSaldo);
       this.producto.estado = 'reservado';
@@ -275,6 +291,49 @@ export class DetalleProductoPage implements OnInit, OnDestroy {
       window.dispatchEvent(new CustomEvent('productoIntercambiado', {
         detail: { productoId: this.producto.id, transaccionId }
       }));
+
+      // ===== 4) Crear notificaciones =====
+      try {
+        const endpoint1 = `${this.API_BASE}/api/notificaciones/canje/propietario`;
+        const payload = {
+          transaccion_id: transaccionId,
+          enser_id: this.producto.id,
+          vendedor_id: propietarioId,
+          comprador_id: compradorId,
+          producto_titulo: this.producto.titulo || 'Producto'
+        };
+        await fetch(`${this.API_BASE}/api/notificaciones/canje/propietario`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            transaccion_id: transaccionId,
+            enser_id: this.producto.id,
+            vendedor_id: propietarioId,
+            comprador_id: compradorId,
+            producto_titulo: this.producto.titulo || 'Producto'
+          })
+        });
+        console.log('➡️ POST propietario', endpoint1, payload);
+
+        const endpoint2 = `${this.API_BASE}/api/notificaciones/canje/comprador`;
+        
+        await fetch(`${this.API_BASE}/api/notificaciones/canje/comprador`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            transaccion_id: transaccionId,
+            enser_id: this.producto.id,
+            vendedor_id: propietarioId,
+            comprador_id: compradorId,
+            producto_titulo: this.producto.titulo || 'Producto'
+          })
+        });
+        console.log('➡️ POST comprador', endpoint2, payload);
+
+        console.log('📩 Notificaciones creadas correctamente');
+      } catch (err) {
+        console.warn('⚠️ Error creando notificaciones:', err);
+      }
 
       setTimeout(() => {
         this.router.navigate(['/home']);

@@ -1,6 +1,10 @@
 <ion-menu contentId="main-content">
-  <ion-header>
-    <ion-toolbar></ion-toolbar>
+   <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button auto-hide="false" class="icono-accent"></ion-menu-button>
+      </ion-buttons>
+    </ion-toolbar>
   </ion-header>
 
   <ion-content class="ion-padding menu-content">
@@ -31,26 +35,34 @@
   <ion-icon name="help-circle-outline" slot="start"></ion-icon>
   <span>Consejos de envío</span>
 </ion-button>
-
-
-
-      
-
-
-      
-
     </div>
   </ion-content>
 </ion-menu>
 
 <div class="ion-page" id="main-content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-menu-button auto-hide="false" class="icono-accent"></ion-menu-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
+   <ion-header>
+      <ion-toolbar>
+
+        <ion-buttons slot="start">
+          <ion-menu-button auto-hide="false"></ion-menu-button>
+        </ion-buttons>
+
+        <ion-buttons slot="end">
+          <ion-button fill="clear" class="notif-btn" (click)="verNotificaciones($event)">
+            <ion-icon name="notifications-outline"></ion-icon>
+            <ion-img src="./assets/nuevos_img/notificacion.png" class="bell-icon" />
+            <!-- ✅ Badge reemplazo -->
+            <div
+              *ngIf="notificacionesPendientes > 0"
+              class="notif-count"
+            >
+              {{ notificacionesPendientes }}
+            </div>
+          </ion-button>
+        </ion-buttons>
+
+      </ion-toolbar>
+    </ion-header>
 
 
 
