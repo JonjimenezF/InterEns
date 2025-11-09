@@ -13,9 +13,8 @@
   </ion-toolbar>
 </ion-header>
 
-
-<ion-content class="misiones-container">
-
+<!-- Contenido principal -->
+<ion-content class="misiones-container" fullscreen="true">
   <!-- 🧾 Tabla informativa de misiones -->
   <div class="tabla-misiones">
     <h3>Misiones disponibles</h3>
@@ -53,14 +52,11 @@
   </div>
 
   <!-- 🧩 Lista de misiones del usuario -->
-  <div *ngIf="!cargando">
+  <div *ngIf="!cargando" class="lista-misiones">
     <div *ngFor="let m of misiones" class="mision-card" [class.completada]="m.completada">
       <div class="mision-header">
         <div class="icon-wrapper" [class.completada]="m.completada">
-          <ion-icon
-            [name]="m.completada ? 'trophy' : 'flag-outline'"
-            class="icon-mision"
-          ></ion-icon>
+          <ion-icon [name]="m.completada ? 'trophy' : 'flag-outline'" class="icon-mision"></ion-icon>
         </div>
         <div class="titulo-box">
           <h2>{{ m.nombre }}</h2>
@@ -72,10 +68,7 @@
       </div>
 
       <div class="barra">
-        <ion-progress-bar
-          [value]="m.porcentaje"
-          color="tertiary"
-        ></ion-progress-bar>
+        <ion-progress-bar [value]="m.porcentaje" color="tertiary"></ion-progress-bar>
       </div>
 
       <div class="info">
@@ -87,12 +80,14 @@
       </div>
     </div>
   </div>
-  <!-- ✨ Animación visual de puntos ganados -->
-<div *ngIf="mostrandoAnimacion" class="floating-points">
-  +{{ puntosGanados }} pts ✨
-</div>
 
-  <app-footer-interens></app-footer-interens>
+  <!-- ✨ Animación visual de puntos ganados -->
+  <div *ngIf="mostrandoAnimacion" class="floating-points">
+    +{{ puntosGanados }} pts ✨
+  </div>
 </ion-content>
 
-
+<!-- Footer real (fuera del contenido) -->
+<ion-footer class="footer-interens">
+  <app-footer-interens></app-footer-interens>
+</ion-footer>

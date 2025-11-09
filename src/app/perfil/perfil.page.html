@@ -18,11 +18,11 @@
     <ion-label class="profile-info">
       <div class="nombre">{{ nombre || 'Usuario' }}</div>
       <small class="email" *ngIf="email">{{ email }}</small>
-      
+
       <!-- Reputación -->
       <div class="reputacion" *ngIf="reputacion">
-        <app-star-rating 
-          [rating]="reputacion.promedio" 
+        <app-star-rating
+          [rating]="reputacion.promedio"
           [totalReviews]="reputacion.totalReviews"
           size="medium">
         </app-star-rating>
@@ -67,7 +67,7 @@
   <!-- ===================== -->
   <ng-container *ngIf="selectedTab === 'mensajes'">
     <ion-list *ngIf="conversaciones.length > 0">
-      <ion-item *ngFor="let conv of conversaciones" button (click)="abrirChat(conv)" 
+      <ion-item *ngFor="let conv of conversaciones" button (click)="abrirChat(conv)"
                 [class.unread-conversation]="conv.mensajes_no_leidos > 0">
         <ion-thumbnail slot="start">
           <img [src]="conv.enser_imagen || 'assets/img/default.png'" alt="producto" />
@@ -75,7 +75,7 @@
 
         <ion-label>
           <h3>{{ conv.enser_titulo || 'Producto sin título' }}</h3>
-          
+
           <!-- Último mensaje con indicador -->
           <p class="ion-text-wrap mensaje-preview" *ngIf="conv.ultimo_mensaje_real">
             <span class="mensaje-indicador" [style.color]="conv.es_mio ? '#1fd39a' : '#ffffff'">
@@ -85,12 +85,12 @@
               {{ conv.ultimo_mensaje_real }}
             </span>
           </p>
-          
+
           <p class="ion-text-wrap" *ngIf="!conv.ultimo_mensaje_real">
             <ion-icon name="chatbubble-outline" color="medium"></ion-icon>
             Sin mensajes aún
           </p>
-          
+
           <small>{{ (conv.ultimo_mensaje_fecha || conv.updated_at) | date:'short' }}</small>
         </ion-label>
 
@@ -116,54 +116,47 @@
   <!-- TAB: MIS PRODUCTOS -->
   <!-- ===================== -->
   <ng-container *ngIf="selectedTab === 'productos'">
-    <ion-list *ngIf="productos.length > 0">
-      <ion-item *ngFor="let p of productos">
-        <ion-thumbnail slot="start">
-          <img [src]="cover(p)" alt="img" />
-        </ion-thumbnail>
+      <ion-grid class="products-grid" *ngIf="productos.length > 0">
+        <ion-row>
+          <ion-col size="12" size-md="6" size-lg="4" *ngFor="let p of productos">
+            <ion-card class="product-card">
+              <div class="img">
+                <img [src]="cover(p)" alt="img" />
+              </div>
 
-        <ion-label>
-          <h3>{{ p.title || p.titulo }}</h3>
-          <p class="ion-text-wrap">{{ p.description || p.descripcion }}</p>
-          <small *ngIf="p.created_at">Publicado: {{ p.created_at | date: 'shortDate' }}</small>
-        </ion-label>
+              <div class="content">
+                <h3>{{ p.title || p.titulo }}</h3>
+                <p class="desc ion-text-wrap">{{ p.description || p.descripcion }}</p>
+                <small class="date" *ngIf="p.created_at">
+                  Publicado: {{ p.created_at | date:'shortDate' }}
+                </small>
+              </div>
 
-        <ion-badge [color]="statusColor(p)">
-          {{ formatEstado(p.estado) }}
-        </ion-badge>
+              <div class="actions">
+                <ion-badge [color]="statusColor(p)" class="estado">
+                  {{ formatEstado(p.estado) }}
+                </ion-badge>
 
-        <!-- ♻️ Botón Intercambiar / Reactivar -->
-        <ion-buttons slot="end">
-          <ion-button
-            fill="outline"
-            [color]="p.estado === 'no_disponible' ? 'success' : 'tertiary'"
-            class="intercambiado-btn"
-            (click)="marcarIntercambiado(p)">
-            <ion-icon
-              [name]="p.estado === 'no_disponible' ? 'reload-outline' : 'swap-horizontal-outline'">
-            </ion-icon>
-            {{ p.estado === 'no_disponible' ? 'HABILITAR' : 'INTERCAMBIAR' }}
-          </ion-button>
-          
-          <ion-button
-            fill="outline"
-            color="success"
-            class="pickup-btn"
-            (click)="solicitarRetiro(p)"
-            *ngIf="p.estado === 'publicado'">
-            <ion-icon name="car-outline"></ion-icon>
-            RETIRO
-          </ion-button>
-        </ion-buttons>
-      </ion-item>
-    </ion-list>
+                <ion-button
+                  *ngIf="p.estado === 'reservado'"
+                  fill="outline"
+                  color="success"
+                  class="pickup-btn"
+                  (click)="solicitarRetiro(p)">
+                  <ion-icon name="car-outline"></ion-icon>
+                  RETIRO
+                </ion-button>
+              </div>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
 
-    <!-- 🕳️ Sin productos -->
-    <div *ngIf="!prodLoading && productos.length === 0" class="ion-text-center ion-margin-top">
-      <ion-icon name="cube-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
-      <p>Sin productos publicados aún.</p>
-    </div>
-  </ng-container>
+      <div *ngIf="!prodLoading && productos.length === 0" class="ion-text-center ion-margin-top">
+        <ion-icon name="cube-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
+        <p>Sin productos publicados aún.</p>
+      </div>
+    </ng-container>
 
   <!-- ===================== -->
   <!-- TAB: MIS BORRADORES -->
@@ -181,7 +174,6 @@
           <small *ngIf="b.updated_at">Última edición: {{ b.updated_at | date: 'short' }}</small>
         </ion-label>
 
-        <!-- Botones de acción -->
         <ion-buttons slot="end">
           <ion-button fill="outline" color="success" (click)="editarBorrador(b)">
             <ion-icon name="create-outline"></ion-icon>
@@ -196,7 +188,6 @@
       </ion-item>
     </ion-list>
 
-    <!-- 📭 Sin borradores -->
     <div *ngIf="!borrLoading && borradores.length === 0" class="ion-text-center ion-margin-top">
       <ion-icon name="document-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
       <p>No tienes borradores guardados.</p>
@@ -207,11 +198,11 @@
   <!-- TAB: MIS RESEÑAS -->
   <!-- ===================== -->
   <ng-container *ngIf="selectedTab === 'reseñas'">
-    <app-reviews-list 
-      [usuarioId]="userId!" 
+    <app-reviews-list
+      [usuarioId]="userId!"
       *ngIf="userId">
     </app-reviews-list>
-    
+
     <div *ngIf="!userId" class="ion-text-center ion-margin-top">
       <ion-icon name="star-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
       <p>Error cargando reseñas.</p>
@@ -237,9 +228,9 @@
         </ion-label>
 
         <ion-buttons slot="end" *ngIf="transaccion.estado === 'en_logistica'">
-          <ion-button 
-            fill="solid" 
-            color="success" 
+          <ion-button
+            fill="solid"
+            color="success"
             (click)="confirmarRecepcionProducto(transaccion.id)">
             <ion-icon name="checkmark-circle" slot="start"></ion-icon>
             Confirmar Recepción
@@ -273,26 +264,26 @@
         </ion-label>
 
         <ion-buttons slot="end" *ngIf="solicitud.estado === 'pendiente'">
-          <ion-button 
-            fill="solid" 
-            color="success" 
+          <ion-button
+            fill="solid"
+            color="success"
             size="small"
             (click)="aceptarSolicitud(solicitud.id)">
             <ion-icon name="checkmark" slot="icon-only"></ion-icon>
           </ion-button>
-          <ion-button 
-            fill="solid" 
-            color="danger" 
+          <ion-button
+            fill="solid"
+            color="danger"
             size="small"
             (click)="rechazarSolicitud(solicitud.id)">
             <ion-icon name="close" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-buttons>
-        
+
         <ion-buttons slot="end" *ngIf="solicitud.estado === 'aceptada'">
-          <ion-button 
-            fill="solid" 
-            color="tertiary" 
+          <ion-button
+            fill="solid"
+            color="tertiary"
             size="small"
             (click)="marcarComoEnviado(solicitud.id)">
             <ion-icon name="car" slot="start"></ion-icon>
@@ -376,75 +367,9 @@
       </ion-card-content>
     </ion-card>
   </ng-container>
-
-  <!-- ===================== -->
-  <!-- TAB: IMPACTO POSITIVO 🌿 -->
-  <!-- ===================== -->
-  <ng-container *ngIf="selectedTab === 'impacto'">
-    <!-- Nivel -->
-    <ion-card class="nivel-card" *ngIf="nivel">
-      <ion-card-header><ion-card-title>{{ nivel }}</ion-card-title></ion-card-header>
-      <ion-card-content>
-        <p>Tu nivel refleja tu contribución al planeta 🌎</p>
-        <ion-progress-bar [value]="porcentajeNivel" color="success"></ion-progress-bar>
-        <small>Has reutilizado <b>{{ impacto.reutilizados }}</b> artículos.</small>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Impacto Global -->
-    <ion-card *ngIf="impacto">
-      <ion-card-header><ion-card-title>🌍 Impacto Global</ion-card-title></ion-card-header>
-      <ion-card-content>
-        <p>♻️ CO₂ evitado: <b>{{ impacto.co2 | number:'1.0-1' }} kg</b></p>
-        <p>💧 Agua ahorrada: <b>{{ impacto.agua | number:'1.0-0' }} L</b></p>
-        <p>🌳 Árboles equivalentes: <b>{{ impacto.arboles }}</b></p>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Equivalencias -->
-    <ion-card *ngIf="equivalencias">
-      <ion-card-header><ion-card-title>💡 Equivalencias</ion-card-title></ion-card-header>
-      <ion-card-content>
-        <p>🚗 <b>{{ equivalencias.viajesAuto }}</b> viajes en auto evitados</p>
-        <p>📱 <b>{{ equivalencias.celulares }}</b> cargas de celular ahorradas</p>
-        <p>🚿 <b>{{ equivalencias.duchas }}</b> duchas cortas equivalentes</p>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Impacto por Categoría -->
-    <ion-card class="categoria-card" *ngIf="impactoPorCategoria.length > 0">
-      <ion-card-header><ion-card-title>📊 Impacto por Categoría</ion-card-title></ion-card-header>
-      <ion-card-content>
-        <ion-list lines="none">
-          <ion-item *ngFor="let c of impactoPorCategoria">
-            <ion-label>
-              <h3>{{ c.nombre | titlecase }}</h3>
-              <p>CO₂ evitado: <b>{{ c.co2 | number:'1.0-1' }}</b> kg</p>
-              <ion-progress-bar [value]="c.co2 / maxCo2" color="success" class="barra-impacto"></ion-progress-bar>
-              <p>💧 Agua: <b>{{ c.agua }}</b> L | 🌳 Árboles: <b>{{ c.arboles }}</b></p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Niveles -->
-    <ion-card class="niveles-card">
-      <ion-card-header><ion-card-title>🌱 Niveles Ecológicos</ion-card-title></ion-card-header>
-      <ion-card-content>
-        <ion-list lines="none">
-          <ion-item *ngFor="let n of nivelesDisponibles" [class.activo]="nivel === n.nombre">
-            <ion-icon [name]="n.icono" slot="start"></ion-icon>
-            <ion-label>
-              <h3>{{ n.nombre }}</h3>
-              <p>{{ n.descripcion }}</p>
-            </ion-label>
-            <ion-badge [color]="nivel === n.nombre ? 'success' : 'medium'">{{ n.meta }} artículos</ion-badge>
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
-  </ng-container>
 </ion-content>
 
-<app-footer-interens></app-footer-interens>
+<!-- Footer fijo abajo -->
+<ion-footer class="footer-fixed">
+  <app-footer-interens></app-footer-interens>
+</ion-footer>

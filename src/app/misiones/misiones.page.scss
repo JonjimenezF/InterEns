@@ -4,6 +4,14 @@
   --stroke: #2b3036;
   --txt: #ffffff;
   --accent: #1fd39a;
+
+  --purple: #9b46ff;
+  --purple-light: #b778ff;
+  --purple-dark: #6a25cc;
+
+  --muted: #b8c0cc;
+  --accent-soft: rgba(31, 211, 154, 0.5);
+  --accent-glow: rgba(31, 211, 154, 0.35);
 }
 
 ion-toolbar {
@@ -40,7 +48,7 @@ ion-toolbar {
   margin-top: 2px;
 }
 
-/* Texto principal */
+/* Texto principal (un único selector .titulo) */
 .titulo {
   color: var(--txt);
   font-size: 20px;
@@ -48,36 +56,20 @@ ion-toolbar {
   margin: 0;
 }
 
-/* Botón de volver */
 ion-back-button {
   --color: var(--accent);
   --icon-font-size: 24px;
 }
 
-
-/* ===== GENERAL ===== */
+/* ===== CONTENEDOR DEL CONTENIDO ===== */
 .misiones-container {
   --background: var(--bg);
   padding: 18px;
   color: var(--txt);
   animation: fadeIn 0.8s ease;
-  min-height: calc(100vh - 60px);
-}
 
-/* ===== TÍTULO ===== */
-.titulo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--accent);
-  text-shadow: 0 0 6px var(--accent-soft);
-
-  ion-icon {
-    font-size: 1.3rem;
-    color: var(--accent);
-  }
+  /* deja espacio para el footer real (alto aprox. 72px + safe-area iOS) */
+  --padding-bottom: calc(84px + env(safe-area-inset-bottom));
 }
 
 /* ===== TABLA DE MISIONES DISPONIBLES ===== */
@@ -171,7 +163,7 @@ ion-back-button {
   }
 }
 
-/* ===== TARJETAS DE MISIONES ===== */
+/* ===== LISTA Y TARJETAS DE MISIONES ===== */
 .lista-misiones {
   animation: fadeInUp 1.2s ease;
 }
@@ -265,12 +257,7 @@ ion-back-button {
       height: 8px;
       border-radius: 8px;
       --background: rgba(255, 255, 255, 0.05);
-      --progress-background: linear-gradient(
-        90deg,
-        var(--purple),
-        var(--purple-light),
-        var(--purple-dark)
-      );
+      --progress-background: linear-gradient(90deg, var(--purple), var(--purple-light), var(--purple-dark));
       transition: all 0.4s ease;
       animation: fillBar 0.8s ease-out;
       margin-bottom: 6px;
@@ -288,36 +275,19 @@ ion-back-button {
 
 /* ===== ANIMACIONES ===== */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);   }
 }
 
 @keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  0%   { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0);     }
 }
 
 @keyframes fillBar {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
+  from { width: 0; }
+  to   { width: 100%; }
 }
-
 
 .floating-points {
   position: fixed;
@@ -334,20 +304,22 @@ ion-back-button {
 }
 
 @keyframes floatUp {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, 10%) scale(0.8);
-  }
-  30% {
-    opacity: 1;
-    transform: translate(-50%, -10%) scale(1.05);
-  }
-  60% {
-    opacity: 1;
-    transform: translate(-50%, -30%) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -60%) scale(0.9);
-  }
+  0%   { opacity: 0; transform: translate(-50%, 10%) scale(0.8); }
+  30%  { opacity: 1; transform: translate(-50%, -10%) scale(1.05); }
+  60%  { opacity: 1; transform: translate(-50%, -30%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -60%) scale(0.9); }
+}
+
+/* ===== FOOTER ===== */
+ion-footer.footer-interens {
+  --background: var(--card);
+  border-top: 1px solid var(--stroke);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.35);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+ion-footer.footer-interens app-footer-interens {
+  display: block;
+  width: 100%;
 }

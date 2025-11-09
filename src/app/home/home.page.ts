@@ -44,7 +44,7 @@ import { PuntosService } from '../servicios/puntos.service';
     IonIcon
   ]
 })
-export class HomePage implements OnDestroy {
+export class HomePage implements OnInit, OnDestroy {
   nombre: string | null = null;
   email: string | null = null;
   avatarUrl: string | null = null;
@@ -56,14 +56,15 @@ export class HomePage implements OnDestroy {
   loading = true;
   userId: string | undefined;
   userInfo?: any;
-  subscription: any;
 
   selectedCard: string | null = null;
   puntosTotales: number = 0;
 
-  // ✨ Animación de puntos
   mostrarAnimacion = false;
   puntosGanados = 0;
+
+  // 🔔 Canal realtime
+  private realtimeChannel: any;
 
   constructor(
     private router: Router,
@@ -86,18 +87,21 @@ export class HomePage implements OnDestroy {
       this.userId = userData.user.id;
       console.log('✅ Usuario activo:', this.userId);
 
-      this.obtenerPuntos();
+      // Carga inicial
+      await this.cargarPuntosIniciales();
+
+      // Escucha cambios realtime
       this.escucharCambiosEnPuntos();
     } else {
-      console.warn('No hay usuario autenticado.');
+      console.warn('⚠️ No hay usuario autenticado.');
     }
+
     this.loading = true;
     await this.loadPerfil();
   }
 
-
   async ionViewWillEnter() {
-  await this.loadPerfil();
+    await this.loadPerfil();
   }
 
   private async loadPerfil() {
@@ -111,10 +115,7 @@ export class HomePage implements OnDestroy {
     const perfil = await r.json();
 
     this.perfile = perfil;
-    // this.nombre = perfil?.nombre_completo ?? null;
-    // this.email  = perfil?.email ?? null;
 
-    // por si el backend no trae ?v=... (cache-buster)
     let url = perfil?.avatar_url ?? null;
     if (url && !url.includes('?v=')) {
       url = `${url}${url.includes('?') ? '&' : '?'}v=${Date.now()}`;
@@ -124,27 +125,39 @@ export class HomePage implements OnDestroy {
     this.loading = false;
   }
 
-  // 🪙 Obtener puntos desde el backend
-  obtenerPuntos() {
+  // 💰 Cargar puntos actuales (snapshot inicial)
+  private async cargarPuntosIniciales() {
     if (!this.userId) return;
 
-    this.puntosService.getUserPoints(this.userId).subscribe({
-      next: (res) => {
-        console.log('🎯 Puntos desde Supabase:', res);
-        this.puntosTotales = res.total_points || 0;
-      },
-      error: (err) => {
-        console.error('❌ Error al obtener puntos en Home:', err);
-      }
+    // Usa tu service (el mismo que ocupabas antes en obtenerPuntos)
+    await new Promise<void>((resolve) => {
+      this.puntosService.getUserPoints(this.userId!).subscribe({
+        next: (res) => {
+          console.log('🔹 Snapshot puntos (service):', res);
+          this.puntosTotales = Number(res?.total_points ?? 0);
+          resolve();
+        },
+        error: (err) => {
+          console.error('❌ Error snapshot puntos:', err);
+          this.puntosTotales = 0;
+          resolve();
+        }
+      });
     });
   }
 
-  // 🔔 Escuchar actualizaciones en tiempo real (puntos)
-  escucharCambiosEnPuntos() {
+
+  // 🔁 Escuchar cambios en tiempo real de los puntos
+  private escucharCambiosEnPuntos() {
     if (!this.userId) return;
 
-    this.subscription = supabase
-      .channel('user-points-realtime')
+    // Cierra canal previo si existe (evita duplicados)
+    if (this.realtimeChannel) {
+      supabase.removeChannel(this.realtimeChannel);
+    }
+
+    this.realtimeChannel = supabase
+      .channel(`user-points-${this.userId}`)
       .on(
         'postgres_changes',
         {
@@ -154,21 +167,22 @@ export class HomePage implements OnDestroy {
           filter: `usuario_id=eq.${this.userId}`,
         },
         (payload) => {
-          const nuevo = payload.new as { total_points?: number };
+          const nuevo = (payload.new as any)?.total_points;
 
-          if (nuevo && typeof nuevo.total_points === 'number') {
-            const diferencia = nuevo.total_points - this.puntosTotales;
+          if (typeof nuevo === 'number') {
+            const diferencia = nuevo - this.puntosTotales;
 
+            // Animación si suben los puntos
             if (diferencia > 0) {
               this.puntosGanados = diferencia;
               this.mostrarAnimacion = true;
-
-              setTimeout(() => {
-                this.mostrarAnimacion = false;
-              }, 1500);
+              setTimeout(() => (this.mostrarAnimacion = false), 1500);
             }
 
-            this.puntosTotales = nuevo.total_points;
+            this.puntosTotales = nuevo;
+            console.log('🔁 Puntos actualizados en tiempo real:', this.puntosTotales);
+          } else {
+            this.cargarPuntosIniciales(); // seguridad si no hay payload.new
           }
         }
       )
@@ -179,8 +193,9 @@ export class HomePage implements OnDestroy {
 
   // 🧹 Limpiar canal al salir
   ngOnDestroy() {
-    if (this.subscription) {
-      supabase.removeChannel(this.subscription);
+    if (this.realtimeChannel) {
+      supabase.removeChannel(this.realtimeChannel);
+      this.realtimeChannel = null;
       console.log('🔴 Canal Realtime desconectado');
     }
   }
@@ -199,7 +214,7 @@ export class HomePage implements OnDestroy {
     this.router.navigate(['/home']);
   }
 
-   misiones() {
+  misiones() {
     this.router.navigate(['/misiones']);
   }
 
@@ -238,18 +253,18 @@ export class HomePage implements OnDestroy {
   }
 
   goConsejos() {
-  this.navCtrl.navigateForward('/consejos');
-}
+    this.navCtrl.navigateForward('/consejos');
+  }
 
   inter() {
     this.router.navigate(['/que-es'], { state: { userInfo: this.userInfo } });
   }
 
   favoritos() {
-  this.router.navigate(['/favoritos']);
-}
- mapa() {
-    this.router.navigate(['/mapa']);
+    this.router.navigate(['/favoritos']);
   }
 
+  mapa() {
+    this.router.navigate(['/mapa']);
+  }
 }

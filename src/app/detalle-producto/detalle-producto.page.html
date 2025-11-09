@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button (click)="goBack()" text=""></ion-back-button>
+      <ion-back-button (click)="goBack()" defaultHref="home" text=""></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -43,10 +43,15 @@
         </div>
       </div>
 
-      <!-- Bloque de puntos -->
+      <!-- 💰 Caja de puntos (solo valor) -->
       <div class="puntos-box">
         <ion-icon name="trophy-outline" class="icono-puntos"></ion-icon>
         <h2>{{ producto.valor_puntos }} InterCoins</h2>
+      </div>
+
+      <!-- 🪙 Saldo del usuario separado -->
+      <div class="saldo-container" *ngIf="userSaldo !== null">
+        <p>Tu saldo actual: <strong>{{ userSaldo }}</strong> InterCoins</p>
       </div>
 
       <!-- Reseñas del vendedor -->
@@ -74,22 +79,38 @@
           Reportar producto
         </ion-button>
         
+        <!-- ✅ Botón con validaciones -->
         <ion-button 
           expand="block" 
           shape="round" 
           class="btn-canjear" 
           (click)="canjearProducto()"
-          *ngIf="producto.estado !== 'no_disponible'">
+          *ngIf="!productoNoDisponible"
+          [disabled]="
+            isBusyCanje ||
+            esPropietario ||
+            (userSaldo !== null && userSaldo < (producto?.valor_puntos || 0))
+          ">
           <ion-icon name="trophy" slot="start"></ion-icon>
           Canjear por {{ producto.valor_puntos }} InterCoins
         </ion-button>
+
+        <!-- Mensajes de ayuda -->
+        <div *ngIf="esPropietario" class="help-text">
+          Este es tu producto: no puedes canjearlo.
+        </div>
+
+        <div *ngIf="!esPropietario && userSaldo !== null && userSaldo < (producto?.valor_puntos || 0)"
+             class="help-text">
+          Te faltan {{ (producto?.valor_puntos || 0) - (userSaldo || 0) }} InterCoins para canjear este producto.
+        </div>
         
         <ion-button 
           expand="block" 
           shape="round" 
           class="btn-no-disponible" 
           disabled
-          *ngIf="producto.estado === 'no_disponible'">
+          *ngIf="productoNoDisponible">
           <ion-icon name="close-circle" slot="start"></ion-icon>
           Producto No Disponible
         </ion-button>

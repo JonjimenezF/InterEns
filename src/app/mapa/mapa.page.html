@@ -14,9 +14,11 @@
     <span *ngIf="distanciaKm">({{ distanciaKm.toFixed(1) }} km)</span>
   </div>
 
+  <!-- Contenedor del mapa -->
   <div #mapElement class="map-container"></div>
-
-  <ion-footer>
-    <ion-button expand="block" color="success" (click)="iniciarRuta()">INICIAR RUTA</ion-button>
-  </ion-footer>
 </ion-content>
+
+<!-- Footer fuera del ion-content -->
+<ion-footer>
+  <ion-button expand="block" color="success" (click)="iniciarRuta()">INICIAR RUTA</ion-button>
+</ion-footer>

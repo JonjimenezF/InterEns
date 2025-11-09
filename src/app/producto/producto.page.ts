@@ -147,20 +147,46 @@ export class ProductoPage implements OnInit, OnDestroy {
   }
 
   applyAllFilters() {
-    const query = this.searchQuery.trim().toLowerCase();
-    const min = parseFloat(this.precioMin) || 0;
-    const max = parseFloat(this.precioMax) || Infinity;
+    const query = (this.searchQuery || '').trim().toLowerCase().slice(0, 100);
+
+    // Coerción segura
+    const minRaw = String(this.precioMin ?? '').trim();
+    const maxRaw = String(this.precioMax ?? '').trim();
+    const minNum = minRaw === '' ? 0 : Number(minRaw);
+    const maxNum = maxRaw === '' ? Number.POSITIVE_INFINITY : Number(maxRaw);
+
+    // Validaciones duras
+    if (Number.isNaN(minNum) || Number.isNaN(maxNum)) {
+      this.showToast('Ingresa números válidos en Puntos.');
+      return;
+    }
+    if (minNum < 0 || maxNum < 0) {
+      this.showToast('Los puntos no pueden ser negativos.');
+      return;
+    }
+    if (maxNum !== Number.POSITIVE_INFINITY && minNum > maxNum) {
+      this.showToast('El mínimo no puede ser mayor que el máximo.');
+      return;
+    }
+
     const categoria = this.categoriaSeleccionada;
+    const categoriaExiste = !categoria || this.categorias.some(c => String(c.id) === String(categoria));
+    if (!categoriaExiste) {
+      this.showToast('La categoría seleccionada no existe.');
+      return;
+    }
 
     this.filteredProducts = this.productos.filter(p => {
-      const matchesSearch =
-        p.titulo?.toLowerCase().includes(query) ||
-        p.descripcion?.toLowerCase().includes(query);
-      const matchesCategory = categoria ? p.categoria_id == categoria : true;
-      const matchesPrice = p.valor_puntos >= min && p.valor_puntos <= max;
+      const titulo = (p.titulo || '').toLowerCase();
+      const desc = (p.descripcion || '').toLowerCase();
+      const matchesSearch = !query || titulo.includes(query) || desc.includes(query);
+      const matchesCategory = categoria ? String(p.categoria_id) === String(categoria) : true;
+      const puntos = Number(p.valor_puntos) || 0;
+      const matchesPrice = puntos >= minNum && puntos <= maxNum;
       return matchesSearch && matchesCategory && matchesPrice;
     });
   }
+
 
   resetFilters() {
     this.searchQuery = '';
