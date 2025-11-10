@@ -8,6 +8,36 @@
 </ion-header>
 
 <ion-content>
-  <div id="map"></div>
-  <div id="info"></div>
+  <div class="header-section">
+    <ion-icon name="leaf-outline" class="header-icon"></ion-icon>
+    <h1>Puntos Limpios</h1>
+    <p>Encuentra el punto de reciclaje más cercano</p>
+  </div>
+
+  <ion-list>
+    <ion-item *ngFor="let punto of puntosLimpios" class="punto-card">
+      <ion-icon name="location-outline" slot="start" color="success"></ion-icon>
+      
+      <ion-label>
+        <h2>{{ punto.nombre }}</h2>
+        <p>{{ punto.direccion }}</p>
+        <p><ion-icon name="time-outline"></ion-icon> {{ punto.horario }}</p>
+        
+        <div class="materiales">
+          <ion-chip *ngFor="let material of punto.materiales" color="success" outline="true">
+            {{ material }}
+          </ion-chip>
+        </div>
+      </ion-label>
+      
+      <ion-buttons slot="end">
+        <ion-button fill="clear" (click)="abrirMapa(punto.direccion)">
+          <ion-icon name="map-outline" color="primary"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" (click)="llamar(punto.telefono)">
+          <ion-icon name="call-outline" color="success"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
 </ion-content>
