@@ -3,8 +3,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthCallbackPage } from './auth-callback/auth-callback.page';
 
-
-
 export const routes: Routes = [
   {
     path: 'home',
@@ -88,10 +86,22 @@ export const routes: Routes = [
     loadComponent: () => import('./chatbox/chatbox.page').then((m) => m.ChatboxPage),
   },
   {
+    path: 'chat-usuario/:usuarioId/:enserId',
+    loadComponent: () => import('./chat-usuario/chat-usuario.page').then( m => m.ChatUsuarioPage)
+  },
+  {
+    path: 'confirmar-recepcion/:id',
+    loadComponent: () => import('./confirmar-recepcion/confirmar-recepcion.page').then( m => m.ConfirmarRecepcionPage)
+  },
+  {
+    path: 'comprar-puntos',
+    loadComponent: () => import('./comprar-puntos/comprar-puntos.page').then((m) => m.ComprarPuntosPage),
+  },
+  {
     path: 'misiones',
     loadComponent: () => import('./misiones/misiones.page').then((m) => m.MisionesPage),
   },
-   {
+  {
     path: 'consejos',
     loadComponent: () => import('./consejos/consejos.page').then((m) => m.ConsejosPage),
   },
@@ -99,15 +109,14 @@ export const routes: Routes = [
     path: 'puntos-limpios',
     loadComponent: () => import('./puntos-limpios/puntos-limpios.page').then((m) => m.PuntosLimpiosPage),
   },
-   {
-  path: 'mapa',
-  loadComponent: () => import('./mapa/mapa.page').then(m => m.MapaPage),
-
-},
-
-
-
-
-  
+  {
+    path: 'mapa',
+    loadComponent: () => import('./mapa/mapa.page').then(m => m.MapaPage),
+  },
 ];
 
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+})
+export class AppRoutingModule {}
