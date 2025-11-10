@@ -1,225 +1,122 @@
-// <<<<<<< HEAD
-// import { Routes } from '@angular/router';
-// import { NgModule } from '@angular/core';
-// import { RouterModule } from '@angular/router';
-
-// ///import { RecuperarPage } from './recuperar/recuperar.page';
-
-// export const routes: Routes = [
-//   {
-//     path: 'home',
-//     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
-    
-//   },
- 
-//   {    
-//     path: '',
-//     redirectTo: 'portada',
-//     pathMatch: 'full',
-//   },
-//   {
-//     path: 'login',
-//     loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
-//   },
-
-//   {
-//     path: 'portada',
-//     loadComponent: () => import('./portada/portada.page').then( m => m.PortadaPage)
-//   },
-//   {
-//     path: 'perfil',
-//     loadComponent: () => import('./perfil/perfil.page').then( m => m.PerfilPage)
-//   },
-//   {
-//     path: 'producto',
-//     loadComponent: () => import('./producto/producto.page').then( m => m.ProductoPage)
-//   },
-//   {
-//     path: 'recuperar',
-//     loadComponent: () => import('./recuperar/recuperar.page').then( m => m.RecuperarPage)
-//   },
-//   {
-//     path: 'verificarcontra',
-//     loadComponent: () => import('./verificarcontra/verificarcontra.page').then( m => m.VerificarcontraPage)
-//   },
-//   {
-//     path: 'sfoto',
-//     loadComponent: () => import('./sfoto/sfoto.page').then( m => m.SfotoPage)
-//   },
-//   {
-//     path: 'registrar',
-//     loadComponent: () => import('./registrar/registrar.page').then( m => m.RegistrarPage)
-//   },
-//   {
-//     path: 'detalle-producto',
-//     loadComponent: () => import('./detalle-producto/detalle-producto.page').then( m => m.DetalleProductoPage)
-//   },
-//   {
-//     path: 'sproducto',
-//     loadComponent: () => import('./sproducto/sproducto.page').then( m => m.SproductoPage)
-//   },
-//   {
-//     path: 'carrito',
-//     loadComponent: () => import('./carrito/carrito.page').then( m => m.CarritoPage)
-//   },
-  
-//   {
-//     path: 'preguntas',
-//     loadComponent: () => import('./preguntas/preguntas.page').then( m => m.PreguntasPage)
-//   },
-//   {
-//     path: 'contacto',
-//     loadComponent: () => import('./contacto/contacto.page').then( m => m.ContactoPage)
-//   },
-//   {
-//     path: 'mis-productos',
-//     loadComponent: () => import('./mis-productos/mis-productos.page').then( m => m.MisProductosPage)
-//   },
-//   {
-//     path: 'puntos',
-//     loadComponent: () => import('./puntos/puntos.page').then( m => m.PuntosPage)
-//   },
-//   {
-//     path: 'canjear-puntos',
-//     loadComponent: () => import('./canjear-puntos/canjear-puntos.page').then( m => m.CanjearPuntosPage)
-//   },
-//   {
-//     path: 'historial-puntos',
-//     loadComponent: () => import('./historial-puntos/historial-puntos.page').then( m => m.HistorialPuntosPage)
-//   }
-
- 
-// ];
-// =======
 import { Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthCallbackPage } from './auth-callback/auth-callback.page';
 
-
-///import { RecuperarPage } from './recuperar/recuperar.page';
-
 export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
-    
   },
-
-  { path: 'auth/callback', component: AuthCallbackPage },
-
-  {    
+  {
+    path: 'auth/callback',
+    component: AuthCallbackPage,
+  },
+  {
     path: '',
     redirectTo: 'portada',
     pathMatch: 'full',
   },
   {
     path: 'login',
-    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
+    loadComponent: () => import('./login/login.page').then((m) => m.LoginPage),
   },
-
   {
     path: 'portada',
-    loadComponent: () => import('./portada/portada.page').then( m => m.PortadaPage)
+    loadComponent: () => import('./portada/portada.page').then((m) => m.PortadaPage),
   },
   {
     path: 'perfil',
-    loadComponent: () => import('./perfil/perfil.page').then( m => m.PerfilPage)
+    loadComponent: () => import('./perfil/perfil.page').then((m) => m.PerfilPage),
   },
   {
     path: 'producto',
-    loadComponent: () => import('./producto/producto.page').then( m => m.ProductoPage)
+    loadComponent: () => import('./producto/producto.page').then((m) => m.ProductoPage),
   },
   {
     path: 'recuperar',
-    loadComponent: () => import('./recuperar/recuperar.page').then( m => m.RecuperarPage)
+    loadComponent: () => import('./recuperar/recuperar.page').then((m) => m.RecuperarPage),
   },
   {
     path: 'verificarcontra',
-    loadComponent: () => import('./verificarcontra/verificarcontra.page').then( m => m.VerificarcontraPage)
+    loadComponent: () => import('./verificarcontra/verificarcontra.page').then((m) => m.VerificarcontraPage),
   },
-  
-  //   path: 'sfoto',
-  //   loadComponent: () => import('./sfoto/sfoto.page').then( m => m.SfotoPage)
-  // },
   {
     path: 'registrar',
-    loadComponent: () => import('./registrar/registrar.page').then( m => m.RegistrarPage)
+    loadComponent: () => import('./registrar/registrar.page').then((m) => m.RegistrarPage),
   },
   {
-   path: 'detalle-producto',
-   loadComponent: () => import('./detalle-producto/detalle-producto.page').then( m => m.DetalleProductoPage)
-   },
+    path: 'detalle-producto',
+    loadComponent: () => import('./detalle-producto/detalle-producto.page').then((m) => m.DetalleProductoPage),
+  },
   {
     path: 'sproducto',
-    loadComponent: () => import('./sproducto/sproducto.page').then( m => m.SproductoPage)
+    loadComponent: () => import('./sproducto/sproducto.page').then((m) => m.SproductoPage),
   },
-  // {
-  //   path: 'carrito',
-  //   loadComponent: () => import('./carrito/carrito.page').then( m => m.CarritoPage)
-  // },
-  //{
-  //   path: 'categoria',
-  //   loadComponent: () => import('./categoria/categoria.page').then( m => m.CategoriaPage)
-  // },
   {
     path: 'preguntas',
-    loadComponent: () => import('./preguntas/preguntas.page').then( m => m.PreguntasPage)
+    loadComponent: () => import('./preguntas/preguntas.page').then((m) => m.PreguntasPage),
   },
   {
     path: 'contacto',
-    loadComponent: () => import('./contacto/contacto.page').then( m => m.ContactoPage)
+    loadComponent: () => import('./contacto/contacto.page').then((m) => m.ContactoPage),
   },
-  // {
-  //   path: 'mis-productos',
-  //   loadComponent: () => import('./mis-productos/mis-productos.page').then( m => m.MisProductosPage)
-  // },
   {
-  path: 'puntos',
-  loadComponent: () => import('./puntos/puntos.page').then(m => m.PuntosPage)
-},
-{
-  path: 'canjear-puntos',
-  loadComponent: () => import('./canjear-puntos/canjear-puntos.page').then(m => m.CanjearPuntosPage)
-},
-{
-  path: 'historial-puntos',
-  loadComponent: () => import('./historial-puntos/historial-puntos.page').then(m => m.HistorialPuntosPage)
-},
+    path: 'puntos',
+    loadComponent: () => import('./puntos/puntos.page').then((m) => m.PuntosPage),
+  },
+  {
+    path: 'canjear-puntos',
+    loadComponent: () => import('./canjear-puntos/canjear-puntos.page').then((m) => m.CanjearPuntosPage),
+  },
+  {
+    path: 'historial-puntos',
+    loadComponent: () => import('./historial-puntos/historial-puntos.page').then((m) => m.HistorialPuntosPage),
+  },
   {
     path: 'edit-perfil',
-    loadComponent: () => import('./edit-perfil/edit-perfil.page').then( m => m.EditPerfilPage)
-  },  {
+    loadComponent: () => import('./edit-perfil/edit-perfil.page').then((m) => m.EditPerfilPage),
+  },
+  {
     path: 'favoritos',
-    loadComponent: () => import('./favoritos/favoritos.page').then( m => m.FavoritosPage)
+    loadComponent: () => import('./favoritos/favoritos.page').then((m) => m.FavoritosPage),
   },
   {
     path: 'chatbox',
-    loadComponent: () => import('./chatbox/chatbox.page').then( m => m.ChatboxPage)
+    loadComponent: () => import('./chatbox/chatbox.page').then((m) => m.ChatboxPage),
   },
   {
     path: 'chat-usuario/:usuarioId/:enserId',
     loadComponent: () => import('./chat-usuario/chat-usuario.page').then( m => m.ChatUsuarioPage)
   },
-
-
-
-
-  // {
-  //   path: 'que-es',
-  //   loadComponent: () => import('./que-es/que-es.page').then( m => m.QueEsPage)
-  // },
-  // {
-  //   path: 'reciclaje',
-  //   loadComponent: () => import('./reciclaje/reciclaje.page').then( m => m.ReciclajePage)
-  // },
   {
     path: 'confirmar-recepcion/:id',
     loadComponent: () => import('./confirmar-recepcion/confirmar-recepcion.page').then( m => m.ConfirmarRecepcionPage)
   },
   {
     path: 'comprar-puntos',
-    loadComponent: () => import('./comprar-puntos/comprar-puntos.page').then(m => m.ComprarPuntosPage)
+    loadComponent: () => import('./comprar-puntos/comprar-puntos.page').then((m) => m.ComprarPuntosPage),
+  },
+  {
+    path: 'misiones',
+    loadComponent: () => import('./misiones/misiones.page').then((m) => m.MisionesPage),
+  },
+  {
+    path: 'consejos',
+    loadComponent: () => import('./consejos/consejos.page').then((m) => m.ConsejosPage),
+  },
+  {
+    path: 'puntos-limpios',
+    loadComponent: () => import('./puntos-limpios/puntos-limpios.page').then((m) => m.PuntosLimpiosPage),
+  },
+  {
+    path: 'mapa',
+    loadComponent: () => import('./mapa/mapa.page').then(m => m.MapaPage),
   },
 ];
 
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+})
+export class AppRoutingModule {}
