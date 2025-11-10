@@ -474,4 +474,248 @@ ion-card.niveles-card ion-item:hover {
     grid-column: 2; grid-row: 2;
     align-items: flex-start; flex-direction: row; gap: 8px; margin-top: 6px;
   }
+
+  /* Contenedor de meta + acciones */
+.card-meta{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* Badge “Reservado” */
+.estado-badge{
+  --background: rgba(255, 200, 40, .15);
+  --color: #ffd56a;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+/* Fila de acciones: dos columnas iguales */
+.card-actions{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  flex: 1;
+  min-width: 220px;
+}
+
+/* Responsive: en pantallas angostas se apilan */
+@media (max-width: 390px){
+  .card-actions{ grid-template-columns: 1fr; }
+}
+
+/* Botones: misma altura/estilo */
+.card-actions ion-button{
+  --border-radius: 12px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  height: 36px;
+  font-size: 13px;
+  letter-spacing: .2px;
+}
+
+/* Primario (verde InterEns) */
+.card-actions .btn-primary{
+  --background: #1fd39a;
+  --color: #081015;
+  --background-hover: #1fd39a;
+  --background-activated: #19b483;
+  box-shadow: 0 6px 14px rgba(31,211,154,.18);
+}
+
+/* Secundario (outline, acorde al dark) */
+.card-actions .btn-secondary{
+  --background: transparent;
+  --color: #cfe8de;
+  --border-color: #2b3036;
+  --border-width: 1px;
+  --background-hover: rgba(255,255,255,.04);
+  --background-activated: rgba(255,255,255,.06);
+}
+
+/* Evitar cortes del card */
+ion-card, ion-card-content, .card-meta { overflow: visible !important; }
+
+}
+
+/* ====== CARD GRID ====== */
+.product-card{
+  background:#0f1216;
+  border:1px solid #242a30;
+  border-radius:16px;
+  padding:12px;
+  display:grid;
+  grid-template-columns: 88px 1fr;          /* cover | info */
+  grid-template-rows: auto auto;            /* info | actions */
+  grid-template-areas:
+    "img content"
+    "actions actions";
+  gap:12px;
+}
+
+/* cover */
+.product-card .img{
+  grid-area: img;
+}
+.product-card .img img{
+  width:88px; height:88px; object-fit:cover;
+  border-radius:12px; background:#0a0d10; border:1px solid #1e242a;
+}
+
+/* contenido */
+.product-card .content{
+  grid-area: content; min-width:0;
+}
+.product-card .title-row{
+  display:grid; grid-template-columns: 1fr max-content; align-items:center; gap:10px;
+}
+.product-card .title{
+  margin:0 0 6px 0; font-size:16px; font-weight:800; line-height:1.2;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+.product-card .estado{
+  justify-self:end; padding:6px 10px; border-radius:999px; font-weight:700; white-space:nowrap;
+}
+.product-card .desc{ margin:2px 0 8px; opacity:.85; font-size:13px; }
+.product-card .date{ opacity:.7; }
+
+/* acciones abajo */
+.product-card .p-actions{
+  grid-area: actions;
+  display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:4px;
+}
+.p-btn{ --border-radius:12px; height:40px; font-weight:700; }
+.p-btn.primary{
+  --background:#1fd39a; --color:#071014;
+  box-shadow:0 6px 14px rgba(31,211,154,.18);
+}
+.p-btn.ghost{ --border-color:#2b3036; --color:#cfe8de; }
+
+/* responsive */
+@media (max-width: 420px){
+  .product-card{ grid-template-columns:78px 1fr; }
+  .product-card .img img{ width:78px; height:78px; }
+  .product-card .title{ font-size:15px; }
+}
+@media (max-width: 360px){
+  .product-card .p-actions{ grid-template-columns:1fr; } /* botones apilados */
+}
+
+/* ====== PRODUCT CARD — LAYOUT CONSISTENTE ====== */
+/* Tarjeta con grilla fija: cover | info arriba + acciones abajo */
+.product-card{
+  background: var(--card);
+  border: 1px solid var(--stroke);
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(0,0,0,.35);
+  padding: 12px;
+
+  display: grid;
+  grid-template-columns: 88px 1fr;           /* cover | info */
+  grid-template-rows: auto auto;             /* info | acciones */
+  grid-template-areas:
+    "img content"
+    "actions actions";
+  gap: 12px;
+  align-items: start;
+  min-height: 190px;                         /* alto mínimo estable */
+}
+
+/* Cover */
+.product-card .img{ grid-area: img; }
+.product-card .img img{
+  width: 88px; height: 88px; object-fit: cover;
+  border-radius: 12px; background:#0a0d10;
+  border: 1px solid #1e242a;
+  box-shadow: 0 0 0 2px var(--accent) inset;
+}
+
+/* Contenido */
+.product-card .content{ grid-area: content; min-width: 0; }
+.product-card .title-row{
+  display: grid; grid-template-columns: 1fr max-content;
+  align-items: center; gap: 10px;
+}
+.product-card .title{
+  margin: 0 0 6px; font-size: 16px; font-weight: 800; line-height: 1.2;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; /* evita cortes raros y mantiene 2 líneas */
+}
+.product-card .estado{
+  justify-self: end;
+  padding: 6px 10px; border-radius: 999px; font-weight: 700;
+  white-space: nowrap; font-size: 12px;
+}
+.product-card .desc{
+  margin: 2px 0 8px; color: var(--muted); font-size: 13px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.product-card .date{ opacity: .75; font-size: 11px; }
+
+/* Acciones ABajo SIEMPRE */
+.product-card .card-actions,
+.product-card .p-actions{
+  grid-area: actions;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  margin-top: 4px;
+}
+
+/* Botones – alturas iguales y redondeos */
+.product-card .card-actions ion-button,
+.product-card .p-actions   ion-button{
+  --border-radius: 12px;
+  height: 40px;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+/* Primario (verde InterEns) — soporte para ambas clases que usas */
+.product-card .card-actions .btn-primary,
+.product-card .p-actions .p-btn.primary{
+  --background: #1fd39a;
+  --color: #071014;
+  --background-hover: #1fd39a;
+  --background-activated: #19b483;
+  box-shadow: 0 6px 14px rgba(31,211,154,.18);
+}
+
+/* Secundario (outline) — soporte para ambas clases que usas */
+.product-card .card-actions .btn-secondary,
+.product-card .p-actions .p-btn.ghost{
+  --background: transparent;
+  --color: #cfe8de;
+  --border-color: #2b3036;
+  --border-width: 1px;
+  --background-hover: rgba(255,255,255,.06);
+  --background-activated: rgba(255,255,255,.08);
+}
+
+/* Botón “pickup” clásico por si lo usas */
+.product-card .pickup-btn{
+  --border-color: var(--accent);
+  --color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: transform .2s ease, background .2s ease;
+}
+.product-card .pickup-btn:hover{
+  background: var(--accent); color: #0c0f13; transform: scale(1.02);
+}
+
+/* ====== RESPONSIVE: MISMO CONTENIDO, SOLO AJUSTES SUTILES ====== */
+@media (max-width: 420px){
+  .product-card{ grid-template-columns: 78px 1fr; }
+  .product-card .img img{ width: 78px; height: 78px; }
+  .product-card .title{ font-size: 15px; }
+}
+@media (max-width: 360px){
+  .product-card .card-actions,
+  .product-card .p-actions{ grid-template-columns: 1fr; } /* apila botones */
 }

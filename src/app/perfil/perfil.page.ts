@@ -50,6 +50,10 @@ export class PerfilPage implements OnInit, OnDestroy {
   equivalencias: any = {};
   impactoPorCategoria: any[] = [];
   maxCo2 = 0;
+  API_BASE = 'http://localhost:4000'; // ajusta si usas otro host/puerto
+
+  puntoSeleccionado: any = null;      // si luego abres modal para elegir punto
+  fechaSeleccionada: string | null = null; // ISO string opcional
 
   nivelesDisponibles = [
     {
@@ -470,6 +474,9 @@ export class PerfilPage implements OnInit, OnDestroy {
     const { data } = await modal.onDidDismiss();
     if (data?.success) {
       this.presentAnimatedToast('✅ Solicitud de retiro enviada correctamente');
+      await this.loadSolicitudesPendientes();
+      await this.loadTransaccionesPendientes();
+      await this.loadMyProducts();
     }
   }
 
@@ -607,4 +614,114 @@ export class PerfilPage implements OnInit, OnDestroy {
       await this.presentToast('Error al marcar como enviado', 'danger');
     }
   }
+
+  // ——— Normalizadores
+  public isReservado(p: any): boolean {
+    const e = `${p?.estado ?? ''}`.toLowerCase().trim();
+    // agrega todos los estados que uses para esta etapa
+    return ['reservado','pendiente','en_logistica'].includes(e);
+  }
+
+  public getOwnerId(p: any): string | null {
+    // cubre varias formas que he visto en tu código/respuestas del API
+    return (
+      p?.propietario_id ??
+      p?.owner_id ??
+      p?.usuario_id ??
+      p?.user_id ??
+      p?.propietario?.id ??
+      null
+    );
+  }
+
+  public esMio(p: any): boolean {
+    if (!this.userId) return false;
+    const owner = this.getOwnerId(p);
+    return owner ? String(owner) === String(this.userId) : false;
+  }
+
+  public puedeMostrarAccionesEntrega(p: any): boolean {
+    return this.isReservado(p) && this.esMio(p);
+  }
+  private async fetchTransaccionActivaPorEnser(enserId: number) {
+  // estados considerados "activos" para la opción de entrega
+  const estados = ['pendiente','aceptada','en_logistica'];
+  const { data, error } = await supabase
+    .from('transacciones')
+    .select('id, solicitante_id')
+    .eq('enser_id', enserId)
+    .in('estado', estados)
+    .order('creado_en', { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.warn('fetchTransaccionActivaPorEnser error', error);
+    return null;
+  }
+  return (data && data.length) ? data[0] : null;
+  }
+
+  public dbg(p:any){
+  console.log('DBG producto', {estado:p?.estado, propietario_id:this.getOwnerId(p), userId:this.userId});
+  return true;
+  }
+
+  // mis-productos.page.ts (fragmento)
+  async elegirEntrega(p: any, opcion: 'lleva_vendedor'|'retiro_operador') {
+    try {
+      // 1) Resolver IDs
+      let transaccionId = p.transaccion_id as number | undefined;
+      let compradorId   = p.ultimo_comprador_id as string | undefined;
+
+      if (!transaccionId || !compradorId) {
+        const trx = await this.fetchTransaccionActivaPorEnser(p.id);
+        if (!trx) {
+          await this.presentToast('⚠️ No se encontró una transacción activa para este producto.', 'warning');
+          return;
+        }
+        transaccionId = trx.id;
+        compradorId   = trx.solicitante_id;
+      }
+
+      if (!this.userId) {
+        await this.presentToast('Debes iniciar sesión.', 'danger');
+        return;
+      }
+      console.log('➡️ elegirEntrega', { transaccionId, compradorId, opcion });
+
+      // 2) (Opcional) datos extra
+      const punto_id = this.puntoSeleccionado?.id ?? null;
+      const fecha_estimada = this.fechaSeleccionada ?? null;
+      console.log('➡️ Datos extra', { punto_id, fecha_estimada });
+      // 3) Payload y llamada
+      const body = {
+        opcion,                 // 'lleva_vendedor' | 'retiro_operador'
+        punto_id,
+        fecha_estimada,
+        vendedor_id: this.userId,         // propietario (usuario actual en Perfil)
+        comprador_id: compradorId,
+        producto_titulo: p.titulo || 'Producto'
+      };
+
+      const resp = await fetch(
+        `${this.API_BASE}/api/transacciones/${transaccionId}/entrega-opcion`,
+        { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+      );
+
+      if (!resp.ok) {
+        const j = await resp.json().catch(() => ({}));
+        throw new Error(j?.error || `Error HTTP ${resp.status}`);
+      }
+
+      // 4) Feedback y refresco
+      await this.presentToast('✅ Opción de entrega guardada', 'success');
+      await this.loadMyProducts();         // recarga tu lista
+      await this.loadSolicitudesPendientes();
+
+    } catch (e: any) {
+      console.error('elegirEntrega error', e);
+      await this.presentToast(`Error: ${e?.message || 'No se pudo guardar la opción.'}`, 'danger');
+    }
+  }
+
 }

@@ -120,31 +120,47 @@
         <ion-row>
           <ion-col size="12" size-md="6" size-lg="4" *ngFor="let p of productos">
             <ion-card class="product-card">
+                          <!-- cover -->
               <div class="img">
                 <img [src]="cover(p)" alt="img" />
               </div>
 
+              <!-- info -->
               <div class="content">
-                <h3>{{ p.title || p.titulo }}</h3>
+                <div class="title-row">
+                  <h3 class="title">{{ p.title || p.titulo }}</h3>
+                  <ion-badge class="estado" [color]="statusColor(p)">
+                    {{ formatEstado(p.estado) }}
+                  </ion-badge>
+                </div>
+
                 <p class="desc ion-text-wrap">{{ p.description || p.descripcion }}</p>
                 <small class="date" *ngIf="p.created_at">
                   Publicado: {{ p.created_at | date:'shortDate' }}
                 </small>
               </div>
 
-              <div class="actions">
-                <ion-badge [color]="statusColor(p)" class="estado">
-                  {{ formatEstado(p.estado) }}
-                </ion-badge>
+              <!-- acciones (abajo del card) -->
+              <div class="card-actions">
+                <ion-button class="btn-primary" size="small"
+                            (click)="elegirEntrega(p, 'lleva_vendedor')">
+                  <ion-icon slot="start" name="bag-check-outline"></ion-icon>
+                  <span class="btn-label">Llevar al punto</span>
+                </ion-button>
 
+                <!-- <ion-button class="btn-secondary" size="small" fill="outline"
+                            (click)="elegirEntrega(p, 'retiro_operador')">
+                  <ion-icon slot="start" name="cube-outline"></ion-icon>
+                  <span class="btn-label">Solicitar retiro</span>
+                </ion-button> -->
                 <ion-button
-                  *ngIf="p.estado === 'reservado'"
-                  fill="outline"
-                  color="success"
-                  class="pickup-btn"
-                  (click)="solicitarRetiro(p)">
-                  <ion-icon name="car-outline"></ion-icon>
-                  RETIRO
+                    fill="outline"
+                    size="small"
+                    class="btn-secondary"
+                    (click)="solicitarRetiro(p)"
+                    *ngIf="p.estado === 'reservado'">
+                    <ion-icon name="car-outline"></ion-icon>
+                    Solicitar retiro
                 </ion-button>
               </div>
             </ion-card>

@@ -30,7 +30,11 @@ import {
   cartOutline,
   menuOutline,
     heart,               // ❤️ agregado
-  heartOutline         // ❤️ agregado
+  heartOutline,        // ❤️ agregado
+  pinOutline,
+  cubeOutline,
+  carOutline,
+  bagCheckOutline
 } from 'ionicons/icons';
 
 /* 🧩 Agregamos todos los íconos usados en la app */
@@ -53,7 +57,11 @@ addIcons({
   'cart-outline': cartOutline,
   'menu-outline': menuOutline,
   'heart': heart,                   // ❤️ agregado
-  'heart-outline': heartOutline     // ❤️ agregado
+  'heart-outline': heartOutline,     // ❤️ agregado
+  'pin-outline': pinOutline,
+  'cube-outline': cubeOutline,
+  'car-outline': carOutline,
+  'bag-check-outline': bagCheckOutline,
 });
 
 /* 🚀 Configuración estándar */
