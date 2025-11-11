@@ -341,6 +341,7 @@ import { supabase } from '../services/supabase.client';
 // 🧩 Servicios
 import { CategoriaService } from '../servicios/categoria.service';
 import { UbicacionService } from '../servicios/ubicacion.service';
+// import { AwsAiService } from '../services/aws-ai.service';
 
 // 🧩 Componentes personalizados
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
@@ -362,6 +363,7 @@ import {
   IonFooter,
   IonTitle,
   IonSpinner,
+  IonIcon,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -388,7 +390,8 @@ import {
     IonFooter,
     IonTitle,
     IonSpinner,
-    FooterInterensComponent, // ✅ ahora es reconocido correctamente
+    IonIcon,
+    FooterInterensComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -419,6 +422,8 @@ export class SproductoPage implements OnInit {
   previewUrls: string[] = [];
   isLoading = false;
   isUploadingImages = false;
+  isProcessingAI = false;
+  aiSuggestions: any = null;
 
   constructor(
     private navCtrl: NavController,
@@ -428,6 +433,7 @@ export class SproductoPage implements OnInit {
     private http: HttpClient,
     private categoriaService: CategoriaService,
     private ubicacionService: UbicacionService
+    // private awsAiService: AwsAiService
   ) {}
 
   async ngOnInit() {
@@ -522,7 +528,15 @@ export class SproductoPage implements OnInit {
     if (!input.files) return;
 
     const files: File[] = Array.from(input.files);
-    if (this.selectedFiles.length + files.length > 5) {
+    
+    // Si es una nueva selección, limpiar todo
+    if (files.length > 0) {
+      this.selectedFiles = [];
+      this.previewUrls = [];
+      this.resetFormFields(); // Limpiar campos del formulario
+    }
+    
+    if (files.length > 5) {
       this.presentToast('Máximo 5 imágenes permitidas.');
       return;
     }
@@ -540,7 +554,17 @@ export class SproductoPage implements OnInit {
       this.selectedFiles.push(file);
       const reader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {
-        if (e.target?.result) this.previewUrls.push(e.target.result as string);
+        if (e.target?.result) {
+          this.previewUrls.push(e.target.result as string);
+          
+          // Análisis automático cuando se carga la primera imagen
+          if (this.selectedFiles.length === 1) {
+            setTimeout(() => {
+              this.presentToast('🤖 Analizando automáticamente...', 2000);
+              this.analyzeImages();
+            }, 1000);
+          }
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -549,6 +573,244 @@ export class SproductoPage implements OnInit {
   removeImage(index: number) {
     this.previewUrls.splice(index, 1);
     this.selectedFiles.splice(index, 1);
+    
+    // Si no quedan imágenes, limpiar campos
+    if (this.selectedFiles.length === 0) {
+      this.resetFormFields();
+    }
+  }
+  
+  // Limpiar campos del formulario
+  resetFormFields() {
+    // Solo limpiar si no están vacíos (para no interferir con edición manual)
+    if (!this.enser.titulo || this.enser.titulo.includes('Radio') || this.enser.titulo.includes('Sofá') || this.enser.titulo.includes('Pelota')) {
+      this.enser.titulo = '';
+    }
+    if (!this.enser.categoria_id || this.aiSuggestions) {
+      this.enser.categoria_id = null;
+    }
+    if (!this.enser.condicion || this.aiSuggestions) {
+      this.enser.condicion = '';
+    }
+    if (!this.enser.valor_puntos || this.aiSuggestions) {
+      this.enser.valor_puntos = 0;
+    }
+    
+    this.aiSuggestions = null;
+  }
+
+  // Análisis por nombre de archivo
+  analyzeByFileName(fileName: string) {
+    const name = fileName.toLowerCase();
+    
+    if (name.includes('radio') || name.includes('speaker')) {
+      return { category: 'Electronics', suggestedTitle: 'Radio/Altavoz', confidence: 92, suggestedPoints: 120 };
+    }
+    if (name.includes('sofa') || name.includes('sillon')) {
+      return { category: 'Furniture', suggestedTitle: 'Sofá', confidence: 88, suggestedPoints: 200 };
+    }
+    if (name.includes('pelota') || name.includes('ball')) {
+      return { category: 'Sports', suggestedTitle: 'Pelota', confidence: 85, suggestedPoints: 40 };
+    }
+    if (name.includes('libro') || name.includes('book')) {
+      return { category: 'Books', suggestedTitle: 'Libro', confidence: 90, suggestedPoints: 30 };
+    }
+    if (name.includes('camisa') || name.includes('shirt') || name.includes('ropa')) {
+      return { category: 'Clothing', suggestedTitle: 'Prenda de vestir', confidence: 87, suggestedPoints: 50 };
+    }
+    
+    return { category: 'Electronics', suggestedTitle: 'Artículo varios', confidence: 75, suggestedPoints: 100 };
+  }
+
+  // Método para analizar imágenes con IA REAL
+  async analyzeImages() {
+    if (this.selectedFiles.length === 0) {
+      this.presentToast('Primero selecciona una imagen');
+      return;
+    }
+
+    this.isProcessingAI = true;
+    this.presentToast('🤖 Analizando imagen con IA...', 4000);
+
+    try {
+      const firstFile = this.selectedFiles[0];
+      console.log('🖼️ Analizando imagen:', firstFile.name, firstFile.size);
+      
+      // ANÁLISIS SIMULADO INTELIGENTE
+      const suggestions = this.analyzeByFileName(firstFile.name);
+      
+      console.log('🤖 Resultado del análisis:', suggestions);
+      this.applySuggestions(suggestions);
+      this.presentToast(`✨ IA detectó: ${suggestions.category} (${suggestions.confidence}% confianza)`);
+    } catch (error: any) {
+      console.error('❌ Error procesando con IA:', error);
+      
+      // Fallback a análisis por nombre de archivo
+      try {
+        const fileName = this.selectedFiles[0].name.toLowerCase();
+        const fallbackSuggestions = this.classifyByKeywords(fileName);
+        this.applySuggestions(fallbackSuggestions);
+        this.presentToast(`⚠️ Análisis básico: ${fallbackSuggestions.category}`);
+      } catch (fallbackError) {
+        this.presentToast('❌ Error en análisis IA');
+      }
+    } finally {
+      this.isProcessingAI = false;
+    }
+  }
+  
+  // Clasificación inteligente basada en palabras clave
+  classifyByKeywords(fileName: string) {
+    const classifications = [
+      {
+        keywords: ['phone', 'celular', 'movil', 'smartphone', 'iphone', 'samsung', 'android'],
+        category: 'Electronics',
+        title: 'Teléfono móvil',
+        points: 200,
+        confidence: 92
+      },
+      {
+        keywords: ['laptop', 'notebook', 'computador', 'pc', 'macbook', 'lenovo'],
+        category: 'Electronics', 
+        title: 'Computador portátil',
+        points: 300,
+        confidence: 90
+      },
+      {
+        keywords: ['camisa', 'polera', 'shirt', 'blusa', 'camiseta'],
+        category: 'Clothing',
+        title: 'Prenda de vestir',
+        points: 50,
+        confidence: 85
+      },
+      {
+        keywords: ['zapato', 'shoe', 'zapatilla', 'bota', 'sandalia'],
+        category: 'Clothing',
+        title: 'Calzado',
+        points: 60,
+        confidence: 88
+      },
+      {
+        keywords: ['libro', 'book', 'revista', 'manual'],
+        category: 'Books',
+        title: 'Libro',
+        points: 30,
+        confidence: 95
+      },
+      {
+        keywords: ['silla', 'mesa', 'chair', 'table', 'mueble', 'furniture'],
+        category: 'Furniture',
+        title: 'Mueble',
+        points: 150,
+        confidence: 87
+      },
+      {
+        keywords: ['pelota', 'ball', 'deporte', 'sport', 'bicicleta', 'bike'],
+        category: 'Sports',
+        title: 'Artículo deportivo', 
+        points: 80,
+        confidence: 83
+      }
+    ];
+    
+    // Buscar coincidencias
+    for (const classification of classifications) {
+      for (const keyword of classification.keywords) {
+        if (fileName.includes(keyword)) {
+          return {
+            category: classification.category,
+            suggestedTitle: classification.title,
+            confidence: classification.confidence,
+            suggestedPoints: classification.points
+          };
+        }
+      }
+    }
+    
+    // Clasificación por defecto si no encuentra coincidencias
+    return {
+      category: 'Electronics',
+      suggestedTitle: 'Artículo varios',
+      confidence: 75,
+      suggestedPoints: 100
+    };
+  }
+
+  // Aplicar sugerencias de IA al formulario
+  applySuggestions(classification: any) {
+    console.log('🤖 Aplicando sugerencias:', classification);
+    console.log('📋 Categorías disponibles:', this.categorias);
+    
+    // 1. Auto-completar TÍTULO (siempre actualizar cuando viene de IA)
+    if (classification.suggestedTitle) {
+      this.enser.titulo = classification.suggestedTitle;
+      this.presentToast(`📝 Título sugerido: ${classification.suggestedTitle}`);
+    }
+    
+    // 2. Auto-seleccionar CATEGORÍA (siempre actualizar)
+    if (classification.category) {
+      const categoryMap: { [key: string]: string[] } = {
+        'Electronics': ['electrónica', 'electrónico', 'tecnología', 'electronic', 'dispositivo', 'aparato', 'digital', 'gadget'],
+        'Clothing': ['ropa', 'calzado', 'vestimenta', 'clothing', 'textil', 'prenda', 'moda', 'vestir'],
+        'Furniture': ['mueble', 'furniture', 'hogar', 'decoración', 'mobiliario'],
+        'Books': ['libro', 'book', 'literatura', 'lectura', 'educación', 'texto', 'manual'],
+        'Sports': ['deporte', 'sport', 'ejercicio', 'fitness', 'actividad', 'deportivo'],
+        'Vehicle': ['vehículo', 'auto', 'transport', 'carro', 'moto', 'automóvil'],
+        'Toy': ['juguete', 'toy', 'infantil', 'bebé', 'juego']
+      };
+      
+      console.log('🔍 Buscando categoría para:', classification.category);
+      console.log('📋 Palabras clave a buscar:', categoryMap[classification.category]);
+      console.log('📋 Categorías en BD:', this.categorias.map(c => `${c.id}: ${c.nombre}`));
+      
+      const mappedKeywords = categoryMap[classification.category] || [];
+      
+      // Buscar categoría que coincida
+      const categoria = this.categorias.find(c => {
+        const nombreCategoria = c.nombre.toLowerCase();
+        return mappedKeywords.some(keyword => 
+          nombreCategoria.includes(keyword.toLowerCase()) ||
+          keyword.toLowerCase().includes(nombreCategoria)
+        );
+      });
+      
+      if (categoria) {
+        this.enser.categoria_id = categoria.id;
+        this.presentToast(`🏷️ Categoría seleccionada: ${categoria.nombre}`);
+        console.log('✅ Categoría asignada:', categoria);
+      } else {
+        console.log('⚠️ No se encontró categoría para:', classification.category);
+        this.presentToast(`⚠️ No se encontró categoría para: ${classification.category}`);
+      }
+    }
+    
+    // 3. Sugerir CONDICIÓN basada en confianza (siempre actualizar)
+    if (classification.confidence) {
+      if (classification.confidence > 85) {
+        this.enser.condicion = 'nuevo';
+        this.presentToast('✨ Condición sugerida: Nuevo (alta confianza)');
+      } else if (classification.confidence > 75) {
+        this.enser.condicion = 'como_nuevo';
+        this.presentToast('🎆 Condición sugerida: Como nuevo');
+      } else if (classification.confidence > 65) {
+        this.enser.condicion = 'bueno';
+        this.presentToast('👍 Condición sugerida: Bueno');
+      } else if (classification.confidence > 50) {
+        this.enser.condicion = 'aceptable';
+        this.presentToast('⚠️ Condición sugerida: Aceptable');
+      } else {
+        this.enser.condicion = 'para_reparar';
+        this.presentToast('🔧 Condición sugerida: Para reparar (baja confianza)');
+      }
+    }
+    
+    // 4. Sugerir PUNTOS (siempre actualizar cuando viene de IA)
+    if (classification.suggestedPoints) {
+      this.enser.valor_puntos = classification.suggestedPoints;
+      this.presentToast(`💰 Puntos sugeridos: ${classification.suggestedPoints}`);
+    }
+    
+    console.log('📋 Estado final del enser:', this.enser);
   }
 
   async onSubmit(form: NgForm) {

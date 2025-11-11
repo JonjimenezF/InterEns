@@ -85,9 +85,22 @@
         </ion-item>
 
         <div class="preview-container" *ngIf="previewUrls.length > 0">
+          <h4>Previsualización</h4>
           <div class="image-wrapper" *ngFor="let url of previewUrls; let i = index">
             <img [src]="url" alt="preview" class="preview-img" />
             <button type="button" class="delete-btn" (click)="removeImage(i)">✖</button>
+          </div>
+          
+          <!-- Botón de análisis con IA -->
+          <div class="ai-button-container">
+            <ion-button 
+              fill="outline" 
+              color="primary"
+              (click)="analyzeImages()"
+              [disabled]="isProcessingAI">
+              <ion-icon name="star" slot="start"></ion-icon>
+              {{ isProcessingAI ? 'Analizando...' : 'Analizar con IA' }}
+            </ion-button>
           </div>
         </div>
 
