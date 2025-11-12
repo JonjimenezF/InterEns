@@ -91,7 +91,7 @@
             <button type="button" class="delete-btn" (click)="removeImage(i)">✖</button>
           </div>
           
-          <!-- Botón de análisis con IA -->
+          <!-- Botones de IA -->
           <div class="ai-button-container">
             <ion-button 
               fill="outline" 
@@ -101,6 +101,20 @@
               <ion-icon name="star" slot="start"></ion-icon>
               {{ isProcessingAI ? 'Analizando...' : 'Analizar con IA' }}
             </ion-button>
+            
+            <ion-button 
+              fill="solid" 
+              color="secondary"
+              (click)="improveImages()"
+              [disabled]="isImprovingImages || selectedFiles.length === 0">
+              <ion-icon name="brush" slot="start"></ion-icon>
+              {{ isImprovingImages ? 'Mejorando...' : 'Mejorar Fotos ✨' }}
+            </ion-button>
+          </div>
+          
+          <!-- Indicador de imágenes mejoradas -->
+          <div class="improved-indicator" *ngIf="improvedImages.length > 0">
+            <p>✨ {{ improvedImages.length }} imagen(es) mejorada(s) con IA</p>
           </div>
         </div>
 

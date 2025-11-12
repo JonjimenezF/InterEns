@@ -223,34 +223,68 @@ ion-select-popover ion-checkbox {
   }
 }
 
-/* ====== BOTÓN DE IA ====== */
+/* ====== BOTONES DE IA ====== */
 .ai-button-container {
   display: flex;
   justify-content: center;
+  gap: 10px;
   margin-top: 15px;
+  flex-wrap: wrap;
   
   ion-button {
-    --background: transparent;
-    --border-color: var(--accent);
-    --color: var(--accent);
     font-weight: 600;
     border-radius: 12px;
     transition: all 0.3s ease;
+    min-width: 140px;
     
     &:hover {
-      --background: rgba(31, 211, 154, 0.1);
       transform: scale(1.05);
     }
     
     &:disabled {
-      --color: var(--muted);
-      --border-color: var(--muted);
       opacity: 0.6;
     }
     
     ion-icon {
       margin-right: 8px;
     }
+    
+    // Botón analizar (outline)
+    &[fill="outline"] {
+      --background: transparent;
+      --border-color: var(--accent);
+      --color: var(--accent);
+      
+      &:hover {
+        --background: rgba(31, 211, 154, 0.1);
+      }
+    }
+    
+    // Botón mejorar (solid)
+    &[fill="solid"] {
+      --background: #ff6b35;
+      --color: white;
+      
+      &:hover {
+        --background: #ff5722;
+      }
+    }
+  }
+}
+
+/* Indicador de imágenes mejoradas */
+.improved-indicator {
+  text-align: center;
+  margin-top: 10px;
+  
+  p {
+    color: #ff6b35;
+    font-weight: 600;
+    background: rgba(255, 107, 53, 0.1);
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin: 0;
+    font-size: 14px;
   }
 }
 
@@ -293,7 +327,7 @@ ion-select-popover ion-checkbox {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-.remove-btn {
+.delete-btn {
   position: absolute;
   top: -8px;
   right: -8px;
@@ -314,14 +348,20 @@ ion-select-popover ion-checkbox {
   z-index: 10;
 }
 
-.remove-btn:hover {
+.delete-btn:hover {
   background: #ff3742;
   transform: scale(1.1);
   box-shadow: 0 3px 8px rgba(255, 71, 87, 0.4);
 }
 
-.remove-btn:active {
+.delete-btn:active {
   transform: scale(0.95);
+}
+
+.image-wrapper {
+  position: relative;
+  display: inline-block;
+  margin: 5px;
 }
 
 /* ====== BOTONES ====== */

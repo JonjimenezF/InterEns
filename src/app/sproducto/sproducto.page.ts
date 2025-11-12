@@ -341,7 +341,7 @@ import { supabase } from '../services/supabase.client';
 // 🧩 Servicios
 import { CategoriaService } from '../servicios/categoria.service';
 import { UbicacionService } from '../servicios/ubicacion.service';
-// import { AwsAiService } from '../services/aws-ai.service';
+// import { ImageImprovementService } from '../services/image-improvement.service'; // Ya no necesario
 
 // 🧩 Componentes personalizados
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
@@ -424,6 +424,8 @@ export class SproductoPage implements OnInit {
   isUploadingImages = false;
   isProcessingAI = false;
   aiSuggestions: any = null;
+  isImprovingImages = false;
+  improvedImages: { original: string, improved: string }[] = [];
 
   constructor(
     private navCtrl: NavController,
@@ -432,8 +434,8 @@ export class SproductoPage implements OnInit {
     private toastController: ToastController,
     private http: HttpClient,
     private categoriaService: CategoriaService,
-    private ubicacionService: UbicacionService
-    // private awsAiService: AwsAiService
+    private ubicacionService: UbicacionService,
+    // private imageImprovementService: ImageImprovementService // Ya no necesario
   ) {}
 
   async ngOnInit() {
@@ -542,8 +544,10 @@ export class SproductoPage implements OnInit {
     }
 
     for (const file of files) {
-      if (!file.type.startsWith('image/')) {
-        this.presentToast('Solo puedes subir imágenes.');
+      // ✅ Validación mejorada para Remove.bg
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        this.presentToast(`❌ ${file.name}: Solo JPG, PNG y WebP son compatibles con Remove.bg`);
         continue;
       }
       if (file.size > 5 * 1024 * 1024) {
@@ -813,6 +817,102 @@ export class SproductoPage implements OnInit {
     console.log('📋 Estado final del enser:', this.enser);
   }
 
+  // 🎨 Mejorar imágenes con Remove.bg (directo desde frontend)
+  async improveImages() {
+    if (this.selectedFiles.length === 0) {
+      this.presentToast('❌ Primero selecciona imágenes para mejorar');
+      return;
+    }
+
+    this.isImprovingImages = true;
+    this.presentToast('🎨 Mejorando imágenes con IA...', 3000);
+
+    try {
+      for (let i = 0; i < this.selectedFiles.length; i++) {
+        const file = this.selectedFiles[i];
+        
+        try {
+          // ✅ Validación adicional antes de procesar
+          const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+          if (!allowedTypes.includes(file.type)) {
+            throw new Error(`Tipo de archivo no soportado: ${file.type}`);
+          }
+          
+          this.presentToast(`🎨 Procesando imagen ${i + 1}/${this.selectedFiles.length}...`, 2000);
+          
+          // Crear FormData para Remove.bg
+          const formData = new FormData();
+          formData.append('image_file', file);
+          formData.append('size', 'auto');
+          
+          // Llamar directamente a Remove.bg API
+          const response = await fetch('https://api.remove.bg/v1.0/removebg', {
+            method: 'POST',
+            headers: {
+              'X-Api-Key': 'UAgKxS45Jcqmhy6piBLGPAzt'
+            },
+            body: formData
+          });
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Remove.bg error: ${errorText}`);
+          }
+          
+          // Obtener imagen procesada
+          const resultBlob = await response.blob();
+          
+          // Subir imagen mejorada a Supabase
+          const fileName = `improved_${Date.now()}_${i}.png`;
+          const { data, error } = await supabase.storage
+            .from('enseres')
+            .upload(fileName, resultBlob, {
+              contentType: 'image/png'
+            });
+          
+          if (error) {
+            throw new Error(`Supabase error: ${error.message}`);
+          }
+          
+          // Obtener URL pública
+          const { data: publicUrlData } = supabase.storage
+            .from('enseres')
+            .getPublicUrl(fileName);
+          
+          // Guardar imagen mejorada
+          this.improvedImages.push({
+            original: this.previewUrls[i],
+            improved: publicUrlData.publicUrl
+          });
+          
+          // Actualizar preview con imagen mejorada
+          this.previewUrls[i] = publicUrlData.publicUrl;
+          
+          this.presentToast(`✅ Imagen ${i + 1} mejorada exitosamente`);
+          
+        } catch (error) {
+          console.error(`❌ Error mejorando imagen ${i + 1}:`, error);
+          this.presentToast(`⚠️ Error mejorando imagen ${i + 1}, usando original`);
+        }
+      }
+      
+      if (this.improvedImages.length > 0) {
+        this.presentToast(`🎉 ${this.improvedImages.length} imágenes mejoradas con IA`);
+        
+        // Actualizar URLs del producto con imágenes mejoradas
+        const improvedUrls = this.improvedImages.map(img => img.improved);
+        this.enser.imagen_url = improvedUrls[0];
+        this.enser.imagenes_extra = improvedUrls.slice(1);
+      }
+      
+    } catch (error) {
+      console.error('❌ Error general mejorando imágenes:', error);
+      this.presentToast('❌ Error al mejorar imágenes');
+    } finally {
+      this.isImprovingImages = false;
+    }
+  }
+
   async onSubmit(form: NgForm) {
     if (form.invalid) {
       this.presentToast('❌ Completa todos los campos obligatorios.');
@@ -823,8 +923,17 @@ export class SproductoPage implements OnInit {
     this.isUploadingImages = true;
 
     try {
-      this.presentToast('📤 Subiendo imágenes...', 1500);
-      const imageUrls = await this.uploadAllImages();
+      // Si hay imágenes mejoradas, usar esas; sino subir las originales
+      let imageUrls: string[] = [];
+      
+      if (this.improvedImages.length > 0) {
+        this.presentToast('📤 Usando imágenes mejoradas...', 1500);
+        imageUrls = this.improvedImages.map(img => img.improved);
+      } else {
+        this.presentToast('📤 Subiendo imágenes...', 1500);
+        imageUrls = await this.uploadAllImages();
+      }
+      
       this.isUploadingImages = false;
 
       this.enser.imagen_url = imageUrls[0] || this.enser.imagen_url || 'assets/img/default.png';
