@@ -154,7 +154,7 @@
                   <ion-icon slot="start" name="cube-outline"></ion-icon>
                   <span class="btn-label">Solicitar retiro</span>
                 </ion-button> -->
-                <ion-button
+                <!-- <ion-button
                     fill="outline"
                     size="small"
                     class="btn-secondary"
@@ -162,7 +162,7 @@
                     *ngIf="p.estado === 'reservado'">
                     <ion-icon name="car-outline"></ion-icon>
                     Solicitar retiro
-                </ion-button>
+                </ion-button> -->
               </div>
             </ion-card>
           </ion-col>
@@ -229,38 +229,59 @@
   <!-- ===================== -->
   <!-- TAB: TRANSACCIONES -->
   <!-- ===================== -->
-  <ng-container *ngIf="selectedTab === 'transacciones'">
-    <ion-list *ngIf="transaccionesPendientes.length > 0">
-      <ion-item *ngFor="let transaccion of transaccionesPendientes">
-        <ion-thumbnail slot="start">
-          <img [src]="transaccion.producto_imagen || 'assets/img/default.png'" alt="producto" />
-        </ion-thumbnail>
+  <!-- ===================== -->
+<!-- TAB: TRANSACCIONES   -->
+<!-- ===================== -->
+<ng-container *ngIf="selectedTab === 'transacciones'">
+  <ion-list *ngIf="transaccionesPendientes.length > 0">
+    <ion-item *ngFor="let t of transaccionesPendientes">
+      <ion-thumbnail slot="start">
+        <img [src]="t.producto_imagen || 'assets/img/default.png'" alt="producto" />
+      </ion-thumbnail>
 
-        <ion-label>
-          <h3>{{ transaccion.producto_nombre }}</h3>
-          <p>Vendedor: {{ transaccion.vendedor_nombre }}</p>
-          <p>Precio: ${{ transaccion.precio | number }}</p>
-          <p><ion-badge color="warning">{{ transaccion.estado | titlecase }}</ion-badge></p>
-          <small>Fecha de envío: {{ transaccion.fecha_creacion | date: 'short' }}</small>
-        </ion-label>
+      <ion-label>
+        <h3>{{ t.producto_nombre }}</h3>
 
-        <ion-buttons slot="end" *ngIf="transaccion.estado === 'en_logistica'">
-          <ion-button
-            fill="solid"
-            color="success"
-            (click)="confirmarRecepcionProducto(transaccion.id)">
-            <ion-icon name="checkmark-circle" slot="start"></ion-icon>
-            Confirmar Recepción
-          </ion-button>
-        </ion-buttons>
-      </ion-item>
-    </ion-list>
+        <p>Vendedor: {{ t.vendedor_nombre }}</p>
 
-    <div *ngIf="transaccionesPendientes.length === 0" class="ion-text-center ion-margin-top">
-      <ion-icon name="checkmark-done-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
-      <p>No tienes transacciones pendientes de confirmación.</p>
-    </div>
-  </ng-container>
+        <!-- Chip con opción de entrega -->
+        <p>
+          <ion-badge [color]="t.entrega_opcion === 'retiro_operador' ? 'success' : 'primary'">
+            {{ labelEntrega(t.entrega_opcion) }}
+          </ion-badge>
+        </p>
+
+        <!-- Punto/fecha si existen -->
+        <p *ngIf="t.punto_id || t.fecha_estimada" class="ion-text-wrap">
+          <small class="ion-text-muted">
+            <ng-container *ngIf="t.punto_id">Punto: #{{ t.punto_id }}</ng-container>
+            <ng-container *ngIf="t.punto_id && t.fecha_estimada"> · </ng-container>
+            <ng-container *ngIf="t.fecha_estimada">Fecha: {{ t.fecha_estimada | date:'short' }}</ng-container>
+          </small>
+        </p>
+
+        <p>
+          <ion-badge color="warning">{{ formatEstado(t.estado) }}</ion-badge>
+        </p>
+        <small>Creada: {{ t.fecha_creacion | date:'short' }}</small>
+      </ion-label>
+
+      <!-- Botón solo cuando la OT ya está marcada “completado” por el operador -->
+      <ion-buttons slot="end" *ngIf="t.estado === 'completado'">
+        <ion-button color="success" (click)="confirmarRecepcionProducto(t.id)">
+          <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+          Confirmar Recepción
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="transaccionesPendientes.length === 0" class="ion-text-center ion-margin-top">
+    <ion-icon name="checkmark-done-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
+    <p>No tienes transacciones pendientes de confirmación.</p>
+  </div>
+</ng-container>
+
 
   <!-- ===================== -->
   <!-- TAB: SOLICITUDES -->

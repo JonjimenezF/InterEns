@@ -495,7 +495,7 @@ export class PerfilPage implements OnInit, OnDestroy {
           propietario:propietario_id ( nombre_completo )
         `)
         .eq('solicitante_id', this.userId)
-        .eq('estado', 'en_logistica');
+        .in('estado', ['en_logistica','completado'])   // 👈 ver ambas etapas
 
       if (error) {
         console.error('Error cargando transacciones:', error);
@@ -503,14 +503,17 @@ export class PerfilPage implements OnInit, OnDestroy {
         return;
       }
 
-      this.transaccionesPendientes = data.map(t => ({
+      this.transaccionesPendientes = (data || []).map(t => ({
         id: t.id,
         producto_nombre: t.enseres?.titulo || 'Producto',
         producto_imagen: t.enseres?.imagen_url || 'assets/img/default.png',
         vendedor_nombre: t.propietario?.nombre_completo || 'Vendedor',
-        estado: t.estado,
+        estado: t.estado,                                   // 'en_logistica' | 'completado' | ...
         fecha_creacion: new Date(t.creado_en),
         precio: t.enseres?.valor_puntos || 0,
+        entrega_opcion: t.entrega_opcion || null,           // 👈 NUEVO
+        punto_id: t.punto_id || null,                       // 👈 NUEVO
+        fecha_estimada: t.fecha_estimada || null            // 👈 NUEVO
       }));
     } catch (error) {
       console.error('Error cargando transacciones:', error);
@@ -518,9 +521,48 @@ export class PerfilPage implements OnInit, OnDestroy {
     }
   }
 
-  confirmarRecepcionProducto(transaccionId: string) {
-    this.router.navigate(['/confirmar-recepcion', transaccionId]);
+  labelEntrega(op?: 'lleva_vendedor'|'retiro_operador'|null): string {
+    if (op === 'lleva_vendedor') return 'Lo lleva el vendedor';
+    if (op === 'retiro_operador') return 'Retiro por operador';
+    return 'Entrega por definir';
   }
+
+
+
+  async confirmarRecepcionProducto(transaccionId: number | string) {
+    if (!this.userId) {
+      await this.presentToast('Debes iniciar sesión.', 'danger');
+      return;
+    }
+
+    if (!confirm('¿Confirmas que recibiste el producto en buen estado?')) return;
+
+    try {
+      const resp = await fetch(`${this.API_BASE}/api/transacciones/solicitante/${transaccionId}/confirmar`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ solicitante_id: this.userId })
+      });
+
+      const json = await resp.json().catch(()=> ({}));
+
+      if (!resp.ok || json?.ok === false) {
+        throw new Error(json?.error || `Error HTTP ${resp.status}`);
+      }
+
+      await this.presentToast('✅ Recepción confirmada. ¡Gracias!', 'success');
+
+      // refresca datos
+      await this.loadTransaccionesPendientes();
+      await this.loadMyProducts();            // por si el producto pasa a “intercambiado”
+      await this.loadImpacto();               // si actualizas impacto/pts en backend
+
+    } catch (e: any) {
+      console.error('confirmarRecepcionProducto', e);
+      await this.presentToast(e?.message || 'No se pudo confirmar la recepción.', 'danger');
+    }
+  }
+
 
   // =========================
   // SOLICITUDES DE CANJE
