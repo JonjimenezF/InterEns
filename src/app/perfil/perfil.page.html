@@ -143,7 +143,8 @@
               <!-- acciones (abajo del card) -->
               <div class="card-actions">
                 <ion-button class="btn-primary" size="small"
-                            (click)="elegirEntrega(p, 'lleva_vendedor')">
+                            (click)="elegirEntrega(p, 'lleva_vendedor')"
+                            *ngIf="p.estado === 'reservado'">
                   <ion-icon slot="start" name="bag-check-outline"></ion-icon>
                   <span class="btn-label">Llevar al punto</span>
                 </ion-button>
