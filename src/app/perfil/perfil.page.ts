@@ -320,7 +320,7 @@ export class PerfilPage implements OnInit, OnDestroy {
       case 'en_logistica':
         return 'Envío en camino';
       case 'recibido':
-        return 'Recibido en Punto Limpio';
+        return 'Listo para retiro';
       case 'completado':
         return 'Completado';
       default:
@@ -507,7 +507,7 @@ export class PerfilPage implements OnInit, OnDestroy {
           propietario:propietario_id ( nombre_completo )
         `)
         .eq('solicitante_id', this.userId)
-        .in('estado', ['en_logistica','recibido'])   // 👈 ver ambas etapas
+        .in('estado', ['en_logistica','recibido','pendiente','completado'])   // 👈 ver ambas etapas
 
       if (error) {
         console.error('Error cargando transacciones:', error);

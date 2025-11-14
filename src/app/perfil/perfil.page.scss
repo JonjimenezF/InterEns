@@ -721,3 +721,183 @@ ion-card, ion-card-content, .card-meta { overflow: visible !important; }
   .product-card .p-actions{ grid-template-columns: 1fr; } /* apila botones */
 }
 
+/* ===== TRANSACCIONES (Confirmar recepción) ===== */
+
+.perfil-transacciones {
+  margin-top: 12px;
+}
+
+/* Grid contenedor */
+.perfil-transacciones .trans-grid {
+  padding-inline: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Tarjeta */
+.perfil-transacciones .trans-card {
+  background: var(--card);
+  border: 1px solid var(--stroke);
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(0,0,0,.35);
+  padding: 12px;
+
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  grid-template-rows: auto auto;  /* info + acciones */
+  grid-template-areas:
+    "img content"
+    "actions actions";
+  gap: 12px;
+  align-items: start;
+}
+
+/* Imagen */
+.perfil-transacciones .trans-img {
+  grid-area: img;
+}
+.perfil-transacciones .trans-img img {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #0a0d10;
+  border: 1px solid #1e242a;
+  box-shadow: 0 0 0 2px var(--accent) inset;
+}
+
+/* Contenido */
+.perfil-transacciones .trans-content {
+  grid-area: content;
+  min-width: 0;
+}
+
+.perfil-transacciones .trans-title-row {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  align-items: center;
+  gap: 10px;
+}
+
+.perfil-transacciones .trans-title {
+  margin: 0 0 6px;
+  font-size: 15px;           /* un pelín más chico para que quepa mejor */
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--txt);
+
+  /* 👇 permitir que el título se vea completo */
+  display: block;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+  word-break: break-word;    /* por si hay títulos muy largos sin espacios */
+}
+
+.perfil-transacciones .trans-estado {
+  justify-self: end;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.perfil-transacciones .trans-desc {
+  margin: 2px 0 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.perfil-transacciones .trans-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.perfil-transacciones .trans-date {
+  color: var(--muted);
+  font-size: 11px;
+  opacity: .8;
+  margin: 4px 0 0;
+}
+
+/* Acciones (botón) */
+.perfil-transacciones .trans-actions {
+  grid-area: actions;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.perfil-transacciones .trans-actions ion-button.trans-btn-primary {
+  --border-radius: 12px;
+  height: 40px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  --background: #1fd39a;
+  --color: #071014;
+  --background-hover: #1fd39a;
+  --background-activated: #19b483;
+  box-shadow: 0 6px 14px rgba(31,211,154,.18);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 420px) {
+  .perfil-transacciones .trans-card {
+    grid-template-columns: 78px 1fr;
+  }
+  .perfil-transacciones .trans-img img {
+    width: 78px;
+    height: 78px;
+  }
+  .perfil-transacciones .trans-title {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  .perfil-transacciones .trans-actions {
+    flex-direction: column;
+  }
+}
+
+/* ===== TABS PERFIL COMPACTOS ===== */
+.perfil-tabs {
+  --background: transparent;
+  padding: 4px 8px 0;
+}
+
+/* botón de tab */
+.perfil-tabs ion-segment-button {
+  --background: transparent;
+  --indicator-color: var(--accent);
+  --indicator-height: 3px;
+  --color: var(--muted);
+  --color-checked: var(--accent);
+
+  min-width: auto;
+  padding: 4px 10px;
+  text-transform: none;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* icono + texto en columna */
+.perfil-tabs ion-segment-button ion-icon {
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+.perfil-tabs ion-segment-button ion-label {
+  margin: 0;
+}
+
+/* pequeño efecto al seleccionar */
+.perfil-tabs ion-segment-button[aria-pressed='true'] {
+  filter: drop-shadow(0 2px 6px rgba(31,211,154,0.35));
+}

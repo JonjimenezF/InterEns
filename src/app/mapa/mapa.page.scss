@@ -16,3 +16,20 @@
   font-size: 14px;
   text-align: center;
 }
+
+ion-header, ion-toolbar {
+  --background: #0c0f13 !important; /* tu color dark */
+  --color: #ffffff !important;      /* texto e íconos blancos */
+  border-bottom: 1px solid #1a1d22;
+}
+
+/* Flecha blanca siempre */
+ion-back-button {
+  --color: #ffffff !important;
+}
+
+/* Título blanco centrado */
+ion-title {
+  color: #ffffff !important;
+  text-align: center;
+}

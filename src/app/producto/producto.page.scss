@@ -25,25 +25,68 @@ ion-back-button {
 
 /* 🌿 CABECERA DE FILTROS */
 .filter-section {
-  background-color: var(--bg);
-  padding: 15px 16px 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-bottom: 1px solid var(--stroke);
+  padding: 8px 16px 6px;      /* antes eran ~15px y más */
+  align-items: stretch;
 }
 
+/* Logo más cerca del buscador y centrado */
 .logo-area {
   display: flex;
   justify-content: center;
-  margin-bottom: 8px;
-
-  .logo {
-    width: 140px;
-    filter: drop-shadow(0 0 12px rgba(31, 211, 154, 0.4));
-    animation: glow 3s ease-in-out infinite alternate;
-  }
+  margin-top: 4px;
+  margin-bottom: 6px;
 }
+
+.logo-area ion-img {
+  width: 60px !important;
+  height: 60px !important;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(31, 211, 154, 0.35));
+}
+
+/* Contenedor de buscador + filtros con ancho máximo */
+.search-and-filters {
+  width: 100%;
+  max-width: 420px;          /* en móvil se ve compacto, en web no se estira de más */
+  margin: 0 auto;
+}
+
+/* Buscador más pegado al resto */
+.searchbar {
+  margin-bottom: 6px;
+}
+
+/* Texto “Filtrar por:” más discreto */
+.filter-label {
+  margin: 2px 0 4px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* Caja de selects/inputs menos alta y con menos separación */
+.input-box {
+  --min-height: 40px;
+  height: 40px;
+  margin-bottom: 6px;
+}
+
+/* Fila de Puntos Mín / Máx más juntita */
+.price-row {
+  display: flex;
+  gap: 8px;
+}
+
+/* Botones con menos espacio vertical */
+.filter-buttons {
+  margin-top: 4px;
+}
+
+.apply-button {
+  height: 40px;
+  margin-top: 4px;
+}
+
+
 
 @keyframes glow {
   from {
