@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { ReputacionService } from '../../servicios/reputacion.service';
 import { StarRatingComponent } from '../star-rating/star-rating.component';
+import { supabase } from '../../services/supabase.client';  // 👈 IMPORTANTE
 
 @Component({
   selector: 'app-reviews-list',
@@ -29,17 +30,25 @@ export class ReviewsListComponent implements OnInit {
   async cargarReseñas() {
     this.loading = true;
     try {
-      this.reviews = await this.reputacionService.obtenerCalificacionesDetalladas(this.usuarioId);
-      
-      // Obtener nombres de los calificadores
-      for (let review of this.reviews) {
-        try {
-          const resp = await fetch(`http://127.0.0.1:4000/profile/${review.usuario_calificador}`);
-          const perfil = await resp.json();
-          review.nombre_calificador = perfil?.nombre_completo || 'Usuario';
-        } catch {
+      // 1) Calificaciones del vendedor
+      this.reviews = await this.reputacionService
+        .obtenerCalificacionesDetalladas(this.usuarioId);
+
+      // 2) Para cada review, traer el nombre del calificador
+      for (const review of this.reviews) {
+        const { data: perfil, error } = await supabase
+          .from('perfiles')
+          .select('nombre_completo')
+          .eq('usuario_id', review.usuario_calificador)
+          .maybeSingle();
+
+        if (!error && perfil) {
+          review.nombre_calificador = perfil.nombre_completo || 'Usuario';
+        } else {
           review.nombre_calificador = 'Usuario';
         }
+
+        console.log('Review actualizada:', review);
       }
     } catch (error) {
       console.error('Error cargando reseñas:', error);

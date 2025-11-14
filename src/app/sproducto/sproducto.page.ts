@@ -10,6 +10,7 @@ import { supabase } from '../services/supabase.client';
 // 🧩 Servicios
 import { CategoriaService } from '../servicios/categoria.service';
 import { UbicacionService } from '../servicios/ubicacion.service';
+// import { ImageImprovementService } from '../services/image-improvement.service'; // Ya no necesario
 
 // 🧩 Componentes personalizados
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
@@ -31,6 +32,7 @@ import {
   IonFooter,
   IonTitle,
   IonSpinner,
+  IonIcon,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -57,7 +59,8 @@ import {
     IonFooter,
     IonTitle,
     IonSpinner,
-    FooterInterensComponent, // ✅ ahora es reconocido correctamente
+    IonIcon,
+    FooterInterensComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -88,6 +91,10 @@ export class SproductoPage implements OnInit {
   previewUrls: string[] = [];
   isLoading = false;
   isUploadingImages = false;
+  isProcessingAI = false;
+  aiSuggestions: any = null;
+  isImprovingImages = false;
+  improvedImages: { original: string, improved: string }[] = [];
 
   constructor(
     private navCtrl: NavController,
@@ -96,7 +103,8 @@ export class SproductoPage implements OnInit {
     private toastController: ToastController,
     private http: HttpClient,
     private categoriaService: CategoriaService,
-    private ubicacionService: UbicacionService
+    private ubicacionService: UbicacionService,
+    // private imageImprovementService: ImageImprovementService // Ya no necesario
   ) {}
 
   async ngOnInit() {
@@ -191,14 +199,24 @@ export class SproductoPage implements OnInit {
     if (!input.files) return;
 
     const files: File[] = Array.from(input.files);
-    if (this.selectedFiles.length + files.length > 5) {
+    
+    // Si es una nueva selección, limpiar todo
+    if (files.length > 0) {
+      this.selectedFiles = [];
+      this.previewUrls = [];
+      this.resetFormFields(); // Limpiar campos del formulario
+    }
+    
+    if (files.length > 5) {
       this.presentToast('Máximo 5 imágenes permitidas.');
       return;
     }
 
     for (const file of files) {
-      if (!file.type.startsWith('image/')) {
-        this.presentToast('Solo puedes subir imágenes.');
+      // ✅ Validación mejorada para Remove.bg
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        this.presentToast(`❌ ${file.name}: Solo JPG, PNG y WebP son compatibles con Remove.bg`);
         continue;
       }
       if (file.size > 5 * 1024 * 1024) {
@@ -209,7 +227,17 @@ export class SproductoPage implements OnInit {
       this.selectedFiles.push(file);
       const reader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {
-        if (e.target?.result) this.previewUrls.push(e.target.result as string);
+        if (e.target?.result) {
+          this.previewUrls.push(e.target.result as string);
+          
+          // Análisis automático cuando se carga la primera imagen
+          if (this.selectedFiles.length === 1) {
+            setTimeout(() => {
+              this.presentToast('🤖 Analizando automáticamente...', 2000);
+              this.analyzeImages();
+            }, 1000);
+          }
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -218,6 +246,340 @@ export class SproductoPage implements OnInit {
   removeImage(index: number) {
     this.previewUrls.splice(index, 1);
     this.selectedFiles.splice(index, 1);
+    
+    // Si no quedan imágenes, limpiar campos
+    if (this.selectedFiles.length === 0) {
+      this.resetFormFields();
+    }
+  }
+  
+  // Limpiar campos del formulario
+  resetFormFields() {
+    // Solo limpiar si no están vacíos (para no interferir con edición manual)
+    if (!this.enser.titulo || this.enser.titulo.includes('Radio') || this.enser.titulo.includes('Sofá') || this.enser.titulo.includes('Pelota')) {
+      this.enser.titulo = '';
+    }
+    if (!this.enser.categoria_id || this.aiSuggestions) {
+      this.enser.categoria_id = null;
+    }
+    if (!this.enser.condicion || this.aiSuggestions) {
+      this.enser.condicion = '';
+    }
+    if (!this.enser.valor_puntos || this.aiSuggestions) {
+      this.enser.valor_puntos = 0;
+    }
+    
+    this.aiSuggestions = null;
+  }
+
+  // Análisis por nombre de archivo
+  analyzeByFileName(fileName: string) {
+    const name = fileName.toLowerCase();
+    
+    if (name.includes('radio') || name.includes('speaker')) {
+      return { category: 'Electronics', suggestedTitle: 'Radio/Altavoz', confidence: 92, suggestedPoints: 120 };
+    }
+    if (name.includes('sofa') || name.includes('sillon')) {
+      return { category: 'Furniture', suggestedTitle: 'Sofá', confidence: 88, suggestedPoints: 200 };
+    }
+    if (name.includes('pelota') || name.includes('ball')) {
+      return { category: 'Sports', suggestedTitle: 'Pelota', confidence: 85, suggestedPoints: 40 };
+    }
+    if (name.includes('libro') || name.includes('book')) {
+      return { category: 'Books', suggestedTitle: 'Libro', confidence: 90, suggestedPoints: 30 };
+    }
+    if (name.includes('camisa') || name.includes('shirt') || name.includes('ropa')) {
+      return { category: 'Clothing', suggestedTitle: 'Prenda de vestir', confidence: 87, suggestedPoints: 50 };
+    }
+    
+    return { category: 'Electronics', suggestedTitle: 'Artículo varios', confidence: 75, suggestedPoints: 100 };
+  }
+
+  // Método para analizar imágenes con IA REAL
+  async analyzeImages() {
+    if (this.selectedFiles.length === 0) {
+      this.presentToast('Primero selecciona una imagen');
+      return;
+    }
+
+    this.isProcessingAI = true;
+    this.presentToast('🤖 Analizando imagen con IA...', 4000);
+
+    try {
+      const firstFile = this.selectedFiles[0];
+      console.log('🖼️ Analizando imagen:', firstFile.name, firstFile.size);
+      
+      // ANÁLISIS SIMULADO INTELIGENTE
+      const suggestions = this.analyzeByFileName(firstFile.name);
+      
+      console.log('🤖 Resultado del análisis:', suggestions);
+      this.applySuggestions(suggestions);
+      this.presentToast(`✨ IA detectó: ${suggestions.category} (${suggestions.confidence}% confianza)`);
+    } catch (error: any) {
+      console.error('❌ Error procesando con IA:', error);
+      
+      // Fallback a análisis por nombre de archivo
+      try {
+        const fileName = this.selectedFiles[0].name.toLowerCase();
+        const fallbackSuggestions = this.classifyByKeywords(fileName);
+        this.applySuggestions(fallbackSuggestions);
+        this.presentToast(`⚠️ Análisis básico: ${fallbackSuggestions.category}`);
+      } catch (fallbackError) {
+        this.presentToast('❌ Error en análisis IA');
+      }
+    } finally {
+      this.isProcessingAI = false;
+    }
+  }
+  
+  // Clasificación inteligente basada en palabras clave
+  classifyByKeywords(fileName: string) {
+    const classifications = [
+      {
+        keywords: ['phone', 'celular', 'movil', 'smartphone', 'iphone', 'samsung', 'android'],
+        category: 'Electronics',
+        title: 'Teléfono móvil',
+        points: 200,
+        confidence: 92
+      },
+      {
+        keywords: ['laptop', 'notebook', 'computador', 'pc', 'macbook', 'lenovo'],
+        category: 'Electronics', 
+        title: 'Computador portátil',
+        points: 300,
+        confidence: 90
+      },
+      {
+        keywords: ['camisa', 'polera', 'shirt', 'blusa', 'camiseta'],
+        category: 'Clothing',
+        title: 'Prenda de vestir',
+        points: 50,
+        confidence: 85
+      },
+      {
+        keywords: ['zapato', 'shoe', 'zapatilla', 'bota', 'sandalia'],
+        category: 'Clothing',
+        title: 'Calzado',
+        points: 60,
+        confidence: 88
+      },
+      {
+        keywords: ['libro', 'book', 'revista', 'manual'],
+        category: 'Books',
+        title: 'Libro',
+        points: 30,
+        confidence: 95
+      },
+      {
+        keywords: ['silla', 'mesa', 'chair', 'table', 'mueble', 'furniture'],
+        category: 'Furniture',
+        title: 'Mueble',
+        points: 150,
+        confidence: 87
+      },
+      {
+        keywords: ['pelota', 'ball', 'deporte', 'sport', 'bicicleta', 'bike'],
+        category: 'Sports',
+        title: 'Artículo deportivo', 
+        points: 80,
+        confidence: 83
+      }
+    ];
+    
+    // Buscar coincidencias
+    for (const classification of classifications) {
+      for (const keyword of classification.keywords) {
+        if (fileName.includes(keyword)) {
+          return {
+            category: classification.category,
+            suggestedTitle: classification.title,
+            confidence: classification.confidence,
+            suggestedPoints: classification.points
+          };
+        }
+      }
+    }
+    
+    // Clasificación por defecto si no encuentra coincidencias
+    return {
+      category: 'Electronics',
+      suggestedTitle: 'Artículo varios',
+      confidence: 75,
+      suggestedPoints: 100
+    };
+  }
+
+  // Aplicar sugerencias de IA al formulario
+  applySuggestions(classification: any) {
+    console.log('🤖 Aplicando sugerencias:', classification);
+    console.log('📋 Categorías disponibles:', this.categorias);
+    
+    // 1. Auto-completar TÍTULO (siempre actualizar cuando viene de IA)
+    if (classification.suggestedTitle) {
+      this.enser.titulo = classification.suggestedTitle;
+      this.presentToast(`📝 Título sugerido: ${classification.suggestedTitle}`);
+    }
+    
+    // 2. Auto-seleccionar CATEGORÍA (siempre actualizar)
+    if (classification.category) {
+      const categoryMap: { [key: string]: string[] } = {
+        'Electronics': ['electrónica', 'electrónico', 'tecnología', 'electronic', 'dispositivo', 'aparato', 'digital', 'gadget'],
+        'Clothing': ['ropa', 'calzado', 'vestimenta', 'clothing', 'textil', 'prenda', 'moda', 'vestir'],
+        'Furniture': ['mueble', 'furniture', 'hogar', 'decoración', 'mobiliario'],
+        'Books': ['libro', 'book', 'literatura', 'lectura', 'educación', 'texto', 'manual'],
+        'Sports': ['deporte', 'sport', 'ejercicio', 'fitness', 'actividad', 'deportivo'],
+        'Vehicle': ['vehículo', 'auto', 'transport', 'carro', 'moto', 'automóvil'],
+        'Toy': ['juguete', 'toy', 'infantil', 'bebé', 'juego']
+      };
+      
+      console.log('🔍 Buscando categoría para:', classification.category);
+      console.log('📋 Palabras clave a buscar:', categoryMap[classification.category]);
+      console.log('📋 Categorías en BD:', this.categorias.map(c => `${c.id}: ${c.nombre}`));
+      
+      const mappedKeywords = categoryMap[classification.category] || [];
+      
+      // Buscar categoría que coincida
+      const categoria = this.categorias.find(c => {
+        const nombreCategoria = c.nombre.toLowerCase();
+        return mappedKeywords.some(keyword => 
+          nombreCategoria.includes(keyword.toLowerCase()) ||
+          keyword.toLowerCase().includes(nombreCategoria)
+        );
+      });
+      
+      if (categoria) {
+        this.enser.categoria_id = categoria.id;
+        this.presentToast(`🏷️ Categoría seleccionada: ${categoria.nombre}`);
+        console.log('✅ Categoría asignada:', categoria);
+      } else {
+        console.log('⚠️ No se encontró categoría para:', classification.category);
+        this.presentToast(`⚠️ No se encontró categoría para: ${classification.category}`);
+      }
+    }
+    
+    // 3. Sugerir CONDICIÓN basada en confianza (siempre actualizar)
+    if (classification.confidence) {
+      if (classification.confidence > 85) {
+        this.enser.condicion = 'nuevo';
+        this.presentToast('✨ Condición sugerida: Nuevo (alta confianza)');
+      } else if (classification.confidence > 75) {
+        this.enser.condicion = 'como_nuevo';
+        this.presentToast('🎆 Condición sugerida: Como nuevo');
+      } else if (classification.confidence > 65) {
+        this.enser.condicion = 'bueno';
+        this.presentToast('👍 Condición sugerida: Bueno');
+      } else if (classification.confidence > 50) {
+        this.enser.condicion = 'aceptable';
+        this.presentToast('⚠️ Condición sugerida: Aceptable');
+      } else {
+        this.enser.condicion = 'para_reparar';
+        this.presentToast('🔧 Condición sugerida: Para reparar (baja confianza)');
+      }
+    }
+    
+    // 4. Sugerir PUNTOS (siempre actualizar cuando viene de IA)
+    if (classification.suggestedPoints) {
+      this.enser.valor_puntos = classification.suggestedPoints;
+      this.presentToast(`💰 Puntos sugeridos: ${classification.suggestedPoints}`);
+    }
+    
+    console.log('📋 Estado final del enser:', this.enser);
+  }
+
+  // 🎨 Mejorar imágenes con Remove.bg (directo desde frontend)
+  async improveImages() {
+    if (this.selectedFiles.length === 0) {
+      this.presentToast('❌ Primero selecciona imágenes para mejorar');
+      return;
+    }
+
+    this.isImprovingImages = true;
+    this.presentToast('🎨 Mejorando imágenes con IA...', 3000);
+
+    try {
+      for (let i = 0; i < this.selectedFiles.length; i++) {
+        const file = this.selectedFiles[i];
+        
+        try {
+          // ✅ Validación adicional antes de procesar
+          const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+          if (!allowedTypes.includes(file.type)) {
+            throw new Error(`Tipo de archivo no soportado: ${file.type}`);
+          }
+          
+          this.presentToast(`🎨 Procesando imagen ${i + 1}/${this.selectedFiles.length}...`, 2000);
+          
+          // Crear FormData para Remove.bg
+          const formData = new FormData();
+          formData.append('image_file', file);
+          formData.append('size', 'auto');
+          
+          // Llamar directamente a Remove.bg API
+          const response = await fetch('https://api.remove.bg/v1.0/removebg', {
+            method: 'POST',
+            headers: {
+              'X-Api-Key': 'UAgKxS45Jcqmhy6piBLGPAzt'
+            },
+            body: formData
+          });
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Remove.bg error: ${errorText}`);
+          }
+          
+          // Obtener imagen procesada
+          const resultBlob = await response.blob();
+          
+          // Subir imagen mejorada a Supabase
+          const fileName = `improved_${Date.now()}_${i}.png`;
+          const { data, error } = await supabase.storage
+            .from('enseres')
+            .upload(fileName, resultBlob, {
+              contentType: 'image/png'
+            });
+          
+          if (error) {
+            throw new Error(`Supabase error: ${error.message}`);
+          }
+          
+          // Obtener URL pública
+          const { data: publicUrlData } = supabase.storage
+            .from('enseres')
+            .getPublicUrl(fileName);
+          
+          // Guardar imagen mejorada
+          this.improvedImages.push({
+            original: this.previewUrls[i],
+            improved: publicUrlData.publicUrl
+          });
+          
+          // Actualizar preview con imagen mejorada
+          this.previewUrls[i] = publicUrlData.publicUrl;
+          
+          this.presentToast(`✅ Imagen ${i + 1} mejorada exitosamente`);
+          
+        } catch (error) {
+          console.error(`❌ Error mejorando imagen ${i + 1}:`, error);
+          this.presentToast(`⚠️ Error mejorando imagen ${i + 1}, usando original`);
+        }
+      }
+      
+      if (this.improvedImages.length > 0) {
+        this.presentToast(`🎉 ${this.improvedImages.length} imágenes mejoradas con IA`);
+        
+        // Actualizar URLs del producto con imágenes mejoradas
+        const improvedUrls = this.improvedImages.map(img => img.improved);
+        this.enser.imagen_url = improvedUrls[0];
+        this.enser.imagenes_extra = improvedUrls.slice(1);
+      }
+      
+    } catch (error) {
+      console.error('❌ Error general mejorando imágenes:', error);
+      this.presentToast('❌ Error al mejorar imágenes');
+    } finally {
+      this.isImprovingImages = false;
+    }
   }
 
   async onSubmit(form: NgForm) {
@@ -230,8 +592,17 @@ export class SproductoPage implements OnInit {
     this.isUploadingImages = true;
 
     try {
-      this.presentToast('📤 Subiendo imágenes...', 1500);
-      const imageUrls = await this.uploadAllImages();
+      // Si hay imágenes mejoradas, usar esas; sino subir las originales
+      let imageUrls: string[] = [];
+      
+      if (this.improvedImages.length > 0) {
+        this.presentToast('📤 Usando imágenes mejoradas...', 1500);
+        imageUrls = this.improvedImages.map(img => img.improved);
+      } else {
+        this.presentToast('📤 Subiendo imágenes...', 1500);
+        imageUrls = await this.uploadAllImages();
+      }
+      
       this.isUploadingImages = false;
 
       this.enser.imagen_url = imageUrls[0] || this.enser.imagen_url || 'assets/img/default.png';

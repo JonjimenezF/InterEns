@@ -30,7 +30,7 @@
 
       <div class="info-secundaria">
         <p><strong>Condición:</strong> {{ producto.condicion || 'No especificada' }}</p>
-        <p><strong>Ubicación:</strong> {{ producto.region }} - {{ producto.ciudad }}</p>
+        <p><strong>Ubicación: </strong> {{ producto.comunas?.nombre }}</p>
         
         <!-- Reputación del vendedor -->
         <div class="vendedor-reputacion" *ngIf="vendedorReputacion">

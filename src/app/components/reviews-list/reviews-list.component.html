@@ -13,34 +13,44 @@
   <div *ngIf="!loading && reviews.length > 0" class="reviews-list">
     <ion-card *ngFor="let review of reviews" class="review-card">
       <ion-card-content>
+
         <div class="review-header">
+
           <div class="user-info">
-            <ion-avatar class="user-avatar">
+            <!-- <ion-avatar class="user-avatar">
               <ion-icon name="person" class="avatar-icon"></ion-icon>
-            </ion-avatar>
+            </ion-avatar> -->
+
             <div class="user-details">
+              <!-- 👤 Nombre -->
               <h4 class="user-name">{{ review.nombre_calificador }}</h4>
+
+              <!-- ⭐ Estrellas debajo del nombre -->
+              <div class="rating-under-name">
+                <app-star-rating
+                  [rating]="review.puntuacion"
+                  [totalReviews]="0"
+                  [showText]="false"
+                  size="small">
+                </app-star-rating>
+              </div>
+
+              <!-- Fecha -->
               <p class="review-date">{{ getTimeAgo(review.created_at) }}</p>
             </div>
           </div>
-          
-          <div class="rating-display">
-            <app-star-rating 
-              [rating]="review.puntuacion" 
-              [totalReviews]="0"
-              [showText]="false"
-              size="small">
-            </app-star-rating>
-          </div>
+
         </div>
 
+        <!-- Comentario -->
         <div class="review-content" *ngIf="review.comentario">
           <p>{{ review.comentario }}</p>
         </div>
-        
+
         <div class="review-content" *ngIf="!review.comentario">
           <p class="no-comment">Sin comentario adicional</p>
         </div>
+
       </ion-card-content>
     </ion-card>
   </div>

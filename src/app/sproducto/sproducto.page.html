@@ -85,9 +85,36 @@
         </ion-item>
 
         <div class="preview-container" *ngIf="previewUrls.length > 0">
+          <h4>Previsualización</h4>
           <div class="image-wrapper" *ngFor="let url of previewUrls; let i = index">
             <img [src]="url" alt="preview" class="preview-img" />
             <button type="button" class="delete-btn" (click)="removeImage(i)">✖</button>
+          </div>
+          
+          <!-- Botones de IA -->
+          <div class="ai-button-container">
+            <ion-button 
+              fill="outline" 
+              color="primary"
+              (click)="analyzeImages()"
+              [disabled]="isProcessingAI">
+              <ion-icon name="star" slot="start"></ion-icon>
+              {{ isProcessingAI ? 'Analizando...' : 'Analizar con IA' }}
+            </ion-button>
+            
+            <ion-button 
+              fill="solid" 
+              color="secondary"
+              (click)="improveImages()"
+              [disabled]="isImprovingImages || selectedFiles.length === 0">
+              <ion-icon name="brush" slot="start"></ion-icon>
+              {{ isImprovingImages ? 'Mejorando...' : 'Mejorar Fotos ✨' }}
+            </ion-button>
+          </div>
+          
+          <!-- Indicador de imágenes mejoradas -->
+          <div class="improved-indicator" *ngIf="improvedImages.length > 0">
+            <p>✨ {{ improvedImages.length }} imagen(es) mejorada(s) con IA</p>
           </div>
         </div>
 

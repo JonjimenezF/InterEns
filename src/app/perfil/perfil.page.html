@@ -226,61 +226,86 @@
     </div>
   </ng-container>
 
-  <!-- ===================== -->
-  <!-- TAB: TRANSACCIONES -->
-  <!-- ===================== -->
-  <!-- ===================== -->
 <!-- TAB: TRANSACCIONES   -->
 <!-- ===================== -->
-<ng-container *ngIf="selectedTab === 'transacciones'">
-  <ion-list *ngIf="transaccionesPendientes.length > 0">
-    <ion-item *ngFor="let t of transaccionesPendientes">
-      <ion-thumbnail slot="start">
-        <img [src]="t.producto_imagen || 'assets/img/default.png'" alt="producto" />
-      </ion-thumbnail>
+  <ng-container *ngIf="selectedTab === 'transacciones'">
 
-      <ion-label>
-        <h3>{{ t.producto_nombre }}</h3>
+    <!-- Lista de transacciones en tarjetas responsive -->
+    <div *ngIf="transaccionesPendientes.length > 0" class="products-grid">
+      <div *ngFor="let t of transaccionesPendientes" class="product-card">
 
-        <p>Vendedor: {{ t.vendedor_nombre }}</p>
+        <!-- 📸 Imagen -->
+        <div class="img">
+          <img
+            [src]="t.producto_imagen || 'assets/img/default.png'"
+            alt="producto" />
+        </div>
 
-        <!-- Chip con opción de entrega -->
-        <p>
-          <ion-badge [color]="t.entrega_opcion === 'retiro_operador' ? 'success' : 'primary'">
-            {{ labelEntrega(t.entrega_opcion) }}
-          </ion-badge>
-        </p>
+        <!-- 📄 Contenido -->
+        <div class="content">
+          <div class="title-row">
+            <h3 class="title">{{ t.producto_nombre }}</h3>
 
-        <!-- Punto/fecha si existen -->
-        <p *ngIf="t.punto_id || t.fecha_estimada" class="ion-text-wrap">
-          <small class="ion-text-muted">
-            <ng-container *ngIf="t.punto_id">Punto: #{{ t.punto_id }}</ng-container>
-            <ng-container *ngIf="t.punto_id && t.fecha_estimada"> · </ng-container>
-            <ng-container *ngIf="t.fecha_estimada">Fecha: {{ t.fecha_estimada | date:'short' }}</ng-container>
-          </small>
-        </p>
+            <!-- Estado general (pendiente / completado / etc.) -->
+            <ion-badge class="estado" color="warning">
+              {{ formatEstado(t.estado) }}
+            </ion-badge>
+          </div>
 
-        <p>
-          <ion-badge color="warning">{{ formatEstado(t.estado) }}</ion-badge>
-        </p>
-        <small>Creada: {{ t.fecha_creacion | date:'short' }}</small>
-      </ion-label>
+          <p class="desc">
+            Vendedor: {{ t.vendedor_nombre }}
+          </p>
 
-      <!-- Botón solo cuando la OT ya está marcada “completado” por el operador -->
-      <ion-buttons slot="end" *ngIf="t.estado === 'completado'">
-        <ion-button color="success" (click)="confirmarRecepcionProducto(t.id)">
-          <ion-icon name="checkmark-circle" slot="start"></ion-icon>
-          Confirmar Recepción
-        </ion-button>
-      </ion-buttons>
-    </ion-item>
-  </ion-list>
+          <!-- Meta: tipo de entrega + fecha creación -->
+          <div class="card-meta">
+            <ion-badge
+              [color]="t.entrega_opcion === 'retiro_operador' ? 'success' : 'primary'">
+              {{ labelEntrega(t.entrega_opcion) }}
+            </ion-badge>
 
-  <div *ngIf="transaccionesPendientes.length === 0" class="ion-text-center ion-margin-top">
-    <ion-icon name="checkmark-done-outline" style="font-size: 3em; opacity: 0.5"></ion-icon>
-    <p>No tienes transacciones pendientes de confirmación.</p>
-  </div>
-</ng-container>
+            <span class="date">
+              Creada: {{ t.fecha_creacion | date:'short' }}
+            </span>
+          </div>
+
+          <!-- Punto / fecha estimada si existen -->
+          <p class="date" *ngIf="t.punto_id || t.fecha_estimada">
+            <ng-container *ngIf="t.punto_id">
+              Punto: #{{ t.punto_id }}
+            </ng-container>
+            <ng-container *ngIf="t.punto_id && t.fecha_estimada">
+              ·
+            </ng-container>
+            <ng-container *ngIf="t.fecha_estimada">
+              Fecha: {{ t.fecha_estimada | date:'short' }}
+            </ng-container>
+          </p>
+        </div>
+
+        <!-- ✅ Botón de confirmar recepción -->
+        <div class="card-actions" *ngIf="t.estado === 'recibido'">
+          <ion-button
+            class="btn-primary"
+            expand="block"
+            (click)="confirmarRecepcionProducto(t.id)">
+            <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+            CONFIRMAR RECEPCIÓN
+          </ion-button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Estado vacío -->
+    <div *ngIf="transaccionesPendientes.length === 0"
+        class="ion-text-center ion-margin-top">
+      <ion-icon
+        name="checkmark-done-outline"
+        style="font-size: 3em; opacity: 0.5"></ion-icon>
+      <p>No tienes transacciones pendientes de confirmación.</p>
+    </div>
+  </ng-container>
+
 
 
   <!-- ===================== -->

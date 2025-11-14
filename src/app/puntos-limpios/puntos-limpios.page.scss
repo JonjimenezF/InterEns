@@ -1,48 +1,57 @@
-ion-content {
-  --background: #0c0f13;
-  color: white;
-}
-
-#map {
-  height: 75vh;
-  width: 92%;
-  margin: 15px auto;
-  border-radius: 16px;
-  border: 2px solid #1fd39a;
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(31, 211, 154, 0.3);
-}
-
-#info {
+.header-section {
   text-align: center;
-  margin-top: 12px;
+  padding: 20px;
+  background: linear-gradient(135deg, #1fd39a, #17b085);
+  color: white;
+  margin-bottom: 20px;
 }
 
-.info-banner {
-  background: #ffffff;
-  color: #111;
-  padding: 12px 20px;
+.header-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.header-section h1 {
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.header-section p {
+  opacity: 0.9;
+  margin: 0;
+}
+
+.punto-card {
+  margin-bottom: 16px;
   border-radius: 12px;
-  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --inner-padding-end: 16px;
+  --inner-padding-start: 16px;
+}
+
+.punto-card ion-label h2 {
+  color: var(--ion-color-dark);
   font-weight: 600;
-  display: inline-block;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  margin-bottom: 4px;
 }
 
-.floating-btn {
-  margin-top: 14px;
-  background: #1fd39a;
-  color: #000;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 20px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s;
+.punto-card ion-label p {
+  color: var(--ion-color-medium);
+  font-size: 14px;
+  margin: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.floating-btn:active {
-  transform: scale(0.97);
-  background: #18b982;
+.materiales {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.materiales ion-chip {
+  font-size: 12px;
+  height: 24px;
 }

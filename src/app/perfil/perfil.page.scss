@@ -495,12 +495,11 @@ ion-card.niveles-card ion-item:hover {
 }
 
 /* Fila de acciones: dos columnas iguales */
-.card-actions{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  flex: 1;
-  min-width: 220px;
+.card-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 /* Responsive: en pantallas angostas se apilan */
@@ -661,7 +660,9 @@ ion-card, ion-card-content, .card-meta { overflow: visible !important; }
 .product-card .card-actions,
 .product-card .p-actions{
   grid-area: actions;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 4px;
 }
 
@@ -719,3 +720,4 @@ ion-card, ion-card-content, .card-meta { overflow: visible !important; }
   .product-card .card-actions,
   .product-card .p-actions{ grid-template-columns: 1fr; } /* apila botones */
 }
+

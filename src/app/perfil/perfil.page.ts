@@ -313,7 +313,19 @@ export class PerfilPage implements OnInit, OnDestroy {
 
   formatEstado(estado: string): string {
     if (!estado) return '';
-    return estado.replace('_', ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+    const e = estado.toLowerCase();
+
+    switch (e) {
+      case 'en_logistica':
+        return 'Envío en camino';
+      case 'recibido':
+        return 'Recibido en Punto Limpio';
+      case 'completado':
+        return 'Completado';
+      default:
+        return estado.replace('_', ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    }
   }
 
   async marcarIntercambiado(producto: any) {
@@ -495,7 +507,7 @@ export class PerfilPage implements OnInit, OnDestroy {
           propietario:propietario_id ( nombre_completo )
         `)
         .eq('solicitante_id', this.userId)
-        .in('estado', ['en_logistica','completado'])   // 👈 ver ambas etapas
+        .in('estado', ['en_logistica','recibido'])   // 👈 ver ambas etapas
 
       if (error) {
         console.error('Error cargando transacciones:', error);

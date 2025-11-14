@@ -36,7 +36,6 @@
 
 .review-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 12px;
 }
@@ -65,25 +64,40 @@
   }
 }
 
+/* 🔽 AQUÍ está la magia */
 .user-details {
   flex: 1;
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* 👈 centra nombre, estrellas y fecha */
+  text-align: center;      /* 👈 texto centrado */
+  gap: 4px;
+
   .user-name {
     color: var(--txt, #ffffff);
     font-size: 14px;
     font-weight: 600;
-    margin: 0 0 2px 0;
+    margin: 0;
   }
-  
+
+  /* ⭐ Estrellas debajo del nombre, centradas */
+  .rating-under-name {
+    margin: 2px 0 2px 0;
+    display: flex;
+    justify-content: center;      /* 👈 centra horizontalmente */
+    align-items: center;
+  }
+
+  .rating-under-name app-star-rating {
+    display: inline-flex;
+    line-height: 1;
+  }
+
   .review-date {
     color: var(--muted, #999);
     font-size: 12px;
     margin: 0;
   }
-}
-
-.rating-display {
-  flex-shrink: 0;
 }
 
 .review-content {
