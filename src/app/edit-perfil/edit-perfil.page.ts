@@ -254,7 +254,14 @@ export class EditPerfilPage implements OnInit {
   private async cargarTodo() {
     this.loading = true;
     try {
-      await Promise.all([this.cargarRegiones(), this.cargarPerfil(), this.cargarDireccion()]);
+      // 1️⃣ Primero regiones (para poder buscar por nombre)
+      await this.cargarRegiones();
+
+      // 2️⃣ Luego perfil y dirección en paralelo
+      await Promise.all([
+        this.cargarPerfil(),
+        this.cargarDireccion(),
+      ]);
     } finally {
       this.loading = false;
     }
@@ -279,30 +286,40 @@ export class EditPerfilPage implements OnInit {
 
   // 🔹 Cargar dirección actual
   private async cargarDireccion() {
-    const token = await this.getToken();
-    if (!token) return;
+   const token = await this.getToken();
+  if (!token) return;
 
-    const r = await fetch('http://127.0.0.1:4000/profile/address', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const d = await r.json();
+  const r = await fetch('http://127.0.0.1:4000/profile/address', {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const d = await r.json();
 
-    this.dir = {
-      linea_direccion: d?.linea_direccion ?? '',
-      region_id: null,
-      comuna_id: null,
-      latitud: d?.latitud ?? null,
-      longitud: d?.longitud ?? null,
-    };
+  // Siempre setea la línea de dirección si viene
+  this.dir.linea_direccion = d?.linea_direccion ?? '';
 
-    // 🧭 intentar preseleccionar región y comuna por nombre
-    const regionEncontrada = this.regiones.find((r) => r.nombre === d?.region);
+  // 🔹 Intentar preseleccionar región por nombre (ej: "Valparaíso")
+  if (d?.region && this.regiones.length) {
+    const regionEncontrada = this.regiones.find(
+      (reg) => reg.nombre === d.region
+    );
+
     if (regionEncontrada) {
       this.dir.region_id = regionEncontrada.id;
+
+      // Cargar comunas de esa región
       await this.cargarComunas();
-      const comunaEncontrada = this.comunas.find((c) => c.nombre === d?.ciudad);
-      if (comunaEncontrada) this.dir.comuna_id = comunaEncontrada.id;
+
+      // 🔹 Luego intentar preseleccionar comuna por nombre (ej: "Viña del Mar")
+      if (d?.ciudad && this.comunas.length) {
+        const comunaEncontrada = this.comunas.find(
+          (c) => c.nombre === d.ciudad
+        );
+        if (comunaEncontrada) {
+          this.dir.comuna_id = comunaEncontrada.id;
+        }
+      }
     }
+  }
   }
 
   // 🌎 Cargar regiones desde Supabase
