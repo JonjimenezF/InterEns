@@ -29,21 +29,32 @@ import {
   trophyOutline,
   cartOutline,
   menuOutline,
-    heart,               // ❤️ agregado
-  heartOutline,        // ❤️ agregado
+  heart,
+  heartOutline,
   pinOutline,
   cubeOutline,
   carOutline,
-  bagCheckOutline
+  bagCheckOutline,
+  chatbubblesOutline,
+  documentTextOutline,
+  starOutline,
+  checkmarkCircleOutline,
+  swapHorizontalOutline,
+  leafOutline,
+  checkmarkDoneOutline,
+  checkmarkCircle,
 } from 'ionicons/icons';
 
 /* 🧩 Agregamos todos los íconos usados en la app */
 addIcons({
+  // Navegación principal
   'home-outline': homeOutline,
   'navigate-outline': navigateOutline,
   'add-circle-outline': addCircleOutline,
   'person-circle-outline': personCircleOutline,
   'person-outline': personOutline,
+
+  // Utilidades
   'help-circle-outline': helpCircleOutline,
   'mail-outline': mailOutline,
   'information-circle-outline': informationCircleOutline,
@@ -56,12 +67,38 @@ addIcons({
   'trophy-outline': trophyOutline,
   'cart-outline': cartOutline,
   'menu-outline': menuOutline,
-  'heart': heart,                   // ❤️ agregado
-  'heart-outline': heartOutline,     // ❤️ agregado
+
+  // Corazones
+  'heart': heart,
+  'heart-outline': heartOutline,
+
+  // Ubicación y productos
   'pin-outline': pinOutline,
   'cube-outline': cubeOutline,
+
+  // Entrega
   'car-outline': carOutline,
   'bag-check-outline': bagCheckOutline,
+
+  // 📩 MENSAJES
+  'chatbubbles-outline': chatbubblesOutline,
+
+  // 📄 BORRADORES
+  'document-text-outline': documentTextOutline,
+
+  // ⭐ RESEÑAS
+  'star-outline': starOutline,
+
+  // ✔ RECEPCIÓN
+  'checkmark-circle-outline': checkmarkCircleOutline,
+  'checkmark-circle': checkmarkCircle,
+  'checkmark-done-outline': checkmarkDoneOutline,
+
+  // 🔄 SOLICITUDES
+  'swap-horizontal-outline': swapHorizontalOutline,
+
+  // 🌱 IMPACTO
+  'leaf-outline': leafOutline,
 });
 
 /* 🚀 Configuración estándar */

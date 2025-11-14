@@ -30,9 +30,50 @@
     </ion-label>
     <ion-button class="edit-btn" (click)="editarperfil()">Editar Perfil</ion-button>
   </div>
+  
+  <ion-segment
+  [(ngModel)]="selectedTab"
+  value="productos"
+  scrollable="true"
+  class="perfil-tabs">
 
+  <ion-segment-button value="productos">
+    <ion-icon name="cube-outline"></ion-icon>
+    <ion-label>Productos</ion-label>
+  </ion-segment-button>
+
+  <ion-segment-button value="mensajes">
+    <ion-icon name="chatbubbles-outline"></ion-icon>
+    <ion-label>Mensajes</ion-label>
+  </ion-segment-button>
+
+  <ion-segment-button value="borradores">
+    <ion-icon name="document-text-outline"></ion-icon>
+    <ion-label>Borradores</ion-label>
+  </ion-segment-button>
+
+  <ion-segment-button value="reseñas">
+    <ion-icon name="star-outline"></ion-icon>
+    <ion-label>Reseñas</ion-label>
+  </ion-segment-button>
+
+  <ion-segment-button value="transacciones">
+    <ion-icon name="checkmark-circle-outline"></ion-icon>
+    <ion-label>Recepción</ion-label>
+  </ion-segment-button>
+
+  <ion-segment-button value="solicitudes">
+    <ion-icon name="swap-horizontal-outline"></ion-icon>
+    <ion-label>Solicitudes</ion-label>
+  </ion-segment-button>
+
+  <ion-segment-button value="impacto">
+    <ion-icon name="leaf-outline"></ion-icon>
+    <ion-label>Impacto</ion-label>
+  </ion-segment-button>
+</ion-segment>
   <!-- 🔹 Segmento de pestañas -->
-  <ion-segment [(ngModel)]="selectedTab" value="productos">
+  <!-- <ion-segment [(ngModel)]="selectedTab" value="productos">
     <ion-segment-button value="productos">
       <ion-label>Mis Productos</ion-label>
     </ion-segment-button>
@@ -60,7 +101,7 @@
     <ion-segment-button value="impacto">
       <ion-label>🌱 Impacto</ion-label>
     </ion-segment-button>
-  </ion-segment>
+  </ion-segment> -->
 
   <!-- ===================== -->
   <!-- TAB: MENSAJES -->

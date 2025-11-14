@@ -99,43 +99,43 @@ ion-header {
   transform: scale(1.05);
 }
 
-/* ===== SEGMENTO SUPERIOR ===== */
-ion-segment {
-  display: flex;
-  justify-content: center;
-  background: var(--bg);
-  margin: 20px 0;
-  flex-wrap: wrap;
-  gap: 10px;
-  --background: var(--bg);
-}
+/* ===== SEGMENTO SUPERIOR (GENÉRICO) ===== */
+// ion-segment {
+//   display: flex;
+//   justify-content: center;
+//   background: var(--bg);
+//   margin: 20px 0;
+//   flex-wrap: wrap;
+//   gap: 10px;
+//   --background: var(--bg);
+// }
 
-ion-segment-button {
-  --background: var(--card);
-  --color: var(--txt);
-  --color-checked: #0b1115;
-  --background-checked: var(--accent);
-  --border-color: var(--stroke);
-  border-radius: 12px;
-  font-weight: 600;
-  text-transform: none;
-  padding: 6px 16px;
-  border: 1px solid var(--stroke);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  transition: all 0.25s ease;
-  flex: 1 1 45%;
-  min-width: 140px;
-}
+// ion-segment-button {
+//   --background: var(--card);
+//   --color: var(--txt);
+//   --color-checked: #0b1115;
+//   --background-checked: var(--accent);
+//   --border-color: var(--stroke);
+//   border-radius: 12px;
+//   font-weight: 600;
+//   text-transform: none;
+//   padding: 6px 16px;
+//   border: 1px solid var(--stroke);
+//   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+//   transition: all 0.25s ease;
+//   flex: 1 1 45%;
+//   min-width: 140px;
+// }
 
-ion-segment-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-}
+// ion-segment-button:hover {
+//   transform: translateY(-2px);
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+// }
 
-ion-segment-button[aria-pressed='true'] {
-  border: 1px solid var(--accent);
-  color: #0b1115;
-}
+// ion-segment-button[aria-pressed='true'] {
+//   border: 1px solid var(--accent);
+//   color: #0b1115;
+// }
 
 /* ===== TARJETAS DE PRODUCTOS / BORRADORES ===== */
 ion-item {
@@ -476,68 +476,68 @@ ion-card.niveles-card ion-item:hover {
   }
 
   /* Contenedor de meta + acciones */
-.card-meta{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
+  .card-meta{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
 
-/* Badge “Reservado” */
-.estado-badge{
-  --background: rgba(255, 200, 40, .15);
-  --color: #ffd56a;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-weight: 700;
-  letter-spacing: .2px;
-}
+  /* Badge “Reservado” */
+  .estado-badge{
+    --background: rgba(255, 200, 40, .15);
+    --color: #ffd56a;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    letter-spacing: .2px;
+  }
 
-/* Fila de acciones: dos columnas iguales */
-.card-actions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
+  /* Fila de acciones: dos columnas iguales */
+  .card-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
 
-/* Responsive: en pantallas angostas se apilan */
-@media (max-width: 390px){
-  .card-actions{ grid-template-columns: 1fr; }
-}
+  /* Responsive: en pantallas angostas se apilan */
+  @media (max-width: 390px){
+    .card-actions{ grid-template-columns: 1fr; }
+  }
 
-/* Botones: misma altura/estilo */
-.card-actions ion-button{
-  --border-radius: 12px;
-  --padding-start: 12px;
-  --padding-end: 12px;
-  height: 36px;
-  font-size: 13px;
-  letter-spacing: .2px;
-}
+  /* Botones: misma altura/estilo */
+  .card-actions ion-button{
+    --border-radius: 12px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    height: 36px;
+    font-size: 13px;
+    letter-spacing: .2px;
+  }
 
-/* Primario (verde InterEns) */
-.card-actions .btn-primary{
-  --background: #1fd39a;
-  --color: #081015;
-  --background-hover: #1fd39a;
-  --background-activated: #19b483;
-  box-shadow: 0 6px 14px rgba(31,211,154,.18);
-}
+  /* Primario (verde InterEns) */
+  .card-actions .btn-primary{
+    --background: #1fd39a;
+    --color: #081015;
+    --background-hover: #1fd39a;
+    --background-activated: #19b483;
+    box-shadow: 0 6px 14px rgba(31,211,154,.18);
+  }
 
-/* Secundario (outline, acorde al dark) */
-.card-actions .btn-secondary{
-  --background: transparent;
-  --color: #cfe8de;
-  --border-color: #2b3036;
-  --border-width: 1px;
-  --background-hover: rgba(255,255,255,.04);
-  --background-activated: rgba(255,255,255,.06);
-}
+  /* Secundario (outline, acorde al dark) */
+  .card-actions .btn-secondary{
+    --background: transparent;
+    --color: #cfe8de;
+    --border-color: #2b3036;
+    --border-width: 1px;
+    --background-hover: rgba(255,255,255,.04);
+    --background-activated: rgba(255,255,255,.06);
+  }
 
-/* Evitar cortes del card */
-ion-card, ion-card-content, .card-meta { overflow: visible !important; }
+  /* Evitar cortes del card */
+  ion-card, ion-card-content, .card-meta { overflow: visible !important; }
 
 }
 
@@ -782,17 +782,16 @@ ion-card, ion-card-content, .card-meta { overflow: visible !important; }
 
 .perfil-transacciones .trans-title {
   margin: 0 0 6px;
-  font-size: 15px;           /* un pelín más chico para que quepa mejor */
+  font-size: 15px;
   font-weight: 800;
   line-height: 1.2;
   color: var(--txt);
 
-  /* 👇 permitir que el título se vea completo */
   display: block;
   white-space: normal;
   overflow: visible;
   text-overflow: unset;
-  word-break: break-word;    /* por si hay títulos muy largos sin espacios */
+  word-break: break-word;
 }
 
 .perfil-transacciones .trans-estado {
@@ -866,10 +865,19 @@ ion-card, ion-card-content, .card-meta { overflow: visible !important; }
   }
 }
 
+/* ===== TABS PERFIL COMPACTOS (OVERRIDE PARA MI PERFIL) ===== */
+/* ===== TABS PERFIL COMPACTOS (OVERRIDE PARA MI PERFIL) ===== */
 /* ===== TABS PERFIL COMPACTOS ===== */
 .perfil-tabs {
   --background: transparent;
-  padding: 4px 8px 0;
+  margin: 8px 0 4px;
+  padding: 0 12px;
+}
+
+/* alineamos internamente el scroll de las tabs */
+.perfil-tabs::part(scroll) {
+  display: flex;
+  justify-content: space-between;
 }
 
 /* botón de tab */
@@ -880,8 +888,11 @@ ion-card, ion-card-content, .card-meta { overflow: visible !important; }
   --color: var(--muted);
   --color-checked: var(--accent);
 
-  min-width: auto;
-  padding: 4px 10px;
+  flex: 1 1 0;         /* todos ocupan el mismo ancho */
+  min-width: 0;
+  max-width: none;
+
+  padding: 6px 0;
   text-transform: none;
   font-size: 12px;
   font-weight: 600;
@@ -895,9 +906,11 @@ ion-card, ion-card-content, .card-meta { overflow: visible !important; }
 
 .perfil-tabs ion-segment-button ion-label {
   margin: 0;
+  line-height: 1.1;
 }
 
-/* pequeño efecto al seleccionar */
+/* efecto al seleccionar */
 .perfil-tabs ion-segment-button[aria-pressed='true'] {
   filter: drop-shadow(0 2px 6px rgba(31,211,154,0.35));
 }
+
