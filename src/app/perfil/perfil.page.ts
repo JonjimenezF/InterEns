@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController, ModalController } from '@ionic/angular';
+import { IonicModule, ToastController, ModalController,AlertController} from '@ionic/angular';
 import { Router } from '@angular/router';
 import { supabase } from 'src/shared/supabase/supabase.client';
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
@@ -91,7 +91,8 @@ export class PerfilPage implements OnInit, OnDestroy {
     private chatService: ChatService,
     private reputacionService: ReputacionService,
     private modalController: ModalController,
-    private transaccionService: TransaccionService
+    private transaccionService: TransaccionService,
+    private alertController: AlertController
   ) {}
 
   async ngOnInit() {
@@ -539,16 +540,36 @@ export class PerfilPage implements OnInit, OnDestroy {
     return 'Entrega por definir';
   }
 
-
-
   async confirmarRecepcionProducto(transaccionId: number | string) {
     if (!this.userId) {
       await this.presentToast('Debes iniciar sesión.', 'danger');
       return;
     }
 
-    if (!confirm('¿Confirmas que recibiste el producto en buen estado?')) return;
+    // 🔔 Alerta propia de la app, no del navegador
+    const alert = await this.alertController.create({
+      header: 'Confirmar recepción',
+      message: '¿Confirmas que recibiste el producto en buen estado?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+        {
+          text: 'Sí, confirmar',
+          role: 'confirm',
+        },
+      ],
+    });
 
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+
+    // Si no presionó "Sí, confirmar", no hacemos nada
+    if (role !== 'confirm') return;
+
+    // 👇 Lógica original
     try {
       const resp = await fetch(`${this.API_BASE}/api/transacciones/solicitante/${transaccionId}/confirmar`, {
         method: 'POST',
@@ -556,7 +577,7 @@ export class PerfilPage implements OnInit, OnDestroy {
         body: JSON.stringify({ solicitante_id: this.userId })
       });
 
-      const json = await resp.json().catch(()=> ({}));
+      const json = await resp.json().catch(() => ({}));
 
       if (!resp.ok || json?.ok === false) {
         throw new Error(json?.error || `Error HTTP ${resp.status}`);
@@ -566,8 +587,8 @@ export class PerfilPage implements OnInit, OnDestroy {
 
       // refresca datos
       await this.loadTransaccionesPendientes();
-      await this.loadMyProducts();            // por si el producto pasa a “intercambiado”
-      await this.loadImpacto();               // si actualizas impacto/pts en backend
+      await this.loadMyProducts();
+      await this.loadImpacto();
 
     } catch (e: any) {
       console.error('confirmarRecepcionProducto', e);
