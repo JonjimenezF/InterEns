@@ -95,7 +95,6 @@ export class SproductoPage implements OnInit {
   aiSuggestions: any = null;
   isImprovingImages = false;
   improvedImages: { original: string, improved: string }[] = [];
-
   constructor(
     private navCtrl: NavController,
     private router: Router,
@@ -194,54 +193,47 @@ export class SproductoPage implements OnInit {
   }
 
   // Manejo de selección de archivos
-  onFilesSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files) return;
+   // Manejo de selección de archivos
+  async onFilesSelected(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (!input.files) return;
 
-    const files: File[] = Array.from(input.files);
-    
-    // Si es una nueva selección, limpiar todo
-    if (files.length > 0) {
-      this.selectedFiles = [];
-      this.previewUrls = [];
-      this.resetFormFields(); // Limpiar campos del formulario
-    }
-    
-    if (files.length > 5) {
-      this.presentToast('Máximo 5 imágenes permitidas.');
-      return;
+  const files: File[] = Array.from(input.files);
+
+  for (const file of files) {
+    // 1. Validación básica
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      this.presentToast("❌ Tipo de archivo no permitido");
+      input.value = ""; // LIMPIAR INPUT
+      continue;
     }
 
-    for (const file of files) {
-      // ✅ Validación mejorada para Remove.bg
-      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-      if (!allowedTypes.includes(file.type)) {
-        this.presentToast(`❌ ${file.name}: Solo JPG, PNG y WebP son compatibles con Remove.bg`);
-        continue;
+    // 2. 🔥 Moderación con Hive antes de previsualizar
+    const seguro = await this.moderateImageWithHive(file);
+
+    if (!seguro) {
+      this.presentToast("🚫 Imagen rechazada por contenido explícito");
+      input.value = ""; // 🔥 LIMPIA EL CAMPO DE ARCHIVO
+      continue; // ⛔ NO agregar a preview // ⛔ NO se agrega a preview
+    }
+
+    // 3. Si pasó el filtro → agregar a preview
+    this.selectedFiles.push(file);
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      if (e.target?.result) {
+        this.previewUrls.push(e.target.result as string);
       }
-      if (file.size > 5 * 1024 * 1024) {
-        this.presentToast('El tamaño máximo por imagen es 5MB.');
-        continue;
-      }
+    };
+    reader.readAsDataURL(file);
 
-      this.selectedFiles.push(file);
-      const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        if (e.target?.result) {
-          this.previewUrls.push(e.target.result as string);
-          
-          // Análisis automático cuando se carga la primera imagen
-          if (this.selectedFiles.length === 1) {
-            setTimeout(() => {
-              this.presentToast('🤖 Analizando automáticamente...', 2000);
-              this.analyzeImages();
-            }, 1000);
-          }
-        }
-      };
-      reader.readAsDataURL(file);
-    }
+    this.presentToast("✅ Imagen segura, agregada");
   }
+}
+
+
 
   removeImage(index: number) {
     this.previewUrls.splice(index, 1);
@@ -588,6 +580,16 @@ export class SproductoPage implements OnInit {
       return;
     }
 
+    if (!this.isTextClean(this.enser.titulo)) {
+      this.presentToast("🚫 El título contiene palabras no permitidas.");
+      return;
+    }
+
+    if (!this.isTextClean(this.enser.descripcion)) {
+      this.presentToast("🚫 La descripción contiene palabras no permitidas.");
+      return;
+    }
+
     this.isLoading = true;
     this.isUploadingImages = true;
 
@@ -661,4 +663,214 @@ export class SproductoPage implements OnInit {
     const toast = await this.toastController.create({ message, duration, position: 'bottom', color });
     toast.present();
   }
+
+  private async fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      const base64 = result.split(",")[1]; // quitar "data:image/...;base64,"
+      resolve(base64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async moderateImageWithHive(file: File): Promise<boolean> {
+  try {
+    const base64 = await this.fileToBase64(file);
+
+    const resp: any = await this.http
+      .post("http://localhost:4000/api/moderate", { base64 })
+      .toPromise();
+
+    // Si Hive falla -> por seguridad rechazamos
+    if (!resp?.ok) return false;
+
+    const classes = resp.classes || [];
+    console.log("📊 [Hive desde backend] clases:", classes);
+
+    let banned = false;
+
+    for (const c of classes) {
+      const name = String(c.class_name ?? c.class ?? "").toLowerCase();
+      const value = Number(c.value ?? c.score ?? 0);
+
+      // 1) NSFW general (más estricto)
+      if (name === "general_nsfw" && value >= 0.5) {
+        banned = true;
+        break;
+      }
+
+      // 2) Cualquier "yes_*" de contenido sexual / cuerpo
+      const isYesClass = name.startsWith("yes_");
+
+      if (
+        isYesClass &&
+        (
+          name.includes("nudity") ||
+          name.includes("underwear") ||
+          name.includes("undressed") ||
+          name.includes("butt") ||
+          name.includes("breast") ||
+          name.includes("genitals") ||
+          name.includes("lingerie") ||
+          name.includes("sportswear_bottoms") ||
+          name.includes("panties") ||
+          name.includes("cleavage")
+        ) &&
+        value >= 0.4 // 👈 umbral más bajo para estos casos
+      ) {
+        banned = true;
+        break;
+      }
+
+      // 3) Sexual activity / intención sexual
+      if (
+        (name === "yes_sexual_activity" || name === "yes_sexual_intent") &&
+        value >= 0.4
+      ) {
+        banned = true;
+        break;
+      }
+
+      // 4) Violencia fuerte / cadáver
+      if (
+        ["human_corpse", "animated_corpse", "very_bloody"].includes(name) &&
+        value >= 0.4
+      ) {
+        banned = true;
+        break;
+      }
+
+      // 5) Drogas explícitas
+      if (
+        ["yes_marijuana", "yes_pills", "yes_smoking", "illicit_injectables"]
+          .includes(name) &&
+        value >= 0.5
+      ) {
+        banned = true;
+        break;
+      }
+
+      // 6) Armas claras
+      if (
+        [
+          "gun_in_hand",
+          "gun_not_in_hand",
+          "animated_gun",
+          "knife_in_hand",
+          "knife_not_in_hand",
+        ].includes(name) &&
+        value >= 0.5
+      ) {
+        banned = true;
+        break;
+      }
+
+      // 7) Símbolos de odio
+      if (
+        ["yes_nazi", "yes_kkk", "yes_terrorist", "yes_confederate"].includes(
+          name
+        ) &&
+        value >= 0.5
+      ) {
+        banned = true;
+        break;
+      }
+    }
+
+    return !banned;
+  } catch (e) {
+    console.error("❌ Error moderando imagen:", e);
+    return false; // modo estricto
+  }
+}
+
+private forbiddenWords: string[] = [
+  // Sexual explícito / NSFW
+  "porno", "pornografia", "pornografía", "pornohub", "pornhub",
+  "sexo", "sexual", "xxx", "paja", "masturbar", "masturbacion", "masturbación",
+  "penetracion", "penetración", "penetrar", "coito", "orgasmo", "sexualidad",
+  "follar", "coger", "cogida", "follada", "tirar", "tirón sexual",
+  "anal", "vaginal", "oral", "mamand*", "chupar", "chupon", "chupon*", "chupalo",
+  "pene", "verga", "pico", "tula", "riñon", "riñón", "pichula", "nepe",
+  "vagina", "chocho", "chucha", "concha", "cuca", "clitoris", "clítoris",
+  "tetonas", "tetona", "pechugas", "tetas", "boobs", "boobies",
+  "culo", "ass", "booty", "nalgas", "trasero",
+  "pussy", "coño", "chocha",
+  "hardcore", "deepthroat",
+
+  // Prostitución
+  "prostituta", "prostitucion", "prostitución", "escort",
+  "puta", "putita", "put*", "ramera",
+
+  // Drogas
+  "droga", "drogas", "marihuana", "cannabis", "weed", "hierba", "porro",
+  "pasto", "pito", "blunt", "cripy", "coca", "cocaina", "cocaína", "perico",
+  "crack", "heroina", "heroína", "lsd", "éxtasis", "pastilla", "tusi", "tussy",
+  "molécula rosa", "mdma", "ketamina", "pepa", "pildora", "píldora",
+
+  // Alcohol extremo (si quieres filtrar)
+  "borracho", "curado", "ebrio", "alcoholico", "alcohólico",
+
+  // Violencia / homicidio / armas
+  "matar", "muerte", "asesinar", "asesinato", "homicidio",
+  "degollar", "apuñalar", "acuchillar", "violencia", "violento",
+  "sangre", "sangriento", "descuartizar", "tortura",
+  "arma", "armas", "pistola", "revolver", "revólver", "escopeta",
+  "fusil", "metralleta", "rifle", "escopeta", "granada",
+  "cuchillo", "navaja", "machete", "bisturi", "bisturí",
+  "bomb*", "explosivo", "amenaza", "amenazar",
+
+  // Suicidio / autolesiones
+  "suicidio", "suicidarme", "quitarme la vida", "colgarme", "cortarme",
+  "cortarse", "autolesion", "autolesión", "selfharm", "self harm",
+  "ahorcar", "ahorcarme",
+
+  // Discriminación / odio / racismo / terrorismo
+  "nazi", "hitler", "facho", "fach*", "kkk", "racista", "racismo",
+  "negro de mierda", "maricon", "maricón", "maraco", "maricon*", "homofobico",
+  "homofóbico", "homofobia",
+  "terrorista", "isis", "alqaeda", "al-qaeda",
+  "judío de mierda", "maldito judío", "judios", "judíos",
+  "moro de mierda", "chino qliao", "chino culiao",
+  "cingano", "gitano de mierda",
+
+  // Insultos fuertes
+  "conchetumare", "ctm", "culiao", "culia*", "qliao", "qlo",
+  "hueon", "weon", "weon*", "weona", "wn", "wna",
+  "mierda", "imbecil", "imbécil", "idiota", "perra", "zorra",
+  "fuck", "shit", "bitch", "bastard", "motherfucker",
+  "dick", "fag", "retard", "stupid",
+
+  // Lenguaje vulgar explícito
+  "puta", "puto", "hueco", "puta madre", "mierda", "pendejo",
+  "garch*", "chuchetumare", "chuche", "chetumare",
+
+  // Sexualización de menores
+  "loli", "child porn", "cp", "pedo", "pedofilia", "pedofilo",
+  "pedófilo", "pedo*", "underage sex", "sex with minor",
+
+  // Variantes y abreviaciones peligrosas
+  "s3x0", "s3xo", "sex0", "s3x", "sxo", "sx0",
+  "p0rn", "pr0n", "p0rno",
+  "c0ca", "m4rihuana", "w33d", "p4sto",
+
+  // Emojis sexuales (por si los quieres bloquear)
+  "🍆", "🍑", "💦", "👅", "🔞"
+];
+
+private isTextClean(text: string): boolean {
+  if (!text) return true;
+
+  const lower = text.toLowerCase();
+
+  // Busca alguna palabra prohibida en el texto
+  return !this.forbiddenWords.some(w => lower.includes(w));
+}
+
+
+
 }
