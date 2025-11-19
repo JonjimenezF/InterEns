@@ -120,7 +120,7 @@ export class HomePage implements OnInit, OnDestroy {
     const token = session?.access_token;
     if (!token) return;
 
-    const r = await fetch('http://127.0.0.1:4000/profile/me', {
+    const r = await fetch('http://54.210.35.66:4000/profile/me', {
       headers: { Authorization: `Bearer ${token}` }
     });
     const perfil = await r.json();
@@ -198,7 +198,7 @@ export class HomePage implements OnInit, OnDestroy {
         const token = session?.access_token;
         if (!token) return;
 
-        const url = new URL('http://127.0.0.1:4000/api/notificaciones/count');
+        const url = new URL('http://54.210.35.66:4000/api/notificaciones/count');
         url.searchParams.set('usuario_id', this.userId);
 
         const r = await fetch(url.toString(), { headers: { Authorization: `Bearer ${token}` } });
@@ -231,7 +231,7 @@ export class HomePage implements OnInit, OnDestroy {
     const pop = await this.popoverCtrl.create({
       component: NotifPopoverComponent,
       componentProps: {
-        apiBase: 'http://127.0.0.1:4000',
+        apiBase: 'http://54.210.35.66:4000',
         usuarioId: this.userId,
         token,
         onChanged: async () => {

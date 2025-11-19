@@ -119,7 +119,7 @@ export class MisionesPage implements OnInit, OnDestroy {
     if (!this.usuarioId) return;
     this.cargando = true;
 
-    const url = `http://localhost:4000/api/misiones/${this.usuarioId}?t=${Date.now()}`;
+    const url = `http://54.210.35.66:4000/api/misiones/${this.usuarioId}?t=${Date.now()}`;
 
     this.http.get<any[]>(url).subscribe({
       next: (res) => {

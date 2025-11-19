@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class TransbankService {
-  private readonly API_URL = 'http://localhost:4000/api/transbank';
+  private readonly API_URL = 'http://54.210.35.66:4000/api/transbank';
 
   constructor(private router: Router) {
     this.setupAppUrlListener();

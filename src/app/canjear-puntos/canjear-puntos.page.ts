@@ -150,7 +150,7 @@ export class CanjearPuntosPage implements OnInit, OnDestroy {
 
     try {
       // 🔄 Llamar al backend actualizado
-      const response: any = await this.http.post('http://localhost:4000/api/canjear', {
+      const response: any = await this.http.post('http://54.210.35.66:4000/api/canjear', {
         usuario_id: this.userId,
         producto_id: item.id,
         puntos_requeridos: item.valor_puntos,

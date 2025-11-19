@@ -611,7 +611,7 @@ export class SproductoPage implements OnInit {
       this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
       this.enser.estado = 'pendiente';
 
-      await this.http.post(`http://localhost:4000/api/uploadProduct`, this.enser).toPromise();
+      await this.http.post(`http://54.210.35.66:4000/api/uploadProduct`, this.enser).toPromise();
       this.presentToast('✅ Producto publicado correctamente.');
       localStorage.removeItem('borrador_en_edicion');
       this.router.navigateByUrl('/perfil', { state: { openTab: 'productos', refresh: true } });
@@ -640,7 +640,7 @@ export class SproductoPage implements OnInit {
       this.enser.imagenes_extra = [...(this.enser.imagenes_extra || []), ...imageUrls];
       this.enser.estado = 'borrador';
 
-      await this.http.post(`http://localhost:4000/api/uploadProduct`, this.enser).toPromise();
+      await this.http.post(`http://54.210.35.66:4000/api/uploadProduct`, this.enser).toPromise();
       localStorage.setItem('borrador_en_edicion', JSON.stringify(this.enser));
       this.presentToast('📝 Borrador guardado correctamente.');
       this.router.navigateByUrl('/perfil', { state: { openTab: 'borradores', refresh: true } });
@@ -682,7 +682,7 @@ async moderateImageWithHive(file: File): Promise<boolean> {
     const base64 = await this.fileToBase64(file);
 
     const resp: any = await this.http
-      .post("http://localhost:4000/api/moderate", { base64 })
+      .post("http://54.210.35.66:4000/api/moderate", { base64 })
       .toPromise();
 
     // Si Hive falla -> por seguridad rechazamos

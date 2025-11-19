@@ -21,7 +21,7 @@ export type CanjearResponse =
   providedIn: 'root'
 })
 export class PuntosService {
-  private apiUrl = 'http://localhost:4000/api';
+  private apiUrl = 'http://54.210.35.66:4000/api';
   private puntosTotales = new BehaviorSubject<number>(0);
   puntosTotales$ = this.puntosTotales.asObservable();
 

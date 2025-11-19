@@ -50,7 +50,7 @@ export class PerfilPage implements OnInit, OnDestroy {
   equivalencias: any = {};
   impactoPorCategoria: any[] = [];
   maxCo2 = 0;
-  API_BASE = 'http://localhost:4000'; // ajusta si usas otro host/puerto
+  API_BASE = 'http://54.210.35.66:4000'; // ajusta si usas otro host/puerto
 
   puntoSeleccionado: any = null;      // si luego abres modal para elegir punto
   fechaSeleccionada: string | null = null; // ISO string opcional
@@ -129,7 +129,7 @@ export class PerfilPage implements OnInit, OnDestroy {
     const token = session?.access_token;
     if (!token) return;
 
-    const res = await fetch('http://127.0.0.1:4000/profile/me', {
+    const res = await fetch('http://54.210.35.66:4000/profile/me', {
       headers: { Authorization: `Bearer ${token}` },
     });
     const perfil = await res.json();
@@ -154,7 +154,7 @@ export class PerfilPage implements OnInit, OnDestroy {
         data: { session },
       } = await supabase.auth.getSession();
       const token = session?.access_token;
-      const resp = await fetch(`http://127.0.0.1:4000/product_usuario/usuario`, {
+      const resp = await fetch(`http://54.210.35.66:4000/product_usuario/usuario`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await resp.json();
@@ -177,7 +177,7 @@ export class PerfilPage implements OnInit, OnDestroy {
   // =========================
   async loadImpacto() {
     if (!this.userId) return;
-    const url = `http://localhost:4000/api/impacto/${this.userId}`;
+    const url = `http://54.210.35.66:4000/api/impacto/${this.userId}`;
     this.http.get(url).subscribe({
       next: (data: any) => {
         this.impacto = data;
@@ -238,7 +238,7 @@ export class PerfilPage implements OnInit, OnDestroy {
     const antiCache = Date.now();
 
     this.http
-      .get(`http://localhost:4000/api/getUserDrafts/${this.userId}?t=${antiCache}`)
+      .get(`http://54.210.35.66:4000/api/getUserDrafts/${this.userId}?t=${antiCache}`)
       .subscribe({
         next: (res: any) => {
           this.borradores =
@@ -261,7 +261,7 @@ export class PerfilPage implements OnInit, OnDestroy {
 
   eliminarBorrador(id: number) {
     if (!confirm('¿Seguro que deseas eliminar este borrador?')) return;
-    this.http.delete(`http://localhost:4000/api/deleteDraft/${id}`).subscribe({
+    this.http.delete(`http://54.210.35.66:4000/api/deleteDraft/${id}`).subscribe({
       next: async () => {
         this.borradores = this.borradores.filter(
           (b) => Number(b.id) !== Number(id)
@@ -333,7 +333,7 @@ export class PerfilPage implements OnInit, OnDestroy {
     try {
       const id = producto.id;
       const resp: any = await this.http
-        .put(`http://localhost:4000/api/toggleAvailability/${id}`, {})
+        .put(`http://54.210.35.66:4000/api/toggleAvailability/${id}`, {})
         .toPromise();
 
       producto.estado = resp.nuevoEstado;
@@ -405,7 +405,7 @@ export class PerfilPage implements OnInit, OnDestroy {
           // Obtener nombres de los usuarios
           const otroUsuarioId = conv.usuario1_id === this.userId ? conv.usuario2_id : conv.usuario1_id;
           try {
-            const resp = await fetch(`http://127.0.0.1:4000/profile/${otroUsuarioId}`);
+            const resp = await fetch(`http://54.210.35.66:4000/profile/${otroUsuarioId}`);
             const perfil = await resp.json();
             conv.otro_usuario_nombre = perfil?.nombre_completo || 'Usuario';
           } catch {

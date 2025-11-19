@@ -7,7 +7,7 @@ import { Transaccion, ConfirmarRecepcion } from '../models/transaccion';
   providedIn: 'root'
 })
 export class TransaccionService {
-  private apiUrl = 'http://localhost:4000/api';
+  private apiUrl = 'http://54.210.35.66:4000/api';
 
   constructor(private http: HttpClient) {}
 

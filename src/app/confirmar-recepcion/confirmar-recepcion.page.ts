@@ -143,7 +143,7 @@ export class ConfirmarRecepcionPage implements OnInit {
       if (emailComprador && emailVendedor) {
         console.log('📧 Enviando correos dinámicos...');
         
-        const response = await fetch('http://localhost:4000/api/confirmar-intercambio', {
+        const response = await fetch('http://54.210.35.66:4000/api/confirmar-intercambio', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

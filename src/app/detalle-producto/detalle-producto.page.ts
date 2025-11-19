@@ -43,7 +43,7 @@ export class DetalleProductoPage implements OnInit, OnDestroy {
   puedeCalificar = false;
   usuarioActual?: string;
   vendedorReputacion: any = null;
-  API_BASE = 'http://localhost:4000';
+  API_BASE = 'http://54.210.35.66:4000';
 
   // 💰 saldo del usuario (muestra en UI y valida canjeo)
   userSaldo: number | null = null;

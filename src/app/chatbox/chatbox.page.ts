@@ -49,7 +49,7 @@ export class ChatboxPage implements OnInit {
     this.cargando = true;
 
     try {
-      const resp = await fetch('http://localhost:4000/api/chat', {
+      const resp = await fetch('http://54.210.35.66:4000/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: mensaje }),

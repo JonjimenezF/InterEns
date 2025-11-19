@@ -49,7 +49,7 @@ export class ContactoPage implements OnInit {
       mensaje: this.mensaje,
     };
 
-    this.http.post('http://localhost:4000/api/enviar-correo', data).subscribe({
+    this.http.post('http://54.210.35.66:4000/api/enviar-correo', data).subscribe({
       next: async (response) => {
         console.log('✅ Correo enviado:', response);
         this.loading = false;

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ProductoService {
-  private apiUrl = 'http://localhost:4000/api'; // URL del backend Fastify
+  private apiUrl = 'http://54.210.35.66:4000/api'; // URL del backend Fastify
 
   constructor(private http: HttpClient) {}
 

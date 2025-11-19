@@ -74,7 +74,7 @@ export class LoginPage {
 
   // sincroniza perfil en tu backend y navega
   const token = data.session.access_token;
-  await fetch('http://127.0.0.1:4000/auth/me', { headers: { Authorization: `Bearer ${token}` } }).catch(()=>{});
+  await fetch('http://54.210.35.66:4000/auth/me', { headers: { Authorization: `Bearer ${token}` } }).catch(()=>{});
   this.router.navigateByUrl('/home', { replaceUrl: true });
 }
   

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class EmailService {
-  private baseUrl = 'http://localhost:4000/api';
+  private baseUrl = 'http://54.210.35.66:4000/api';
 
   async enviarConfirmacionIntercambio(datos: {
     correoComprador: string;

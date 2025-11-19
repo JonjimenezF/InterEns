@@ -272,7 +272,7 @@ export class EditPerfilPage implements OnInit {
     const token = await this.getToken();
     if (!token) return;
 
-    const r = await fetch('http://127.0.0.1:4000/profile/me', {
+    const r = await fetch('http://54.210.35.66:4000/profile/me', {
       headers: { Authorization: `Bearer ${token}` },
     });
     const p = await r.json();
@@ -289,7 +289,7 @@ export class EditPerfilPage implements OnInit {
    const token = await this.getToken();
   if (!token) return;
 
-  const r = await fetch('http://127.0.0.1:4000/profile/address', {
+  const r = await fetch('http://54.210.35.66:4000/profile/address', {
     headers: { Authorization: `Bearer ${token}` },
   });
   const d = await r.json();
@@ -362,7 +362,7 @@ export class EditPerfilPage implements OnInit {
       const fd = new FormData();
       fd.append('file', file);
 
-      const res = await fetch('http://127.0.0.1:4000/profile/avatar', {
+      const res = await fetch('http://54.210.35.66:4000/profile/avatar', {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: fd,
@@ -395,7 +395,7 @@ export class EditPerfilPage implements OnInit {
     this.saving = true;
     try {
       // 1️⃣ Actualizar perfil
-      const r1 = await fetch('http://127.0.0.1:4000/profile/editperfil', {
+      const r1 = await fetch('http://54.210.35.66:4000/profile/editperfil', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -423,7 +423,7 @@ export class EditPerfilPage implements OnInit {
 
       console.log('📦 Enviando dirección:', direccionPayload);
 
-      const r2 = await fetch('http://127.0.0.1:4000/profile/address', {
+      const r2 = await fetch('http://54.210.35.66:4000/profile/address', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

@@ -155,7 +155,7 @@ export class ChatUsuarioPage implements OnInit {
     // Cargar nombre del otro usuario
     if (otroUsuarioId) {
       try {
-        const resp = await fetch(`http://127.0.0.1:4000/profile/${otroUsuarioId}`);
+        const resp = await fetch(`http://54.210.35.66:4000/profile/${otroUsuarioId}`);
         const perfil = await resp.json();
         this.otroUsuarioNombre = perfil?.nombre_completo || 'Usuario';
       } catch (error) {
