@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController, ModalController,AlertController} from '@ionic/angular';
+import { ToastController, ModalController,AlertController} from '@ionic/angular';
 import { Router } from '@angular/router';
 import { supabase } from 'src/shared/supabase/supabase.client';
 import { FooterInterensComponent } from '../components/footer-interens/footer-interens.component';
@@ -13,13 +13,61 @@ import { ReviewsListComponent } from '../components/reviews-list/reviews-list.co
 import { PickupRequestComponent } from '../components/pickup-request/pickup-request.component';
 import { TransaccionService } from '../servicios/transaccion.service';
 import { Transaccion } from '../models/transaccion';
-
+import {
+  IonHeader,
+  IonToolbar,
+  IonButtons,
+  IonBackButton,
+  IonTitle,
+  IonContent,
+  IonLabel,
+  IonButton,
+  IonIcon,
+  IonList,
+  IonItem,
+  IonThumbnail,
+  IonBadge,
+  IonFooter,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonProgressBar,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonSegment,
+  IonSegmentButton,
+} from '@ionic/angular/standalone';
 @Component({
   selector: 'app-perfil',
   templateUrl: './perfil.page.html',
   styleUrls: ['./perfil.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonicModule, FooterInterensComponent, StarRatingComponent, ReviewsListComponent],
+  imports: [CommonModule, FormsModule, IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonBackButton,
+    IonTitle,
+    IonContent,
+    IonLabel,
+    IonButton,
+    IonIcon,
+    IonList,
+    IonItem,
+    IonThumbnail,
+    IonBadge,
+    IonFooter,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonProgressBar,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonSegment,
+    IonSegmentButton, FooterInterensComponent, StarRatingComponent, ReviewsListComponent],
 })
 export class PerfilPage implements OnInit, OnDestroy {
   nombre: string | null = null;

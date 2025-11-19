@@ -58,13 +58,29 @@ export class LoginPage {
     }
     await this.loginWithEmail();
   }
-
+  
+  private socialInitialized = false;
   async ngOnInit() {
     // 👇 Al entrar al login, revisa si ya hay sesión de Supabase
-    const { data: { session } } = await supabase.auth.getSession();
+    // 🔹 1) Inicializar SocialLogin en nativo
+    const platform = Capacitor.getPlatform(); // 'android', 'ios' o 'web'
+    console.log('Platform:', platform);
 
+    if (platform === 'android' || platform === 'ios') {
+      if (!this.socialInitialized) {
+        await SocialLogin.initialize({
+          google: {
+            webClientId: environment.googleWebClientId, // CLIENT ID WEB de Google Cloud
+            // mode: 'online'  // opcional
+          },
+        });
+        this.socialInitialized = true;
+      }
+    }
+
+    // 🔹 2) revisar session de Supabase (como ya tenías)
+    const { data: { session } } = await supabase.auth.getSession();
     if (session) {
-      // Ya está logueado (por Google o por email) → manda directo al home
       this.router.navigateByUrl('/home', { replaceUrl: true });
     }
   }
