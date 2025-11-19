@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '../services/supabase.client';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+
 
 // 🧩 Servicios
 import { CategoriaService } from '../servicios/categoria.service';
@@ -149,6 +151,144 @@ export class SproductoPage implements OnInit {
       this.presentToast('❌ Error al cargar datos iniciales.');
     }
   }
+
+  dataURLtoFile(dataurl: string, filename: string): File {
+    const arr = dataurl.split(',');
+    const mimeMatch = arr[0].match(/:(.*?);/);
+
+    if (!mimeMatch) {
+      throw new Error("No se pudo obtener el MIME type desde la imagen base64.");
+    }
+
+    const mime = mimeMatch[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, { type: mime });
+  }
+
+  // 🔧 Comprimir un dataURL usando canvas
+  private shrinkDataUrl(
+    dataUrl: string,
+    maxSize: number = 1280,   // máx ancho/alto en px
+    quality: number = 0.7     // calidad JPEG 0–1
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+
+        // Si ya es pequeña, devolver tal cual
+        if (width <= maxSize && height <= maxSize) {
+          return resolve(dataUrl);
+        }
+
+        // Mantener proporción
+        const canvas = document.createElement('canvas');
+        if (width > height) {
+          const ratio = maxSize / width;
+          canvas.width = maxSize;
+          canvas.height = height * ratio;
+        } else {
+          const ratio = maxSize / height;
+          canvas.height = maxSize;
+          canvas.width = width * ratio;
+        }
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          return reject(new Error('No se pudo crear el contexto de canvas'));
+        }
+
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        // Comprimir a JPEG
+        const compressed = canvas.toDataURL('image/jpeg', quality);
+        resolve(compressed);
+      };
+
+      img.onerror = (err) => reject(err);
+      img.src = dataUrl;
+    });
+  }
+
+
+  async takePhoto() {
+  try {
+    const image = await Camera.getPhoto({
+      quality: 70,                   // un poco más baja
+      width: 1280,                   // limitar tamaño
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Camera,
+      allowEditing: false,
+    });
+
+    if (!image.dataUrl) {
+      this.presentToast('❌ No se obtuvo imagen de la cámara');
+      return;
+    }
+
+    // 🔽 1) Comprimir dataURL con canvas
+    let dataUrl = await this.shrinkDataUrl(image.dataUrl, 1280, 0.7);
+
+    // 🔁 2) Convertir a File ya comprimido
+    const file = this.dataURLtoFile(dataUrl, `photo_${Date.now()}.jpg`);
+
+    // 🛡 3) Moderar con Hive (usa tu misma función)
+    const permitido = await this.moderateImageWithHive(file);
+    if (!permitido) {
+      this.presentToast('🚫 La foto fue rechazada por contenido inapropiado');
+      return;
+    }
+
+    // ✅ 4) Mantener tus flujos (preview + subida)
+    this.selectedFiles.push(file);
+    this.previewUrls.push(dataUrl);
+
+    this.presentToast('📸 Foto agregada correctamente');
+
+  } catch (err) {
+    console.error('❌ Error tomando foto:', err);
+  }
+}
+
+
+  async selectFromGallery() {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 85,
+        allowEditing: false,
+        resultType: CameraResultType.DataUrl,
+        source: CameraSource.Photos,
+      });
+
+      const dataUrl = image.dataUrl!;
+      const file = this.dataURLtoFile(dataUrl, `gallery_${Date.now()}.jpg`);
+
+      // 🔥 Moderación Hive
+      const permitido = await this.moderateImageWithHive(file);
+      if (!permitido) {
+        this.presentToast("🚫 Imagen rechazada");
+        return;
+      }
+
+      this.selectedFiles.push(file);
+      this.previewUrls.push(dataUrl);
+
+      this.presentToast("🖼 Imagen agregada");
+
+    } catch (err) {
+      console.error("❌ Error seleccionando desde galería:", err);
+    }
+  }
+
+
+
 
   async cargarRegiones() {
     this.cargandoRegiones = true;

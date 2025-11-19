@@ -80,9 +80,24 @@
         <ion-item class="custom-item">
           <div class="upload-container">
             <label class="upload-label">Seleccionar imágenes</label>
+
+            <!-- Botón Galería -->
+            <ion-button fill="outline" color="primary" (click)="selectFromGallery()">
+              <ion-icon slot="start" name="image-outline"></ion-icon>
+              Galería
+            </ion-button>
+
+            <!-- Botón Cámara -->
+            <ion-button fill="solid" color="secondary" (click)="takePhoto()">
+              <ion-icon slot="start" name="camera-outline"></ion-icon>
+              Cámara
+            </ion-button>
+
+            <!-- Input original (NO SE ELIMINA) -->
             <input type="file" multiple (change)="onFilesSelected($event)" />
           </div>
         </ion-item>
+
 
         <div class="preview-container" *ngIf="previewUrls.length > 0">
           <h4>Previsualización</h4>
