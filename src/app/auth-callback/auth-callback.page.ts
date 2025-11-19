@@ -13,19 +13,18 @@ export class AuthCallbackPage implements OnInit {
   constructor(private router: Router) {}
 
   async ngOnInit() {
-    // 1) Maneja el callback de autenticación
-    await supabase.auth.getSession();
-
-    // 2) Llama a tu API con el token del usuario
     const { data: { session } } = await supabase.auth.getSession();
     const token = session?.access_token;
-    if (token) {
-      await fetch('http://127.0.0.1:4000/auth/me', {
-        headers: { Authorization: `Bearer ${token}` }
-      }).catch(() => {});
-    }
 
-    // 3) Navega al Home
-    this.router.navigateByUrl('/home', { replaceUrl: true });
+    if (token) {
+      await fetch('http://54.210.35.66:4000/auth/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => {});
+
+      this.router.navigateByUrl('/home', { replaceUrl: true });
+    } else {
+      // si algo falla, vuelve al login
+      this.router.navigateByUrl('/login', { replaceUrl: true });
+    }
   }
 }

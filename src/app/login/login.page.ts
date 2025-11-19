@@ -11,6 +11,8 @@ import {
 } from '@ionic/angular/standalone';
 import { Router } from '@angular/router'; //rutas
 
+import { Capacitor } from '@capacitor/core';
+import { SocialLogin } from '@capgo/capacitor-social-login';
 import { supabase } from 'src/shared/supabase/supabase.client';
 import { environment } from 'src/environments/environment';
 
@@ -55,6 +57,16 @@ export class LoginPage {
     return t.present();
     }
     await this.loginWithEmail();
+  }
+
+  async ngOnInit() {
+    // 👇 Al entrar al login, revisa si ya hay sesión de Supabase
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (session) {
+      // Ya está logueado (por Google o por email) → manda directo al home
+      this.router.navigateByUrl('/home', { replaceUrl: true });
+    }
   }
 
   private async loginWithEmail() {
@@ -107,21 +119,68 @@ export class LoginPage {
   async signIn() { /* conecta tu auth aquí */ }
 
 
-  async continueWithGoogle() {
-    const isMobile = this.platform.is('capacitor');
-    const redirectTo = isMobile ? environment.redirectUrlMobile : environment.redirectUrlWeb;
+ async continueWithGoogle() {
+  const isNative = Capacitor.isNativePlatform();
 
-    const { error } = await supabase.auth.signInWithOAuth({
+  try {
+    // 🌐 WEB
+    if (!isNative) {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: 'http://localhost:8100/auth/callback',
+          queryParams: {
+            prompt: 'select_account', // para poder cambiar de cuenta
+          },
+        },
+      });
+
+      if (error) throw error;
+      return; // Supabase redirige, no seguimos acá
+    }
+
+    // 📱 NATIVO (Android/iOS) -> plugin SocialLogin
+    const loginResult = await SocialLogin.login({
       provider: 'google',
-      options: {
-        redirectTo,
-        queryParams: { prompt: 'select_account' }
-      }
+      options: { scopes: ['email', 'profile'] },
     });
 
-    if (error) {
-      const t = await this.toastCtrl.create({ message: error.message, duration: 2200, color: 'danger' });
-      t.present();
+    console.log('GOOGLE RESULT ===>', loginResult);
+
+    const anyResult: any = loginResult;
+
+    const idToken: string | null =
+      anyResult?.result?.idToken ??
+      anyResult?.result?.accessToken?.token ??
+      null;
+
+    if (!idToken) {
+      throw new Error('No se recibió idToken desde Google');
     }
+
+    const { data, error } = await supabase.auth.signInWithIdToken({
+      provider: 'google',
+      token: idToken,
+    });
+
+    if (error) throw error;
+
+    const token = data.session?.access_token;
+    if (token) {
+      await fetch('http://54.210.35.66:4000/auth/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      }).catch(() => {});
+    }
+
+    this.router.navigateByUrl('/home', { replaceUrl: true });
+  } catch (err: any) {
+    console.error('Error Google login', err);
+    const t = await this.toastCtrl.create({
+      message: err?.message || 'Error al iniciar sesión con Google',
+      duration: 2500,
+      color: 'danger',
+    });
+    t.present();
   }
+}
 }

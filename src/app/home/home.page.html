@@ -32,9 +32,14 @@
       </ion-button>
 
       <ion-button fill="clear" (click)="goConsejos()" class="menu-btn" expand="block">
-  <ion-icon name="help-circle-outline" slot="start"></ion-icon>
-  <span>Consejos de envío</span>
-</ion-button>
+        <ion-icon name="help-circle-outline" slot="start"></ion-icon>
+        <span>Consejos de envío</span>
+      </ion-button>
+      <ion-button fill="clear" class="menu-btn" (click)="logout()" expand="block">
+        <ion-icon name="log-out-outline" slot="start"></ion-icon>
+        <span>Cerrar Sesión</span>
+      </ion-button>
+
     </div>
   </ion-content>
 </ion-menu>

@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { Capacitor } from '@capacitor/core';
+import { SocialLogin } from '@capgo/capacitor-social-login';
 import {
   IonBackButton,
   IonButtons,
@@ -276,6 +277,28 @@ private escucharCambiosEnNotificaciones() {
     .subscribe();
   }
 
+  async logout() {
+    try {
+      // 1) Cerrar sesión en Supabase
+      await supabase.auth.signOut();
+
+      // 2) (Opcional pero recomendado) cerrar en plugin nativo
+      const isNative = Capacitor.isNativePlatform();
+      if (isNative) {
+        try {
+          await SocialLogin.logout({ provider: 'google' } as any);
+        } catch {
+          // si el plugin no soporta logout, ignoramos el error
+        }
+      }
+
+      // 3) Ir al login
+      this.router.navigateByUrl('/login', { replaceUrl: true });
+    } catch (e) {
+      console.error('Error al cerrar sesión', e);
+    }
+  }
+
   async presentToast(message: string) {
     const toast = document.createElement('ion-toast');
     toast.message = message;
@@ -305,6 +328,8 @@ private escucharCambiosEnNotificaciones() {
   favoritos() { this.router.navigate(['/favoritos']); }
   mapa() { this.router.navigate(['/mapa']); }
 }
+
+
 
 // -----------------------------------------------------------------------------
 // POPOVER DE NOTIFICACIONES (standalone)
